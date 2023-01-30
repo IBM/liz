@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, FileUploader, Grid, Column, Row } from "@carbon/react";
+import { Dropdown, FileUploader, Grid, Column } from "@carbon/react";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = () => {
