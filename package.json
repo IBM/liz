@@ -1,0 +1,41 @@
+{
+  "name": "liz",
+  "version": "0.1.0",
+  "private": true,
+  "repository": "git@github.ibm.com:daniel-haischt/liz.git",
+  "bugs": "https://github.ibm.com/daniel-haischt/liz/issues",
+  "homepage": "https://github.ibm.com/daniel-haischt/liz",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d build",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@carbon/colors": "^11.12.0",
+    "@carbon/layout": "^11.11.0",
+    "@carbon/react": "^1.21.0",
+    "@carbon/styles": "^1.21.0",
+    "@carbon/themes": "^11.16.0",
+    "@carbon/type": "^11.15.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "6.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-react": "^3.0.1",
+    "gh-pages": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "prettier": "2.8.3",
+    "sass": "^1.57.1",
+    "vite": "^4.0.4"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

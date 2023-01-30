@@ -1,0 +1,44 @@
+@use "@carbon/react";
+@use "@carbon/type";
+@use "@carbon/layout";
+@use "@carbon/colors";
+@use "@carbon/themes";
+
+.input-file-selection__heading {
+  @include type.type-style("heading-05");
+  margin: layout.$spacing-05 0 layout.$spacing-05 0;
+}
+
+.input-file-selection__subheading {
+  @include type.type-style("heading-03");
+  @include type.font-weight("semibold");
+}
+
+.input-file-selection__label {
+  @include type.type-style("heading-01");
+}
+
+.input-file-selection__contentHeader {
+  background: themes.$background;
+  padding: layout.$spacing-05 0 layout.$spacing-05 0;
+}
+
+.input-file-selection__contentRow {
+  padding-bottom: layout.$spacing-05;
+  background: themes.$background;
+}
+
+.input-file-selection__contentRowIntro {
+  padding: 0 0 layout.$spacing-05 0;
+}
+
+.input-file-selection__contentRowDropdowns {
+  .bx--dropdown__wrapper {
+    padding: 0 0 layout.$spacing-05 0;
+  }
+}
+
+.input-file-selection__grid {
+  padding-left: layout.$spacing-05;
+  padding-right: layout.$spacing-01;
+}
