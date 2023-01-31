@@ -11,4 +11,4 @@ deploy:
   github_token: $GHE_TOKEN
   keep_history: true
   on:
-    branch: gh-pages
+    branch: main
