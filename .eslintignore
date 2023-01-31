@@ -5,3 +5,4 @@ package-lock.json
 .eslintrc.json
 babel.config.json
 jest.config.json
+**/*.scss

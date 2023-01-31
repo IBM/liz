@@ -5,7 +5,7 @@
 @use "@carbon/colors";
 @use "@carbon/themes";
 
-@import "./overrides.scss";
+@import "./overrides";
 
 .landing-page__illo {
   max-width: 100%;
@@ -13,6 +13,7 @@
 
 .landing-page__heading {
   @include type.type-style("heading-05");
+
   margin: layout.$spacing-05 0 layout.$spacing-05 0;
 }
 

@@ -6,6 +6,7 @@
 
 .input-file-selection__heading {
   @include type.type-style("heading-05");
+
   margin: layout.$spacing-05 0 layout.$spacing-05 0;
 }
 
