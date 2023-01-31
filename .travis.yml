@@ -5,3 +5,10 @@ git:
 dist: focal
 script:
   - npm run deploy
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GHE_TOKEN
+  keep_history: true
+  on:
+    branch: gh-pages
