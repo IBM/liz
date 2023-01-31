@@ -1,0 +1,5 @@
+language: node_js
+node_js: 18.12.1
+git:
+  depth: false
+dist: focal
