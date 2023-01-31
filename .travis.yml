@@ -7,6 +7,7 @@ script:
   - npm run build
 deploy:
   provider: pages
+  local_dir: dist
   github_url: github.ibm.com
   skip_cleanup: true
   github_token: $GHE_TOKEN
