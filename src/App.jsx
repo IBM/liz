@@ -12,7 +12,11 @@ class App extends Component {
         <TutorialHeader />
         <Content className="app__full-height">
           <Routes>
-            <Route exact={true} path="/" element={<LandingPage />} />
+            <Route
+              exact={true}
+              path="/daniel-haischt/liz/"
+              element={<LandingPage />}
+            />
           </Routes>
         </Content>
       </>
