@@ -3,3 +3,5 @@
 .stylelintrc.json
 package-lock.json
 package.json
+**/*.png
+**/*.js

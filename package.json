@@ -64,7 +64,8 @@
     "stylelint-config-standard": "^29.0.0",
     "stylelint-config-standard-scss": "^6.1.0",
     "ts-jest": "^29.0.5",
-    "vite": "^4.0.4"
+    "vite": "^4.0.4",
+    "vite-plugin-favicons-inject": "^2.2.0"
   },
   "lint-staged": {
     "**/*": [

@@ -1,8 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import vitePluginFaviconsInject from "vite-plugin-favicons-inject";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    vitePluginFaviconsInject("./src/assets/favicon-32x32.png"),
+  ],
   base: "/daniel-haischt/liz/",
 });

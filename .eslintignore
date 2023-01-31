@@ -6,3 +6,4 @@ package-lock.json
 babel.config.json
 jest.config.json
 **/*.scss
+**/*.png
