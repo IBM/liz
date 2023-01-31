@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "npm run lint",
-    "build": "vite build",
+    "build": "vite build --base=/daniel-haischt/liz/",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
