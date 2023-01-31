@@ -2,3 +2,6 @@ package.json
 package-lock.json
 .nvmrc
 .travis.yml
+.eslintrc.json
+babel.config.json
+jest.config.json
