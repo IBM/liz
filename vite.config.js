@@ -8,5 +8,4 @@ export default defineConfig({
     react(),
     vitePluginFaviconsInject("./src/assets/favicon-32x32.png"),
   ],
-  base: "/daniel-haischt/liz/",
 });

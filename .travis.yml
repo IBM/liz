@@ -4,7 +4,7 @@ git:
   depth: false
 dist: focal
 script:
-  - npm run build
+  - npx vite build --mode github
 deploy:
   provider: pages
   local_dir: dist

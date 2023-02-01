@@ -5,3 +5,7 @@ package-lock.json
 package.json
 **/*.png
 **/*.js
+**/*.jsx
+.env
+.env.github
+.travis.yml
