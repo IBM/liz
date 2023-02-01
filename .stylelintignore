@@ -6,6 +6,7 @@ package.json
 **/*.png
 **/*.js
 **/*.jsx
+**/*.html
 .env
 .env.github
 .travis.yml
