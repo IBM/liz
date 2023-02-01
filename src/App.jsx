@@ -5,8 +5,6 @@ import TutorialHeader from "./components/TutorialHeader";
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
 
-console.log(import.meta.env);
-
 class App extends Component {
   render() {
     return (
