@@ -4,7 +4,7 @@ git:
   depth: false
 dist: focal
 script:
-  - npx vite build --mode github
+  - npx vite build --mode github --base=/daniel-haischt/liz/
 deploy:
   provider: pages
   local_dir: dist
