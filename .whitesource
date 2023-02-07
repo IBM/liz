@@ -1,3 +1,18 @@
 {
-  "settingsInheritedFrom": "whitesource-config/whitesource-config@master"
+  "settingsInheritedFrom": "whitesource-config/whitesource-config@master",
+  "scanSettings": {
+    "baseBranches": [],
+    "configMode": "LOCAL"
+  },
+  "remediateSettings": {
+    "enableRenovate": true,
+    "transitiveRemediation": true,
+    "extends": ["config:base",":preserveSemverRanges"],
+    "workflowRules": {              
+      "enabled": true        
+    },
+    "major": {          
+      "dependencyDashboardApproval": true        
+    }  
+  }
 }
