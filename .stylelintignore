@@ -3,6 +3,8 @@
 .stylelintrc.json
 package-lock.json
 package.json
+whitesource.config
+.whitesource
 **/*.png
 **/*.js
 **/*.jsx

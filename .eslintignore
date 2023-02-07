@@ -3,6 +3,8 @@ package-lock.json
 .nvmrc
 .travis.yml
 .eslintrc.json
+.whitesource
+whitesource.config
 babel.config.json
 jest.config.json
 **/*.scss

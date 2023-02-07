@@ -45,11 +45,12 @@
   height: 100%;
   background: themes.$layer-01;
   padding-left: layout.$spacing-05;
-  padding-right: layout.$spacing-07;
+  padding-right: 0;
   margin-left: 0;
   max-width: 100%;
 }
 
 .landing-page__grey-column-background {
   background: themes.$layer-01;
+  margin-right: 0;
 }
