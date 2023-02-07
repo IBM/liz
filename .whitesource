@@ -7,7 +7,7 @@
   "remediateSettings": {
     "enableRenovate": true,
     "transitiveRemediation": true,
-    "extends": ["config:base",":preserveSemverRanges"],
+    "extends": ["config:base",":preserveSemverRanges", ":dependencyDashboard"],
     "workflowRules": {              
       "enabled": true        
     },
