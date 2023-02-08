@@ -26,8 +26,8 @@ toc::[]
 == Prerequisites
 
 * Node Version Manager (latest)
-* NodeJS 18.12.1
-* NPM 8.19.2
+* NodeJS (18.12.1 or latest)
+* NPM (8.19.2 or latest)
 
 == Overview
 
