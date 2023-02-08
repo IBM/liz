@@ -12,14 +12,16 @@ import {
   SideNavItems,
 } from "@carbon/react";
 import { Help } from "@carbon/icons-react";
-import "./_tutorial-header.scss";
+import PropTypes from "prop-types";
+import InstallerFlow from "../InstallerFlow";
+import "./_installer-header.scss";
 
-const TutorialHeader = () => {
+const InstallerHeader = ({ onProgress, progressStep }) => {
   const [expanded, setExpanded] = useState(false);
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-        <Header aria-label="Carbon Tutorial">
+        <Header aria-label="Linux on Z Installer">
           <SkipToContent />
           <HeaderMenuButton
             aria-label="Open menu"
@@ -41,7 +43,10 @@ const TutorialHeader = () => {
           </HeaderGlobalBar>
           <SideNav aria-label="Side navigation" expanded={true}>
             <SideNavItems>
-              <div>TEST</div>
+              <InstallerFlow
+                onProgress={onProgress}
+                progressStep={progressStep}
+              />
             </SideNavItems>
           </SideNav>
           <HeaderPanel expanded={expanded}></HeaderPanel>
@@ -51,4 +56,9 @@ const TutorialHeader = () => {
   );
 };
 
-export default TutorialHeader;
+InstallerHeader.propTypes = {
+  onProgress: PropTypes.func.isRequired,
+  progressStep: PropTypes.number.isRequired,
+};
+
+export default InstallerHeader;
