@@ -53,4 +53,5 @@
 .landing-page__grey-column-background {
   background: themes.$layer-01;
   margin-right: 0;
+  padding-left: calc(7 * layout.$spacing-07);
 }

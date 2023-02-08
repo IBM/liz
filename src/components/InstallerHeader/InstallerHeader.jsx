@@ -41,7 +41,11 @@ const InstallerHeader = ({ onProgress, progressStep }) => {
               <Help />
             </HeaderGlobalAction>
           </HeaderGlobalBar>
-          <SideNav aria-label="Side navigation" expanded={true}>
+          <SideNav
+            aria-label="Side navigation"
+            expanded={true}
+            className="installer-header__sidenav-component"
+          >
             <SideNavItems>
               <InstallerFlow
                 onProgress={onProgress}
@@ -49,7 +53,11 @@ const InstallerHeader = ({ onProgress, progressStep }) => {
               />
             </SideNavItems>
           </SideNav>
-          <HeaderPanel expanded={expanded}></HeaderPanel>
+          <HeaderPanel
+            expanded={expanded}
+            aria-label="Help"
+            className="installer-header__panel-component"
+          ></HeaderPanel>
         </Header>
       )}
     />
