@@ -3,6 +3,7 @@
 .stylelintrc.json
 package-lock.json
 package.json
+README.adoc
 whitesource.config
 .whitesource
 **/*.png

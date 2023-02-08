@@ -1,5 +1,6 @@
 package.json
 package-lock.json
+README.adoc
 .nvmrc
 .travis.yml
 .eslintrc.json
