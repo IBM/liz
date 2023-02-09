@@ -16,7 +16,7 @@ Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 
 
 
-_Linux Installer UI that is supposed to be run on GitHub Pages._
+_Linux Installer on Z copilot that is supposed to be run on GitHub Pages._
 
 toc::[]
 
@@ -31,4 +31,4 @@ toc::[]
 
 == Overview
 
-The Linux Installer UI (Stage 1) is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process.
+The Linux Installer on Z copilot (Stage 1) is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process.
