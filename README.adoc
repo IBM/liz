@@ -1,4 +1,4 @@
-= Linux Installer UI on Z
+= Linux Installer on Z copilot
 Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 :toc: macro
 :source-highlighter: pygments
