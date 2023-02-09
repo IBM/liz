@@ -7,7 +7,7 @@ before_script:
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
 script:
-  - npx vite build --mode github --base=/daniel-haischt/liz/
+  - npx vite build --mode github --base=/linuxonz/liz/
 after_success:
   - git clone git@github.ibm.com:linuxonz/liz.wiki.git
   - echo "Open Source dependencies that will be used to build the UI." > Open-Source-Development-Dependencies.md
@@ -19,6 +19,8 @@ after_success:
   - cd liz.wiki
   - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md
   - git commit -m "update dependencies"
+  - git pull --rebase
+  - git push
 #deploy:
 #  provider: pages
 #  local_dir: dist
