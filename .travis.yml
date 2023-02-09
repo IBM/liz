@@ -18,7 +18,7 @@ after_success:
   - license-checker-rseidelsohn --production --markdown >> liz.wiki/Open-Source-Production-Dependencies.md
   - cd liz.wiki
   - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md
-  - git commit -m "fix: update dependencies"
+  - git commit -m "update dependencies"
 #deploy:
 #  provider: pages
 #  local_dir: dist
