@@ -17,10 +17,11 @@ after_success:
   - echo "" >> Open-Source-Production-Dependencies.md
   - license-checker-rseidelsohn --production --markdown >> liz.wiki/Open-Source-Production-Dependencies.md
   - cd liz.wiki
+  - git remote add origin-wiki https://${GHE_TOKEN}@github.ibm.com:linuxonz/liz.wiki.git > /dev/null 2>&1
   - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md
   - git commit -m "update dependencies"
   - git pull --rebase
-  - git push
+  - git push --set-upstream origin-wiki master
 #deploy:
 #  provider: pages
 #  local_dir: dist
