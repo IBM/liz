@@ -9,7 +9,7 @@ before_script:
 script:
   - npx vite build --mode github --base=/linuxonz/liz/
 after_success:
-  - git clone https://github.ibm.com/linuxonz/liz.wiki.git
+  - git clone https://${GHE_TOKEN}@github.ibm.com/linuxonz/liz.wiki.git
   - echo "Open Source dependencies that will be used to build the UI." > Open-Source-Development-Dependencies.md
   - echo "" >> Open-Source-Development-Dependencies.md
   - license-checker-rseidelsohn --development --markdown >> liz.wiki/Open-Source-Development-Dependencies.md
