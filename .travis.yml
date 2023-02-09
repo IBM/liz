@@ -3,15 +3,29 @@ node_js: 18.12.1
 git:
   depth: false
 dist: focal
+before_script:
+  - travis_retry npm install -g license-checker-rseidelsohn
+  - travis_retry npm install
 script:
   - npx vite build --mode github --base=/daniel-haischt/liz/
-deploy:
-  provider: pages
-  local_dir: dist
-  github_url: github.ibm.com
-  skip_cleanup: true
-  github_token: $GHE_TOKEN
-  keep_history: true
-  target_branch: gh-pages
-  on:
-    branch: main
+after_success:
+  - git clone git@github.ibm.com:linuxonz/liz.wiki.git
+  - echo "Open Source dependencies that will be used to build the UI." > Open-Source-Development-Dependencies.md
+  - echo "" >> Open-Source-Development-Dependencies.md
+  - license-checker-rseidelsohn --development --markdown >> liz.wiki/Open-Source-Development-Dependencies.md
+  - echo "Open Source dependencies that will be consumed by the UI during runtime after its deployment." > Open-Source-Production-Dependencies.md
+  - echo "" >> Open-Source-Production-Dependencies.md
+  - license-checker-rseidelsohn --production --markdown >> liz.wiki/Open-Source-Production-Dependencies.md
+  - cd liz.wiki
+  - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md
+  - git commit -m "fix: update dependencies"
+#deploy:
+#  provider: pages
+#  local_dir: dist
+#  github_url: github.ibm.com
+#  skip_cleanup: true
+#  github_token: $GHE_TOKEN
+#  keep_history: true
+#  target_branch: gh-pages
+#  on:
+#    branch: main
