@@ -10,6 +10,8 @@ whitesource.config
 **/*.js
 **/*.jsx
 **/*.html
+.husky/*
 .env
 .env.github
 .travis.yml
+.nvmrc
