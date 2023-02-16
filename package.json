@@ -6,6 +6,9 @@
   "bugs": "https://github.ibm.com/linuxonz/liz/issues",
   "homepage": "https://github.ibm.com/linuxonz/liz",
   "license": "Apache-2.0",
+  "engines": {
+    "node": "18.14.0"
+  },
   "scripts": {
     "dev": "vite",
     "prebuild": "npm run lint",
