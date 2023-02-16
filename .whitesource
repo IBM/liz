@@ -15,7 +15,10 @@
       "dependencyDashboardApproval": true        
     },
     "node": {
-      "enabled": true
+      "enabled": true,
+      "supportPolicy": [
+        "lts_latest"
+      ]
     }
   }
 }
