@@ -13,6 +13,9 @@
     },
     "major": {          
       "dependencyDashboardApproval": true        
-    }  
+    },
+    "node": {
+      "enabled": true
+    }
   }
 }
