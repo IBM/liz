@@ -8,7 +8,7 @@ before_script:
   - travis_retry npm install
   - perl -i -p -e 's/URL_PATH_TOKEN/$ENV{URL_PATH_TOKEN}/' .env.github
 script:
-  - npx vite build --mode github --base=/URL_PATH_TOKEN/liz/
+  - npx vite build --mode github --base=/${URL_PATH_TOKEN}/liz/
 after_success:
   - git clone https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git
   - echo "Open Source dependencies that will be used to build the UI." > liz.wiki/Open-Source-Development-Dependencies.md
