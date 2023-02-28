@@ -1,4 +1,4 @@
-= Linux Installer on Z copilot
+= Linux Installer on Z assistant
 Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 :toc: macro
 :source-highlighter: pygments
@@ -13,7 +13,7 @@ Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 
 
 
-_Linux Installer on Z copilot that is supposed to be run on GitHub Pages._
+_Linux Installer on Z assistant that is supposed to be run on GitHub Pages._
 
 toc::[]
 
