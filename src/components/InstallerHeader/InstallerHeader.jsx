@@ -21,15 +21,15 @@ const InstallerHeader = ({ onProgress, progressStep }) => {
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-        <Header aria-label="Linux on Z Installer">
+        <Header aria-label="Installation assistant for Linux on IBM Z">
           <SkipToContent />
           <HeaderMenuButton
             aria-label="Open menu"
             onClick={onClickSideNavExpand}
             isActive={isSideNavExpanded}
           />
-          <HeaderName href="#" prefix="IBM">
-            Linux Installation
+          <HeaderName href="#" prefix="">
+            Installation assistant for Linux on IBM Z
           </HeaderName>
           <HeaderGlobalBar>
             <HeaderGlobalAction
