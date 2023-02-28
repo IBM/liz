@@ -6,6 +6,7 @@ package-lock.json
 package.json
 README.adoc
 whitesource.config
+jest.config.json
 .whitesource
 **/*.png
 **/*.js
