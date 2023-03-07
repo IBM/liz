@@ -22,7 +22,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@carbon/colors": "11.12.0",
+    "@carbon/colors": "11.13.0",
     "@carbon/layout": "11.12.0",
     "@carbon/react": "1.24.0",
     "@carbon/styles": "1.24.0",
