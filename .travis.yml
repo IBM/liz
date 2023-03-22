@@ -7,7 +7,7 @@ before_script:
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
   - perl -i -p -e 's/URL_PATH_TOKEN/$ENV{URL_PATH_TOKEN}/' packages/app/.env.github
-  - perl -pi -e 's/vite build/vite build --mode github --base=\/$ENV{URL_PATH_TOKEN}\/liz\//'
+  - perl -pi -e 's/vite build/vite build --mode github --base=\/$ENV{URL_PATH_TOKEN}\/liz\//' packages/app/package.json
 script:
   - npm run build
 after_success:
