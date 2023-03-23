@@ -16,6 +16,7 @@ jest.config.json
 **/*.jsx
 **/*.snap
 **/*.html
+**/*.sh
 lib/*.*
 .husky/*
 .env

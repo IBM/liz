@@ -12,4 +12,5 @@ jest.config.json
 **/*.png
 **/*.html
 **/*.mjs
+**/*.sh
 lib/*.*

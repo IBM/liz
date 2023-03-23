@@ -25,7 +25,10 @@
     "lint:eslint": "eslint --ext .js,.jsx --ignore-path .eslintignore --fix src",
     "lint:stylelint": "npx stylelint '**/*.scss'",
     "lint": "npm-run-all --parallel lint:eslint lint:stylelint",
-    "test": "jest"
+    "test": "jest",
+    "storybook:build": "build-storybook",
+    "storybook:noui": "bash ./tools/storybook_noui.sh",
+    "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
     "@carbon/colors": "11.13.0",
@@ -44,6 +47,15 @@
     "@commitlint/cli": "17.5.0",
     "@commitlint/config-conventional": "17.4.4",
     "@inrupt/jest-jsdom-polyfills": "1.6.0",
+    "@storybook/addon-a11y": "^6.5.16",
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-docs": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/builder-vite": "^0.4.2",
+    "@storybook/cli": "^6.5.16",
+    "@storybook/node-logger": "^6.5.16",
+    "@storybook/react": "^6.5.16",
     "@testing-library/react": "14.0.0",
     "@types/jest": "29.5.0",
     "@types/react": "18.0.28",
