@@ -21,7 +21,7 @@
   "scripts": {
     "prebuild": "npm run lint",
     "build": "vite build",
-    "clean": "npx -y rimraf node_modules lib **/node_modules/ package-lock.json && npm i",
+    "clean": "npx -y rimraf node_modules lib package-lock.json && npm i",
     "lint:eslint": "eslint --ext .js,.jsx --ignore-path .eslintignore --fix src",
     "lint:stylelint": "npx stylelint '**/*.scss'",
     "lint": "npm-run-all --parallel lint:eslint lint:stylelint",

@@ -16,7 +16,7 @@
     "dev": "vite",
     "prebuild": "npm run lint",
     "build": "vite build",
-    "clean": "npx -y rimraf node_modules dist **/node_modules/ package-lock.json && npm i",
+    "clean": "npx -y rimraf node_modules dist package-lock.json && npm i",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",

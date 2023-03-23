@@ -20,7 +20,8 @@
   "scripts": {
     "build": "npm run build -ws",
     "clean": "npx -y rimraf node_modules **/node_modules/ package-lock.json && npm i",
-    "lint": "npm run lint -ws"
+    "lint": "npm run lint -ws",
+    "deploy": "npm run deploy -ws"
   },
   "workspaces": [
     "./packages/*"
