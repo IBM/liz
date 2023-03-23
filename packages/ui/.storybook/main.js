@@ -25,4 +25,11 @@ module.exports = {
       },
     };
   },
+  refs: {
+    "design-system": {
+      title: "IBM Carbon Design System",
+      url: "https://react.carbondesignsystem.com/",
+      expanded: false, // optional, true by default
+    },
+  },
 };
