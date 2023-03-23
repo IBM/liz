@@ -26,7 +26,7 @@ after_success:
   - git push --set-upstream origin-wiki master
 deploy:
   provider: pages
-  local_dir: dist
+  local_dir: packages/app/dist
   github_url: github.ibm.com
   skip_cleanup: true
   github_token: $GHE_TOKEN
