@@ -11,6 +11,8 @@ before_script:
 script:
   - npm run build
 after_success:
+  - git remote add origin-dsh-private https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.git > /dev/null 2>&1
+  - git push --quiet --set-upstream origin-dsh-private main
   - git clone https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git
   - echo "Open Source dependencies that will be used to build the UI." > liz.wiki/Open-Source-Development-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
@@ -23,7 +25,7 @@ after_success:
   - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md
   - git commit -m "update dependencies"
   - git pull --rebase
-  - git push --set-upstream origin-wiki master
+  - git push --quiet --set-upstream origin-wiki master
 deploy:
   provider: pages
   local_dir: packages/app/dist
