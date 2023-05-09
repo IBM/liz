@@ -1,0 +1,9 @@
+@use "@carbon/react" with (
+  $font-path: "@ibm/plex"
+);
+
+body,
+html,
+#root {
+  height: 100%;
+}
