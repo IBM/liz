@@ -5,6 +5,7 @@ import vitePluginFaviconsInject from "vite-plugin-favicons-inject";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react()
+    react(),
+    vitePluginFaviconsInject("./src/assets/favicon-32x32.png"),
   ],
 });
