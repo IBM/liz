@@ -1,4 +1,5 @@
 import React from "react";
+import { IsoFilled } from "@carbon/icons-react";
 import "./_information.scss";
 
 const Information = () => {
@@ -14,7 +15,10 @@ const Information = () => {
         <div className="flex-row" id="display-iformation__table-content-row__name" role="cell">SUSE 8.4.1</div>
         <div className="flex-row" id="display-iformation__table-content-row__distribution" role="cell">Not detected</div>
         <div className="flex-row" id="display-iformation__table-content-row__version" role="cell">8.4.1</div>
-        <div className="flex-row" id="display-iformation__table-content-row__status" role="cell">ISO inserted</div>
+        <div className="flex-row" id="display-iformation__table-content-row__status" role="cell">
+          <span className="isoIcon icon"><IsoFilled size="24" /></span>
+          <span className="isoIcon label">ISO inserted</span>
+        </div>
       </div>
     </div>
   );
