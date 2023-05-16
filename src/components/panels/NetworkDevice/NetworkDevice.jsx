@@ -1,5 +1,6 @@
 import React from "react";
 import { Dropdown, TextInput, Grid, Column } from "@carbon/react";
+import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
 const NetworkDevice = () => {
@@ -37,6 +38,7 @@ const NetworkDevice = () => {
             invalid={false}
             disabled={false}
           />
+          <DeviceSettings />
         </div>
       </Column>
       <Column sm={4}>
@@ -47,6 +49,20 @@ const NetworkDevice = () => {
             invalidText="A valid value is required"
             labelText="Read channel"
             placeholder="ex: 0.0.bdf0"
+          />
+          <TextInput
+            helperText="Helper text goes here"
+            id="write-channel-input"
+            invalidText="A valid value is required"
+            labelText="Write channel"
+            placeholder="ex: 0.0.bdf1"
+          />
+          <TextInput
+            helperText="Helper text goes here"
+            id="data-channel-input"
+            invalidText="A valid value is required"
+            labelText="Data channel"
+            placeholder="ex: 0.0.bdf2"
           />
         </div>
       </Column>
