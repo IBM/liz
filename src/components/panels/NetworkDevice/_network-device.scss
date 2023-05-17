@@ -6,3 +6,16 @@
 @use "@carbon/colors";
 @use "@carbon/themes";
 
+.network-device_column-left {
+  .cds--dropdown__wrapper,
+  .cds--form-item {
+    padding: 0 0 layout.$spacing-07 0;
+  }
+}
+
+.network-device_column-right {
+  .cds--form-item {
+    padding: 0 0 layout.$spacing-07 0;
+  }
+}
+

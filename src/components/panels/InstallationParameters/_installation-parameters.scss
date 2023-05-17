@@ -6,19 +6,18 @@
 @use "@carbon/colors";
 @use "@carbon/themes";
 
-.network-address_hostip-range {
-  /* empty block */
+.installation-parameters_installation-address-input {
+  padding: 0 0 layout.$spacing-07 0;
 }
 
-.network-address_column-left {
+.installation-parameters_column-left {
   .cds--form-item {
     padding: 0 0 layout.$spacing-07 0;
   }
 }
 
-.network-address_column-right {
+.installation-parameters_column-right {
   .cds--form-item {
     padding: 0 0 layout.$spacing-07 0;
   }
 }
-

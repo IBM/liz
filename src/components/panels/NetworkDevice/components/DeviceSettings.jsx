@@ -4,9 +4,9 @@ import "./_device-settings.scss";
 
 const DeviceSettings = () => {
     return (
-        <Grid className="" fullWidth>
-          <Column sm={4}>
-            <div className="">
+        <Grid className="device-settings_grid" fullWidth>
+          <Column sm={3}>
+            <div className="device-settings_grid-column-left">
                 <RadioButtonGroup
                     legendText="OSA interface"
                     name="radio-button-group"
@@ -28,12 +28,11 @@ const DeviceSettings = () => {
                     labelB="1"
                     defaultToggled
                     id="layer2-toggle"
-                    toggled={true}
                 />
             </div>
           </Column>
-          <Column sm={4}>
-            <div className="">
+          <Column sm={3}>
+            <div className="device-settings_grid-column-right">
                 <TextInput
                     id="read-channel-input"
                     invalidText="A valid value is required"
@@ -46,7 +45,6 @@ const DeviceSettings = () => {
                     labelB="1"
                     defaultToggled
                     id="portno-toggle"
-                    toggled={false}
                 />
             </div>
           </Column>

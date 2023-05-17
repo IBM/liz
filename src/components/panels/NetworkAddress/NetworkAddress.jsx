@@ -5,8 +5,8 @@ import "./_network-address.scss";
 const NetworkAddress = () => {
   return (
     <Grid className="" fullWidth>
-      <Column sm={4}>
-        <div className="">
+      <Column sm={2} md={3} lg={4}>
+        <div className="network-address_column-left">
           <TextInput
             helperText=""
             id="hostname-input"
@@ -17,73 +17,25 @@ const NetworkAddress = () => {
           <div className="">
             <TextInput
               helperText=""
-              id="broadcast-input1"
+              id="broadcast-address-input"
               invalidText="A valid value is required"
-              labelText=""
-              placeholder="10"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="broadcast-input2"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="broadcast-input3"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="broadcast-input4"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="255"
+              labelText="Broadcast"
+              placeholder="10.0.0.255"
             />
           </div>
           <div className="">
             <TextInput
               helperText=""
-              id="ns-input1"
+              id="ns-address-input"
               invalidText="A valid value is required"
-              labelText=""
-              placeholder="10"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="ns-input2"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="ns-input3"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="ns-input4"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="255"
+              labelText="Name server"
+              placeholder="10.0.0.255"
             />
           </div>
         </div>
       </Column>
-      <Column sm={4}>
-        <div className="">
+      <Column sm={4} md={6} lg={8}>
+        <div className="network-address_column-right">
           <RadioButtonGroup
             legendText="Host IP"
             name="radio-button-group"
@@ -99,8 +51,8 @@ const NetworkAddress = () => {
               id="hostip-range-radio-2"
             />
           </RadioButtonGroup>
-          <div className="">
-          <TextInput
+          <div className="network-address_hostip-range">
+            <TextInput
               helperText=""
               id="hostip-range-input1"
               invalidText="A valid value is required"
@@ -119,67 +71,19 @@ const NetworkAddress = () => {
           <div className="">
             <TextInput
               helperText=""
-              id="gateway-input1"
+              id="gateway-address-input"
               invalidText="A valid value is required"
-              labelText=""
-              placeholder="10"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="gateway-input2"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="gateway-input3"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="gateway-input4"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="255"
+              labelText="Gateway"
+              placeholder="10.0.0.255"
             />
           </div>
           <div className="">
             <TextInput
               helperText=""
-              id="netmask-input1"
+              id="netmask-input"
               invalidText="A valid value is required"
-              labelText=""
-              placeholder="10"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="netmask-input2"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="netmask-input3"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="0"
-            />
-            <span className="">.</span>
-            <TextInput
-              helperText=""
-              id="netmask-input4"
-              invalidText="A valid value is required"
-              labelText=""
-              placeholder="255"
+              labelText="Net mask"
+              placeholder="10.0.0.255"
             />
           </div>
         </div>

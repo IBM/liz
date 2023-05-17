@@ -24,8 +24,8 @@ const NetworkDevice = () => {
   ];
   return (
     <Grid className="" fullWidth>
-      <Column sm={4}>
-        <div className="">
+      <Column sm={4} md={6} lg={6}>
+        <div className="network-device_column-left">
           <Dropdown
             titleText="Device type"
             ariaLabel="Select a device type"
@@ -41,8 +41,8 @@ const NetworkDevice = () => {
           <DeviceSettings />
         </div>
       </Column>
-      <Column sm={4}>
-        <div className="">
+      <Column sm={4} md={6} lg={6}>
+        <div className="network-device_column-right">
           <TextInput
             helperText="Helper text goes here"
             id="read-channel-input"
