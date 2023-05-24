@@ -11,13 +11,15 @@
 }
 
 .installation-parameters_column-left {
-  .cds--form-item {
+  .cds--form-item,
+  .cds--toggle {
     padding: 0 0 layout.$spacing-07 0;
   }
 }
 
 .installation-parameters_column-right {
-  .cds--form-item {
+  .cds--form-item,
+  .cds--toggle {
     padding: 0 0 layout.$spacing-07 0;
   }
 }

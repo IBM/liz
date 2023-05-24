@@ -6,9 +6,12 @@ import {
   Information,
   InputFileSelection,
   InstallationParameters,
+  Hint,
   MiscParameters,
   NetworkAddress,
   NetworkDevice,
+  NextSteps,
+  DownloadParamFile
 } from "./components/panels";
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
@@ -24,16 +27,25 @@ const renderPanel = (step) => {
       markup = Information();
       break;
     case 2:
-      markup = NetworkDevice();
+      markup = Hint();
       break;
     case 3:
-      markup = NetworkAddress();
+      markup = NetworkDevice();
       break;
     case 4:
-      markup = InstallationParameters();
+      markup = NetworkAddress();
       break;
     case 5:
+      markup = InstallationParameters();
+      break;
+    case 6:
       markup = MiscParameters();
+      break;
+    case 7:
+      markup = DownloadParamFile();
+      break;
+    case 8:
+      markup = NextSteps();
       break;
     default:
       markup = <div>Panel not yet implemented.</div>;

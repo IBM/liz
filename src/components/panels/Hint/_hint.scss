@@ -1,0 +1,20 @@
+@use "@carbon/react" with (
+  $font-path: "@ibm/plex"
+);
+@use "@carbon/type";
+@use "@carbon/layout";
+@use "@carbon/colors";
+@use "@carbon/themes";
+
+.hint_heading {
+  @include type.type-style("heading-01");
+  @include type.font-weight("semibold");
+
+  padding: 0 0 layout.$spacing-07 0;
+}
+
+.hint_intro {
+  @include type.type-style("body-01");
+
+  padding: 0 0 layout.$spacing-05 0;
+}

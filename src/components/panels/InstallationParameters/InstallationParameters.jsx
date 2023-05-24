@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Toggle, TextInput, Grid, Column } from "@carbon/react";
 import "./_installation-parameters.scss";
 
 const InstallationParameters = () => {
-  const [useVnc, setUseVnc] = useState(false);
-  const [useSsh, setUseSsh] = useState(false);
   return (
     <>
       <TextInput
@@ -25,27 +23,23 @@ const InstallationParameters = () => {
               defaultToggled
               id="vnc-toggle"
               onToggle={() => {
-                return useVnc ? setUseVnc(false) : setUseVnc(true);
+                return null;
               }}
             />
-            {useVnc &&
-              <>
-                <TextInput
-                  helperText="Helper text goes here"
-                  id="vnc-host-input"
-                  invalidText="A valid value is required"
-                  labelText="VNC host"
-                  placeholder="ex: 10.0.0.1"
-                />
-                <TextInput
-                  helperText="Helper text goes here"
-                  id="vnc-password-input"
-                  invalidText="A valid value is required"
-                  labelText="VNC password"
-                  placeholder="VNC password here"
-                />
-              </>
-            }
+            <TextInput
+              helperText="Helper text goes here"
+              id="vnc-host-input"
+              invalidText="A valid value is required"
+              labelText="VNC host"
+              placeholder="ex: 10.0.0.1"
+            />
+            <TextInput
+              helperText="Helper text goes here"
+              id="vnc-password-input"
+              invalidText="A valid value is required"
+              labelText="VNC password"
+              placeholder="VNC password here"
+            />
           </div>
         </Column>
         <Column sm={4}>
@@ -57,18 +51,16 @@ const InstallationParameters = () => {
               defaultToggled
               id="ssh-toggle"
               onToggle={() => {
-                return useSsh ? setUseSsh(false) : setUseSsh(true);
+                return null;
               }}
             />
-            {useSsh &&
-              <TextInput
-                helperText="Helper text goes here"
-                id="ssh-host-input"
-                invalidText="A valid value is required"
-                labelText="SSH host"
-                placeholder="ex: 10.0.0.1"
-              />
-            }
+            <TextInput
+              helperText="Helper text goes here"
+              id="ssh-host-input"
+              invalidText="A valid value is required"
+              labelText="SSH host"
+              placeholder="ex: 10.0.0.1"
+            />
           </div>
         </Column>
       </Grid>
