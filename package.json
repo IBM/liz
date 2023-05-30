@@ -43,8 +43,8 @@
   "devDependencies": {
     "@babel/preset-env": "7.22.4",
     "@babel/preset-react": "7.22.3",
-    "@commitlint/cli": "17.6.3",
-    "@commitlint/config-conventional": "17.6.3",
+    "@commitlint/cli": "17.6.5",
+    "@commitlint/config-conventional": "17.6.5",
     "@inrupt/jest-jsdom-polyfills": "1.7.0",
     "@storybook/addon-a11y": "^7.0.0",
     "@storybook/addon-actions": "^7.0.0",
