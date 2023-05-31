@@ -45,27 +45,36 @@ const NetworkDevice = () => {
       </Column>
       <Column sm={4} md={6} lg={6}>
         <div className="network-device_column-right">
-          <TextInput
-            helperText="Helper text goes here"
-            id="network-device_read-channel-input"
-            invalidText="A valid value is required"
-            labelText="Read channel"
-            placeholder="ex: 0.0.bdf0"
-          />
-          <TextInput
-            helperText="Helper text goes here"
-            id="network-device_write-channel-input"
-            invalidText="A valid value is required"
-            labelText="Write channel"
-            placeholder="ex: 0.0.bdf1"
-          />
-          <TextInput
-            helperText="Helper text goes here"
-            id="network-device_data-channel-input"
-            invalidText="A valid value is required"
-            labelText="Data channel"
-            placeholder="ex: 0.0.bdf2"
-          />
+          {state.selectedDeviceType && state.selectedDeviceType.id === "network-device_osa-option"
+            ?
+            (
+              <>
+                <TextInput
+                  helperText="Helper text goes here"
+                  id="network-device_read-channel-input"
+                  invalidText="A valid value is required"
+                  labelText="Read channel"
+                  placeholder="ex: 0.0.bdf0"
+                />
+                <TextInput
+                  helperText="Helper text goes here"
+                  id="network-device_write-channel-input"
+                  invalidText="A valid value is required"
+                  labelText="Write channel"
+                  placeholder="ex: 0.0.bdf1"
+                />
+                <TextInput
+                  helperText="Helper text goes here"
+                  id="network-device_data-channel-input"
+                  invalidText="A valid value is required"
+                  labelText="Data channel"
+                  placeholder="ex: 0.0.bdf2"
+                />
+              </>
+            )
+            :
+            (null) 
+          }
         </div>
       </Column>
     </Grid>
