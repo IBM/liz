@@ -1,9 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { RadioButtonGroup, RadioButton, TextInput, Toggle, Grid, Column } from "@carbon/react";
 import "./_device-settings.scss";
 
-const DeviceSettings = () => {
-    return (
+const DeviceSettings = ({ deviceSettingsId }) => {
+
+    const osaMarkup = (
         <Grid className="device-settings_grid" fullWidth>
           <Column sm={3}>
             <div className="device-settings_grid-column-left">
@@ -49,7 +51,39 @@ const DeviceSettings = () => {
             </div>
           </Column>
         </Grid>
-      );
+    );
+
+    const roceMarkup = (
+        <Grid className="device-settings_grid" fullWidth>
+          <Column sm={4} md={6} lg={6}>
+            <div className="device-settings_grid-column-single">
+                <TextInput
+                    id="pci-function-input"
+                    invalidText="A valid value is required"
+                    labelText="PCI function ID"
+                    placeholder="e.g. 0x0100"
+                />
+                <TextInput
+                    id="user-identifier-input"
+                    invalidText="A valid value is required"
+                    labelText="User identifier"
+                    placeholder="e.g. 0x1234"
+                />
+            </div>
+          </Column>
+        </Grid>
+    );
+
+    if (deviceSettingsId === "network-device_osa-option") {
+        return osaMarkup;
+    } else if (deviceSettingsId === "network-device_roce-option") {
+        return roceMarkup;
+    }
+    return (null);
 }
+
+DeviceSettings.propTypes = {
+    deviceSettingsId: PropTypes.string.isRequired
+  };
 
 export default DeviceSettings;

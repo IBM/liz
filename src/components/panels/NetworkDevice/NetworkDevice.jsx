@@ -4,27 +4,23 @@ import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
 const NetworkDevice = () => {
-  // eslint-disable-next-line
   const [state, setState] = useState({
+    selectedDeviceType: {}
   });
+
+  const updateSelectedDeviceType = (selectedDeviceType) => {
+    setState({ ...state, selectedDeviceType });
+  }
 
   const deviceTypeList = [
     {
-      id: "option-1",
-      label: "Option 1",
+      id: "network-device_osa-option",
+      label: "OSA",
     },
     {
-      id: "option-2",
-      label: "Option 2",
-    },
-    {
-      id: "option-3",
-      label: "Option 3",
-    },
-    {
-      id: "option-4",
-      label: "Option 4",
-    },
+      id: "network-device_roce-option",
+      label: "RoCE",
+    }
   ];
   return (
     <Grid className="" fullWidth>
@@ -33,7 +29,7 @@ const NetworkDevice = () => {
           <Dropdown
             titleText="Device type"
             ariaLabel="Select a device type"
-            id="device-type-selection"
+            id="network-device_device-type-selection"
             items={deviceTypeList}
             label="Select a device type"
             helperText="Helper text goes here"
@@ -41,29 +37,31 @@ const NetworkDevice = () => {
             warn={false}
             invalid={false}
             disabled={false}
+            onChange={({ selectedItem }) => updateSelectedDeviceType(selectedItem)}
+            selectedItem={state.selectedDeviceType}
           />
-          <DeviceSettings />
+          <DeviceSettings deviceSettingsId={state.selectedDeviceType ? state.selectedDeviceType.id : ""} />
         </div>
       </Column>
       <Column sm={4} md={6} lg={6}>
         <div className="network-device_column-right">
           <TextInput
             helperText="Helper text goes here"
-            id="read-channel-input"
+            id="network-device_read-channel-input"
             invalidText="A valid value is required"
             labelText="Read channel"
             placeholder="ex: 0.0.bdf0"
           />
           <TextInput
             helperText="Helper text goes here"
-            id="write-channel-input"
+            id="network-device_write-channel-input"
             invalidText="A valid value is required"
             labelText="Write channel"
             placeholder="ex: 0.0.bdf1"
           />
           <TextInput
             helperText="Helper text goes here"
-            id="data-channel-input"
+            id="network-device_data-channel-input"
             invalidText="A valid value is required"
             labelText="Data channel"
             placeholder="ex: 0.0.bdf2"

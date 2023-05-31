@@ -37,8 +37,7 @@ const DownloadParamFile = () => {
         />
         {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
         <ButtonSet className="download-param-file_buttons">
-          <CopyToClipboard text={state.paramFileValue}
-            onCopy={ updateCopied }>
+          <CopyToClipboard text={state.paramFileValue} onCopy={ updateCopied }>
             <Button kind="secondary" size="xl" className="download-param-file_button">
               Copy to clipboard
             </Button>
