@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { IsoFilled } from "@carbon/icons-react";
 import "./_information.scss";
 
 const Information = () => {
+  // eslint-disable-next-line
+  const [state, setState] = useState({
+  });
+  
   return (
     <div className="table-container" role="table" aria-label="Display Information">
       <div className="flex-table header" id="display-iformation__table-header-row" role="rowgroup">

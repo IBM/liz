@@ -17,7 +17,14 @@ import InstallerFlow from "../InstallerFlow";
 import "./_installer-header.scss";
 
 const InstallerHeader = ({ onProgress, progressStep }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [state, setState] = useState({
+    expanded: false
+  });
+
+  const updateExpanded = (expanded) => {
+    setState({ ...state, expanded });
+  }
+
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
@@ -35,7 +42,7 @@ const InstallerHeader = ({ onProgress, progressStep }) => {
             <HeaderGlobalAction
               aria-label="Help"
               onClick={() => {
-                return expanded ? setExpanded(false) : setExpanded(true);
+                return state.expanded ? updateExpanded(false) : updateExpanded(true);
               }}
             >
               <Help />
@@ -54,7 +61,7 @@ const InstallerHeader = ({ onProgress, progressStep }) => {
             </SideNavItems>
           </SideNav>
           <HeaderPanel
-            expanded={expanded}
+            expanded={state.expanded}
             aria-label="Help"
             className="installer-header__panel-component"
           ></HeaderPanel>

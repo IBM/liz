@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { RadioButtonGroup, RadioButton, TextInput, Grid, Column } from "@carbon/react";
 import "./_network-address.scss";
 
 const NetworkAddress = () => {
+  // eslint-disable-next-line
+  const [state, setState] = useState({
+  });
+
   return (
     <Grid className="" fullWidth>
       <Column sm={2} md={3} lg={4}>

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { ListItem, UnorderedList, Grid, Column } from "@carbon/react";
 import "./_hint.scss";
 
 const Hint = () => {
+  // eslint-disable-next-line
+  const [state, setState] = useState({
+  });
+
   return (
     <Grid className="hint_grid" fullWidth>
       <Column sm={6} md={8} lg={16}>

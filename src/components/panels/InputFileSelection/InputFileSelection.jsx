@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown, FileUploader, Grid, Column } from "@carbon/react";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = () => {
+  // eslint-disable-next-line
+  const [state, setState] = useState({
+  });
+
   const distributionList = [
     {
       id: "option-1",

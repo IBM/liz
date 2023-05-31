@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown, TextInput, Grid, Column } from "@carbon/react";
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
 const NetworkDevice = () => {
+  // eslint-disable-next-line
+  const [state, setState] = useState({
+  });
+
   const deviceTypeList = [
     {
       id: "option-1",

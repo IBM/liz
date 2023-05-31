@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Toggle, TextInput, Grid, Column } from "@carbon/react";
 import "./_installation-parameters.scss";
 
 const InstallationParameters = () => {
+  const [state, setState] = useState({
+    useSsh: false,
+    useVnc: false
+  });
+
+  const updateUseSsh = (flag) => {
+    setState({ ...state, useSsh: flag });
+  }
+
+  const updateUseVnc = (flag) => {
+    setState({ ...state, useVnc: flag });
+  }
+
   return (
     <>
       <TextInput
@@ -20,26 +33,30 @@ const InstallationParameters = () => {
               labelText="VNC for installation"
               labelA="Disable"
               labelB="Enable"
-              defaultToggled
               id="vnc-toggle"
+              defaultToggled={state.useVnc}
               onToggle={() => {
-                return null;
+                return state.useVnc ? updateUseVnc(false) : updateUseVnc(true);
               }}
             />
-            <TextInput
-              helperText="Helper text goes here"
-              id="vnc-host-input"
-              invalidText="A valid value is required"
-              labelText="VNC host"
-              placeholder="ex: 10.0.0.1"
-            />
-            <TextInput
-              helperText="Helper text goes here"
-              id="vnc-password-input"
-              invalidText="A valid value is required"
-              labelText="VNC password"
-              placeholder="VNC password here"
-            />
+            {state.useVnc &&
+              <>
+                <TextInput
+                  helperText="Helper text goes here"
+                  id="vnc-host-input"
+                  invalidText="A valid value is required"
+                  labelText="VNC host"
+                  placeholder="ex: 10.0.0.1"
+                />
+                <TextInput
+                  helperText="Helper text goes here"
+                  id="vnc-password-input"
+                  invalidText="A valid value is required"
+                  labelText="VNC password"
+                  placeholder="VNC password here"
+                />
+              </>
+            }
           </div>
         </Column>
         <Column sm={4}>
@@ -48,19 +65,21 @@ const InstallationParameters = () => {
               labelText="SSH for installation"
               labelA="Disable"
               labelB="Enable"
-              defaultToggled
               id="ssh-toggle"
+              defaultToggled={state.useSsh}
               onToggle={() => {
-                return null;
+                return state.useSsh ? updateUseSsh(false) : updateUseSsh(true);
               }}
             />
-            <TextInput
-              helperText="Helper text goes here"
-              id="ssh-host-input"
-              invalidText="A valid value is required"
-              labelText="SSH host"
-              placeholder="ex: 10.0.0.1"
-            />
+            {state.useSsh &&
+              <TextInput
+                helperText="Helper text goes here"
+                id="ssh-host-input"
+                invalidText="A valid value is required"
+                labelText="SSH host"
+                placeholder="ex: 10.0.0.1"
+              />
+            }
           </div>
         </Column>
       </Grid>

@@ -6,4 +6,21 @@
 @use "@carbon/colors";
 @use "@carbon/themes";
 
+.download-param-file_textarea textarea {
+  @include type.type-style("code-02");  
+}
 
+.download-param-file_copied-label {
+  @include type.type-style("label-01");
+
+  margin: layout.$spacing-03 0 0 0;
+  display: inline-block;
+}
+
+.download-param-file_buttons {
+  float: right;
+}
+
+.download-param-file_button {
+  white-space: nowrap;
+}
