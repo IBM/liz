@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, ButtonSet, TextArea, Grid, Column } from "@carbon/react";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
