@@ -45,7 +45,7 @@
     "@babel/preset-react": "7.22.3",
     "@commitlint/cli": "17.6.5",
     "@commitlint/config-conventional": "17.6.5",
-    "@inrupt/jest-jsdom-polyfills": "1.7.0",
+    "@inrupt/jest-jsdom-polyfills": "1.8.0",
     "@storybook/addon-a11y": "^7.0.0",
     "@storybook/addon-actions": "^7.0.0",
     "@storybook/addon-docs": "^7.0.0",
