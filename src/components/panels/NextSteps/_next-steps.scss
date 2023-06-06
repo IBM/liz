@@ -6,4 +6,27 @@
 @use "@carbon/colors";
 @use "@carbon/themes";
 
+.next-steps_heading {
+  @include type.type-style("heading-01");
+  @include type.font-weight("semibold");
 
+  padding: 0 0 layout.$spacing-07 0;
+}
+
+.next-steps_para_top {
+  @include type.type-style("body-01");
+
+  padding: layout.$spacing-05 0 0 0;
+}
+
+.next-steps_para_bottom {
+  @include type.type-style("body-01");
+
+  padding: 0 0 layout.$spacing-05 0;
+}
+
+.next-steps_para {
+  @include type.type-style("body-01");
+
+  padding: layout.$spacing-05 0 layout.$spacing-05 0;
+}
