@@ -1,19 +1,20 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Button, ButtonSet, TextArea, Grid, Column } from "@carbon/react";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
 
-const DownloadParamFile = () => {
+const DownloadParamFile = (patchState) => {
   const [state, setState] = useState({
     copied: false,
     paramFileValue: `
-    rd.znet=qeth,
-    0.0.bdf0,0.0.
-    bdf1,0.0.bdf2,
-    layer2=1,
-    portno=0,
-    ip=172.18.132.1::172.18.0.1:15:t3560001.lnxne.boe:encbdf0:none,
-    nameserver=172.18.0.1
+      rd.znet=qeth,
+      0.0.bdf0,0.0.
+      bdf1,0.0.bdf2,
+      layer2=1,
+      portno=0,
+      ip=172.18.132.1::172.18.0.1:15:t3560001.lnxne.boe:encbdf0:none,
+      nameserver=172.18.0.1
     `
   });
 
@@ -51,6 +52,10 @@ const DownloadParamFile = () => {
   );
 
   return (markup);
+};
+
+DownloadParamFile.propTypes = {
+  patchState: PropTypes.func.isRequired
 };
 
 export default DownloadParamFile;

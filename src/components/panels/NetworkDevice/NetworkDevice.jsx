@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Dropdown, TextInput, Grid, Column } from "@carbon/react";
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
-const NetworkDevice = () => {
+const NetworkDevice = (patchState) => {
   const [state, setState] = useState({
     selectedDeviceType: {}
   });
@@ -79,6 +80,10 @@ const NetworkDevice = () => {
       </Column>
     </Grid>
   );
+};
+
+NetworkDevice.propTypes = {
+  patchState: PropTypes.func.isRequired
 };
 
 export default NetworkDevice;

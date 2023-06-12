@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { RadioButtonGroup, RadioButton, TextInput, Grid, Column } from "@carbon/react";
 import "./_network-address.scss";
 
-const NetworkAddress = () => {
+const NetworkAddress = (patchState) => {
   // eslint-disable-next-line
   const [state, setState] = useState({
   });
@@ -94,6 +95,10 @@ const NetworkAddress = () => {
       </Column>
     </Grid>
   );
+};
+
+NetworkAddress.propTypes = {
+  patchState: PropTypes.func.isRequired
 };
 
 export default NetworkAddress;

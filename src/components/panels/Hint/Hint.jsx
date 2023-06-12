@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { ListItem, UnorderedList, Grid, Column } from "@carbon/react";
 import "./_hint.scss";
 
-const Hint = () => {
+const Hint = (patchState) => {
   // eslint-disable-next-line
   const [state, setState] = useState({
   });
@@ -35,6 +36,10 @@ const Hint = () => {
       </Column>
     </Grid>
   );
+};
+
+Hint.propTypes = {
+  patchState: PropTypes.func.isRequired
 };
 
 export default Hint;

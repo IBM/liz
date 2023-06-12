@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { TextArea, Grid, Column } from "@carbon/react";
 
-const MiscParameters = () => {
+const MiscParameters = (patchState) => {
   // eslint-disable-next-line
   const [state, setState] = useState({
   });
@@ -18,6 +19,10 @@ const MiscParameters = () => {
       </Column>
     </Grid>
   );
+};
+
+MiscParameters.propTypes = {
+  patchState: PropTypes.func.isRequired
 };
 
 export default MiscParameters;

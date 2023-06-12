@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Dropdown, FileUploader, Grid, Column } from "@carbon/react";
 import "./_input-file-selection.scss";
 
-const InputFileSelection = () => {
+const InputFileSelection = (patchState) => {
   // eslint-disable-next-line
   const [state, setState] = useState({
   });
@@ -107,6 +108,10 @@ const InputFileSelection = () => {
       </Grid>
     </>
   );
+};
+
+InputFileSelection.propTypes = {
+  patchState: PropTypes.func.isRequired
 };
 
 export default InputFileSelection;

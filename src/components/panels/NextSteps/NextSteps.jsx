@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { CodeSnippet, ListItem, UnorderedList, Grid, Column } from "@carbon/react";
 import "./_next-steps.scss";
 
-const NextSteps = () => {
+const NextSteps = (useSsh, useVnc, patchState) => {
   // eslint-disable-next-line
   const [state, setState] = useState({
   });
@@ -28,28 +29,42 @@ const NextSteps = () => {
           <ListItem>Enter the parameters for the FTP server</ListItem>
           <ListItem>Select OK</ListItem>
         </UnorderedList>
-        <div className="next-steps_para">
-          If VNC installation was selected, the following additional hint should be displayed:
-        </div>
-        <div className="next-steps_para_bottom">
-          Once the installer is started, use a VNC client to connect to the system at the following address:
-        </div>
-        <UnorderedList>
-          <ListItem>VNC host: &lt;host-IP-address&gt;</ListItem>
-          <ListItem>VNC password: &lt;vncpassword&gt;</ListItem>
-        </UnorderedList>
-        <div className="next-steps_para">
-          If SSH installation was selected, the following additional hint should be displayed:
-        </div>
-        <div className="next-steps_para_bottom">
-          Once the installer is started, use an SSH client to connect to the system at the following address:
-        </div>
-        <UnorderedList>
-          <ListItem>SSH host: installer@&lt;host-IP-address&gt;</ListItem>
-        </UnorderedList>
+        {useVnc &&
+          <>
+            <div className="next-steps_para">
+              If VNC installation was selected, the following additional hint should be displayed:
+            </div>
+            <div className="next-steps_para_bottom">
+              Once the installer is started, use a VNC client to connect to the system at the following address:
+            </div>
+            <UnorderedList>
+              <ListItem>VNC host: &lt;host-IP-address&gt;</ListItem>
+              <ListItem>VNC password: &lt;vncpassword&gt;</ListItem>
+            </UnorderedList>
+          </>
+        }
+        {useSsh &&
+          <>
+            <div className="next-steps_para">
+              If SSH installation was selected, the following additional hint should be displayed:
+            </div>
+            <div className="next-steps_para_bottom">
+              Once the installer is started, use an SSH client to connect to the system at the following address:
+            </div>
+            <UnorderedList>
+              <ListItem>SSH host: installer@&lt;host-IP-address&gt;</ListItem>
+            </UnorderedList>
+          </>
+        }
       </Column>
     </Grid>
   );
+};
+
+NextSteps.propTypes = {
+  useVnc: PropTypes.bool.isRequired,
+  useSsh: PropTypes.bool.isRequired,
+  patchState: PropTypes.func.isRequired
 };
 
 export default NextSteps;
