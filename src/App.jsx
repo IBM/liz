@@ -16,24 +16,43 @@ import {
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
 
+const getProgressStepCompletion = (state) => {
+  return {
+    inputFileSelection: state.inputFileSelection.complete,
+    information: state.information.complete,
+    hint: state.hint.complete,
+    networkDevice: state.networkDevice.complete,
+    networkAddress: state.networkAddress.complete,
+    installationParameters: state.miscParameters.complete,
+    miscParameters: state.miscParameters.complete,
+    downloadParamFile: state.downloadParamFile.complete,
+    nextStep: state.nextStep.complete
+  }
+}
+
 const renderPanel = (step, patchState, state) => {
   let markup;
 
   switch (step) {
     case 0:
-      markup = InputFileSelection(patchState);
+      markup = InputFileSelection(patchState, {
+        disk: state.inputFileSelection.diskSize,
+        memory: state.inputFileSelection.memorySize,
+        level: state.inputFileSelection.machineLevel
+      },
+      state.inputFileSelection.docLink);
       break;
     case 1:
       markup = Information(patchState, {
-        name: state.information.distributionName,
-        version: state.information.distributionVersion
+        name: state.inputFileSelection.distributionName,
+        version: state.inputFileSelection.distributionVersion
       },
       {
-        disk: state.information.diskSize,
-        memory: state.information.memorySize,
-        level: state.information.machineLevel
+        disk: state.inputFileSelection.diskSize,
+        memory: state.inputFileSelection.memorySize,
+        level: state.inputFileSelection.machineLevel
       },
-      state.information.docLink);
+      state.inputFileSelection.docLink);
       break;
     case 2:
       markup = Hint(patchState);
@@ -67,27 +86,23 @@ const App = () => {
   const [step, setStep] = useState(0);
   const [state, setState] = useState({
     inputFileSelection: {
-      distributionName: "",
-      distributionVersion: "",
-      mainMemoryRequirement: 0,
-      diskRequirement: 10,
-      minMachineLevel: "",
-      docLink: ""
-    },
-    downloadParamFile: {
-      contents: ""
-    },
-    hint: {
-
-    },
-    information: {
       distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
       distributionVersion: "9.0",
       memorySize: 3,
       diskSize: 10,
       machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
-      docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9"
-
+      docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
+      complete: false
+    },
+    information: {
+      complete: true
+    },
+    downloadParamFile: {
+      contents: "",
+      complete: false
+    },
+    hint: {
+      complete: true
     },
     installationParameters: {
       networkInstallationUrl: "",
@@ -97,12 +112,14 @@ const App = () => {
       },
       ssh: {
         host: ""
-      }
+      },
+      complete: false
     },
     miscParameters: {
-      params: ""
+      params: "",
+      complete: true
     },
-    networkAdress: {
+    networkAddress: {
       addressType: "",
       ipv4Address: "",
       ipv6Address: "",
@@ -114,7 +131,8 @@ const App = () => {
       ipv6Prefix: "",
       broadcastIpAddress: "",
       gatewayIpAddress: "",
-      nameserverIpAddress: ""
+      nameserverIpAddress: "",
+      complete: false
     },
     networkDevice: {
       deviceType: "",
@@ -130,10 +148,11 @@ const App = () => {
         fid: "",
         uid: ""
       },
-      vlanId: ""
+      vlanId: "",
+      complete: false
     },
     nextStep: {
-
+      complete: true
     }
   });
   const patchState = (patch) => {
@@ -142,10 +161,11 @@ const App = () => {
     console.log(newState);
   }
   const panelMarkup = renderPanel(step, patchState, state);
+  const progressStepCompletion = getProgressStepCompletion(state);
 
   return (
     <>
-      <InstallerHeader onProgress={setStep} progressStep={step} />
+      <InstallerHeader onProgress={setStep} progressStep={step} progressStepCompletion={progressStepCompletion} />
       <Content className="app__full-height">
         <Routes>
           <Route

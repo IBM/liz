@@ -42,7 +42,7 @@ const Information = (patchStat, distribution, systemRequirements, docLink) => {
       </div>
       <div className="information_heading">Information</div>
       <div className="information_content">
-        Link to distribution-specific documentation: <Link href={docLink}>{distributionName}</Link>
+        Link to distribution-specific documentation: <Link href={docLink} target="_blank">{distributionName}</Link>
       </div>
     </>
   );
@@ -58,7 +58,7 @@ Information.propTypes = {
     disk: PropTypes.number.isRequired,
     memory: PropTypes.number.isRequired,
     level: PropTypes.string.isRequired
-  }),
+  }).isRequired,
   docLink: PropTypes.string.isRequired
 };
 
