@@ -11,12 +11,12 @@ import {
   SideNav,
   SideNavItems,
 } from "@carbon/react";
-import { Help } from "@carbon/icons-react";
+import { Help, LinuxAlt } from "@carbon/icons-react";
 import PropTypes from "prop-types";
 import InstallerFlow from "../InstallerFlow";
 import "./_installer-header.scss";
 
-const InstallerHeader = ({ onProgress, progressStep, progressStepCompletion }) => {
+const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepCompletion }) => {
   const [state, setState] = useState({
     expanded: false
   });
@@ -45,7 +45,15 @@ const InstallerHeader = ({ onProgress, progressStep, progressStepCompletion }) =
                 return state.expanded ? updateExpanded(false) : updateExpanded(true);
               }}
             >
-              <Help />
+              <Help size="24" />
+            </HeaderGlobalAction>
+            <HeaderGlobalAction
+              aria-label="Profile settings"
+              onClick={() => {
+                return onShowNotification();
+              }}
+            >
+              <LinuxAlt size="24" />
             </HeaderGlobalAction>
           </HeaderGlobalBar>
           <SideNav
@@ -73,6 +81,7 @@ const InstallerHeader = ({ onProgress, progressStep, progressStepCompletion }) =
 };
 
 InstallerHeader.propTypes = {
+  onShowNotification: PropTypes.func.isRequired,
   onProgress: PropTypes.func.isRequired,
   progressStep: PropTypes.number.isRequired,
   progressStepCompletion: PropTypes.shape({

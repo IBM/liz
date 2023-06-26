@@ -56,3 +56,15 @@
   margin-right: 0;
   padding-left: calc(7 * layout.$spacing-07);
 }
+
+.landing-page__notification {
+  z-index: 10000;
+  position: absolute;
+  top: layout.$spacing-09;
+  right: 0;
+  border: 0;
+
+  &.cds--actionable-notification {
+    position: absolute;
+  }
+}

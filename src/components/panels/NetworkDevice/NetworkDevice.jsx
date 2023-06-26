@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Dropdown, TextInput, Grid, Column } from "@carbon/react";
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
-const NetworkDevice = (patchState) => {
-  const [state, setState] = useState({
-    selectedDeviceType: {}
-  });
+const NetworkDevice = (patchState, localStorageKey) => {
+  const getInitialState = () => {
+    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
+    const defaultState = {
+      selectedDeviceType: {}
+    };
+
+    if (initialState) {
+      return initialState
+    }
+    return defaultState;
+  }
+  const [state, setState] = useState(getInitialState);
 
   const updateSelectedDeviceType = (selectedDeviceType) => {
-    setState({ ...state, selectedDeviceType });
+    setState(Object.assign(state, { selectedDeviceType }));
   }
 
   const deviceTypeList = [
@@ -23,6 +32,11 @@ const NetworkDevice = (patchState) => {
       label: "RoCE",
     }
   ];
+
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(state))
+  }, [localStorageKey, state]);
+
   return (
     <Grid className="" fullWidth>
       <Column sm={4} md={6} lg={6}>
@@ -83,7 +97,8 @@ const NetworkDevice = (patchState) => {
 };
 
 NetworkDevice.propTypes = {
-  patchState: PropTypes.func.isRequired
+  patchState: PropTypes.func.isRequired,
+  localStorageKey: PropTypes.string.isRequired
 };
 
 export default NetworkDevice;

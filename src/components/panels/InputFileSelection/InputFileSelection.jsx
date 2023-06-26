@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, FileUploader, Grid, Column } from "@carbon/react";
+import { Dropdown, /* FileUploader, */ Grid, Column } from "@carbon/react";
 import "./_input-file-selection.scss";
 
-const InputFileSelection = (patchState, systemRequirements, docLink) => {
-  // eslint-disable-next-line
-  const [state, setState] = useState({
-    selectedDistributionName: {},
-    selectedDistributionVersion: {}
-  });
+const InputFileSelection = (patchState, systemRequirements, docLink, localStorageKey) => {
+  const getInitialState = () => {
+    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
+    const defaultState = {
+      selectedDistributionName: {},
+      selectedDistributionVersion: {}
+    };
+
+    if (initialState) {
+      return initialState
+    }
+    return defaultState;
+  }
+  const [state, setState] = useState(getInitialState);
 
   const distributionList = [
     {
@@ -24,11 +32,11 @@ const InputFileSelection = (patchState, systemRequirements, docLink) => {
   ];
 
   const updateSelectedDistributionName = (selectedDistributionName) => {
-    setState({ ...state, selectedDistributionName });
+    setState(Object.assign(state, { selectedDistributionName }));
   }
 
   const updateSelectedDistributionVersion = (selectedDistributionVersion) => {
-    setState({ ...state, selectedDistributionVersion });
+    setState(Object.assign(state, { selectedDistributionVersion }));
   }
 
   const isComplete = () => {
@@ -45,11 +53,15 @@ const InputFileSelection = (patchState, systemRequirements, docLink) => {
     return false;
   }
 
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(state))
+  }, [localStorageKey, state]);
+
   return (
     <>
       <Grid className="input-file-selection__grid">
         <Column sm={4} md={8} lg={16}>
-          <div className="input-file-selection__heading">edgedancer9487</div>
+          {/* <div className="input-file-selection__heading">edgedancer9487</div> */}
         </Column>
         <Column sm={4} md={8} lg={16}>
           <div>
@@ -71,7 +83,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink) => {
                 warn={false}
                 invalid={false}
                 disabled={false}
-                onChange={({ selectedItem }) => { 
+                onChange={({ selectedItem }) => {
                   updateSelectedDistributionName(selectedItem);
                   patchState({
                     inputFileSelection: {
@@ -81,7 +93,8 @@ const InputFileSelection = (patchState, systemRequirements, docLink) => {
                       diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
                       machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
                       docLink,
-                      complete: isComplete() || false
+                      complete: isComplete() || false,
+                      localStorageKey
                     }
                   });
                 }}
@@ -106,7 +119,8 @@ const InputFileSelection = (patchState, systemRequirements, docLink) => {
                       diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
                       machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
                       docLink,
-                      complete: isComplete() || false
+                      complete: isComplete() || false,
+                      localStorageKey
                     }
                   });
                 }}
@@ -119,6 +133,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink) => {
           <div>
             <div></div>
             <div>
+              {/*
               <FileUploader
                 labelTitle="Already have a custom ISO file?"
                 labelDescription="Drag and drop or upload your ISO file here."
@@ -133,6 +148,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink) => {
                 iconDescription="Delete file"
                 name=""
               />
+              */}
             </div>
           </div>
         </Column>
@@ -148,7 +164,8 @@ InputFileSelection.propTypes = {
     memory: PropTypes.number.isRequired,
     level: PropTypes.string.isRequired
   }).isRequired,
-  docLink: PropTypes.string.isRequired
+  docLink: PropTypes.string.isRequired,
+  localStorageKey: PropTypes.string.isRequired
 };
 
 export default InputFileSelection;

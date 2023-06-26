@@ -1,65 +1,97 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Toggle, TextInput, Grid, Column } from "@carbon/react";
 import "./_installation-parameters.scss";
 
-const InstallationParameters = (patchState) => {
-  const [state, setState] = useState({
-    useSsh: false,
-    useVnc: false,
-    installationAddress: "",
-    vncHost: "",
-    vncPassword: "",
-    sshHost: ""
-  });
+const InstallationParameters = (patchState, localStorageKey) => {
+  const getInitialState = () => {
+    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
+    const defaultState = {
+      useSsh: false,
+      useVnc: false,
+      installationAddress: {
+        value: "",
+        valid: false
+      },
+      vncHost: "",
+      vncPassword: "",
+      sshHost: ""
+    };
+
+    if (initialState) {
+      return initialState
+    }
+    return defaultState;
+  }
+  const [state, setState] = useState(getInitialState);
 
   const updateUseSsh = (flag) => {
-    setState({ ...state, useSsh: flag });
+    setState(Object.assign(state, { useSsh: flag }));
   }
 
   const updateUseVnc = (flag) => {
-    setState({ ...state, useVnc: flag });
+    setState(Object.assign(state, { useVnc: flag }));
   }
 
-  const updateInstallationAddress = (address) => {
-    setState({ ...state, installationAddress: address });
-  }
-
-  const updateVncHost = (host) => {
-    setState({ ...state, vncHost: host });
+  const updateInstallationAddress = (address, valid) => {
+    setState(Object.assign(state, { installationAddress: { value: address, valid } }));
   }
 
   const updateVncPassword = (password) => {
-    setState({ ...state, vncPassword: password });
+    setState(Object.assign(state, { vncPassword: password }));
   }
 
-  const updateSshHost = (host) => {
-    setState({ ...state, sshHost: host });
+  const isInstallationAddressInputValid = (url) => {
+    let installationAddressInputIsValid = false;
+
+    const expression = /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
+    const regex = new RegExp(expression);
+
+    if (url.match(regex)) {
+      installationAddressInputIsValid = true;
+    }
+
+    return installationAddressInputIsValid;
   }
+
+  const useSshToggled = state.useSsh;
+  const useVncToggled = state.useVnc;
+
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(state))
+  }, [localStorageKey, state]);
 
   return (
     <>
       <TextInput
         helperText="Helper text goes here"
         id="installation-address-input"
+        invalid={state && state.installationAddress ? !state.installationAddress.valid : false}
         invalidText="A valid value is required"
         labelText="Installation address"
         placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
         className="installation-parameters_installation-address-input"
         onChange={(url) => {
-          updateInstallationAddress(url && url.target ? url.target.value : "");
-          patchState({
-            installationParameters: {
-              networkInstallationUrl: state.installationAddress,
-              vnc: {
-                host: state.vncHost,
-                password: state.vncPassword
-              },
-              ssh: {
-                host: state.sshHost
+          const urlValue = url && url.target ? url.target.value : "";
+          const urlValueIsValid = isInstallationAddressInputValid(urlValue);
+          updateInstallationAddress(urlValue, urlValueIsValid);
+          
+          if (urlValueIsValid) {
+            patchState({
+              installationParameters: {
+                networkInstallationUrl: state.installationAddress.value,
+                vnc: {
+                  password: state.vncPassword,
+                  enabled: useVncToggled
+                },
+                ssh: {
+                  host: state.sshHost,
+                  enabled: useSshToggled
+                },
+                localStorageKey
               }
-            }
-          });
+            });
+          }
         }}
       />
       <Grid className="" fullWidth>
@@ -70,61 +102,54 @@ const InstallationParameters = (patchState) => {
               labelA="Disable"
               labelB="Enable"
               id="vnc-toggle"
-              defaultToggled={state.useVnc}
+              defaultToggled={useVncToggled}
               onToggle={() => {
-                if (state.useVnc) {
+                if (useVncToggled) {
                   updateUseVnc(false);
+                } else {
+                  updateUseVnc(true);
                 }
-                updateUseVnc(true);
+                patchState({
+                  installationParameters: {
+                    networkInstallationUrl: state.installationAddress,
+                    vnc: {
+                      password: state.vncPassword,
+                      enabled: useVncToggled
+                    },
+                    ssh: {
+                      host: state.sshHost,
+                      enabled: useSshToggled
+                    },
+                    localStorageKey
+                  }
+                });
               }}
             />
-            {state.useVnc &&
-              <>
-                <TextInput
-                  helperText="Helper text goes here"
-                  id="vnc-host-input"
-                  invalidText="A valid value is required"
-                  labelText="VNC host"
-                  placeholder="ex: 10.0.0.1"
-                  onChange={(host) => {
-                    updateVncHost(host && host.target ? host.target.value : "");
-                    patchState({
-                      installationParameters: {
-                        networkInstallationUrl: state.installationAddress,
-                        vnc: {
-                          host: state.vncHost,
-                          password: state.vncPassword
-                        },
-                        ssh: {
-                          host: state.sshHost
-                        }
-                      }
-                    });
-                  }}
-                />
-                <TextInput
-                  helperText="Helper text goes here"
-                  id="vnc-password-input"
-                  invalidText="A valid value is required"
-                  labelText="VNC password"
-                  placeholder="VNC password here"
-                  onChange={(password) => {
-                    updateVncPassword(password && password.target ? password.target.value : "");
-                    patchState({
-                      installationParameters: {
-                        networkInstallationUrl: state.installationAddress,
-                        vnc: {
-                          host: state.vncHost,
-                          password: state.vncPassword
-                        },
-                        ssh: {
-                          host: state.sshHost
-                        }
-                      }
-                    });
-                  }}
-                />
-              </>
+            {useVncToggled &&
+              <TextInput
+                helperText="Helper text goes here"
+                id="vnc-password-input"
+                invalidText="A valid value is required"
+                labelText="VNC password"
+                placeholder="VNC password here"
+                onChange={(password) => {
+                  updateVncPassword(password && password.target ? password.target.value : "");
+                  patchState({
+                    installationParameters: {
+                      networkInstallationUrl: state.installationAddress,
+                      vnc: {
+                        password: state.vncPassword,
+                        enabled: useVncToggled
+                      },
+                      ssh: {
+                        host: state.sshHost,
+                        enabled: useSshToggled
+                      },
+                      localStorageKey
+                    }
+                  });
+                }}
+              />
             }
           </div>
         </Column>
@@ -135,38 +160,28 @@ const InstallationParameters = (patchState) => {
               labelA="Disable"
               labelB="Enable"
               id="ssh-toggle"
-              defaultToggled={state.useSsh}
+              defaultToggled={useSshToggled}
               onToggle={() => {
-                if (state.useSsh) {
+                if (useSshToggled) {
                   updateUseSsh(false);
+                } else {
+                  updateUseSsh(true);
                 }
-                updateUseSsh(true);
+                patchState({
+                  installationParameters: {
+                    networkInstallationUrl: state.installationAddress,
+                    vnc: {
+                      password: state.vncPassword,
+                      enabled: useVncToggled
+                    },
+                    ssh: {
+                      host: state.sshHost,
+                      enabled: useSshToggled
+                    }
+                  }
+                });
               }}
             />
-            {state.useSsh &&
-              <TextInput
-                helperText="Helper text goes here"
-                id="ssh-host-input"
-                invalidText="A valid value is required"
-                labelText="SSH host"
-                placeholder="ex: 10.0.0.1"
-                onChange={(host) => {
-                  updateSshHost(host && host.target ? host.target.value : "");
-                  patchState({
-                    installationParameters: {
-                      networkInstallationUrl: state.installationAddress,
-                      vnc: {
-                        host: state.vncHost,
-                        password: state.vncPassword
-                      },
-                      ssh: {
-                        host: state.sshHost
-                      }
-                    }
-                  });
-                }}
-              />
-            }
           </div>
         </Column>
       </Grid>
@@ -175,7 +190,8 @@ const InstallationParameters = (patchState) => {
 };
 
 InstallationParameters.propTypes = {
-  patchState: PropTypes.func.isRequired
+  patchState: PropTypes.func.isRequired,
+  localStorageKey: PropTypes.string.isRequired
 };
 
 export default InstallationParameters;

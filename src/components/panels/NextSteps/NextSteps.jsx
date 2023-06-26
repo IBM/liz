@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { CodeSnippet, ListItem, UnorderedList, Grid, Column } from "@carbon/react";
 import "./_next-steps.scss";
 
-const NextSteps = (useSsh, useVnc, patchState) => {
+const NextSteps = (useSsh, useVnc, patchState, localStorageKey) => {
+  const getInitialState = () => {
+    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
+    const defaultState = {
+    };
+
+    if (initialState) {
+      return initialState
+    }
+    return defaultState;
+  }
   // eslint-disable-next-line
-  const [state, setState] = useState({
-  });
+  const [state, setState] = useState(getInitialState);
+
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(state))
+  }, [localStorageKey, state]);
 
   return (
     <Grid className="download-param-file_grid" fullWidth>
@@ -32,9 +45,6 @@ const NextSteps = (useSsh, useVnc, patchState) => {
         {useVnc &&
           <>
             <div className="next-steps_para">
-              If VNC installation was selected, the following additional hint should be displayed:
-            </div>
-            <div className="next-steps_para_bottom">
               Once the installer is started, use a VNC client to connect to the system at the following address:
             </div>
             <UnorderedList>
@@ -46,9 +56,6 @@ const NextSteps = (useSsh, useVnc, patchState) => {
         {useSsh &&
           <>
             <div className="next-steps_para">
-              If SSH installation was selected, the following additional hint should be displayed:
-            </div>
-            <div className="next-steps_para_bottom">
               Once the installer is started, use an SSH client to connect to the system at the following address:
             </div>
             <UnorderedList>
@@ -64,7 +71,8 @@ const NextSteps = (useSsh, useVnc, patchState) => {
 NextSteps.propTypes = {
   useVnc: PropTypes.bool.isRequired,
   useSsh: PropTypes.bool.isRequired,
-  patchState: PropTypes.func.isRequired
+  patchState: PropTypes.func.isRequired,
+  localStorageKey: PropTypes.string.isRequired
 };
 
 export default NextSteps;

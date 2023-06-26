@@ -13,13 +13,9 @@
 
 .flex-table {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 15%);
+  grid-template-columns: repeat(auto-fill, 25%);
   grid-template-rows: 100% auto;
   transition: 0.5s;
-
-  &:first-of-type {
-    @include type.type-style("heading-01");
-  }
 
   &.row {
     @include type.type-style("body-01");
@@ -29,7 +25,14 @@
 .flex-row {
   display: block;
   width: 100%;
-  padding: 0 0 0 layout.$spacing-05;
+  padding: layout.$spacing-05 0 layout.$spacing-05 layout.$spacing-05;
+  background-color: themes.$background;
+
+  &:first-of-type {
+    @include type.type-style("heading-01");
+
+    background-color: themes.$background-selected;
+  }
 }
 
 .isoIcon {
@@ -49,4 +52,6 @@
 
 .information_content {
   @include type.type-style("body-compact-01");
+
+  padding: 0 0 layout.$spacing-07 0;
 }

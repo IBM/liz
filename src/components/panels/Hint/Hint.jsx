@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { ListItem, UnorderedList, Grid, Column } from "@carbon/react";
 import "./_hint.scss";
 
-const Hint = (patchState) => {
+const Hint = (patchState, localStorageKey) => {
+  const getInitialState = () => {
+    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
+    const defaultState = {
+    };
+
+    if (initialState) {
+      return initialState
+    }
+    return defaultState;
+  }
   // eslint-disable-next-line
-  const [state, setState] = useState({
-  });
+  const [state, setState] = useState(getInitialState);
+
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(state))
+  }, [localStorageKey, state]);
 
   return (
     <Grid className="hint_grid" fullWidth>
@@ -39,7 +52,8 @@ const Hint = (patchState) => {
 };
 
 Hint.propTypes = {
-  patchState: PropTypes.func.isRequired
+  patchState: PropTypes.func.isRequired,
+  localStorageKey: PropTypes.string.isRequired
 };
 
 export default Hint;
