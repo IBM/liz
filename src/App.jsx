@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Content } from "@carbon/react";
+import { Modal, Content } from "@carbon/react";
 import { Routes, Route } from "react-router-dom";
 import InstallerHeader from "./components/InstallerHeader";
 import {
@@ -90,7 +90,12 @@ const renderPanel = (step, patchState, state) => {
       markup = DownloadParamFile(patchState, stateToParamFile, state, state.downloadParamFile.localStorageKey);
       break;
     case 8:
-      markup = NextSteps(patchState, state.nextStep.localStorageKey);
+      markup = NextSteps(
+        state.installationParameters.ssh.enabled,
+        state.installationParameters.vnc.enabled,
+        patchState,
+        state.nextStep.localStorageKey
+      );
       break;
     default:
       markup = <div>Panel not yet implemented.</div>;
@@ -180,7 +185,8 @@ const App = () => {
       localStorageKey: "com.ibm.systems.linux.z.nextStep"
     },
     showNotification: false,
-    isDirty: false
+    isDirty: false,
+    showConfirmationModal: false
   });
   const patchState = (patch) => {;
     setState(Object.assign(state, patch));
@@ -188,17 +194,33 @@ const App = () => {
     console.log(state);
   }
   const updateShowNotification = (showNotification) => {
-    setState({ ...state, showNotification });
+    setState(prevState => ({...prevState, showNotification}));
+  }
+  const updateShowConfirmationModal = (showConfirmationModal) => {
+    setState(prevState => ({...prevState, showConfirmationModal}));
   }
   const updateIsDirty = (isDirty) => {
-    setState({ ...state, isDirty });
+    setState(prevState => ({...prevState, isDirty}));
   }
   const panelMarkup = renderPanel(step, patchState, state);
-  const showNotification = () => {
+  const showNotification = (callback) => {
+    if (callback) {
+      if (state.showNotification) {
+        updateShowNotification(false);
+        return callback();
+      }
+      updateShowNotification(true);
+      return callback();
+    }
     return state.showNotification ? updateShowNotification(false) : updateShowNotification(true);
   }
-  const closeNotification = () => {
-    updateShowNotification(false);
+  const closeNotification = (settingsWereDeleted) => {
+    if (settingsWereDeleted) {
+      showNotification(() => {
+        return updateShowConfirmationModal(true);
+      });
+    }
+    return updateShowNotification(false);
   }
   const progressStepCompletion = getProgressStepCompletion(state);
   const getLocalStorageKeys = () => {
@@ -229,6 +251,14 @@ const App = () => {
         progressStep={step}
         progressStepCompletion={progressStepCompletion}
       />
+      <Modal
+        open={state.showConfirmationModal}
+        passiveModal
+        onRequestClose={() => {
+          updateShowConfirmationModal(false);
+        }}
+        modalHeading="The param file settings have been pruned from your browser cache.">
+      </Modal>
       <Content className="app__full-height">
         <Routes>
           <Route
