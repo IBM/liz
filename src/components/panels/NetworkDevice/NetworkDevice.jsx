@@ -19,7 +19,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
   const [state, setState] = useState(getInitialState);
 
   const updateSelectedDeviceType = (selectedDeviceType) => {
-    setState(Object.assign(state, { selectedDeviceType }));
+    setState((prevState) => ({...prevState, selectedDeviceType}));
   }
 
   const deviceTypeList = [
@@ -34,8 +34,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
   ];
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    localStorage.setItem(localStorageKey, JSON.stringify(state));
+  });
 
   return (
     <Grid className="" fullWidth>

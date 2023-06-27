@@ -9,6 +9,7 @@ const LandingPage = ({ panelMarkup, showNotification, closeNotification, localSt
     for (i = 0; i < localStorageKeys.length; i++) {
       localStorage.removeItem(localStorageKeys[i]);
     }
+    localStorage.removeItem("com.ibm.systems.linux.z.app");
     closeNotification(true);
   }
 

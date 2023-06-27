@@ -21,19 +21,19 @@ const NetworkAddress = (patchState, localStorageKey) => {
   const [state, setState] = useState(getInitialState);
 
   const updateNetmask = (netmask) => {
-    setState(Object.assign(state, { netmask }));
+    setState((prevState) => ({...prevState, netmask}));
   }
 
   const updateCidr = (cidr) => {
-    setState(Object.assign(state, { cidr }));
+    setState((prevState) => ({...prevState, cidr}));
   }
 
   const updateBinary = (binary) => {
-    setState(Object.assign(state, { binary }));
+    setState((prevState) => ({...prevState, binary}));
   }
 
   const updateAddressType = (addressType) => {
-    setState(Object.assign(state, { addressType }));
+    setState((prevState) => ({...prevState, addressType}));
   }
 
   const netmaskToCidr = (netmask) => {
@@ -83,8 +83,8 @@ const NetworkAddress = (patchState, localStorageKey) => {
   }
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    localStorage.setItem(localStorageKey, JSON.stringify(state));
+  });
 
   return (
     <Grid className="" fullWidth>

@@ -17,12 +17,12 @@ const MiscParameters = (patchState, localStorageKey) => {
   const [state, setState] = useState(getInitialState);
 
   const updateMiscParameterContent = (miscParameterContent) => {
-    setState(Object.assign(state, { miscParameterContent }));
+    setState((prevState) => ({...prevState, miscParameterContent}));
   }
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    localStorage.setItem(localStorageKey, JSON.stringify(state));
+  });
 
   return (
     <Grid className="misc-parameters_grid" fullWidth>

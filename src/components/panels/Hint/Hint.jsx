@@ -18,8 +18,8 @@ const Hint = (patchState, localStorageKey) => {
   const [state, setState] = useState(getInitialState);
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    localStorage.setItem(localStorageKey, JSON.stringify(state));
+  });
 
   return (
     <Grid className="hint_grid" fullWidth>

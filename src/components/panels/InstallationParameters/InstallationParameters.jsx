@@ -26,19 +26,19 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const [state, setState] = useState(getInitialState);
 
   const updateUseSsh = (flag) => {
-    setState(Object.assign(state, { useSsh: flag }));
+    setState((prevState) => ({...prevState, useSsh: flag}));
   }
 
   const updateUseVnc = (flag) => {
-    setState(Object.assign(state, { useVnc: flag }));
+    setState((prevState) => ({...prevState, useVnc: flag}));
   }
 
   const updateInstallationAddress = (address, valid) => {
-    setState(Object.assign(state, { installationAddress: { value: address, valid } }));
+    setState((prevState) => ({...prevState, installationAddress: { value: address, valid }}));
   }
 
   const updateVncPassword = (password) => {
-    setState(Object.assign(state, { vncPassword: password }));
+    setState((prevState) => ({...prevState, vncPassword: password}));
   }
 
   const isInstallationAddressInputValid = (url) => {
@@ -58,8 +58,8 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const useVncToggled = state.useVnc;
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    localStorage.setItem(localStorageKey, JSON.stringify(state));
+  });
 
   return (
     <>

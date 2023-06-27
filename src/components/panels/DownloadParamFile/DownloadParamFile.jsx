@@ -21,9 +21,9 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const [state, setState] = useState(getInitialState);
 
   const updateCopied = () => {
-    setState(Object.assign(state, {copied: true}));
+    setState((prevState) => ({...prevState, copied: true}));
     const timer = setTimeout(() => {
-      setState(Object.assign(state, {copied: false}));
+      setState((prevState) => ({...prevState, copied: false}));
     }, 2000);
     return () => clearTimeout(timer);
   }
@@ -81,8 +81,8 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   );
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    localStorage.setItem(localStorageKey, JSON.stringify(state));
+  });
 
   return (markup);
 };

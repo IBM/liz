@@ -3,18 +3,28 @@ import PropTypes from "prop-types";
 import { Dropdown, /* FileUploader, */ Grid, Column } from "@carbon/react";
 import "./_input-file-selection.scss";
 
-const InputFileSelection = (patchState, systemRequirements, docLink, localStorageKey) => {
-  const getInitialState = () => {
+const InputFileSelection = (patchState, systemRequirements, docLink, localStorageKey, useStateFromLocalStorage, canWriteToLocalStorage) => {
+  const STATE_ORIGIN_USER = "user";
+  const STATE_ORIGIN_DEFAULT = "default";
+  const STATE_ORIGIN_STORAGE = "storage";
+
+  const getInitialState = (useDefault) => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
       selectedDistributionName: {},
-      selectedDistributionVersion: {}
+      selectedDistributionVersion: {},
+      origin: STATE_ORIGIN_DEFAULT
     };
 
-    if (initialState) {
-      return initialState
+    if (useDefault) {
+      return defaultState;
+    } else if (initialState && !useStateFromLocalStorage && canWriteToLocalStorage) {
+      return defaultState;
+    } else if (!initialState) {
+      return defaultState;
     }
-    return defaultState;
+    initialState.origin = STATE_ORIGIN_STORAGE;
+    return initialState
   }
   const [state, setState] = useState(getInitialState);
 
@@ -32,11 +42,11 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
   ];
 
   const updateSelectedDistributionName = (selectedDistributionName) => {
-    setState(Object.assign(state, { selectedDistributionName }));
+    setState((prevState) => ({...prevState, selectedDistributionName, origin: STATE_ORIGIN_USER}));
   }
 
   const updateSelectedDistributionVersion = (selectedDistributionVersion) => {
-    setState(Object.assign(state, { selectedDistributionVersion }));
+    setState((prevState) => ({...prevState, selectedDistributionVersion, origin: STATE_ORIGIN_USER}));
   }
 
   const isComplete = () => {
@@ -54,8 +64,15 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
   }
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    const initialState = getInitialState(true);
+    const stateOriginsFromStorage = state && state.origin === STATE_ORIGIN_STORAGE;
+
+    if (canWriteToLocalStorage && !useStateFromLocalStorage && stateOriginsFromStorage) {
+      return localStorage.setItem(localStorageKey, JSON.stringify(initialState));
+    } else if (canWriteToLocalStorage) {
+      return localStorage.setItem(localStorageKey, JSON.stringify(state));
+    }
+  });
 
   return (
     <>
@@ -165,7 +182,9 @@ InputFileSelection.propTypes = {
     level: PropTypes.string.isRequired
   }).isRequired,
   docLink: PropTypes.string.isRequired,
-  localStorageKey: PropTypes.string.isRequired
+  localStorageKey: PropTypes.string.isRequired,
+  useStateFromLocalStorage: PropTypes.bool.isRequired,
+  canWriteToLocalStorage: PropTypes.bool.isRequired
 };
 
 export default InputFileSelection;

@@ -56,7 +56,9 @@ const renderPanel = (step, patchState, state) => {
         level: state.inputFileSelection.machineLevel
       },
       state.inputFileSelection.docLink,
-      state.inputFileSelection.localStorageKey);
+      state.inputFileSelection.localStorageKey,
+      state.useStateFromLocalStorage,
+      state.useExistingSettingsModalOpened);
       break;
     case 1:
       markup = Information(patchState, {
@@ -105,102 +107,128 @@ const renderPanel = (step, patchState, state) => {
 };
 
 const App = () => {
+  const getInitialState = (useStateFromLocalStorage) => {
+    const initialState = JSON.parse(localStorage.getItem("com.ibm.systems.linux.z.app"));
+    const defaultState = {
+      inputFileSelection: {
+        distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
+        distributionVersion: "9.0",
+        memorySize: 3,
+        diskSize: 10,
+        machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
+        docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
+        complete: false,
+        localStorageKey: "com.ibm.systems.linux.z.inputFileSelection"
+      },
+      information: {
+        complete: true,
+        localStorageKey: "com.ibm.systems.linux.z.information"
+      },
+      downloadParamFile: {
+        contents: "",
+        complete: false,
+        localStorageKey: "com.ibm.systems.linux.z.downloadParamFile"
+      },
+      hint: {
+        complete: true,
+        localStorageKey: "com.ibm.systems.linux.z.hint"
+      },
+      installationParameters: {
+        networkInstallationUrl: "",
+        vnc: {
+          password: "",
+          enabled: false
+        },
+        ssh: {
+          enabled: false
+        },
+        complete: false,
+        localStorageKey: "com.ibm.systems.linux.z.installationParameters"
+      },
+      miscParameters: {
+        params: "",
+        complete: true,
+        localStorageKey: "com.ibm.systems.linux.z.miscParameters"
+      },
+      networkAddress: {
+        addressType: "",
+        ipv4Address: "",
+        ipv6Address: "",
+        hostName: "",
+        domainSearchPath: "",
+        hostIpAddress: "",
+        betmaskPrefix: "",
+        ipv4Netmask: "",
+        ipv6Prefix: "",
+        broadcastIpAddress: "",
+        gatewayIpAddress: "",
+        nameserverIpAddress: "",
+        complete: false,
+        localStorageKey: "com.ibm.systems.linux.z.networkAddress"
+      },
+      networkDevice: {
+        deviceType: "",
+        osa: {
+          readChannel: "",
+          writeChannel: "",
+          dataChannel: "",
+          portNumber: 0,
+          layer: 0,
+        },
+        roce: {
+          fid: "",
+          uid: ""
+        },
+        vlanId: "",
+        complete: false,
+        localStorageKey: "com.ibm.systems.linux.z.networkDevice"
+      },
+      nextStep: {
+        complete: true,
+        localStorageKey: "com.ibm.systems.linux.z.nextStep"
+      },
+      showNotification: false,
+      isDirty: false,
+      showConfirmationModal: false,
+      showUseExistingSettingsModal: false,
+      useExistingSettingsModalOpened: true,
+      useStateFromLocalStorage: false
+    };
+
+    if (initialState && useStateFromLocalStorage) {
+      initialState.isDirty = false;
+      initialState.showConfirmationModal = false;
+      initialState.showUseExistingSettingsModal = true;
+      initialState.useStateFromLocalStorage = true;
+      return initialState
+    } else if (initialState && !useStateFromLocalStorage) {
+      defaultState.showUseExistingSettingsModal = true;
+      return defaultState;
+    }
+    return defaultState;
+  }
   const [step, setStep] = useState(0);
-  const [state, setState] = useState({
-    inputFileSelection: {
-      distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
-      distributionVersion: "9.0",
-      memorySize: 3,
-      diskSize: 10,
-      machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
-      docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
-      complete: false,
-      localStorageKey: "com.ibm.systems.linux.z.inputFileSelection"
-    },
-    information: {
-      complete: true,
-      localStorageKey: "com.ibm.systems.linux.z.information"
-    },
-    downloadParamFile: {
-      contents: "",
-      complete: false,
-      localStorageKey: "com.ibm.systems.linux.z.downloadParamFile"
-    },
-    hint: {
-      complete: true,
-      localStorageKey: "com.ibm.systems.linux.z.hint"
-    },
-    installationParameters: {
-      networkInstallationUrl: "",
-      vnc: {
-        password: "",
-        enabled: false
-      },
-      ssh: {
-        enabled: false
-      },
-      complete: false,
-      localStorageKey: "com.ibm.systems.linux.z.installationParameters"
-    },
-    miscParameters: {
-      params: "",
-      complete: true,
-      localStorageKey: "com.ibm.systems.linux.z.miscParameters"
-    },
-    networkAddress: {
-      addressType: "",
-      ipv4Address: "",
-      ipv6Address: "",
-      hostName: "",
-      domainSearchPath: "",
-      hostIpAddress: "",
-      betmaskPrefix: "",
-      ipv4Netmask: "",
-      ipv6Prefix: "",
-      broadcastIpAddress: "",
-      gatewayIpAddress: "",
-      nameserverIpAddress: "",
-      complete: false,
-      localStorageKey: "com.ibm.systems.linux.z.networkAddress"
-    },
-    networkDevice: {
-      deviceType: "",
-      osa: {
-        readChannel: "",
-        writeChannel: "",
-        dataChannel: "",
-        portNumber: 0,
-        layer: 0,
-      },
-      roce: {
-        fid: "",
-        uid: ""
-      },
-      vlanId: "",
-      complete: false,
-      localStorageKey: "com.ibm.systems.linux.z.networkDevice"
-    },
-    nextStep: {
-      complete: true,
-      localStorageKey: "com.ibm.systems.linux.z.nextStep"
-    },
-    showNotification: false,
-    isDirty: false,
-    showConfirmationModal: false
-  });
+  const [state, setState] = useState(getInitialState);
   const patchState = (patch) => {;
-    setState(Object.assign(state, patch));
+    setState((prevState) => ({...prevState, ...patch}));
     updateIsDirty(true);
+    localStorage.setItem("com.ibm.systems.linux.z.app", JSON.stringify(state));
     console.log(state);
   }
   const updateShowNotification = (showNotification) => {
-    setState(prevState => ({...prevState, showNotification}));
+    setState((prevState) => ({...prevState, showNotification}));
   }
   const updateShowConfirmationModal = (showConfirmationModal) => {
-    setState(prevState => ({...prevState, showConfirmationModal}));
+    setState((prevState) => ({...prevState, showConfirmationModal}));
+  }
+  const updateShowUseExistingSettingsModal = (showUseExistingSettingsModal) => {
+    setState((prevState) => ({...prevState, showUseExistingSettingsModal}));
+  }
+  const updateUseExistingSettingsModalOpened = (useExistingSettingsModalOpened) => {
+    setState((prevState) => ({...prevState, useExistingSettingsModalOpened}));
   }
   const updateIsDirty = (isDirty) => {
-    setState(prevState => ({...prevState, isDirty}));
+    setState((prevState) => ({...prevState, isDirty}));
   }
   const panelMarkup = renderPanel(step, patchState, state);
   const showNotification = (callback) => {
@@ -215,7 +243,7 @@ const App = () => {
     return state.showNotification ? updateShowNotification(false) : updateShowNotification(true);
   }
   const closeNotification = (settingsWereDeleted) => {
-    if (settingsWereDeleted) {
+    if (settingsWereDeleted && typeof settingsWereDeleted === "boolean") {
       showNotification(() => {
         return updateShowConfirmationModal(true);
       });
@@ -259,6 +287,32 @@ const App = () => {
         }}
         modalHeading="The param file settings have been pruned from your browser cache.">
       </Modal>
+      <Modal
+        open={state.showUseExistingSettingsModal}
+        modalHeading="There are existing param file settings. Do you want to use them as a baseline for this session?"
+        modalLabel="Existing settings found"
+        primaryButtonText="Yes"
+        secondaryButtonText="No"
+        onRequestSubmit={() => {
+          patchState(getInitialState(true));
+          updateShowUseExistingSettingsModal(false);
+          updateUseExistingSettingsModalOpened(true);
+        }}
+        onSecondarySubmit={() => {
+          const localStorageKeys = getLocalStorageKeys();
+          let i;
+          for (i = 0; i < localStorageKeys.length; i++) {
+            localStorage.removeItem(localStorageKeys[i]);
+          }
+          localStorage.removeItem("com.ibm.systems.linux.z.app");
+          updateShowUseExistingSettingsModal(false);
+          updateUseExistingSettingsModalOpened(true);
+        }}
+        onRequestClose={() => {
+          updateShowUseExistingSettingsModal(false);
+          updateUseExistingSettingsModalOpened(true);
+        }}
+      />
       <Content className="app__full-height">
         <Routes>
           <Route

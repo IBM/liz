@@ -27,8 +27,8 @@ const Information = (patchStat, distribution, systemRequirements, docLink, local
   const DEFAULT_DISK_SIZE_UNIT = "GiB";
   
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state))
-  }, [localStorageKey, state]);
+    localStorage.setItem(localStorageKey, JSON.stringify(state));
+  });
 
   return (
     <>
