@@ -95,6 +95,10 @@ const renderPanel = (step, patchState, state) => {
       markup = NextSteps(
         state.installationParameters.ssh.enabled,
         state.installationParameters.vnc.enabled,
+        state.networkAddress.addressType === "radio-ipv4"
+          ? state.networkAddress.ipv4.address
+          : state.networkAddress.ipv6.address,
+        state.installationParameters.vnc.password,
         patchState,
         state.nextStep.localStorageKey
       );
@@ -152,15 +156,16 @@ const App = () => {
       },
       networkAddress: {
         addressType: "",
-        ipv4Address: "",
-        ipv6Address: "",
-        hostName: "",
-        domainSearchPath: "",
-        hostIpAddress: "",
-        betmaskPrefix: "",
-        ipv4Netmask: "",
-        ipv6Prefix: "",
-        broadcastIpAddress: "",
+        ipv4: {
+          cidr: "",
+          binary: "",
+          netmask: "",
+          address: ""
+        },
+        ipv6: {
+          cidr: "",
+          address: ""
+        },
         gatewayIpAddress: "",
         nameserverIpAddress: "",
         complete: false,

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { CodeSnippet, ListItem, UnorderedList, Grid, Column } from "@carbon/react";
 import "./_next-steps.scss";
 
-const NextSteps = (useSsh, useVnc, patchState, localStorageKey) => {
+const NextSteps = (useSsh, useVnc, networkAddress = "<host-IP-address>", vncPassword = "<vncpassword>", patchState, localStorageKey) => {
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
@@ -48,8 +48,8 @@ const NextSteps = (useSsh, useVnc, patchState, localStorageKey) => {
               Once the installer is started, use a VNC client to connect to the system at the following address:
             </div>
             <UnorderedList>
-              <ListItem>VNC host: &lt;host-IP-address&gt;</ListItem>
-              <ListItem>VNC password: &lt;vncpassword&gt;</ListItem>
+              <ListItem>VNC host: {networkAddress}</ListItem>
+              <ListItem>VNC password: {vncPassword}</ListItem>
             </UnorderedList>
           </>
         }
@@ -59,7 +59,7 @@ const NextSteps = (useSsh, useVnc, patchState, localStorageKey) => {
               Once the installer is started, use an SSH client to connect to the system at the following address:
             </div>
             <UnorderedList>
-              <ListItem>SSH host: installer@&lt;host-IP-address&gt;</ListItem>
+              <ListItem>SSH host: installer@{networkAddress}</ListItem>
             </UnorderedList>
           </>
         }
@@ -72,7 +72,9 @@ NextSteps.propTypes = {
   useVnc: PropTypes.bool.isRequired,
   useSsh: PropTypes.bool.isRequired,
   patchState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired
+  localStorageKey: PropTypes.string.isRequired,
+  networkAddress: PropTypes.string,
+  vncPassword: PropTypes.string
 };
 
 export default NextSteps;
