@@ -158,6 +158,46 @@ const NetworkAddress = (patchState, localStorageKey) => {
     return regexExp.test(ipv6Address);
   }
 
+  const isV4AddressComplete = () => {
+    if (
+      !state.ipv4Cidr ||
+      !state.gatewayIpAddress ||
+      !state.nameserverIpAddress
+    ) {
+      return false;
+    }
+    return state.ipv4Cidr.valid &&
+      state.netmask.valid &&
+      state.ipv4Address.valid &&
+      state.gatewayIpAddress.valid &&
+      state.nameserverIpAddress.valid;
+  }
+
+  const isV6AddressComplete = () => {
+    if (
+      !state.ipv6Cidr ||
+      !state.gatewayIpAddress ||
+      !state.nameserverIpAddress
+    ) {
+      return false;
+    }
+    return state.ipv6Cidr.valid &&
+      state.ipv4Address.valid &&
+      state.gatewayIpAddress.valid &&
+      state.nameserverIpAddress.valid;
+  }
+
+  const isIpAddressValid = () => {
+    return state.addressType === ADDRESS_TYPE_IPV4
+      ? isV4AddressComplete()
+      : isV6AddressComplete();
+  }
+
+  const isComplete = () => {
+    return state.addressType &&
+      isIpAddressValid();
+  }
+
   useEffect(() => () => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
   }, []);
@@ -205,18 +245,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
                       networkAddress: {
                         addressType: state.addressType,
                         ipv4: {
-                          cidr: state.ipv4Cidr.value,
+                          cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
                           binary: state.binary,
-                          netmask: state.netmask.value,
-                          address: state.ipv4Address.value
+                          netmask: state.netmask ? state.netmask.value : "",
+                          address: state.ipv4Address ? state.ipv4Address.value : ""
                         },
                         ipv6: {
-                          cidr: state.ipv6Cidr.value,
-                          address: state.ipv6Address.value
+                          cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                          address: state.ipv6Address ? state.ipv6Address.value : ""
                         },
-                        gatewayIpAddress: state.gatewayIpAddress.value,
-                        nameserverIpAddress: state.nameserverIpAddress.value,
-                        complete: false,
+                        gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
+                        nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+                        complete: isComplete() || false,
                         localStorageKey: "com.ibm.systems.linux.z.networkAddress"
                       }
                     });
@@ -246,18 +286,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
                       networkAddress: {
                         addressType: state.addressType,
                         ipv4: {
-                          cidr: state.ipv4Cidr.value,
+                          cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
                           binary: state.binary,
-                          netmask: state.netmask.value,
-                          address: state.ipv4Address.value
+                          netmask: state.netmask ? state.netmask.value : "",
+                          address: state.ipv4Address ? state.ipv4Address.value : ""
                         },
                         ipv6: {
-                          cidr: state.ipv6Cidr.value,
-                          address: state.ipv6Address.value
+                          cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                          address: state.ipv6Address ? state.ipv6Address.value : ""
                         },
-                        gatewayIpAddress: state.gatewayIpAddress.value,
-                        nameserverIpAddress: state.nameserverIpAddress.value,
-                        complete: false,
+                        gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
+                        nameserverIpAddress: state.nameserverIpAddres ? state.nameserverIpAddress.value : "",
+                        complete: isComplete() || false,
                         localStorageKey: "com.ibm.systems.linux.z.networkAddress"
                       }
                     });
@@ -287,18 +327,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
                       networkAddress: {
                         addressType: state.addressType,
                         ipv4: {
-                          cidr: state.ipv4Cidr.value,
+                          cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
                           binary: state.binary,
-                          netmask: state.netmask.value,
-                          address: state.ipv4Address.value
+                          netmask: state.netmask ? state.netmask.value : "",
+                          address: state.ipv4Address ? state.ipv4Address.value : ""
                         },
                         ipv6: {
-                          cidr: state.ipv6Cidr.value,
-                          address: state.ipv6Address.value
+                          cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                          address: state.ipv6Address ? state.ipv6Address.value : ""
                         },
-                        gatewayIpAddress: state.gatewayIpAddress.value,
-                        nameserverIpAddress: state.nameserverIpAddress.value,
-                        complete: false,
+                        gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
+                        nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+                        complete: isComplete() || false,
                         localStorageKey: "com.ibm.systems.linux.z.networkAddress"
                       }
                     });
@@ -336,18 +376,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
                       networkAddress: {
                         addressType: state.addressType,
                         ipv4: {
-                          cidr: state.ipv4Cidr.value,
+                          cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
                           binary: state.binary,
-                          netmask: state.netmask.value,
-                          address: state.ipv4Address.value
+                          netmask: state.netmask ? state.netmask.value : "",
+                          address: state.ipv4Address ? state.ipv4Address.value : ""
                         },
                         ipv6: {
-                          cidr: state.ipv6Cidr.value,
-                          address: state.ipv6Address.value
+                          cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                          address: state.ipv6Address ? state.ipv6Address.value : ""
                         },
-                        gatewayIpAddress: state.gatewayIpAddress.value,
-                        nameserverIpAddress: state.nameserverIpAddress.value,
-                        complete: false,
+                        gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
+                        nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+                        complete: isComplete() || false,
                         localStorageKey: "com.ibm.systems.linux.z.networkAddress"
                       }
                     });
@@ -374,18 +414,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
                       networkAddress: {
                         addressType: state.addressType,
                         ipv4: {
-                          cidr: state.ipv4Cidr.value,
+                          cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
                           binary: state.binary,
-                          netmask: state.netmask.value,
-                          address: state.ipv4Address.value
+                          netmask: state.netmask ? state.netmask.value : "",
+                          address: state.ipv4Address ? state.ipv4Address.value : ""
                         },
                         ipv6: {
-                          cidr: state.ipv6Cidr.value,
-                          address: state.ipv6Address.value
+                          cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                          address: state.ipv6Address ? state.ipv6Address.value : ""
                         },
-                        gatewayIpAddress: state.gatewayIpAddress.value,
-                        nameserverIpAddress: state.nameserverIpAddress.value,
-                        complete: false,
+                        gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
+                        nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+                        complete: isComplete() || false,
                         localStorageKey: "com.ibm.systems.linux.z.networkAddress"
                       }
                     });
@@ -417,18 +457,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   networkAddress: {
                     addressType: state.addressType,
                     ipv4: {
-                      cidr: state.ipv4Cidr.value,
+                      cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
                       binary: state.binary,
-                      netmask: state.netmask.value,
-                      address: state.ipv4Address.value
+                      netmask: state.netmask ? state.netmask.value : "",
+                      address: state.ipv4Address ? state.ipv4Address.value : ""
                     },
                     ipv6: {
-                      cidr: state.ipv6Cidr.value,
-                      address: state.ipv6Address.value
+                      cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                      address: state.ipv6Address ? state.ipv6Address.value : ""
                     },
-                    gatewayIpAddress: state.gatewayIpAddress.value,
-                    nameserverIpAddress: state.nameserverIpAddress.value,
-                    complete: false,
+                    gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
+                    nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+                    complete: isComplete() || false,
                     localStorageKey: "com.ibm.systems.linux.z.networkAddress"
                   }
                 });
@@ -454,18 +494,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   networkAddress: {
                     addressType: state.addressType,
                     ipv4: {
-                      cidr: state.ipv4Cidr.value,
+                      cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
                       binary: state.binary,
-                      netmask: state.netmask.value,
-                      address: state.ipv4Address.value
+                      netmask: state.netmask ? state.netmask.value : "",
+                      address: state.ipv4Address ? state.ipv4Address.value : ""
                     },
                     ipv6: {
-                      cidr: state.ipv6Cidr.value,
-                      address: state.ipv6Address.value
+                      cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                      address: state.ipv6Address ? state.ipv6Address.value : ""
                     },
-                    gatewayIpAddress: state.gatewayIpAddress.value,
-                    nameserverIpAddress: state.nameserverIpAddress.value,
-                    complete: false,
+                    gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
+                    nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+                    complete: isComplete() || false,
                     localStorageKey: "com.ibm.systems.linux.z.networkAddress"
                   }
                 });
