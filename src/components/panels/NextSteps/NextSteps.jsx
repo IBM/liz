@@ -22,7 +22,7 @@ const NextSteps = (useSsh, useVnc, networkAddress = "<host-IP-address>", vncPass
   });
 
   return (
-    <Grid className="download-param-file_grid" fullWidth>
+    <Grid className="next-steps_grid" fullWidth>
       <Column sm={6} md={8} lg={16}>
         <div className="next-steps_heading">Next steps</div>
         <div className="next-steps_para_bottom">

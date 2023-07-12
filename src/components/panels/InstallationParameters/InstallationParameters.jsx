@@ -94,7 +94,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
           }
         }}
       />
-      <Grid className="" fullWidth>
+      <Grid className="installation-parameters__grid" fullWidth>
         <Column sm={4}>
           <div className="installation-parameters_column-left">
             <Toggle

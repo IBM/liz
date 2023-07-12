@@ -16,6 +16,9 @@ import {
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
 
+const PROGRESS_STEP_STATE_COMPLETION = "complete";
+const PROGRESS_STATE_INVALIDATION = "invalid";
+
 const stateToParamFile = (state) => {
   let stateToParamFile = `rd.znet=qeth,0.0.bdf0,0.0.bdf1,0.0.bdf2,
 layer2=1,
@@ -31,18 +34,24 @@ if (state && state.miscParameters && state.miscParameters.params && state.miscPa
 return stateToParamFile;
 }
 
-const getProgressStepCompletion = (state) => {
-  return {
-    inputFileSelection: state.inputFileSelection.complete,
-    information: state.information.complete,
-    hint: state.hint.complete,
-    networkDevice: state.networkDevice.complete,
-    networkAddress: state.networkAddress.complete,
-    installationParameters: state.miscParameters.complete,
-    miscParameters: state.miscParameters.complete,
-    downloadParamFile: state.downloadParamFile.complete,
-    nextStep: state.nextStep.complete
+const getProgressStepState = (state, forProgressStepState) => {
+  if (
+    forProgressStepState === PROGRESS_STATE_INVALIDATION ||
+    forProgressStepState === PROGRESS_STEP_STATE_COMPLETION
+  ) {
+    return {
+      inputFileSelection: state.inputFileSelection[forProgressStepState],
+      information: state.information[forProgressStepState],
+      hint: state.hint[forProgressStepState],
+      networkDevice: state.networkDevice[forProgressStepState],
+      networkAddress: state.networkAddress[forProgressStepState],
+      installationParameters: state.miscParameters[forProgressStepState],
+      miscParameters: state.miscParameters[forProgressStepState],
+      downloadParamFile: state.downloadParamFile[forProgressStepState],
+      nextStep: state.nextStep[forProgressStepState]
+    }
   }
+  return {};
 }
 
 const renderPanel = (step, patchState, state) => {
@@ -122,19 +131,23 @@ const App = () => {
         machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
         docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
         complete: false,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.inputFileSelection"
       },
       information: {
         complete: true,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.information"
       },
       downloadParamFile: {
         contents: "",
         complete: false,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.downloadParamFile"
       },
       hint: {
         complete: true,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.hint"
       },
       installationParameters: {
@@ -147,11 +160,13 @@ const App = () => {
           enabled: false
         },
         complete: false,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.installationParameters"
       },
       miscParameters: {
         params: "",
         complete: true,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.miscParameters"
       },
       networkAddress: {
@@ -169,6 +184,7 @@ const App = () => {
         gatewayIpAddress: "",
         nameserverIpAddress: "",
         complete: false,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.networkAddress"
       },
       networkDevice: {
@@ -186,10 +202,12 @@ const App = () => {
         },
         vlanId: "",
         complete: false,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.networkDevice"
       },
       nextStep: {
         complete: true,
+        invalid: false,
         localStorageKey: "com.ibm.systems.linux.z.nextStep"
       },
       showNotification: false,
@@ -255,7 +273,8 @@ const App = () => {
     }
     return updateShowNotification(false);
   }
-  const progressStepCompletion = getProgressStepCompletion(state);
+  const progressStepCompletion = getProgressStepState(state, PROGRESS_STEP_STATE_COMPLETION);
+  const progressStepInvalidation = getProgressStepState(state, PROGRESS_STATE_INVALIDATION);
   const getLocalStorageKeys = () => {
     const keys = Object.keys(state);
     const localStorageKeys = [];
@@ -283,6 +302,7 @@ const App = () => {
         onProgress={setStep}
         progressStep={step}
         progressStepCompletion={progressStepCompletion}
+        progressStepInvalidation={progressStepInvalidation}
       />
       <Modal
         open={state.showConfirmationModal}
@@ -293,6 +313,7 @@ const App = () => {
         modalHeading="The param file settings have been pruned from your browser cache.">
       </Modal>
       <Modal
+        preventCloseOnClickOutside
         open={state.showUseExistingSettingsModal}
         modalHeading="There are existing param file settings. Do you want to use them as a baseline for this session?"
         modalLabel="Existing settings found"

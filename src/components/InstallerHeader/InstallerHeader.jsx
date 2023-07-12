@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import InstallerFlow from "../InstallerFlow";
 import "./_installer-header.scss";
 
-const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepCompletion }) => {
+const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepCompletion, progressStepInvalidation }) => {
   const [state, setState] = useState({
     expanded: false
   });
@@ -66,6 +66,7 @@ const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progres
                 onProgress={onProgress}
                 progressStep={progressStep}
                 progressStepCompletion={progressStepCompletion}
+                progressStepInvalidation={progressStepInvalidation}
               />
             </SideNavItems>
           </SideNav>
@@ -85,6 +86,17 @@ InstallerHeader.propTypes = {
   onProgress: PropTypes.func.isRequired,
   progressStep: PropTypes.number.isRequired,
   progressStepCompletion: PropTypes.shape({
+    inputFileSelection: PropTypes.bool.isRequired,
+    information: PropTypes.bool.isRequired,
+    hint: PropTypes.bool.isRequired,
+    networkDevice: PropTypes.bool.isRequired,
+    networkAddress: PropTypes.bool.isRequired,
+    installationParameters: PropTypes.bool.isRequired,
+    miscParameters: PropTypes.bool.isRequired,
+    downloadParamFile: PropTypes.bool.isRequired,
+    nextStep: PropTypes.bool.isRequired
+  }).isRequired,
+  progressStepInvalidation: PropTypes.shape({
     inputFileSelection: PropTypes.bool.isRequired,
     information: PropTypes.bool.isRequired,
     hint: PropTypes.bool.isRequired,
