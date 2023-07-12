@@ -34,7 +34,7 @@
     "@carbon/react": "1.33.2",
     "@carbon/styles": "1.33.1",
     "@carbon/themes": "11.21.1",
-    "@carbon/type": "11.19.0",
+    "@carbon/type": "11.20.1",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.2.0",
