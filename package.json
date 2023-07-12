@@ -33,7 +33,7 @@
     "@carbon/layout": "11.16.1",
     "@carbon/react": "1.32.0",
     "@carbon/styles": "1.33.1",
-    "@carbon/themes": "11.20.0",
+    "@carbon/themes": "11.21.1",
     "@carbon/type": "11.19.0",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
