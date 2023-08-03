@@ -1,7 +1,19 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Toggle, TextInput, Grid, Column } from "@carbon/react";
 import "./_installation-parameters.scss";
+
+const SUPPORTED_PROTOCOLS = [
+  "http",
+  "https",
+  "ftp"
+];
 
 const InstallationParameters = (patchState, localStorageKey) => {
   const getInitialState = () => {
@@ -48,7 +60,10 @@ const InstallationParameters = (patchState, localStorageKey) => {
     const regex = new RegExp(expression);
 
     if (url.match(regex)) {
-      installationAddressInputIsValid = true;
+      const urlParts = url.split("://");
+      if (SUPPORTED_PROTOCOLS.indexOf(urlParts[0]) >= 0) {
+        installationAddressInputIsValid = true;
+      }
     }
 
     return installationAddressInputIsValid;

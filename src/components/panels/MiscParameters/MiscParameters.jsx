@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { TextArea, Grid, Column } from "@carbon/react";

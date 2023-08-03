@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 import React from "react";
 import PropTypes from "prop-types";
 import { TextInput, Toggle, Grid, Column } from "@carbon/react";
@@ -81,7 +87,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     id="pci-function-input"
                     invalidText="A valid value is required"
                     invalid={state && state.pciFunctionId ? !state.pciFunctionId.valid : false}
-                    labelText="PCI function ID"
+                    labelText="PCI function ID (FID)"
                     placeholder="e.g. 0x0100"
                     value={state.pciFunctionId ? state.pciFunctionId.value : ""}
                     onBlur={(pciFunctionId) => {
@@ -108,7 +114,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     id="user-identifier-input"
                     invalidText="A valid value is required"
                     invalid={state && state.userIdentifier ? !state.userIdentifier.valid : false}
-                    labelText="User identifier"
+                    labelText="User identifier (UID)"
                     placeholder="e.g. 0x1234"
                     value={state.userIdentifier ? state.userIdentifier.value : ""}
                     onBlur={(userIdentifier) => {

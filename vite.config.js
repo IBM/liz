@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import vitePluginFaviconsInject from "vite-plugin-favicons-inject";

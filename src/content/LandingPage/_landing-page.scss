@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
@@ -44,8 +50,7 @@
 .landing-page__grid {
   height: 100%;
   background: themes.$layer-01;
-  padding-left: layout.$spacing-05;
-  padding-right: 0;
+  padding: layout.$spacing-06 0 0 layout.$spacing-05;
   margin-left: 0;
   max-width: 100% !important;
   width: 100%;
@@ -54,7 +59,6 @@
 .landing-page__grey-column-background {
   background: themes.$layer-01;
   margin-right: 0;
-  padding-left: calc(7 * layout.$spacing-07);
 }
 
 .landing-page__notification {
@@ -66,5 +70,13 @@
 
   &.cds--actionable-notification {
     position: absolute;
+  }
+}
+
+.landing-page__legal-banner {
+  float: right;
+
+  &.cds--inline-notification {
+    max-width: 100%;
   }
 }

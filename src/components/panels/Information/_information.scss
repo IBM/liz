@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
@@ -47,7 +53,7 @@
   @include type.type-style("heading-01");
   @include type.font-weight("semibold");
 
-  padding: layout.$spacing-07 0 0 0;
+  padding: 0;
 }
 
 .information_content {

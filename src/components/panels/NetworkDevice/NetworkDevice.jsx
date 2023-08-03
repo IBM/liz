@@ -1,6 +1,16 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Dropdown, TextInput, Grid, Column } from "@carbon/react";
+import {
+  toChannelSegments,
+  validateSegments
+} from "../common";
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
@@ -110,15 +120,27 @@ const NetworkDevice = (patchState, localStorageKey) => {
     setState((prevState) => ({...prevState, vlanId: { value: vlanId, valid }}));
   }
 
-  const isReadChannelIdValid = () => {
+  const isReadChannelIdValid = (readChannelIdValue) => {
+    const segments = toChannelSegments(readChannelIdValue);
+    if (segments.length === 3) {
+      return validateSegments(segments);
+    }
     return false;
   }
 
-  const isWriteChannelIdValid = () => {
+  const isWriteChannelIdValid = (writeChannelIdValue) => {
+    const segments = toChannelSegments(writeChannelIdValue);
+    if (segments.length === 3) {
+      return validateSegments(segments);
+    }
     return false;
   }
 
-  const isDataChannelIdValid = () => {
+  const isDataChannelIdValid = (dataChannelIdValue) => {
+    const segments = toChannelSegments(dataChannelIdValue);
+    if (segments.length === 3) {
+      return validateSegments(segments);
+    }
     return false;
   }
 

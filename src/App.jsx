@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 import React, { useState } from "react";
 import { Modal, Content } from "@carbon/react";
 import { Routes, Route } from "react-router-dom";
@@ -19,19 +25,95 @@ import "./App.scss";
 const PROGRESS_STEP_STATE_COMPLETION = "complete";
 const PROGRESS_STATE_INVALIDATION = "invalid";
 
+const stateToInstallationRepoParams = (state) => {
+  let paramFileContents;
+
+  // => inst.repo=...
+  if (
+    state &&
+    state.installationParameters &&
+    state.installationParameters.networkInstallationUrl &&
+    state.installationParameters.networkInstallationUrl &&
+    state.installationParameters.networkInstallationUrl.value &&
+    state.installationParameters.networkInstallationUrl.value.length > 0
+  ) {
+    const installationRepoLine = `inst.repo=${state.installationParameters.networkInstallationUrl.value}`;
+    paramFileContents = `${installationRepoLine}`;
+  }
+
+  return paramFileContents;
+}
+
+const stateToVncParams = (state) => {
+  let paramFileContents;
+
+  // => inst.vnc inst.vncpassword=...
+  if (
+    state &&
+    state.installationParameters &&
+    state.installationParameters.vnc &&
+    state.installationParameters.vnc.enabled === true
+  ) {
+    if (
+      state.installationParameters.vnc.password &&
+      state.installationParameters.vnc.password.length > 0
+    ) {
+      const vncServerLine = `inst.vnc inst.vncpassword=${state.installationParameters.vnc.password}`;
+      paramFileContents = `${vncServerLine}`;
+    } else {
+      const vncServerLine = `inst.vnc`;
+      paramFileContents = `${vncServerLine}`;
+    }
+  }
+
+  return paramFileContents;
+}
+
+const stateToSshParams = (state) => {
+  let paramFileContents;
+
+  // => inst.sshd
+  if (
+    state &&
+    state.installationParameters &&
+    state.installationParameters.ssh &&
+    state.installationParameters.ssh.enabled === true
+  ) {
+    const sshServerLine = `inst.sshd`;
+    paramFileContents = `${sshServerLine}`;
+  }
+
+  return paramFileContents;
+}
+
+const stateToMiscParams = (state) => {
+  let paramFileContents;
+
+  if (
+    state &&
+    state.miscParameters &&
+    state.miscParameters.params &&
+    state.miscParameters.params.length > 0
+  ) {
+    paramFileContents = `${state.miscParameters.params}`;
+  }
+
+  return paramFileContents;
+}
+
 const stateToParamFile = (state) => {
-  let stateToParamFile = `rd.znet=qeth,0.0.bdf0,0.0.bdf1,0.0.bdf2,
+  const stateToParamFile = `rd.znet=qeth,0.0.bdf0,0.0.bdf1,0.0.bdf2,
 layer2=1,
 portno=0,
 ip=172.18.132.1::172.18.0.1:15:t3560001.lnxne.boe:encbdf0:none,
-nameserver=172.18.0.1  
+nameserver=172.18.0.1`;
+
+  return `${stateToParamFile}
+${stateToInstallationRepoParams(state)}
+${stateToVncParams(state)}
+${stateToSshParams(state)}
+${stateToMiscParams(state)}
 `;
-
-if (state && state.miscParameters && state.miscParameters.params && state.miscParameters.params.length > 0) {
-  stateToParamFile = `${stateToParamFile}${state.miscParameters.params}`;
-}
-
-return stateToParamFile;
 }
 
 const getProgressStepState = (state, forProgressStepState) => {
@@ -287,6 +369,21 @@ const App = () => {
     }
     return localStorageKeys;
   }
+  const getInlineNotification = () => {
+    const inlineNotification = JSON.parse(localStorage.getItem("com.ibm.systems.linux.z.inlineNotification"));
+    const defaultInlineNotification = {
+      show: true,
+      kind: "warning",
+      title: "IBM Internal Use only",
+      subtitle: "Code is not legally cleared."
+    };
+
+    if (inlineNotification) {
+      return inlineNotification
+    }
+    localStorage.setItem("com.ibm.systems.linux.z.inlineNotification", JSON.stringify(defaultInlineNotification));
+    return defaultInlineNotification;
+  };
 
   window.addEventListener('beforeunload', (event) => {
     if (state.isDirty) {
@@ -347,6 +444,7 @@ const App = () => {
             element={
               <LandingPage
                 panelMarkup={panelMarkup}
+                inlineNotification={getInlineNotification()}
                 showNotification={state.showNotification}
                 closeNotification={closeNotification}
                 localStorageKeys={getLocalStorageKeys()}

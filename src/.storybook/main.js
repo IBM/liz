@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 let ui = "http://localhost:6006";
 if (process.env.NODE_ENV === "production") {
   ui = "../storybook-ui";

@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 import React from "react";
 import { Button, Grid, Column } from "@carbon/react";
 import { Incomplete } from "@carbon/icons-react";

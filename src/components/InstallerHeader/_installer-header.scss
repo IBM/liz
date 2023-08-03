@@ -1,3 +1,9 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+
 @use "@carbon/themes";
 @use "@carbon/layout";
 
@@ -7,6 +13,14 @@
 
 .installer-header__sidenav-component {
   padding: 0 layout.$spacing-05 0 layout.$spacing-05;
+
+  &.cds--side-nav--expanded {
+    width: calc(layout.$spacing-10 * 5);
+  }
+
+  &.cds--side-nav {
+    max-width: calc(layout.$spacing-10 * 5);
+  }
 
   ul {
     padding-top: 0;
