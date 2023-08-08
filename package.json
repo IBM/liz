@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@carbon/colors": "11.19.0",
-    "@carbon/layout": "11.17.1",
+    "@carbon/layout": "11.18.0",
     "@carbon/react": "1.35.0",
     "@carbon/styles": "1.35.0",
     "@carbon/themes": "11.23.0",
