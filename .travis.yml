@@ -3,6 +3,12 @@ node_js: 18.16.0
 git:
   depth: false
 dist: focal
+notifications:
+  slack:
+    rooms:
+      - ibm-systems-z:oKgChNrWkTVGEL03UEWUEbrs#linux-io-liz
+    on_success: change # default: always
+    on_failure: always # default: always
 before_script:
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
