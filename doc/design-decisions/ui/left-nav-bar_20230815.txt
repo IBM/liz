@@ -1,0 +1,13 @@
+When and how to disable navbar items?
+=====================================
+
+We discussed the following:
+
+1. Some steps as presented by the left navbar are preliminary steps.
+2. These steps requirte the user to provite data and the date must be correct.
+3. If either the data is missing or the data format is invalid certain actions must be taken.
+4. We identified step one where the distribution is selected as the only prliminary step.
+5. If a preliminary step contains no or invalid data the following actions must be taken.
+5.1 In the left navbar every subsequent step must be inactive. In other words allowing the user to navigate to any subsequent step must be prohibited.
+5.2 The "Continue with next step" button as it is part of a step equally must be inactive.
+6. Aside of that we decided that any other step except the first step must not be treated as a preliminary step.
