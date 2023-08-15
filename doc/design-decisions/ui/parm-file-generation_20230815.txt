@@ -1,0 +1,12 @@
+Behaviour for invalid data
+==========================
+
+We discussed the following:
+
+1. It must be possible that the user provides invalid data.
+2. In cases where invalid data is provided the following behaviour will be exposed by the UI:
+2.1 The form field that contains invalid data turns red and has an error indicator.
+2.2 In the left hand navigation bar the step with the form field also has an error indicator.
+3. On the param file generation step the following behaviour must be provided:
+3.1 An error banner will be shown atop of the page calling out that there are steps with invalid data and thus this may result in an invalid param file format.
+3.2 Despite the error banner the param file gets generated and also can be copied and/or downloaded.
