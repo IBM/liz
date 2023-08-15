@@ -6,7 +6,8 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, TextInput, Grid, Column } from "@carbon/react";
+import { Dropdown, TextInput, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Information } from '@carbon/react/icons';
 import {
   toChannelSegments,
   validateSegments
@@ -166,6 +167,30 @@ const NetworkDevice = (patchState, localStorageKey) => {
     }
   ];
 
+  const content = (
+    <p>
+      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
+      do eiusmod tempor incididunt ut fsil labore et dolore magna
+      aliqua.
+    </p>
+  );
+
+  const getLabel = (label, buttonLabel, content) => {
+    return (
+      <>
+        <ToggletipLabel>{label}</ToggletipLabel>
+        <Toggletip className="misc-parameters_info-icon">
+          <ToggletipButton label={buttonLabel}>
+            <Information/>
+          </ToggletipButton>
+          <ToggletipContent>
+            {content}
+          </ToggletipContent>
+        </Toggletip>
+      </>
+    );
+  }
+
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
   });
@@ -177,12 +202,16 @@ const NetworkDevice = (patchState, localStorageKey) => {
           <div className="network-device_column-left">
             <Dropdown
               className="network-device_device-type-dropdown"
-              titleText="Device type"
+              titleText={getLabel(
+                "Device type",
+                "Show information",
+                content
+              )}
               aria-label="Select a device type"
               id="network-device_device-type-selection"
               items={deviceTypeList}
               label="Select a device type"
-              helperText="Helper text goes here"
+              helperText=""
               size="md"
               warn={false}
               invalid={false}
