@@ -3,6 +3,11 @@ Behaviour for invalid data
 
 We discussed the following:
 
+A. Since users are allowed to access steps and provide data in a way that doesn't have a linear but rather ramdom flow, data to generate the param file may either be incomplete or invalid.
+B. We could add a restriction that would enforce a linear workflow and also would prohibit navigating to the next step until data has been completely provided and is valid.
+C. If doing so that adds a lot of pre-checking logic that must be maintained and it may render the user experience as something that feels to rigid.
+D. Thus we agreed on the following.
+
 1. It must be possible that the user provides invalid data.
 2. In cases where invalid data is provided the following behaviour will be exposed by the UI:
 2.1 The form field that contains invalid data turns red and has an error indicator.
