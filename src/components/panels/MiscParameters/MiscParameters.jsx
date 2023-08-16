@@ -35,7 +35,7 @@ const MiscParameters = (patchState, localStorageKey) => {
   const textAreaLabel = (
     <>
       <ToggletipLabel>Miscellaneous parameters</ToggletipLabel>
-      <Toggletip className="misc-parameters_info-icon">
+      <Toggletip className="misc-parameters_info-icon" align="right-bottom">
         <ToggletipButton label="Show information">
           <Information/>
         </ToggletipButton>

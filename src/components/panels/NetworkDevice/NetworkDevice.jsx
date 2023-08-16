@@ -179,7 +179,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
     return (
       <>
         <ToggletipLabel>{label}</ToggletipLabel>
-        <Toggletip className="misc-parameters_info-icon">
+        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
           <ToggletipButton label={buttonLabel}>
             <Information/>
           </ToggletipButton>
@@ -236,11 +236,15 @@ const NetworkDevice = (patchState, localStorageKey) => {
               state={state}
             />
             <TextInput
-              helperText="Helper text goes here"
+              helperText=""
               id="network-device_vlan-id-input"
               invalidText="A valid value is required"
               invalid={state && state.vlanId ? !state.vlanId.valid : false}
-              labelText="VLAN ID (optional)"
+              labelText={getLabel(
+                "VLAN ID (optional)",
+                "Show information",
+                content
+              )}
               placeholder="ex: 88"
               onBlur={(vlanId) => {
                 const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
@@ -275,7 +279,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
                     id="network-device_read-channel-input"
                     invalidText="A valid value is required"
                     invalid={state && state.readChannelId ? !state.readChannelId.valid : false}
-                    labelText="Read channel"
+                    labelText={getLabel(
+                      "Read channel",
+                      "Show information",
+                      content
+                    )}
                     placeholder="ex: 0.0.bdf0"
                     value={state.readChannelId ? state.readChannelId.value : ""}
                     onBlur={(readChannelId) => {
@@ -303,7 +311,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
                     id="network-device_write-channel-input"
                     invalidText="A valid value is required"
                     invalid={state && state.writeChannelId ? !state.writeChannelId.valid : false}
-                    labelText="Write channel"
+                    labelText={getLabel(
+                      "Write channel",
+                      "Show information",
+                      content
+                    )}
                     placeholder="ex: 0.0.bdf1"
                     value={state.writeChannelId ? state.writeChannelId.value : ""}
                     onBlur={(writeChannelId) => {
@@ -332,7 +344,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
                     id="network-device_data-channel-input"
                     invalidText="A valid value is required"
                     invalid={state && state.dataChannelId ? !state.dataChannelId.valid : false}
-                    labelText="Data channel"
+                    labelText={getLabel(
+                      "Data channel",
+                      "Show information",
+                      content
+                    )}
                     placeholder="ex: 0.0.bdf2"
                     value={state.dataChannelId ? state.dataChannelId.value : ""}
                     onBlur={(dataChannelId) => {

@@ -6,7 +6,8 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { RadioButtonGroup, RadioButton, TextInput, Grid, Column } from "@carbon/react";
+import { RadioButtonGroup, RadioButton, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
+import { Information } from '@carbon/react/icons';
 import "./_network-address.scss";
 
 const ADDRESS_TYPE_IPV4 = "radio-ipv4";
@@ -213,6 +214,30 @@ const NetworkAddress = (patchState, localStorageKey) => {
       isIpAddressValid();
   }
 
+  const content = (
+    <p>
+      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
+      do eiusmod tempor incididunt ut fsil labore et dolore magna
+      aliqua.
+    </p>
+  );
+
+  const getLabel = (label, buttonLabel, content) => {
+    return (
+        <>
+        <ToggletipLabel>{label}</ToggletipLabel>
+        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
+            <ToggletipButton label={buttonLabel}>
+            <Information/>
+            </ToggletipButton>
+            <ToggletipContent>
+            {content}
+            </ToggletipContent>
+        </Toggletip>
+        </>
+    );
+  }
+
   const PLACEHOLDER_GATEWAY_ADDRESS_IPV4 = "192.168.178.1";
   const PLACEHOLDER_GATEWAY_ADDRESS_IPV6 = "0000:0000:0000:0000:0000:ffff:c0a8:b201";
   const PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 = "192.168.178.20";
@@ -258,7 +283,11 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   id="network-address_ipv4-input"
                   invalidText="A valid value is required"
                   invalid={state && state.ipv4Address ? !state.ipv4Address.valid : false}
-                  labelText="IPv4 address"
+                  labelText={getLabel(
+                    "IPv4 address",
+                    "Show information",
+                    content
+                  )}
                   placeholder="192.168.178.22"
                   value={state.ipv4Address ? state.ipv4Address.value : ""}
                   onChange={(localAddress) => {
@@ -302,7 +331,11 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   id="network-address_ipv4-prefix"
                   invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
                   invalidText="A valid value is required"
-                  labelText="IPv4 prefix"
+                  labelText={getLabel(
+                    "IPv4 prefix",
+                    "Show information",
+                    content
+                  )}
                   placeholder="32"
                   value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
                   onChange={(localCidr) => {
@@ -350,7 +383,11 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   id="network-address_ipv4-netmask"
                   invalid={state && state.netmask ? !state.netmask.valid : false}
                   invalidText="A valid value is required"
-                  labelText="IPv4 netmask"
+                  labelText={getLabel(
+                    "IPv4 netmask",
+                    "Show information",
+                    content
+                  )}
                   placeholder="255.255.128.0"
                   value={state.netmask ? state.netmask.value : ""}
                   onChange={(localNetmask) => {
@@ -410,7 +447,11 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   id="network-address_ipv6-input"
                   invalid={state && state.ipv6Address ? !state.ipv6Address.valid : false}
                   invalidText="A valid value is required"
-                  labelText="IPv6 address"
+                  labelText={getLabel(
+                    "IPv6 address",
+                    "Show information",
+                    content
+                  )}
                   placeholder="2001:0db8:85a3:0:0:8a2e:370:7334"
                   value={state.ipv6Address ? state.ipv6Address.value : ""}
                   onChange={(localAddress) => {
@@ -454,7 +495,11 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   id="network-address_ipv6-prefix"
                   invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
                   invalidText="A valid value is required"
-                  labelText="IPv6 prefix"
+                  labelText={getLabel(
+                    "IPv6 prefix",
+                    "Show information",
+                    content
+                  )}
                   placeholder="128"
                   value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
                   onChange={(localCidr) => {
@@ -505,7 +550,11 @@ const NetworkAddress = (patchState, localStorageKey) => {
               id="network-address_gateway-input"
               invalid={state && state.gatewayIpAddress ? !state.gatewayIpAddress.valid : false}
               invalidText="A valid value is required"
-              labelText="Gateway IP address"
+              labelText={getLabel(
+                "Gateway IP address",
+                "Show information",
+                content
+              )}
               placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_GATEWAY_ADDRESS_IPV4 : PLACEHOLDER_GATEWAY_ADDRESS_IPV6}
               value={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
               onChange={(localGatewayIpAddress) => {
@@ -551,7 +600,11 @@ const NetworkAddress = (patchState, localStorageKey) => {
               id="network-address_nameserver-input"
               invalid={state && state.nameserverIpAddress ? !state.nameserverIpAddress.valid : false}
               invalidText="A valid value is required"
-              labelText="Nameserver IP address"
+              labelText={getLabel(
+                "Nameserver IP address",
+                "Show information",
+                content
+              )}
               placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 : PLACEHOLDER_NAMESERVER_ADDRESS_IPV6}
               value={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
               onChange={(localNameserverIpAddress) => {

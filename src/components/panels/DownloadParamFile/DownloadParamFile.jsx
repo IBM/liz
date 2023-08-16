@@ -6,7 +6,8 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Button, ButtonSet, TextArea, Grid, Column } from "@carbon/react";
+import { Button, ButtonSet, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Information } from '@carbon/react/icons';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
 
@@ -60,13 +61,41 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     downloadLink.click();
   }
 
+  const content = (
+    <p>
+      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
+      do eiusmod tempor incididunt ut fsil labore et dolore magna
+      aliqua.
+    </p>
+  );
+
+  const getLabel = (label, buttonLabel, content) => {
+    return (
+        <>
+        <ToggletipLabel>{label}</ToggletipLabel>
+        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
+            <ToggletipButton label={buttonLabel}>
+            <Information/>
+            </ToggletipButton>
+            <ToggletipContent>
+            {content}
+            </ToggletipContent>
+        </Toggletip>
+        </>
+    );
+  }
+
   const markup = (
     <Grid className="download-param-file_grid" fullWidth>
       <Column sm={6} md={8} lg={16}>
         <TextArea
           enableCounter
           id="download-param-file_textarea"
-          labelText="Param text file"
+          labelText={getLabel(
+            "Param text file",
+            "Show information",
+            content
+          )}
           className="download-param-file_textarea"
           rows={10}
           value={state.paramFileContent || paramFileContent}

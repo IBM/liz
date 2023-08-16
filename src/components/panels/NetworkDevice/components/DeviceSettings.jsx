@@ -6,7 +6,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { TextInput, Toggle, Grid, Column } from "@carbon/react";
+import { TextInput, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Information } from '@carbon/react/icons';
 import "./_device-settings.scss";
 
 const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state }) => {
@@ -22,6 +23,30 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
 
     const isUserIdentifierValid = () => {
         return false;
+    }
+
+    const content = (
+        <p>
+          Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
+          do eiusmod tempor incididunt ut fsil labore et dolore magna
+          aliqua.
+        </p>
+    );
+    
+    const getLabel = (label, buttonLabel, content) => {
+        return (
+            <>
+            <ToggletipLabel>{label}</ToggletipLabel>
+            <Toggletip className="misc-parameters_info-icon" align="right-bottom">
+                <ToggletipButton label={buttonLabel}>
+                <Information/>
+                </ToggletipButton>
+                <ToggletipContent>
+                {content}
+                </ToggletipContent>
+            </Toggletip>
+            </>
+        );
     }
 
     const osaMarkup = (
@@ -87,7 +112,11 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     id="pci-function-input"
                     invalidText="A valid value is required"
                     invalid={state && state.pciFunctionId ? !state.pciFunctionId.valid : false}
-                    labelText="PCI function ID (FID)"
+                    labelText={getLabel(
+                        "PCI function ID (FID)",
+                        "Show information",
+                        content
+                    )}
                     placeholder="e.g. 0x0100"
                     value={state.pciFunctionId ? state.pciFunctionId.value : ""}
                     onBlur={(pciFunctionId) => {
@@ -114,7 +143,11 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     id="user-identifier-input"
                     invalidText="A valid value is required"
                     invalid={state && state.userIdentifier ? !state.userIdentifier.valid : false}
-                    labelText="User identifier (UID)"
+                    labelText={getLabel(
+                        "User identifier (UID)",
+                        "Show information",
+                        content
+                    )}
                     placeholder="e.g. 0x1234"
                     value={state.userIdentifier ? state.userIdentifier.value : ""}
                     onBlur={(userIdentifier) => {

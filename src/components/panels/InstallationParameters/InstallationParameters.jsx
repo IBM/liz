@@ -6,7 +6,8 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Toggle, TextInput, Grid, Column } from "@carbon/react";
+import { Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
+import { Information } from '@carbon/react/icons';
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = [
@@ -69,6 +70,30 @@ const InstallationParameters = (patchState, localStorageKey) => {
     return installationAddressInputIsValid;
   }
 
+  const content = (
+    <p>
+      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
+      do eiusmod tempor incididunt ut fsil labore et dolore magna
+      aliqua.
+    </p>
+  );
+
+  const getLabel = (label, buttonLabel, content) => {
+    return (
+        <>
+        <ToggletipLabel>{label}</ToggletipLabel>
+        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
+            <ToggletipButton label={buttonLabel}>
+            <Information/>
+            </ToggletipButton>
+            <ToggletipContent>
+            {content}
+            </ToggletipContent>
+        </Toggletip>
+        </>
+    );
+  }
+
   const useSshToggled = state.useSsh;
   const useVncToggled = state.useVnc;
 
@@ -83,7 +108,11 @@ const InstallationParameters = (patchState, localStorageKey) => {
         id="installation-address-input"
         invalid={state && state.installationAddress ? !state.installationAddress.valid : false}
         invalidText="A valid value is required"
-        labelText="Installation address"
+        labelText={getLabel(
+          "Installation address",
+          "Show information",
+          content
+        )}
         placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
         className="installation-parameters_installation-address-input"
         onChange={(url) => {
@@ -145,7 +174,11 @@ const InstallationParameters = (patchState, localStorageKey) => {
                 helperText="Helper text goes here"
                 id="vnc-password-input"
                 invalidText="A valid value is required"
-                labelText="VNC password"
+                labelText={getLabel(
+                  "VNC password",
+                  "Show information",
+                  content
+                )}
                 placeholder="VNC password here"
                 onChange={(password) => {
                   updateVncPassword(password && password.target ? password.target.value : "");
