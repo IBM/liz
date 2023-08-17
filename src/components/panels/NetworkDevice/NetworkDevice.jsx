@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, TextInput, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Layer, Dropdown, TextInput, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import {
   toChannelSegments,
@@ -196,7 +196,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
   });
 
   return (
-    <>
+    <Layer>
       <Grid className="network-device__horizontal-grid" fullWidth>
         <Column sm={4} md={12} lg={12}>
           <div className="network-device_column-left">
@@ -379,7 +379,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
           </div>
         </Column>
       </Grid>
-    </>
+    </Layer>
   );
 };
 

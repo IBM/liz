@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
+import { Layer, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import "./_installation-parameters.scss";
 
@@ -102,7 +102,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
   });
 
   return (
-    <>
+    <Layer>
       <TextInput
         helperText="Helper text goes here"
         id="installation-address-input"
@@ -233,7 +233,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
           </div>
         </Column>
       </Grid>
-    </>    
+    </Layer>    
   );
 };
 

@@ -4,8 +4,13 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-@use "@carbon/themes";
+@use "@carbon/react" with (
+  $font-path: "@ibm/plex"
+);
+@use "@carbon/type";
 @use "@carbon/layout";
+@use "@carbon/colors";
+@use "@carbon/themes";
 
 .installer-header__panel-component {
   background: themes.$background;
@@ -26,3 +31,26 @@
     padding-top: 0;
   }
 }
+
+.installer-header__panel-component-header {
+  padding: 0 layout.$spacing-05 0 layout.$spacing-05;
+}
+
+.installer-header__panel-component-header > span {
+  float: right;
+  right: 0;
+}
+
+.installer-header__panel-component-header__title {
+  @include type.type-style("heading-01");
+  @include type.font-weight("semibold");
+
+  float: left;
+  padding-top: layout.$spacing-03;
+}
+
+.installer-header__panel-component-header__button {
+  float: right;
+  right: 0;
+}
+

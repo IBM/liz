@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Button, ButtonSet, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Layer, Button, ButtonSet, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
@@ -86,33 +86,35 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   }
 
   const markup = (
-    <Grid className="download-param-file_grid" fullWidth>
-      <Column sm={6} md={8} lg={16}>
-        <TextArea
-          enableCounter
-          id="download-param-file_textarea"
-          labelText={getLabel(
-            "Param text file",
-            "Show information",
-            content
-          )}
-          className="download-param-file_textarea"
-          rows={10}
-          value={state.paramFileContent || paramFileContent}
-        />
-        {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
-        <ButtonSet className="download-param-file_buttons">
-          <CopyToClipboard text={state.paramFileValue || paramFileContent} onCopy={ updateCopied }>
-            <Button kind="secondary" size="xl" className="download-param-file_button">
-              Copy to clipboard
+    <Layer>
+      <Grid className="download-param-file_grid" fullWidth>
+        <Column sm={6} md={8} lg={16}>
+          <TextArea
+            enableCounter
+            id="download-param-file_textarea"
+            labelText={getLabel(
+              "Param text file",
+              "Show information",
+              content
+            )}
+            className="download-param-file_textarea"
+            rows={10}
+            value={state.paramFileContent || paramFileContent}
+          />
+          {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
+          <ButtonSet className="download-param-file_buttons">
+            <CopyToClipboard text={state.paramFileValue || paramFileContent} onCopy={ updateCopied }>
+              <Button kind="secondary" size="xl" className="download-param-file_button">
+                Copy to clipboard
+              </Button>
+            </CopyToClipboard>
+            <Button kind="primary" size="xl" className="download-param-file_button" onClick={ saveParamFileContent }>
+              Download param file
             </Button>
-          </CopyToClipboard>
-          <Button kind="primary" size="xl" className="download-param-file_button" onClick={ saveParamFileContent }>
-            Download param file
-          </Button>
-        </ButtonSet>
-      </Column>
-    </Grid>
+          </ButtonSet>
+        </Column>
+      </Grid>
+    </Layer>
   );
 
   useEffect(() => {

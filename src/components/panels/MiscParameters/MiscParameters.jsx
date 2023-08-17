@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Layer, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import "./_misc-parameters.scss";
 
@@ -51,26 +51,28 @@ const MiscParameters = (patchState, localStorageKey) => {
   );
 
   return (
-    <Grid className="misc-parameters_grid" fullWidth>
-      <Column sm={6} md={8} lg={16}>
-        <TextArea
-          labelText={textAreaLabel}
-          helperText=""
-          rows={8}
-          id="misc-parameters-input"
-          onChange={(content) => {
-            updateMiscParameterContent(content && content.target ? content.target.value : "");
-            patchState({
-              miscParameters: {
-                params: state.miscParameterContent,
-                complete: true,
-                localStorageKey
-              },
-            });
-          }}
-        />
-      </Column>
-    </Grid>
+    <Layer>
+      <Grid className="misc-parameters_grid" fullWidth>
+        <Column sm={6} md={8} lg={16}>
+          <TextArea
+            labelText={textAreaLabel}
+            helperText=""
+            rows={8}
+            id="misc-parameters-input"
+            onChange={(content) => {
+              updateMiscParameterContent(content && content.target ? content.target.value : "");
+              patchState({
+                miscParameters: {
+                  params: state.miscParameterContent,
+                  complete: true,
+                  localStorageKey
+                },
+              });
+            }}
+          />
+        </Column>
+      </Grid>
+    </Layer>
   );
 };
 

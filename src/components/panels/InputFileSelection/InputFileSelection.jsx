@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, /* FileUploader, */ Grid, Column } from "@carbon/react";
+import { Dropdown, /* FileUploader, */ Grid, Column, Layer } from "@carbon/react";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = (patchState, systemRequirements, docLink, localStorageKey, useStateFromLocalStorage, canWriteToLocalStorage) => {
@@ -81,7 +81,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
   });
 
   return (
-    <>
+    <Layer>
       <Grid className="input-file-selection__grid">
         <Column sm={4} md={8} lg={16}>
           {/* <div className="input-file-selection__heading">edgedancer9487</div> */}
@@ -98,7 +98,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
             </div>
             <div className="input-file-selection__contentRowDropdowns">
               <Dropdown
-                ariaLabel="Select a distribution"
+                aria-label="Select a distribution"
                 id="distribution-selection"
                 items={distributionList}
                 label="Dropdown menu options"
@@ -176,7 +176,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
           </div>
         </Column>
       </Grid>
-    </>
+    </Layer>
   );
 };
 

@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { RadioButtonGroup, RadioButton, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
+import { Layer, RadioButtonGroup, RadioButton, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import "./_network-address.scss";
 
@@ -248,7 +248,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
   }, []);
 
   return (
-    <>
+    <Layer>
       <Grid className="network-address__horizontal-grid" fullWidth>
         <Column sm={2} md={6} lg={10}>
           <div className="network-address_column-left">
@@ -649,7 +649,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
           </div>
         </Column>
       </Grid>
-    </>
+    </Layer>
   );
 };
 

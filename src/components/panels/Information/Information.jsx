@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link } from "@carbon/react";
+import { Layer, Link } from "@carbon/react";
 // import { IsoFilled } from "@carbon/icons-react";
 import "./_information.scss";
 
@@ -37,7 +37,7 @@ const Information = (patchStat, distribution, systemRequirements, docLink, local
   });
 
   return (
-    <>
+    <Layer>
       <div className="information_heading">Requirements</div>
       <div className="information_content">
         The requirements shown are minimum requirements as indicated in the documentation.
@@ -73,11 +73,11 @@ const Information = (patchStat, distribution, systemRequirements, docLink, local
         </div>
         */}
       </div>
-      <div className="information_heading">Information</div>
+      <div className="information_heading_alt">Information</div>
       <div className="information_content">
         Link to distribution-specific documentation: <Link href={docLink} target="_blank">{distributionName}</Link>
       </div>
-    </>
+    </Layer>
   );
 };
 

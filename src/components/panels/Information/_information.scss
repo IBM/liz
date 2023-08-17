@@ -49,11 +49,18 @@
   }
 }
 
+.information_heading_alt {
+  @include type.type-style("heading-01");
+  @include type.font-weight("semibold");
+
+  padding: layout.$spacing-07 0 layout.$spacing-05 0;
+}
+
 .information_heading {
   @include type.type-style("heading-01");
   @include type.font-weight("semibold");
 
-  padding: 0;
+  padding: 0 0 layout.$spacing-07 0;
 }
 
 .information_content {
