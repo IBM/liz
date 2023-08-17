@@ -7,8 +7,8 @@ notifications:
   slack:
     rooms:
       - ibm-systems-z:GsrFzDjDjUXPTi8zgEH5VMfU#linux-io-liz-devops
-    on_success: change # default: always
-    on_failure: always # default: always
+    on_success: change
+    on_failure: always
 before_script:
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
