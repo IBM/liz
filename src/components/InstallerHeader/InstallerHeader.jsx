@@ -6,7 +6,6 @@
 
 import React, { useState } from "react";
 import {
-  Button,
   Header,
   HeaderContainer,
   HeaderName,
@@ -19,7 +18,7 @@ import {
   SideNav,
   SideNavItems,
 } from "@carbon/react";
-import { Close, Help, LinuxAlt } from "@carbon/icons-react";
+import { Help, LinuxAlt } from "@carbon/icons-react";
 import PropTypes from "prop-types";
 import InstallerFlow from "../InstallerFlow";
 import HelpContent from "./components/HelpContent";
