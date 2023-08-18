@@ -198,7 +198,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
   return (
     <Layer>
       <Grid className="network-device__horizontal-grid" fullWidth>
-        <Column sm={4} md={12} lg={12}>
+        <Column sm={4} md={8} lg={10}>
           <div className="network-device_column-left">
             <Dropdown
               className="network-device_device-type-dropdown"
@@ -227,7 +227,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         </Column>
       </Grid>
       <Grid className="network-device__vertical-grid" fullWidth>
-        <Column sm={4} md={6} lg={6}>
+        <Column max={5}>
           <div className="network-device_column-left">
             <DeviceSettings
               deviceSettingsId={state.selectedDeviceType ? state.selectedDeviceType.id : ""}
