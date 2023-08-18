@@ -22,9 +22,10 @@ import {
 import { Close, Help, LinuxAlt } from "@carbon/icons-react";
 import PropTypes from "prop-types";
 import InstallerFlow from "../InstallerFlow";
+import HelpContent from "./components/HelpContent";
 import "./_installer-header.scss";
 
-const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepCompletion, progressStepInvalidation }) => {
+const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepCompletion, progressStepInvalidation, helpContent }) => {
   const [state, setState] = useState({
     expanded: false
   });
@@ -84,23 +85,11 @@ const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progres
               aria-label="Help"
               className="installer-header__panel-component"
             >
-              <div className="installer-header__panel-component-header">
-                <div className="installer-header__panel-component-header__title">
-                  <span>Help &amp; Documentation</span>
-                </div>
-                <Button
-                  className="installer-header__panel-component-header__button"
-                  size="sm"
-                  kind="ghost"
-                  renderIcon={Close}
-                  iconDescription="Close"
-                  tooltipPosition="left"
-                  hasIconOnly
-                  onClick={() => {
-                    return state.expanded ? updateExpanded(false) : updateExpanded(true);
-                  }}
-                />
-              </div>
+              <HelpContent
+                expanded={state.expanded}
+                updateExpanded={updateExpanded}
+                helpContent={helpContent}
+              />
             </HeaderPanel>
           </Header>
         )}
@@ -134,7 +123,8 @@ InstallerHeader.propTypes = {
     miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
     nextStep: PropTypes.bool.isRequired
-  }).isRequired
+  }).isRequired,
+  helpContent: PropTypes.node.isRequired
 };
 
 export default InstallerHeader;

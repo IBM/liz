@@ -19,6 +19,17 @@ import {
   NextSteps,
   DownloadParamFile
 } from "./components/panels";
+import {
+  Information as InformationContent,
+  InputFileSelection as InputFileSelectionContent,
+  InstallationParameters as InstallationParametersContent,
+  Hint as HintContent,
+  MiscParameters as MiscParametersContent,
+  NetworkAddress as NetworkAddressContent,
+  NetworkDevice as NetworkDeviceContent,
+  NextSteps as NextStepsContent,
+  DownloadParamFile as DownloadParamFileContent
+} from "./components/help";
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
 
@@ -134,6 +145,44 @@ const getProgressStepState = (state, forProgressStepState) => {
     }
   }
   return {};
+}
+
+const renderHelpContent = (step) => {
+  let markup;
+
+  switch (step) {
+    case 0:
+      markup = InputFileSelectionContent();
+      break;
+    case 1:
+      markup = InformationContent();
+      break;
+    case 2:
+      markup = HintContent();
+      break;
+    case 3:
+      markup = NetworkDeviceContent();
+      break;
+    case 4:
+      markup = NetworkAddressContent();
+      break;
+    case 5:
+      markup = InstallationParametersContent();
+      break;
+    case 6:
+      markup = MiscParametersContent();
+      break;
+    case 7:
+      markup = DownloadParamFileContent();
+      break;
+    case 8:
+      markup = NextStepsContent();
+      break;
+    default:
+      markup = <div>Help content not yet implemented.</div>;
+  }
+
+  return markup;
 }
 
 const renderPanel = (step, patchState, state) => {
@@ -335,6 +384,7 @@ const App = () => {
   const updateIsDirty = (isDirty) => {
     setState((prevState) => ({...prevState, isDirty}));
   }
+  const helpContentMarkup = renderHelpContent(step);
   const panelMarkup = renderPanel(step, patchState, state);
   const showNotification = (callback) => {
     if (callback) {
@@ -400,6 +450,7 @@ const App = () => {
         progressStep={step}
         progressStepCompletion={progressStepCompletion}
         progressStepInvalidation={progressStepInvalidation}
+        helpContent={helpContentMarkup}
       />
       <Modal
         open={state.showConfirmationModal}

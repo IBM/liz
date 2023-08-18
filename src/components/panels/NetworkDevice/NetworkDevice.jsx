@@ -275,7 +275,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
               (
                 <>
                   <TextInput
-                    helperText="Helper text goes here"
+                    helperText=""
                     id="network-device_read-channel-input"
                     invalidText="A valid value is required"
                     invalid={state && state.readChannelId ? !state.readChannelId.valid : false}
@@ -307,7 +307,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                     }}
                   />
                   <TextInput
-                    helperText="Helper text goes here"
+                    helperText=""
                     id="network-device_write-channel-input"
                     invalidText="A valid value is required"
                     invalid={state && state.writeChannelId ? !state.writeChannelId.valid : false}
@@ -340,7 +340,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
 
                   />
                   <TextInput
-                    helperText="Helper text goes here"
+                    helperText=""
                     id="network-device_data-channel-input"
                     invalidText="A valid value is required"
                     invalid={state && state.dataChannelId ? !state.dataChannelId.valid : false}

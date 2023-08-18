@@ -14,6 +14,10 @@
 
 .installer-header__panel-component {
   background: themes.$background;
+
+  &.cds--header-panel--expanded {
+    width: calc(3 * layout.$spacing-13);
+  }
 }
 
 .installer-header__sidenav-component {
@@ -34,23 +38,5 @@
 
 .installer-header__panel-component-header {
   padding: 0 layout.$spacing-05 0 layout.$spacing-05;
-}
-
-.installer-header__panel-component-header > span {
-  float: right;
-  right: 0;
-}
-
-.installer-header__panel-component-header__title {
-  @include type.type-style("heading-01");
-  @include type.font-weight("semibold");
-
-  float: left;
-  padding-top: layout.$spacing-03;
-}
-
-.installer-header__panel-component-header__button {
-  float: right;
-  right: 0;
 }
 

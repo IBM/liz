@@ -88,7 +88,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const markup = (
     <Layer>
       <Grid className="download-param-file_grid" fullWidth>
-        <Column sm={6} md={8} lg={16}>
+      <Column sm={4} md={6} lg={10}>
           <TextArea
             enableCounter
             id="download-param-file_textarea"

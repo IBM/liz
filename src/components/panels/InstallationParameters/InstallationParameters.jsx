@@ -103,41 +103,45 @@ const InstallationParameters = (patchState, localStorageKey) => {
 
   return (
     <Layer>
-      <TextInput
-        helperText="Helper text goes here"
-        id="installation-address-input"
-        invalid={state && state.installationAddress ? !state.installationAddress.valid : false}
-        invalidText="A valid value is required"
-        labelText={getLabel(
-          "Installation address",
-          "Show information",
-          content
-        )}
-        placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
-        className="installation-parameters_installation-address-input"
-        onChange={(url) => {
-          const urlValue = url && url.target ? url.target.value : "";
-          const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-          updateInstallationAddress(urlValue, urlValueIsValid);
-          
-          if (urlValueIsValid) {
-            patchState({
-              installationParameters: {
-                networkInstallationUrl: state.installationAddress.value,
-                vnc: {
-                  password: state.vncPassword,
-                  enabled: useVncToggled
-                },
-                ssh: {
-                  host: state.sshHost,
-                  enabled: useSshToggled
-                },
-                localStorageKey
+      <Grid className="installation-parameters__grid" fullWidth>
+        <Column max={10}>
+          <TextInput
+            helperText=""
+            id="installation-address-input"
+            invalid={state && state.installationAddress ? !state.installationAddress.valid : false}
+            invalidText="A valid value is required"
+            labelText={getLabel(
+              "Installation address",
+              "Show information",
+              content
+            )}
+            placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
+            className="installation-parameters_installation-address-input"
+            onChange={(url) => {
+              const urlValue = url && url.target ? url.target.value : "";
+              const urlValueIsValid = isInstallationAddressInputValid(urlValue);
+              updateInstallationAddress(urlValue, urlValueIsValid);
+            
+              if (urlValueIsValid) {
+                patchState({
+                  installationParameters: {
+                    networkInstallationUrl: state.installationAddress.value,
+                    vnc: {
+                      password: state.vncPassword,
+                      enabled: useVncToggled
+                    },
+                    ssh: {
+                      host: state.sshHost,
+                      enabled: useSshToggled
+                    },
+                    localStorageKey
+                  }
+                });
               }
-            });
-          }
-        }}
-      />
+            }}
+          />
+        </Column>
+      </Grid>
       <Grid className="installation-parameters__grid" fullWidth>
         <Column sm={4}>
           <div className="installation-parameters_column-left">
@@ -171,7 +175,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
             />
             {useVncToggled &&
               <TextInput
-                helperText="Helper text goes here"
+                helperText=""
                 id="vnc-password-input"
                 invalidText="A valid value is required"
                 labelText={getLabel(

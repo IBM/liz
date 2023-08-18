@@ -53,7 +53,7 @@ const MiscParameters = (patchState, localStorageKey) => {
   return (
     <Layer>
       <Grid className="misc-parameters_grid" fullWidth>
-        <Column sm={6} md={8} lg={16}>
+        <Column sm={4} md={6} lg={10}>
           <TextArea
             labelText={textAreaLabel}
             helperText=""
