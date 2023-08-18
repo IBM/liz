@@ -106,7 +106,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
 
     const roceMarkup = (
         <Grid className="device-settings_grid" fullWidth>
-          <Column sm={4} md={6} lg={6}>
+          <Column sm={2} md={4} lg={6}>
             <div className="device-settings_grid-column-single">
                 <TextInput
                     id="pci-function-input"

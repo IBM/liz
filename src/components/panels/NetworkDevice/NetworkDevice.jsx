@@ -198,7 +198,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
   return (
     <Layer>
       <Grid className="network-device__horizontal-grid" fullWidth>
-        <Column sm={4} md={8} lg={10}>
+        <Column sm={2} md={4} lg={6}>
           <div className="network-device_column-left">
             <Dropdown
               className="network-device_device-type-dropdown"
@@ -227,7 +227,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         </Column>
       </Grid>
       <Grid className="network-device__vertical-grid" fullWidth>
-        <Column max={5}>
+        <Column max={6}>
           <div className="network-device_column-left">
             <DeviceSettings
               deviceSettingsId={state.selectedDeviceType ? state.selectedDeviceType.id : ""}
@@ -268,7 +268,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
             />
           </div>
         </Column>
-        <Column sm={4} md={6} lg={6}>
+        <Column max={5}>
           <div className="network-device_column-right">
             {state.selectedDeviceType && state.selectedDeviceType.id === "network-device_osa-option"
               ?
