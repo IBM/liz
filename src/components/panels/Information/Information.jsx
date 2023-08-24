@@ -10,7 +10,7 @@ import { Layer, Link } from "@carbon/react";
 // import { IsoFilled } from "@carbon/icons-react";
 import "./_information.scss";
 
-const Information = (patchStat, distribution, systemRequirements, docLink, localStorageKey) => {
+const Information = (patchState, distribution, systemRequirements, docLink, localStorageKey) => {
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
@@ -34,7 +34,16 @@ const Information = (patchStat, distribution, systemRequirements, docLink, local
   
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-  });
+    patchState({
+      steps: {
+        information: {
+          complete: true,
+          disabled: true,
+          invalid: false
+        }
+      }
+    });
+  }, []);
 
   return (
     <Layer>

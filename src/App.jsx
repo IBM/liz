@@ -33,22 +33,23 @@ import {
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
 
-const PROGRESS_STEP_STATE_COMPLETION = "complete";
-const PROGRESS_STATE_INVALIDATION = "invalid";
+const PROGRESS_STEP_STATE_COMPLETE = "complete";
+const PROGRESS_STATE_INVALID = "invalid";
+const PROGRESS_STATE_DISABLED = "disabled";
 
 const stateToInstallationRepoParams = (state) => {
+  const installationParameters = state && state.steps && state.steps.installationParameters ? state.steps.installationParameters : {};
   let paramFileContents;
 
   // => inst.repo=...
   if (
-    state &&
-    state.installationParameters &&
-    state.installationParameters.networkInstallationUrl &&
-    state.installationParameters.networkInstallationUrl &&
-    state.installationParameters.networkInstallationUrl.value &&
-    state.installationParameters.networkInstallationUrl.value.length > 0
+    installationParameters &&
+    installationParameters.networkInstallationUrl &&
+    installationParameters.networkInstallationUrl &&
+    installationParameters.networkInstallationUrl.value &&
+    installationParameters.networkInstallationUrl.value.length > 0
   ) {
-    const installationRepoLine = `inst.repo=${state.installationParameters.networkInstallationUrl.value}`;
+    const installationRepoLine = `inst.repo=${installationParameters.networkInstallationUrl.value}`;
     paramFileContents = `${installationRepoLine}`;
   }
 
@@ -56,20 +57,20 @@ const stateToInstallationRepoParams = (state) => {
 }
 
 const stateToVncParams = (state) => {
+  const installationParameters = state && state.steps && state.steps.installationParameters ? state.steps.installationParameters : {};
   let paramFileContents;
 
   // => inst.vnc inst.vncpassword=...
   if (
-    state &&
-    state.installationParameters &&
-    state.installationParameters.vnc &&
-    state.installationParameters.vnc.enabled === true
+    installationParameters &&
+    installationParameters.vnc &&
+    installationParameters.vnc.enabled === true
   ) {
     if (
-      state.installationParameters.vnc.password &&
-      state.installationParameters.vnc.password.length > 0
+      installationParameters.vnc.password &&
+      installationParameters.vnc.password.length > 0
     ) {
-      const vncServerLine = `inst.vnc inst.vncpassword=${state.installationParameters.vnc.password}`;
+      const vncServerLine = `inst.vnc inst.vncpassword=${installationParameters.vnc.password}`;
       paramFileContents = `${vncServerLine}`;
     } else {
       const vncServerLine = `inst.vnc`;
@@ -81,14 +82,14 @@ const stateToVncParams = (state) => {
 }
 
 const stateToSshParams = (state) => {
+  const installationParameters = state && state.steps && state.steps.installationParameters ? state.steps.installationParameters : {};
   let paramFileContents;
 
   // => inst.sshd
   if (
-    state &&
-    state.installationParameters &&
-    state.installationParameters.ssh &&
-    state.installationParameters.ssh.enabled === true
+    installationParameters &&
+    installationParameters.ssh &&
+    installationParameters.ssh.enabled === true
   ) {
     const sshServerLine = `inst.sshd`;
     paramFileContents = `${sshServerLine}`;
@@ -98,15 +99,15 @@ const stateToSshParams = (state) => {
 }
 
 const stateToMiscParams = (state) => {
+  const miscParameters = state && state.steps && state.steps.miscParameters ? state.steps.miscParameters : {};
   let paramFileContents;
 
   if (
-    state &&
-    state.miscParameters &&
-    state.miscParameters.params &&
-    state.miscParameters.params.length > 0
+    miscParameters &&
+    miscParameters.params &&
+    miscParameters.params.length > 0
   ) {
-    paramFileContents = `${state.miscParameters.params}`;
+    paramFileContents = `${miscParameters.params}`;
   }
 
   return paramFileContents;
@@ -129,19 +130,20 @@ ${stateToMiscParams(state)}
 
 const getProgressStepState = (state, forProgressStepState) => {
   if (
-    forProgressStepState === PROGRESS_STATE_INVALIDATION ||
-    forProgressStepState === PROGRESS_STEP_STATE_COMPLETION
+    forProgressStepState === PROGRESS_STATE_INVALID ||
+    forProgressStepState === PROGRESS_STEP_STATE_COMPLETE ||
+    forProgressStepState === PROGRESS_STATE_DISABLED
   ) {
     return {
-      inputFileSelection: state.inputFileSelection[forProgressStepState],
-      information: state.information[forProgressStepState],
-      hint: state.hint[forProgressStepState],
-      networkDevice: state.networkDevice[forProgressStepState],
-      networkAddress: state.networkAddress[forProgressStepState],
-      installationParameters: state.miscParameters[forProgressStepState],
-      miscParameters: state.miscParameters[forProgressStepState],
-      downloadParamFile: state.downloadParamFile[forProgressStepState],
-      nextStep: state.nextStep[forProgressStepState]
+      inputFileSelection: state.steps.inputFileSelection[forProgressStepState],
+      information: state.steps.information[forProgressStepState],
+      hint: state.steps.hint[forProgressStepState],
+      networkDevice: state.steps.networkDevice[forProgressStepState],
+      networkAddress: state.steps.networkAddress[forProgressStepState],
+      installationParameters: state.steps.miscParameters[forProgressStepState],
+      miscParameters: state.steps.miscParameters[forProgressStepState],
+      downloadParamFile: state.steps.downloadParamFile[forProgressStepState],
+      nextSteps: state.steps.nextSteps[forProgressStepState]
     }
   }
   return {};
@@ -191,56 +193,56 @@ const renderPanel = (step, patchState, state) => {
   switch (step) {
     case 0:
       markup = InputFileSelection(patchState, {
-        disk: state.inputFileSelection.diskSize,
-        memory: state.inputFileSelection.memorySize,
-        level: state.inputFileSelection.machineLevel
+        disk: state.steps.inputFileSelection.diskSize,
+        memory: state.steps.inputFileSelection.memorySize,
+        level: state.steps.inputFileSelection.machineLevel
       },
-      state.inputFileSelection.docLink,
-      state.inputFileSelection.localStorageKey,
-      state.useStateFromLocalStorage,
-      state.useExistingSettingsModalOpened);
+      state.steps.inputFileSelection.docLink,
+      state.steps.inputFileSelection.localStorageKey,
+      state.steps.useStateFromLocalStorage,
+      state.steps.useExistingSettingsModalOpened);
       break;
     case 1:
       markup = Information(patchState, {
-        name: state.inputFileSelection.distributionName,
-        version: state.inputFileSelection.distributionVersion
+        name: state.steps.inputFileSelection.distributionName,
+        version: state.steps.inputFileSelection.distributionVersion
       },
       {
-        disk: state.inputFileSelection.diskSize,
-        memory: state.inputFileSelection.memorySize,
-        level: state.inputFileSelection.machineLevel
+        disk: state.steps.inputFileSelection.diskSize,
+        memory: state.steps.inputFileSelection.memorySize,
+        level: state.steps.inputFileSelection.machineLevel
       },
-      state.inputFileSelection.docLink,
-      state.information.localStorageKey);
+      state.steps.inputFileSelection.docLink,
+      state.steps.information.localStorageKey);
       break;
     case 2:
-      markup = Hint(patchState, state.hint.localStorageKey);
+      markup = Hint(patchState, state.steps.hint.localStorageKey);
       break;
     case 3:
-      markup = NetworkDevice(patchState, state.networkDevice.localStorageKey);
+      markup = NetworkDevice(patchState, state.steps.networkDevice.localStorageKey);
       break;
     case 4:
-      markup = NetworkAddress(patchState, state.networkAddress.localStorageKey);
+      markup = NetworkAddress(patchState, state.steps.networkAddress.localStorageKey);
       break;
     case 5:
-      markup = InstallationParameters(patchState, state.installationParameters.localStorageKey);
+      markup = InstallationParameters(patchState, state.steps.installationParameters.localStorageKey);
       break;
     case 6:
-      markup = MiscParameters(patchState, state.miscParameters.localStorageKey);
+      markup = MiscParameters(patchState, state.steps.miscParameters.localStorageKey);
       break;
     case 7:
-      markup = DownloadParamFile(patchState, stateToParamFile, state, state.downloadParamFile.localStorageKey);
+      markup = DownloadParamFile(patchState, stateToParamFile, state, state.steps.downloadParamFile.localStorageKey);
       break;
     case 8:
       markup = NextSteps(
-        state.installationParameters.ssh.enabled,
-        state.installationParameters.vnc.enabled,
-        state.networkAddress.addressType === "radio-ipv4"
-          ? state.networkAddress.ipv4.address
-          : state.networkAddress.ipv6.address,
-        state.installationParameters.vnc.password,
+        state.steps.installationParameters.ssh.enabled,
+        state.steps.installationParameters.vnc.enabled,
+        state.steps.networkAddress.addressType === "radio-ipv4"
+          ? state.steps.networkAddress.ipv4.address
+          : state.steps.networkAddress.ipv6.address,
+        state.steps.installationParameters.vnc.password,
         patchState,
-        state.nextStep.localStorageKey
+        state.steps.nextSteps.localStorageKey
       );
       break;
     default:
@@ -254,92 +256,103 @@ const App = () => {
   const getInitialState = (useStateFromLocalStorage) => {
     const initialState = JSON.parse(localStorage.getItem("com.ibm.systems.linux.z.app"));
     const defaultState = {
-      inputFileSelection: {
-        distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
-        distributionVersion: "9.0",
-        memorySize: 3,
-        diskSize: 10,
-        machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
-        docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
-        complete: false,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.inputFileSelection"
-      },
-      information: {
-        complete: true,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.information"
-      },
-      downloadParamFile: {
-        contents: "",
-        complete: false,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.downloadParamFile"
-      },
-      hint: {
-        complete: true,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.hint"
-      },
-      installationParameters: {
-        networkInstallationUrl: "",
-        vnc: {
-          password: "",
-          enabled: false
+      steps: {
+        inputFileSelection: {
+          distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
+          distributionVersion: "9.0",
+          memorySize: 3,
+          diskSize: 10,
+          machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
+          docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
+          complete: false,
+          disabled: false,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.inputFileSelection"
         },
-        ssh: {
-          enabled: false
+        information: {
+          complete: false,
+          disabled: true,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.information"
         },
-        complete: false,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.installationParameters"
-      },
-      miscParameters: {
-        params: "",
-        complete: true,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.miscParameters"
-      },
-      networkAddress: {
-        addressType: "",
-        ipv4: {
-          cidr: "",
-          binary: "",
-          netmask: "",
-          address: ""
+        downloadParamFile: {
+          contents: "",
+          complete: false,
+          disabled: true,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.downloadParamFile"
         },
-        ipv6: {
-          cidr: "",
-          address: ""
+        hint: {
+          complete: false,
+          disabled: true,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.hint"
         },
-        gatewayIpAddress: "",
-        nameserverIpAddress: "",
-        complete: false,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.networkAddress"
-      },
-      networkDevice: {
-        deviceType: "",
-        osa: {
-          readChannel: "",
-          writeChannel: "",
-          dataChannel: "",
-          portNumber: 0,
-          layer: 0,
+        installationParameters: {
+          networkInstallationUrl: "",
+          vnc: {
+            password: "",
+            enabled: false
+          },
+          ssh: {
+            enabled: false
+          },
+          complete: false,
+          disabled: true,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.installationParameters"
         },
-        roce: {
-          fid: "",
-          uid: ""
+        miscParameters: {
+          params: "",
+          complete: false,
+          disabled: true,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.miscParameters"
         },
-        vlanId: "",
-        complete: false,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.networkDevice"
-      },
-      nextStep: {
-        complete: true,
-        invalid: false,
-        localStorageKey: "com.ibm.systems.linux.z.nextStep"
+        networkAddress: {
+          addressType: "",
+          ipv4: {
+            cidr: "",
+            binary: "",
+            netmask: "",
+            address: ""
+          },
+          ipv6: {
+            cidr: "",
+            address: ""
+          },
+          gatewayIpAddress: "",
+          nameserverIpAddress: "",
+          complete: false,
+          disabled: true,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.networkAddress"
+        },
+        networkDevice: {
+          deviceType: "",
+          osa: {
+            readChannel: "",
+            writeChannel: "",
+            dataChannel: "",
+            portNumber: 0,
+            layer: 0,
+          },
+          roce: {
+            fid: "",
+            uid: ""
+          },
+          vlanId: "",
+          complete: false,
+          disabled: true,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.networkDevice"
+        },
+        nextSteps: {
+          disabled: true,
+          complete: false,
+          invalid: false,
+          localStorageKey: "com.ibm.systems.linux.z.nextSteps"
+        }
       },
       showNotification: false,
       isDirty: false,
@@ -363,9 +376,14 @@ const App = () => {
   }
   const [step, setStep] = useState(0);
   const [state, setState] = useState(getInitialState);
-  const patchState = (patch) => {;
-    setState((prevState) => ({...prevState, ...patch}));
+  const patchState = (patch) => {
+    const stateCopy = JSON.parse(JSON.stringify(state));
+    const mergedSteps = Object.assign(stateCopy.steps, patch.steps);
+
+    stateCopy.steps = mergedSteps;
+    setState((prevState) => (Object.assign(prevState, stateCopy)));
     updateIsDirty(true);
+    updateIsDisabled(stateCopy);
     localStorage.setItem("com.ibm.systems.linux.z.app", JSON.stringify(state));
     console.log(state);
   }
@@ -383,6 +401,30 @@ const App = () => {
   }
   const updateIsDirty = (isDirty) => {
     setState((prevState) => ({...prevState, isDirty}));
+  }
+  const setNavigationalStepsActivity = (flag = false, localState) => {
+    const stateCopy = JSON.parse(JSON.stringify(localState));
+    const keys = Object.keys(stateCopy.steps);
+
+    let i;
+    for (i = 0; i < keys.length; i++) {
+      const stateKey = keys[i];
+
+      if (stateKey !== "inputFileSelection") {
+        stateCopy.steps[stateKey].disabled = flag;
+      }
+      setState((prevState) => ({...prevState, ...stateCopy}));
+    }
+  }
+  const updateIsDisabled = (localState) => {
+    const hasInputFileSelection = localState && localState.steps && localState.steps.inputFileSelection;
+    const isComplete = hasInputFileSelection && localState.steps.inputFileSelection.complete;
+
+    if (hasInputFileSelection && !isComplete) {
+      setNavigationalStepsActivity(true, localState);
+    } else if (hasInputFileSelection && isComplete) {
+      setNavigationalStepsActivity(false, localState);
+    }
   }
   const helpContentMarkup = renderHelpContent(step);
   const panelMarkup = renderPanel(step, patchState, state);
@@ -405,16 +447,17 @@ const App = () => {
     }
     return updateShowNotification(false);
   }
-  const progressStepCompletion = getProgressStepState(state, PROGRESS_STEP_STATE_COMPLETION);
-  const progressStepInvalidation = getProgressStepState(state, PROGRESS_STATE_INVALIDATION);
+  const progressStepComplete = getProgressStepState(state, PROGRESS_STEP_STATE_COMPLETE);
+  const progressStepInvalid = getProgressStepState(state, PROGRESS_STATE_INVALID);
+  const progressStepDisabled = getProgressStepState(state, PROGRESS_STATE_DISABLED);
   const getLocalStorageKeys = () => {
-    const keys = Object.keys(state);
+    const keys = Object.keys(state.steps);
     const localStorageKeys = [];
 
     let i;
     for (i = 0; i < keys.length; i++) {
       const stateKey = keys[i];
-      const currentLocalStorageKey = state[stateKey].localStorageKey;
+      const currentLocalStorageKey = state.steps[stateKey].localStorageKey;
       localStorageKeys.push(currentLocalStorageKey);
     }
     return localStorageKeys;
@@ -448,8 +491,9 @@ const App = () => {
         onShowNotification={showNotification}
         onProgress={setStep}
         progressStep={step}
-        progressStepCompletion={progressStepCompletion}
-        progressStepInvalidation={progressStepInvalidation}
+        progressStepComplete={progressStepComplete}
+        progressStepInvalid={progressStepInvalid}
+        progressStepDisabled={progressStepDisabled}
         helpContent={helpContentMarkup}
       />
       <Modal

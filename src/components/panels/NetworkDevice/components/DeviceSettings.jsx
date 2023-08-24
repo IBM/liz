@@ -62,24 +62,26 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     onToggle={(toggleState) => {
                         updateFunction(UPDATE_FUNCTION__LAYER, toggleState);
                         patchState({
-                            networkDevice: {
-                                deviceType: deviceSettingsId,
-                                osa: {
-                                  readChannel: state.readChannelId ? state.readChannelId.value : "",
-                                  writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
-                                  dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
-                                  portNumber: 0,
-                                  layer: 0,
-                                },
-                                roce: {
-                                  fid: state.pciFunctionId ? state.pciFunctionId.value : "",
-                                  uid: state.userIdentifier ? state.userIdentifier.value : ""
-                                },
-                                vlanId: "",
-                                complete: false,
-                                invalid: false,
-                                localStorageKey: "com.ibm.systems.linux.z.networkDevice"
-                              }
+                            steps: {
+                                networkDevice: {
+                                    deviceType: deviceSettingsId,
+                                    osa: {
+                                      readChannel: state.readChannelId ? state.readChannelId.value : "",
+                                      writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
+                                      dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
+                                      portNumber: 0,
+                                      layer: 0,
+                                    },
+                                    roce: {
+                                      fid: state.pciFunctionId ? state.pciFunctionId.value : "",
+                                      uid: state.userIdentifier ? state.userIdentifier.value : ""
+                                    },
+                                    vlanId: "",
+                                    complete: false,
+                                    invalid: false,
+                                    localStorageKey: "com.ibm.systems.linux.z.networkDevice"
+                                }
+                            }
                         });
                     }}
                 />
@@ -131,10 +133,12 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                             });
                         } else {
                             patchState({
-                                networkDevice: {
-                                    invalid: true,
-                                    complete: true
-                                 }
+                                steps: {
+                                    networkDevice: {
+                                        invalid: true,
+                                        complete: true
+                                    }
+                                }
                             });
                         }
                     }}
@@ -162,9 +166,11 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                             });
                         } else {
                             patchState({
-                                networkDevice: {
-                                    invalid: true,
-                                    complete: true
+                                steps: {
+                                    networkDevice: {
+                                        invalid: true,
+                                        complete: true
+                                    }
                                 }
                             });
                         }

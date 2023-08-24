@@ -24,7 +24,7 @@ import InstallerFlow from "../InstallerFlow";
 import HelpContent from "./components/HelpContent";
 import "./_installer-header.scss";
 
-const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepCompletion, progressStepInvalidation, helpContent }) => {
+const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepComplete, progressStepInvalid, progressStepDisabled, helpContent }) => {
   const [state, setState] = useState({
     expanded: false
   });
@@ -74,8 +74,9 @@ const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progres
                 <InstallerFlow
                   onProgress={onProgress}
                   progressStep={progressStep}
-                  progressStepCompletion={progressStepCompletion}
-                  progressStepInvalidation={progressStepInvalidation}
+                  progressStepComplete={progressStepComplete}
+                  progressStepInvalid={progressStepInvalid}
+                  progressStepDisabled={progressStepDisabled}
                 />
               </SideNavItems>
             </SideNav>
@@ -101,7 +102,7 @@ InstallerHeader.propTypes = {
   onShowNotification: PropTypes.func.isRequired,
   onProgress: PropTypes.func.isRequired,
   progressStep: PropTypes.number.isRequired,
-  progressStepCompletion: PropTypes.shape({
+  progressStepComplete: PropTypes.shape({
     inputFileSelection: PropTypes.bool.isRequired,
     information: PropTypes.bool.isRequired,
     hint: PropTypes.bool.isRequired,
@@ -110,9 +111,9 @@ InstallerHeader.propTypes = {
     installationParameters: PropTypes.bool.isRequired,
     miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
-    nextStep: PropTypes.bool.isRequired
+    nextSteps: PropTypes.bool.isRequired
   }).isRequired,
-  progressStepInvalidation: PropTypes.shape({
+  progressStepInvalid: PropTypes.shape({
     inputFileSelection: PropTypes.bool.isRequired,
     information: PropTypes.bool.isRequired,
     hint: PropTypes.bool.isRequired,
@@ -121,7 +122,18 @@ InstallerHeader.propTypes = {
     installationParameters: PropTypes.bool.isRequired,
     miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
-    nextStep: PropTypes.bool.isRequired
+    nextSteps: PropTypes.bool.isRequired
+  }).isRequired,
+  progressStepDisabled: PropTypes.shape({
+    inputFileSelection: PropTypes.bool.isRequired,
+    information: PropTypes.bool.isRequired,
+    hint: PropTypes.bool.isRequired,
+    networkDevice: PropTypes.bool.isRequired,
+    networkAddress: PropTypes.bool.isRequired,
+    installationParameters: PropTypes.bool.isRequired,
+    miscParameters: PropTypes.bool.isRequired,
+    downloadParamFile: PropTypes.bool.isRequired,
+    nextSteps: PropTypes.bool.isRequired
   }).isRequired,
   helpContent: PropTypes.node.isRequired
 };

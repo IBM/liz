@@ -109,22 +109,24 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
                 onChange={({ selectedItem }) => {
                   updateSelectedDistributionName(selectedItem);
                   patchState({
-                    inputFileSelection: {
-                      distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
-                      distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
-                      memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
-                      diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
-                      machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
-                      docLink,
-                      complete: isComplete() || false,
-                      localStorageKey
+                    steps: {
+                      inputFileSelection: {
+                        distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
+                        distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
+                        memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
+                        diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
+                        machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
+                        docLink,
+                        complete: isComplete() || false,
+                        localStorageKey
+                      }
                     }
                   });
                 }}
                 selectedItem={state.selectedDistributionName}
               />
               <Dropdown
-                ariaLabel="Select a version"
+                aria-label="Select a version"
                 id="version-selection"
                 items={versionList}
                 label="Select a version"
@@ -135,15 +137,17 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
                 onChange={({ selectedItem }) => {
                   updateSelectedDistributionVersion(selectedItem);
                   patchState({
-                    inputFileSelection: {
-                      distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
-                      distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
-                      memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
-                      diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
-                      machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
-                      docLink,
-                      complete: isComplete() || false,
-                      localStorageKey
+                    steps: {
+                      inputFileSelection: {
+                        distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
+                        distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
+                        memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
+                        diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
+                        machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
+                        docLink,
+                        complete: isComplete() || false,
+                        localStorageKey
+                      }
                     }
                   });
                 }}

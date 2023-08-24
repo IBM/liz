@@ -1,0 +1,8 @@
+When and how to disable navbar items?
+=====================================
+
+We discussed the following:
+
+1. Some steps as presented by the left navbar are containing information but no data must be provided.
+2. These panels should be in an incomplete state if the UI is initially rendered.
+3. Once a panel that contains such a step where only information is provided, the step indicator in the navigation bar must show a check mark.

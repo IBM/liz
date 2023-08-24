@@ -25,7 +25,16 @@ const NextSteps = (useSsh, useVnc, networkAddress = "<host-IP-address>", vncPass
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-  });
+    patchState({
+      steps: {
+        nextSteps: {
+          complete: true,
+          disabled: true,
+          invalid: false
+        }
+      }
+    });
+  }, []);
 
   return (
     <Layer>

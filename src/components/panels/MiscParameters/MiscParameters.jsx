@@ -30,7 +30,16 @@ const MiscParameters = (patchState, localStorageKey) => {
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-  });
+    patchState({
+      steps: {
+        miscParameters: {
+          complete: true,
+          disabled: true,
+          invalid: false
+        }
+      }
+    });
+  }, []);
 
   const textAreaLabel = (
     <>
@@ -62,11 +71,13 @@ const MiscParameters = (patchState, localStorageKey) => {
             onChange={(content) => {
               updateMiscParameterContent(content && content.target ? content.target.value : "");
               patchState({
-                miscParameters: {
-                  params: state.miscParameterContent,
-                  complete: true,
-                  localStorageKey
-                },
+                steps: {
+                  miscParameters: {
+                    params: state.miscParameterContent,
+                    complete: true,
+                    localStorageKey
+                  }
+                }
               });
             }}
           />

@@ -99,7 +99,16 @@ const InstallationParameters = (patchState, localStorageKey) => {
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-  });
+    patchState({
+      steps: {
+        installationParameters: {
+          complete: true,
+          disabled: true,
+          invalid: false
+        }
+      }
+    });
+  }, []);
 
   return (
     <Layer>
@@ -124,17 +133,19 @@ const InstallationParameters = (patchState, localStorageKey) => {
             
               if (urlValueIsValid) {
                 patchState({
-                  installationParameters: {
-                    networkInstallationUrl: state.installationAddress.value,
-                    vnc: {
-                      password: state.vncPassword,
-                      enabled: useVncToggled
-                    },
-                    ssh: {
-                      host: state.sshHost,
-                      enabled: useSshToggled
-                    },
-                    localStorageKey
+                  steps: {
+                    installationParameters: {
+                      networkInstallationUrl: state.installationAddress.value,
+                      vnc: {
+                        password: state.vncPassword,
+                        enabled: useVncToggled
+                      },
+                      ssh: {
+                        host: state.sshHost,
+                        enabled: useSshToggled
+                      },
+                      localStorageKey
+                    }
                   }
                 });
               }
@@ -158,17 +169,19 @@ const InstallationParameters = (patchState, localStorageKey) => {
                   updateUseVnc(true);
                 }
                 patchState({
-                  installationParameters: {
-                    networkInstallationUrl: state.installationAddress,
-                    vnc: {
-                      password: state.vncPassword,
-                      enabled: useVncToggled
-                    },
-                    ssh: {
-                      host: state.sshHost,
-                      enabled: useSshToggled
-                    },
-                    localStorageKey
+                  steps: {
+                    installationParameters: {
+                      networkInstallationUrl: state.installationAddress,
+                      vnc: {
+                        password: state.vncPassword,
+                        enabled: useVncToggled
+                      },
+                      ssh: {
+                        host: state.sshHost,
+                        enabled: useSshToggled
+                      },
+                      localStorageKey
+                    }
                   }
                 });
               }}
@@ -187,17 +200,19 @@ const InstallationParameters = (patchState, localStorageKey) => {
                 onChange={(password) => {
                   updateVncPassword(password && password.target ? password.target.value : "");
                   patchState({
-                    installationParameters: {
-                      networkInstallationUrl: state.installationAddress,
-                      vnc: {
-                        password: state.vncPassword,
-                        enabled: useVncToggled
-                      },
-                      ssh: {
-                        host: state.sshHost,
-                        enabled: useSshToggled
-                      },
-                      localStorageKey
+                    steps: {
+                      installationParameters: {
+                        networkInstallationUrl: state.installationAddress,
+                        vnc: {
+                          password: state.vncPassword,
+                          enabled: useVncToggled
+                        },
+                        ssh: {
+                          host: state.sshHost,
+                          enabled: useSshToggled
+                        },
+                        localStorageKey
+                      }
                     }
                   });
                 }}
@@ -220,15 +235,17 @@ const InstallationParameters = (patchState, localStorageKey) => {
                   updateUseSsh(true);
                 }
                 patchState({
-                  installationParameters: {
-                    networkInstallationUrl: state.installationAddress,
-                    vnc: {
-                      password: state.vncPassword,
-                      enabled: useVncToggled
-                    },
-                    ssh: {
-                      host: state.sshHost,
-                      enabled: useSshToggled
+                  steps: {
+                    installationParameters: {
+                      networkInstallationUrl: state.installationAddress,
+                      vnc: {
+                        password: state.vncPassword,
+                        enabled: useVncToggled
+                      },
+                      ssh: {
+                        host: state.sshHost,
+                        enabled: useSshToggled
+                      }
                     }
                   }
                 });

@@ -25,7 +25,16 @@ const Hint = (patchState, localStorageKey) => {
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-  });
+    patchState({
+      steps: {
+        hint: {
+          complete: true,
+          disabled: true,
+          invalid: false
+        }
+      }
+    });
+  }, []);
 
   return (
     <Layer>

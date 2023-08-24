@@ -258,9 +258,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
                   });
                 } else {
                   patchState({
-                    networkDevice: {
-                      invalid: true,
-                      complete: true
+                    steps: {
+                      networkDevice: {
+                        invalid: true,
+                        complete: true
+                      }
                     }
                   });
                 }
@@ -298,9 +300,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
                         });
                       } else {
                         patchState({
-                          networkDevice: {
-                            invalid: true,
-                            complete: true
+                          steps: {
+                            networkDevice: {
+                              invalid: true,
+                              complete: true
+                            }
                           }
                         });
                       }
@@ -330,9 +334,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
                         });
                       } else {
                         patchState({
-                          networkDevice: {
-                            invalid: true,
-                            complete: true
+                          steps: {
+                            networkDevice: {
+                              invalid: true,
+                              complete: true
+                            }
                           }
                         });
                       }
@@ -363,9 +369,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
                         });
                       } else {
                         patchState({
-                          networkDevice: {
-                            invalid: true,
-                            complete: true
+                          steps: {
+                            networkDevice: {
+                              invalid: true,
+                              complete: true
+                            }
                           }
                         });
                       }
