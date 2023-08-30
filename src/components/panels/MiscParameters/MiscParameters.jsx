@@ -68,6 +68,7 @@ const MiscParameters = (patchState, localStorageKey) => {
             helperText=""
             rows={8}
             id="misc-parameters-input"
+            className="misc-parameters_textarea"
             onChange={(content) => {
               updateMiscParameterContent(content && content.target ? content.target.value : "");
               patchState({

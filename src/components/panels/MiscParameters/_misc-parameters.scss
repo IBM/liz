@@ -16,4 +16,8 @@
   vertical-align: text-top;
 }
 
+.misc-parameters_textarea textarea {
+  @include type.type-style("code-02");  
+}
+
 
