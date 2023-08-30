@@ -290,7 +290,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   )}
                   placeholder="192.168.178.22"
                   value={state.ipv4Address ? state.ipv4Address.value : ""}
-                  onChange={(localAddress) => {
+                  onBlur={(localAddress) => {
                     const localAddressValue = localAddress && localAddress.target && localAddress.target.value
                       ? localAddress.target.value
                       : "";
@@ -342,7 +342,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   )}
                   placeholder="32"
                   value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
-                  onChange={(localCidr) => {
+                  onBlur={(localCidr) => {
                     const localCidrValue = localCidr && localCidr.target && localCidr.target.value
                       ? localCidr.target.value
                       : "";
@@ -398,7 +398,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   )}
                   placeholder="255.255.128.0"
                   value={state.netmask ? state.netmask.value : ""}
-                  onChange={(localNetmask) => {
+                  onBlur={(localNetmask) => {
                     const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
                       ? localNetmask.target.value
                       : "";
@@ -466,7 +466,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   )}
                   placeholder="2001:0db8:85a3:0:0:8a2e:370:7334"
                   value={state.ipv6Address ? state.ipv6Address.value : ""}
-                  onChange={(localAddress) => {
+                  onBlur={(localAddress) => {
                     const localAddressValue = localAddress && localAddress.target && localAddress.target.value
                       ? localAddress.target.value
                       : "";
@@ -518,7 +518,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   )}
                   placeholder="128"
                   value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
-                  onChange={(localCidr) => {
+                  onBlur={(localCidr) => {
                     const localCidrValue = localCidr && localCidr.target && localCidr.target.value
                       ? localCidr.target.value
                       : "";
@@ -577,7 +577,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
               )}
               placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_GATEWAY_ADDRESS_IPV4 : PLACEHOLDER_GATEWAY_ADDRESS_IPV6}
               value={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
-              onChange={(localGatewayIpAddress) => {
+              onBlur={(localGatewayIpAddress) => {
                 const localGatewayIpAddressValue = localGatewayIpAddress && localGatewayIpAddress.target && localGatewayIpAddress.target.value
                   ? localGatewayIpAddress.target.value
                   : "";
@@ -631,7 +631,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
               )}
               placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 : PLACEHOLDER_NAMESERVER_ADDRESS_IPV6}
               value={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
-              onChange={(localNameserverIpAddress) => {
+              onBlur={(localNameserverIpAddress) => {
                 const localNameserverIpAddressValue = localNameserverIpAddress && localNameserverIpAddress.target && localNameserverIpAddress.target.value
                   ? localNameserverIpAddress.target.value
                   : "";
