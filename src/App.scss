@@ -12,6 +12,14 @@
   height: 100%;
 
   &.cds--content {
+    padding: calc(layout.$spacing-09 - layout.$spacing-01) calc(3 * layout.$spacing-13) 0 calc(layout.$spacing-10 * 5);
+  }
+}
+
+.app__full-height__collapsed {
+  height: 100%;
+
+  &.cds--content {
     padding: calc(layout.$spacing-09 - layout.$spacing-01) 0 0 calc(layout.$spacing-10 * 5);
   }
 }

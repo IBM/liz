@@ -24,13 +24,25 @@ import InstallerFlow from "../InstallerFlow";
 import HelpContent from "./components/HelpContent";
 import "./_installer-header.scss";
 
-const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progressStepComplete, progressStepInvalid, progressStepDisabled, helpContent }) => {
+const InstallerHeader = (
+  {
+    onShowNotification,
+    onShowHelpPanel,
+    onProgress,
+    progressStep,
+    progressStepComplete,
+    progressStepInvalid,
+    progressStepDisabled,
+    helpContent
+  }
+) => {
   const [state, setState] = useState({
-    expanded: false
+    expanded: true
   });
 
   const updateExpanded = (expanded) => {
     setState({ ...state, expanded });
+    onShowHelpPanel(expanded);
   }
 
   return (
@@ -100,6 +112,7 @@ const InstallerHeader = ({ onShowNotification, onProgress, progressStep, progres
 
 InstallerHeader.propTypes = {
   onShowNotification: PropTypes.func.isRequired,
+  onShowHelpPanel: PropTypes.func.isRequired,
   onProgress: PropTypes.func.isRequired,
   progressStep: PropTypes.number.isRequired,
   progressStepComplete: PropTypes.shape({

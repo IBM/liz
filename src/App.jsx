@@ -356,6 +356,7 @@ const App = () => {
       },
       showNotification: false,
       isDirty: false,
+      isHelpPanelExpanded: true,
       showConfirmationModal: false,
       showUseExistingSettingsModal: false,
       useExistingSettingsModalOpened: true,
@@ -389,6 +390,9 @@ const App = () => {
   }
   const updateShowNotification = (showNotification) => {
     setState((prevState) => ({...prevState, showNotification}));
+  }
+  const updateIsHelpPanelExpanded = (isHelpPanelExpanded) => {
+    setState((prevState) => ({...prevState, isHelpPanelExpanded}));
   }
   const updateShowConfirmationModal = (showConfirmationModal) => {
     setState((prevState) => ({...prevState, showConfirmationModal}));
@@ -428,6 +432,9 @@ const App = () => {
   }
   const helpContentMarkup = renderHelpContent(step);
   const panelMarkup = renderPanel(step, patchState, state);
+  const showHelpPanel = (flag) => {
+    updateIsHelpPanelExpanded(flag);
+  }
   const showNotification = (callback) => {
     if (callback) {
       if (state.showNotification) {
@@ -477,6 +484,7 @@ const App = () => {
     localStorage.setItem("com.ibm.systems.linux.z.inlineNotification", JSON.stringify(defaultInlineNotification));
     return defaultInlineNotification;
   };
+  const contentClassName = state.isHelpPanelExpanded ? "app__full-height": "app__full-height__collapsed";
 
   window.addEventListener('beforeunload', (event) => {
     if (state.isDirty) {
@@ -489,6 +497,7 @@ const App = () => {
       <InstallerHeader
         showNotification={state.showNotification}
         onShowNotification={showNotification}
+        onShowHelpPanel={showHelpPanel}
         onProgress={setStep}
         progressStep={step}
         progressStepComplete={progressStepComplete}
@@ -531,7 +540,7 @@ const App = () => {
           updateUseExistingSettingsModalOpened(true);
         }}
       />
-      <Content className="app__full-height">
+      <Content className={contentClassName}>
         <Routes>
           <Route
             exact={true}
