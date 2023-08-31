@@ -99,7 +99,6 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             )}
             className="download-param-file_textarea"
             rows={10}
-            value={state.paramFileContent || paramFileContent}
           />
           {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
           <ButtonSet className="download-param-file_buttons">

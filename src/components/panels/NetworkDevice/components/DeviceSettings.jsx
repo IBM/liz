@@ -120,7 +120,6 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         content
                     )}
                     placeholder="e.g. 0x0100"
-                    value={state.pciFunctionId ? state.pciFunctionId.value : ""}
                     onBlur={(pciFunctionId) => {
                         const pciFunctionIdValue = pciFunctionId && pciFunctionId.target && pciFunctionId.target.value
                             ? pciFunctionId.target.value
@@ -153,7 +152,6 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         content
                     )}
                     placeholder="e.g. 0x1234"
-                    value={state.userIdentifier ? state.userIdentifier.value : ""}
                     onBlur={(userIdentifier) => {
                         const userIdentifierValue = userIdentifier && userIdentifier.target && userIdentifier.target.value
                             ? userIdentifier.target.value

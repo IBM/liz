@@ -292,7 +292,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
                       content
                     )}
                     placeholder="ex: 0.0.bdf0"
-                    value={state.readChannelId ? state.readChannelId.value : ""}
                     onBlur={(readChannelId) => {
                       const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
                         ? readChannelId.target.value
@@ -326,7 +325,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
                       content
                     )}
                     placeholder="ex: 0.0.bdf1"
-                    value={state.writeChannelId ? state.writeChannelId.value : ""}
                     onBlur={(writeChannelId) => {
                       const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
                         ? writeChannelId.target.value
@@ -361,7 +359,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
                       content
                     )}
                     placeholder="ex: 0.0.bdf2"
-                    value={state.dataChannelId ? state.dataChannelId.value : ""}
                     onBlur={(dataChannelId) => {
                       const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
                         ? dataChannelId.target.value
