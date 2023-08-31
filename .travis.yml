@@ -20,9 +20,9 @@ after_success:
   - git clone https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git
   - echo "# Overview" > liz.wiki/Open-Source-Development-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
-  - echo "```" >> liz.wiki/Open-Source-Development-Dependencies.md
+  - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
   - license-checker-rseidelsohn --development --summary >> liz.wiki/Open-Source-Development-Dependencies.md
-  - echo "```" >> liz.wiki/Open-Source-Development-Dependencies.md
+  - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "# Dependency List" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "Open Source dependencies that will be used to build the UI." >> liz.wiki/Open-Source-Development-Dependencies.md
@@ -30,9 +30,9 @@ after_success:
   - license-checker-rseidelsohn --development --markdown --excludePackages liz >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "# Overview" > liz.wiki/Open-Source-Production-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Production-Dependencies.md
-  - echo "```" >> liz.wiki/Open-Source-Development-Dependencies.md
+  - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
   - license-checker-rseidelsohn --production --summary >> liz.wiki/Open-Source-Production-Dependencies.md
-  - echo "```" >> liz.wiki/Open-Source-Development-Dependencies.md
+  - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "# Dependency List" >> liz.wiki/Open-Source-Production-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Production-Dependencies.md
   - echo "Open Source dependencies that will be consumed by the UI during runtime after its deployment." >> liz.wiki/Open-Source-Production-Dependencies.md
