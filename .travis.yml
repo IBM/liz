@@ -21,7 +21,7 @@ after_success:
   - echo "# Overview" > liz.wiki/Open-Source-Development-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
-  - license-checker-rseidelsohn --development --summary >> liz.wiki/Open-Source-Development-Dependencies.md
+  - license-checker-rseidelsohn --development --excludePackages liz --summary >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "# Dependency List" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
@@ -31,7 +31,7 @@ after_success:
   - echo "# Overview" > liz.wiki/Open-Source-Production-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Production-Dependencies.md
   - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
-  - license-checker-rseidelsohn --production --summary >> liz.wiki/Open-Source-Production-Dependencies.md
+  - license-checker-rseidelsohn --production --excludePackages liz --summary >> liz.wiki/Open-Source-Production-Dependencies.md
   - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
   - echo "# Dependency List" >> liz.wiki/Open-Source-Production-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Production-Dependencies.md
