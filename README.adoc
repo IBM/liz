@@ -28,4 +28,4 @@ toc::[]
 
 == Overview
 
-The Linux Installer on Z copilot (Stage 1) is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process.
+The Linux Installer on Z assistant (Stage 1) is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process.
