@@ -39,7 +39,10 @@ const PROGRESS_STATE_DISABLED = "disabled";
 
 const stateToInstallationRepoParams = (state) => {
   const installationParameters = state && state.steps && state.steps.installationParameters ? state.steps.installationParameters : {};
-  let paramFileContents;
+  let paramFileContents = {
+    contents: "",
+    complete: false
+  };
 
   // => inst.repo=...
   if (
@@ -50,7 +53,10 @@ const stateToInstallationRepoParams = (state) => {
     installationParameters.networkInstallationUrl.value.length > 0
   ) {
     const installationRepoLine = `inst.repo=${installationParameters.networkInstallationUrl.value}`;
-    paramFileContents = `${installationRepoLine}`;
+    paramFileContents = {
+      contents: `${installationRepoLine}`,
+      complete: true
+    };
   }
 
   return paramFileContents;
@@ -58,7 +64,10 @@ const stateToInstallationRepoParams = (state) => {
 
 const stateToVncParams = (state) => {
   const installationParameters = state && state.steps && state.steps.installationParameters ? state.steps.installationParameters : {};
-  let paramFileContents;
+  let paramFileContents = {
+    contents: "",
+    complete: false
+  };
 
   // => inst.vnc inst.vncpassword=...
   if (
@@ -71,10 +80,16 @@ const stateToVncParams = (state) => {
       installationParameters.vnc.password.length > 0
     ) {
       const vncServerLine = `inst.vnc inst.vncpassword=${installationParameters.vnc.password}`;
-      paramFileContents = `${vncServerLine}`;
+      paramFileContents = {
+        contents: `${vncServerLine}`,
+        complete: true
+      };
     } else {
       const vncServerLine = `inst.vnc`;
-      paramFileContents = `${vncServerLine}`;
+      paramFileContents = {
+        contents: `${vncServerLine}`,
+        complete: true
+      };
     }
   }
 
@@ -83,7 +98,10 @@ const stateToVncParams = (state) => {
 
 const stateToSshParams = (state) => {
   const installationParameters = state && state.steps && state.steps.installationParameters ? state.steps.installationParameters : {};
-  let paramFileContents;
+  let paramFileContents = {
+    contents: "",
+    complete: false
+  };
 
   // => inst.sshd
   if (
@@ -92,7 +110,10 @@ const stateToSshParams = (state) => {
     installationParameters.ssh.enabled === true
   ) {
     const sshServerLine = `inst.sshd`;
-    paramFileContents = `${sshServerLine}`;
+    paramFileContents = {
+      contents: `${sshServerLine}`,
+      complete: true
+    };
   }
 
   return paramFileContents;
@@ -100,14 +121,20 @@ const stateToSshParams = (state) => {
 
 const stateToMiscParams = (state) => {
   const miscParameters = state && state.steps && state.steps.miscParameters ? state.steps.miscParameters : {};
-  let paramFileContents;
+  let paramFileContents = {
+    contents: "",
+    complete: false
+  };
 
   if (
     miscParameters &&
     miscParameters.params &&
     miscParameters.params.length > 0
   ) {
-    paramFileContents = `${miscParameters.params}`;
+    paramFileContents = {
+      contents: `${miscParameters.params}`,
+      complete: miscParameters.complete
+    };
   }
 
   return paramFileContents;
@@ -119,13 +146,30 @@ layer2=1,
 portno=0,
 ip=172.18.132.1::172.18.0.1:15:t3560001.lnxne.boe:encbdf0:none,
 nameserver=172.18.0.1`;
+  const stateToInstallationRepoParamsResult = stateToInstallationRepoParams(state);
+  const stateToVncParamsResult = stateToVncParams(state);
+  const stateToSshParamsResult = stateToSshParams(state);
+  const stateToMiscParamsResult = stateToMiscParams(state);
+  let hasIncompleteData = true;
 
-  return `${stateToParamFile}
-${stateToInstallationRepoParams(state)}
-${stateToVncParams(state)}
-${stateToSshParams(state)}
-${stateToMiscParams(state)}
-`;
+  if (
+    stateToInstallationRepoParams.complete &&
+    stateToVncParams.complete &&
+    stateToSshParams.complete &&
+    stateToMiscParams.complete
+  ) {
+    hasIncompleteData = false;
+  }
+
+  return {
+    contents: `${stateToParamFile}
+${stateToInstallationRepoParamsResult.contents}
+${stateToVncParamsResult.contents}
+${stateToSshParamsResult.contents}
+${stateToMiscParamsResult.contents}
+`,
+    hasIncompleteData 
+  };
 }
 
 const getProgressStepState = (state, forProgressStepState) => {

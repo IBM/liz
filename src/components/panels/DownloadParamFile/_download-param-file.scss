@@ -12,8 +12,14 @@
 @use "@carbon/colors";
 @use "@carbon/themes";
 
-.download-param-file_textarea textarea {
-  @include type.type-style("code-02");  
+.download-param-file_textarea {
+  > div > textarea {
+    @include type.type-style("code-02");
+  }
+
+  &.download-param-file_textarea__padding {
+    padding: 0 0 layout.$spacing-09 0;
+  }
 }
 
 .download-param-file_copied-label {
@@ -24,9 +30,17 @@
 }
 
 .download-param-file_buttons {
+  &.download-param-file_buttons__padding {
+    padding: layout.$spacing-05 0 0 0;
+  }
+  
   float: right;
 }
 
 .download-param-file_button {
   white-space: nowrap;
+}
+
+.download-param-file__incomplete-data-banner {
+  /* empty style */ 
 }

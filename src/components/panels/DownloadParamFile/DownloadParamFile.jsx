@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, Button, ButtonSet, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Layer, Button, ButtonSet, InlineNotification, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
@@ -41,7 +41,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   }
 
   const saveParamFileContent = () => {
-    const textFileAsBlob = new Blob([ paramFileContent ], { type: "text/plain" });
+    const textFileAsBlob = new Blob([ paramFileContent.contents ], { type: "text/plain" });
     const fileNameToSaveAs = "parmfile.txt";
 
     const downloadLink = document.createElement("a");
@@ -85,6 +85,10 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     );
   }
 
+  const textAreaPaddingClass = paramFileContent.hasIncompleteData ? "download-param-file_textarea__padding" : "";
+  const textAreaClasses = `download-param-file_textarea ${textAreaPaddingClass}`;
+  const buttonPaddingClass = paramFileContent.hasIncompleteData ? "download-param-file_buttons__padding" : "";
+  const buttonClasses = `download-param-file_buttons ${buttonPaddingClass}`;
   const markup = (
     <Layer>
       <Grid className="download-param-file_grid" fullWidth>
@@ -97,12 +101,24 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
               "Show information",
               content
             )}
-            className="download-param-file_textarea"
+            className={textAreaClasses}
             rows={10}
-          />
+          >
+            {paramFileContent.contents}
+          </TextArea>
+          {paramFileContent.hasIncompleteData &&
+            <InlineNotification
+              hideCloseButton
+              statusIconDescription="notification"
+              subtitle="The data provided is incomplete. The param file generated my be unusable."
+              title="Incomplete data."
+              kind="info"
+              className="download-param-file__incomplete-data-banner"
+            />
+          }
           {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
-          <ButtonSet className="download-param-file_buttons">
-            <CopyToClipboard text={state.paramFileValue || paramFileContent} onCopy={ updateCopied }>
+          <ButtonSet className={buttonClasses}>
+            <CopyToClipboard text={state.paramFileValue || paramFileContent.contents} onCopy={ updateCopied }>
               <Button kind="secondary" size="xl" className="download-param-file_button">
                 Copy to clipboard
               </Button>
