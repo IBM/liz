@@ -7,7 +7,7 @@
   "remediateSettings": {
     "enableRenovate": true,
     "transitiveRemediation": true,
-    "extends": ["config:js-app",":preserveSemverRanges", ":dependencyDashboard", "github>whitesource/merge-confidence:beta"],
+    "extends": ["config:js-app",":preserveSemverRanges", ":dependencyDashboard", "github>whitesource/merge-confidence"],
     "workflowRules": {              
       "enabled": true        
     },
