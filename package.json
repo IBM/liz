@@ -41,8 +41,8 @@
     "react-router-dom": "6.15.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "7.22.14",
-    "@babel/preset-react": "7.22.5",
+    "@babel/preset-env": "7.22.15",
+    "@babel/preset-react": "7.22.15",
     "@commitlint/cli": "17.7.1",
     "@commitlint/config-conventional": "17.7.0",
     "@inrupt/jest-jsdom-polyfills": "2.1.3",
