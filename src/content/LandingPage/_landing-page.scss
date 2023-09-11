@@ -101,7 +101,6 @@
       >div {
         >svg {
           border-radius: 50%;
-          cursor: pointer;
           background: themes.$background;
           fill: themes.$background-inverse;
         }
@@ -121,12 +120,36 @@
       vertical-align: middle;
     }
   }
-}
 
-.landing-page__about-build-info {
-  @include type.type-style("helper-text-02");
-
-  padding: layout.$spacing-05;
+  .landing-page__about-build-info {
+    @include type.type-style("helper-text-02");
+  
+    padding: layout.$spacing-05;
+  
+    .landing-page__about-build-info__commit-hash,
+    .landing-page__about-build-info__date {
+      padding-bottom: layout.$spacing-02;
+  
+      :first-of-type {
+        margin-right: layout.$spacing-03;
+      }
+  
+      :last-of-type {
+        vertical-align: bottom;
+        cursor: pointer;
+  
+        svg {
+          padding: layout.$spacing-01;
+        }
+  
+        &:hover {
+          svg {
+            background: themes.$background-inverse-hover;
+          }
+        }
+      }
+    }
+  }  
 }
 
 .landing-page__about-prune-button-container {

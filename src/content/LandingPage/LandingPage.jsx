@@ -7,7 +7,8 @@
 import React from "react";
 import { InlineNotification, Grid, Column } from "@carbon/react";
 import PropTypes from "prop-types";
-import { LinuxAlt } from "@carbon/icons-react";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Copy, LinuxAlt } from "@carbon/icons-react";
 import "./_landing-page.scss";
 
 const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeNotification, localStorageKeys }) => {
@@ -58,8 +59,22 @@ const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeN
             </li>
             <li>
               <div className="landing-page__about-build-info">
-                <div className="landing-page__about-build-info__date">Build date: BUILD_DATE</div>
-                <div className="landing-page__about-build-info__commit-hash">Commit: COMMIT_HASH</div>
+                <div className="landing-page__about-build-info__date">
+                  <span>Build date: BUILD_DATE</span>
+                  <span title="Copy">
+                    <CopyToClipboard text="BUILD_DATE">
+                      <Copy size="16" />
+                    </CopyToClipboard>
+                  </span>
+                </div>
+                <div className="landing-page__about-build-info__commit-hash">
+                  <span>Commit: COMMIT_HASH</span>
+                  <span title="Copy">
+                    <CopyToClipboard text="COMMIT_HASH">
+                      <Copy size="16" />
+                    </CopyToClipboard>
+                  </span>
+                  </div>
               </div>
             </li>
             <li className="landing-page__about-prune-button-container">
