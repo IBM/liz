@@ -82,7 +82,6 @@
   opacity: 1;
   visibility: visible;
   overflow: visible;
-
   max-height: calc(4 * layout.$spacing-13);
   width: calc(3 * layout.$spacing-11);
   right: 0;
@@ -130,18 +129,8 @@
   padding: layout.$spacing-05;
 }
 
-.landing-page__about-prune-button-container:focus-within,
-.landing-page__about-prune-button-container:hover {
-  background: themes.$background-inverse-hover;
-}
-
-.landing-page__about-prune-button-container:focus-within a,
-.landing-page__about-prune-button-container:hover a {
-  color: themes.$background;
-}
-
 .landing-page__about-prune-button-container {
-  background: themes.$background-inverse;;
+  background: themes.$background-inverse;
 
   >a {
     @include type.type-style("body-compact-01");
@@ -153,6 +142,16 @@
     color: themes.$background;
     text-decoration: none;
   }
+}
+
+.landing-page__about-prune-button-container:focus-within,
+.landing-page__about-prune-button-container:hover {
+  background: themes.$background-inverse-hover;
+}
+
+.landing-page__about-prune-button-container:focus-within a,
+.landing-page__about-prune-button-container:hover a {
+  color: themes.$background;
 }
 
 .landing-page__legal-banner {

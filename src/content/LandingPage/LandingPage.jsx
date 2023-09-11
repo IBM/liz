@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { ActionableNotification, InlineNotification, Grid, Column } from "@carbon/react";
+import { InlineNotification, Grid, Column } from "@carbon/react";
 import PropTypes from "prop-types";
 import { LinuxAlt } from "@carbon/icons-react";
 import "./_landing-page.scss";
