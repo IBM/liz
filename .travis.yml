@@ -3,6 +3,8 @@ node_js: 18.16.0
 git:
   depth: false
 dist: focal
+env:
+  - BUILD_DATE=`date "+%Y-%m-%d"` COMMIT_HASH=`git rev-parse --short=11 HEAD`
 notifications:
   slack:
     rooms:
@@ -10,8 +12,6 @@ notifications:
     on_success: change
     on_failure: always
 before_script:
-  - BUILD_DATE=`date "+%Y-%m-%d"`
-  - COMMIT_HASH=`git rev-parse --short=11 HEAD`
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
   - perl -i -p -e 's/BUILD_DATE/${BUILD_DATE}/' src/content/LandingPage/LandingPage.jsx
