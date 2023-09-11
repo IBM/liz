@@ -7,6 +7,7 @@
 import React from "react";
 import { ActionableNotification, InlineNotification, Grid, Column } from "@carbon/react";
 import PropTypes from "prop-types";
+import { LinuxAlt } from "@carbon/icons-react";
 import "./_landing-page.scss";
 
 const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeNotification, localStorageKeys }) => {
@@ -30,17 +31,44 @@ const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeN
   return (
     <>
       {showNotification &&
-        <ActionableNotification
-          actionButtonLabel="Prune"
-          aria-label="closes notification"
-          onActionButtonClick={pruneSettings}
-          onClose={closeNotification}
-          onCloseButtonClick={closeNotification}
-          statusIconDescription="notification"
-          subtitle="Prune param file settings from your browser cache."
-          title="Prune settings"
-          className="landing-page__notification"
-        />
+        <>
+          {/*
+          <ActionableNotification
+            actionButtonLabel="Prune"
+            aria-label="closes notification"
+            onActionButtonClick={pruneSettings}
+            onClose={closeNotification}
+            onCloseButtonClick={closeNotification}
+            statusIconDescription="notification"
+            subtitle="Prune param file settings from your browser cache."
+            title="Prune settings"
+            className="landing-page__notification"
+          />
+          */}
+          <ul id="landing-page__about-menu" className="landing-page__about-menu">
+            <li id="landing-page__about-title" className="landing-page__about__title-section">
+              <div className="landing-page__about__linux-icon">
+                <div>
+                  <LinuxAlt size="48" />
+                </div>
+              </div>
+              <div className="landing-page__about__info-section">
+                <div title="About">About</div>
+              </div>
+            </li>
+            <li>
+              <div className="landing-page__about-build-info">
+                <div className="landing-page__about-build-info__date">Build date: BUILD_DATE</div>
+                <div className="landing-page__about-build-info__commit-hash">Commit: COMMIT_HASH</div>
+              </div>
+            </li>
+            <li className="landing-page__about-prune-button-container">
+              <a href="#" data-title="prune" id="landing-page__about-prune-button" onClick={pruneSettings}>
+                <span>Prune Settings</span>
+              </a>
+            </li>
+          </ul>
+        </>
       }
       {showInlineNotification &&
         <InlineNotification

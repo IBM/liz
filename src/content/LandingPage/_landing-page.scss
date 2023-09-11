@@ -73,6 +73,88 @@
   }
 }
 
+.landing-page__about-menu {
+  z-index: 10000;
+  position: absolute;
+  top: layout.$spacing-09;
+  border: 0;
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  overflow: visible;
+
+  max-height: calc(4 * layout.$spacing-13);
+  width: calc(3 * layout.$spacing-11);
+  right: 0;
+  min-width: calc(5 * layout.$spacing-08);
+  background: themes.$background-inverse;
+  color: themes.$background;
+
+  .landing-page__about__title-section {
+    @include type.type-style("body-compact-01");
+
+    padding: layout.$spacing-05;
+    
+    .landing-page__about__linux-icon {
+      display: inline-block;
+      vertical-align: middle;
+
+      >div {
+        >svg {
+          border-radius: 50%;
+          cursor: pointer;
+          background: themes.$background;
+          fill: themes.$background-inverse;
+        }
+      }   
+    }
+
+    .landing-page__about__info-section {
+      @include type.type-style("heading-04");
+      @include type.font-weight("semibold");
+
+      margin-left: 1rem;
+      margin-right: 0;
+      align-self: center;
+      min-width: 0;
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+.landing-page__about-build-info {
+  @include type.type-style("helper-text-02");
+
+  padding: layout.$spacing-05;
+}
+
+.landing-page__about-prune-button-container:focus-within,
+.landing-page__about-prune-button-container:hover {
+  background: themes.$background-inverse-hover;
+}
+
+.landing-page__about-prune-button-container:focus-within a,
+.landing-page__about-prune-button-container:hover a {
+  color: themes.$background;
+}
+
+.landing-page__about-prune-button-container {
+  background: themes.$background-inverse;;
+
+  >a {
+    @include type.type-style("body-compact-01");
+
+    padding: layout.$spacing-05;
+    line-height: initial;
+    transition: background-color 250ms;
+    display: block;
+    color: themes.$background;
+    text-decoration: none;
+  }
+}
+
 .landing-page__legal-banner {
   float: right;
 

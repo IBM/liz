@@ -10,15 +10,17 @@ notifications:
     on_success: change
     on_failure: always
 before_script:
+  - BUILD_DATE=`date "+%Y-%m-%d"`
+  - COMMIT_HASH=`git rev-parse --short=11 HEAD`
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
+  - perl -i -p -e 's/BUILD_DATE/${BUILD_DATE}/' src/content/LandingPage/LandingPage.jsx
+  - perl -i -p -e 's/COMMIT_HASH/${COMMIT_HASH}/' src/content/LandingPage/LandingPage.jsx
   - perl -i -p -e 's/URL_PATH_TOKEN/$ENV{URL_PATH_TOKEN}/' .env.github
   - perl -pi -e 's/vite build/vite build --mode github --base=\/$ENV{URL_PATH_TOKEN}\/liz\//' package.json
 script:
   - npm run build
 after_success:
-  - BUILD_DATE=`date "+BUILD DATE %Y-%m-%d"`
-  - COMMIT_HASH=`git rev-parse --short=11 HEAD`
   - git clone https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git
   - echo "# Overview" > liz.wiki/Open-Source-Development-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
