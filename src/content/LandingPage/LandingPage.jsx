@@ -55,6 +55,8 @@ const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeN
               </div>
               <div className="landing-page__about__info-section">
                 <div title="About">About</div>
+                <div title="Installation assistant">Installation assistant</div>
+                <div title="for Linux on IBM Z">for Linux on IBM Z</div>
               </div>
             </li>
             <li>
