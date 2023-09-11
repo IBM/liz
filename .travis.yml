@@ -12,6 +12,8 @@ notifications:
     on_success: change
     on_failure: always
 before_script:
+  - echo ${BUILD_DATE}
+  - echo ${COMMIT_HASH}
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
   - perl -i -p -e 's/BUILD_DATE/${BUILD_DATE}/' src/content/LandingPage/LandingPage.jsx
