@@ -126,7 +126,8 @@ const InstallationParameters = (patchState, localStorageKey) => {
             )}
             placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
             className="installation-parameters_installation-address-input"
-            value={state.installationAddress.value}
+            defaultValue={state.installationAddress ? state.installationAddress.value : ""}
+            value={state.installationAddress ? state.installationAddress.value : ""}
             onChange={(url) => {
               const urlValue = url && url.target ? url.target.value : "";
               const urlValueIsValid = isInstallationAddressInputValid(urlValue);
@@ -202,6 +203,11 @@ const InstallationParameters = (patchState, localStorageKey) => {
                   content
                 )}
                 placeholder="VNC password here"
+                defaultValue={state.vncPassword ? state.vncPassword : ""}
+                value={state.vncPassword ? state.vncPassword : ""}
+                onChange={(password) => {
+                  updateVncPassword(password && password.target ? password.target.value : "");
+                }}
                 onBlur={(password) => {
                   updateVncPassword(password && password.target ? password.target.value : "");
                   patchState({

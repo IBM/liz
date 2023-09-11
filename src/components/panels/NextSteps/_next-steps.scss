@@ -36,3 +36,7 @@
 
   padding: layout.$spacing-05 0 layout.$spacing-05 0;
 }
+
+.next-steps__formatted-code {
+  @include type.type-style("code-02");
+}

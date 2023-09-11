@@ -120,6 +120,12 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         content
                     )}
                     placeholder="e.g. 0x0100"
+                    onChange={(pciFunctionId) => {
+                        const pciFunctionIdValue = pciFunctionId && pciFunctionId.target && pciFunctionId.target.value
+                            ? pciFunctionId.target.value
+                            : "";
+                        updateFunction(UPDATE_FUNCTION__PCI_FUNCTION_ID, pciFunctionIdValue, false);
+                    }}
                     onBlur={(pciFunctionId) => {
                         const pciFunctionIdValue = pciFunctionId && pciFunctionId.target && pciFunctionId.target.value
                             ? pciFunctionId.target.value
@@ -152,6 +158,12 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         content
                     )}
                     placeholder="e.g. 0x1234"
+                    onChange={(userIdentifier) => {
+                        const userIdentifierValue = userIdentifier && userIdentifier.target && userIdentifier.target.value
+                            ? userIdentifier.target.value
+                            : "";
+                        updateFunction(UPDATE_FUNCTION__USER_IDENTIFIER, userIdentifierValue, false);
+                    }}
                     onBlur={(userIdentifier) => {
                         const userIdentifierValue = userIdentifier && userIdentifier.target && userIdentifier.target.value
                             ? userIdentifier.target.value

@@ -107,8 +107,8 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             )}
             className={textAreaClasses}
             rows={10}
-            defaultValue={state.paramFileContent}
-            value={state.paramFileContent}
+            defaultValue={state.paramFileContent ? state.paramFileContent : ""}
+            value={state.paramFileContent ? state.paramFileContent : ""}
             onChange={(localParamFileContent) => {
               const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
                 ? localParamFileContent.target.value

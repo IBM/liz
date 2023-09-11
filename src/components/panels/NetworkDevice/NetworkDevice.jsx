@@ -251,6 +251,13 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 content
               )}
               placeholder="ex: 88"
+              onChange={(vlanId) => {
+                const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
+                  ? vlanId.target.value
+                  : "";
+                const vlanIdIsValid = isVlanIdValid(vlanIdValue);
+                updateVlanId(vlanIdValue, vlanIdIsValid);
+              }}
               onBlur={(vlanId) => {
                 const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
                   ? vlanId.target.value
@@ -292,6 +299,12 @@ const NetworkDevice = (patchState, localStorageKey) => {
                       content
                     )}
                     placeholder="ex: 0.0.bdf0"
+                    onChange={(readChannelId) => {
+                      const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
+                        ? readChannelId.target.value
+                        : "";
+                      updateReadChannelId(readChannelIdValue, false);
+                    }}
                     onBlur={(readChannelId) => {
                       const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
                         ? readChannelId.target.value
@@ -325,6 +338,12 @@ const NetworkDevice = (patchState, localStorageKey) => {
                       content
                     )}
                     placeholder="ex: 0.0.bdf1"
+                    onChange={(writeChannelId) => {
+                      const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
+                        ? writeChannelId.target.value
+                        : "";
+                      updateWriteChannelId(writeChannelIdValue, false);
+                    }}
                     onBlur={(writeChannelId) => {
                       const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
                         ? writeChannelId.target.value
@@ -359,6 +378,12 @@ const NetworkDevice = (patchState, localStorageKey) => {
                       content
                     )}
                     placeholder="ex: 0.0.bdf2"
+                    onChange={(dataChannelId) => {
+                      const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
+                        ? dataChannelId.target.value
+                        : "";
+                      updateDataChannelId(dataChannelIdValue, false);
+                    }}
                     onBlur={(dataChannelId) => {
                       const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
                         ? dataChannelId.target.value
