@@ -3,9 +3,6 @@ node_js: 18.16.0
 git:
   depth: false
 dist: focal
-env:
-  - BUILD_DATE=`date "+BUILD DATE %Y-%m-%d"`
-  - COMMIT_HASH=`git rev-parse --short=11 HEAD`
 notifications:
   slack:
     rooms:
@@ -20,6 +17,8 @@ before_script:
 script:
   - npm run build
 after_success:
+  - BUILD_DATE=`date "+BUILD DATE %Y-%m-%d"`
+  - COMMIT_HASH=`git rev-parse --short=11 HEAD`
   - git clone https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git
   - echo "# Overview" > liz.wiki/Open-Source-Development-Dependencies.md
   - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
