@@ -35,6 +35,10 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     return () => clearTimeout(timer);
   }
 
+  const updateParamFileContent = (paramFileContent) => {
+    setState((prevState) => ({...prevState, paramFileContent}));
+  }
+
   const destroyClickedElement = (event) => {
     // remove the link from the DOM
     document.body.removeChild(event.target);
@@ -92,7 +96,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const markup = (
     <Layer>
       <Grid className="download-param-file_grid" fullWidth>
-      <Column sm={4} md={6} lg={10}>
+        <Column sm={4} md={6} lg={12}>
           <TextArea
             enableCounter
             id="download-param-file_textarea"
@@ -103,8 +107,15 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             )}
             className={textAreaClasses}
             rows={10}
+            defaultValue={state.paramFileContent}
+            value={state.paramFileContent}
+            onChange={(localParamFileContent) => {
+              const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
+                ? localParamFileContent.target.value
+                : "";
+              updateParamFileContent(localParamFileContentValue);
+            }}
           >
-            {paramFileContent.contents}
           </TextArea>
           {paramFileContent.hasIncompleteData &&
             <InlineNotification

@@ -69,8 +69,15 @@ const MiscParameters = (patchState, localStorageKey) => {
             rows={8}
             id="misc-parameters-input"
             className="misc-parameters_textarea"
+            defaultValue={state.miscParameterContent}
+            value={state.miscParameterContent}
+            onChange={(localMiscParameterContent) => {
+              const localMiscParameterContentValue = localMiscParameterContent && localMiscParameterContent.target && localMiscParameterContent.target.value
+                ? localMiscParameterContent.target.value
+                : "";
+              updateMiscParameterContent(localMiscParameterContentValue);
+            }}
             onBlur={(content) => {
-              updateMiscParameterContent(content && content.target ? content.target.value : "");
               patchState({
                 steps: {
                   miscParameters: {

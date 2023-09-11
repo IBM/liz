@@ -126,10 +126,15 @@ const InstallationParameters = (patchState, localStorageKey) => {
             )}
             placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
             className="installation-parameters_installation-address-input"
-            onBlur={(url) => {
+            value={state.installationAddress.value}
+            onChange={(url) => {
               const urlValue = url && url.target ? url.target.value : "";
               const urlValueIsValid = isInstallationAddressInputValid(urlValue);
               updateInstallationAddress(urlValue, urlValueIsValid);
+            }}
+            onBlur={(url) => {
+              const urlValue = url && url.target ? url.target.value : "";
+              const urlValueIsValid = isInstallationAddressInputValid(urlValue);
             
               if (urlValueIsValid) {
                 patchState({
