@@ -57,9 +57,9 @@ const About = ({closeNotification, pruneSettings}) => {
                         </span>
                     </div>
                     <div className="about-dialog__about-build-info__commit-hash">
-                        <span>Commit: COMMIT_HASH</span>
+                        <span>Commit hash: COMMIT_HASH_SHORT</span>
                         <span title="Copy">
-                        <CopyToClipboard text="COMMIT_HASH">
+                        <CopyToClipboard text="COMMIT_HASH_LONG">
                             <Copy size="16" />
                         </CopyToClipboard>
                         </span>
