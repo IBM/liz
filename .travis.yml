@@ -4,7 +4,7 @@ git:
   depth: false
 dist: focal
 env:
-  - BUILD_DATE=`date "+%Y-%m-%d"` COMMIT_HASH+SHORT=`git rev-parse --short=11 HEAD` COMMIT_HASH_LONG=`git rev-parse HEAD`
+  - BUILD_DATE=`date "+%Y-%m-%d"` COMMIT_HASH_SHORT=`git rev-parse --short=11 HEAD` COMMIT_HASH_LONG=`git rev-parse HEAD`
 notifications:
   slack:
     rooms:
