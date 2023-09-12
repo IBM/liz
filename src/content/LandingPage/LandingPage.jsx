@@ -7,8 +7,7 @@
 import React from "react";
 import { InlineNotification, Grid, Column } from "@carbon/react";
 import PropTypes from "prop-types";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Close, Copy, LinuxAlt } from "@carbon/icons-react";
+import About from "../../components/About";
 import "./_landing-page.scss";
 
 const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeNotification, localStorageKeys }) => {
@@ -32,60 +31,10 @@ const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeN
   return (
     <>
       {showNotification &&
-        <>
-          {/*
-          <ActionableNotification
-            actionButtonLabel="Prune"
-            aria-label="closes notification"
-            onActionButtonClick={pruneSettings}
-            onClose={closeNotification}
-            onCloseButtonClick={closeNotification}
-            statusIconDescription="notification"
-            subtitle="Prune param file settings from your browser cache."
-            title="Prune settings"
-            className="landing-page__notification"
-          />
-          */}
-          <ul id="landing-page__about-menu" className="landing-page__about-menu">
-            <li id="landing-page__about-title" className="landing-page__about__title-section">
-              <div className="landing-page__about__linux-icon">
-                <div>
-                  <LinuxAlt size="48" />
-                </div>
-              </div>
-              <div className="landing-page__about__info-section">
-                <div title="About">About</div>
-                <div title="Installation assistant for Linux on IBM Z">Installation assistant for Linux on IBM Z</div>
-                <div title="Close" className="landing-page__about__info-section__icon" onClick={closeNotification}><Close size="16"/></div>
-              </div>
-            </li>
-            <li>
-              <div className="landing-page__about-build-info">
-                <div className="landing-page__about-build-info__date">
-                  <span>Build date: BUILD_DATE</span>
-                  <span title="Copy">
-                    <CopyToClipboard text="BUILD_DATE">
-                      <Copy size="16" />
-                    </CopyToClipboard>
-                  </span>
-                </div>
-                <div className="landing-page__about-build-info__commit-hash">
-                  <span>Commit: COMMIT_HASH</span>
-                  <span title="Copy">
-                    <CopyToClipboard text="COMMIT_HASH">
-                      <Copy size="16" />
-                    </CopyToClipboard>
-                  </span>
-                  </div>
-              </div>
-            </li>
-            <li className="landing-page__about-prune-button-container">
-              <a href="#" data-title="prune" id="landing-page__about-prune-button" onClick={pruneSettings}>
-                <span>Prune Settings</span>
-              </a>
-            </li>
-          </ul>
-        </>
+        <About
+          closeNotification={closeNotification}
+          pruneSettings={pruneSettings}
+        />
       }
       {showInlineNotification &&
         <InlineNotification

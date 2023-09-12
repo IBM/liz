@@ -1,0 +1,135 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2023
+ */
+@use "@carbon/react" with (
+  $font-path: "@ibm/plex"
+);
+@use "@carbon/type";
+@use "@carbon/layout";
+@use "@carbon/styles";
+@use "@carbon/colors";
+@use "@carbon/themes";
+
+.about-dialog__about-menu {
+    z-index: 10000;
+    position: absolute;
+    top: layout.$spacing-09;
+    border: 0;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    overflow: visible;
+    max-height: calc(4 * layout.$spacing-13);
+    width: calc(3 * layout.$spacing-11);
+    right: 0;
+    min-width: calc(6 * layout.$spacing-10);
+    background: themes.$background-inverse;
+    color: themes.$background;
+  
+    .about-dialog__about__title-section {
+      @include type.type-style("body-compact-01");
+  
+      padding: layout.$spacing-05;
+      
+      .about-dialog__about__linux-icon {
+        display: inline-block;
+        vertical-align: middle;
+  
+        >div {
+          >svg {
+            border-radius: 50%;
+            background: themes.$background;
+            fill: themes.$background-inverse;
+          }
+        }   
+      }
+  
+      .about-dialog__about__info-section {
+        margin-left: 1rem;
+        margin-right: 0;
+        align-self: center;
+        min-width: 0;
+        height: 100%;
+        display: inline-block;
+        vertical-align: middle;
+  
+        .about-dialog__about__info-section__icon {
+          position: absolute;
+          cursor: pointer;
+          right: 0;
+          top: 0;
+          padding: layout.$spacing-03;
+  
+          &:hover {
+              background: themes.$background-inverse-hover;
+          }
+        }
+  
+        :first-of-type {
+          @include type.type-style("heading-03");
+          @include type.font-weight("semibold");
+        }
+  
+        :not(:first-of-type) {
+          @include type.type-style("heading-01");
+        }
+      }
+    }
+  
+    .about-dialog__about-build-info {
+      @include type.type-style("helper-text-02");
+    
+      padding: layout.$spacing-05;
+    
+      .about-dialog__about-build-info__commit-hash,
+      .about-dialog__about-build-info__date {
+        padding-bottom: layout.$spacing-02;
+    
+        :first-of-type {
+          margin-right: layout.$spacing-03;
+        }
+    
+        :last-of-type {
+          vertical-align: bottom;
+          cursor: pointer;
+    
+          svg {
+            padding: layout.$spacing-01;
+          }
+    
+          &:hover {
+            svg {
+              background: themes.$background-inverse-hover;
+            }
+          }
+        }
+      }
+    }  
+  }
+  
+  .about-dialog__about-prune-button-container {
+    background: themes.$background-inverse;
+  
+    >a {
+      @include type.type-style("body-compact-01");
+  
+      padding: layout.$spacing-05;
+      line-height: initial;
+      transition: background-color 250ms;
+      display: block;
+      color: themes.$background;
+      text-decoration: none;
+    }
+  }
+  
+  .about-dialog__about-prune-button-container:focus-within,
+  .about-dialog__about-prune-button-container:hover {
+    background: colors.$red-60;
+  }
+  
+  .about-dialog__about-prune-button-container:focus-within a,
+  .about-dialog__about-prune-button-container:hover a {
+    color: themes.$background;
+  }
