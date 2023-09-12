@@ -8,7 +8,7 @@ import React from "react";
 import { InlineNotification, Grid, Column } from "@carbon/react";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Copy, LinuxAlt } from "@carbon/icons-react";
+import { Close, Copy, LinuxAlt } from "@carbon/icons-react";
 import "./_landing-page.scss";
 
 const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeNotification, localStorageKeys }) => {
@@ -55,8 +55,8 @@ const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeN
               </div>
               <div className="landing-page__about__info-section">
                 <div title="About">About</div>
-                <div title="Installation assistant">Installation assistant</div>
-                <div title="for Linux on IBM Z">for Linux on IBM Z</div>
+                <div title="Installation assistant for Linux on IBM Z">Installation assistant for Linux on IBM Z</div>
+                <div title="Close" className="landing-page__about__info-section__icon" onClick={closeNotification}><Close size="16"/></div>
               </div>
             </li>
             <li>

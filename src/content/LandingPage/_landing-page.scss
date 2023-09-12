@@ -70,6 +70,7 @@
 
   &.cds--actionable-notification {
     position: absolute;
+    float: right;
   }
 }
 
@@ -85,7 +86,7 @@
   max-height: calc(4 * layout.$spacing-13);
   width: calc(3 * layout.$spacing-11);
   right: 0;
-  min-width: calc(5 * layout.$spacing-08);
+  min-width: calc(6 * layout.$spacing-10);
   background: themes.$background-inverse;
   color: themes.$background;
 
@@ -115,6 +116,18 @@
       height: 100%;
       display: inline-block;
       vertical-align: middle;
+
+      .landing-page__about__info-section__icon {
+        position: absolute;
+        cursor: pointer;
+        right: 0;
+        top: 0;
+        padding: layout.$spacing-03;
+
+        &:hover {
+            background: themes.$background-inverse-hover;
+        }
+      }
 
       :first-of-type {
         @include type.type-style("heading-03");
@@ -175,7 +188,7 @@
 
 .landing-page__about-prune-button-container:focus-within,
 .landing-page__about-prune-button-container:hover {
-  background: themes.$background-inverse-hover;
+  background: colors.$red-60;
 }
 
 .landing-page__about-prune-button-container:focus-within a,
