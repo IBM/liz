@@ -66,6 +66,11 @@ const About = ({closeNotification, pruneSettings}) => {
                     </div>
                 </div>
             </li>
+            <li className="about-dialog__about-report-button-container">
+                <a href="BUG_TRACKER" data-title="report" id="about-dialog__about-report-button" target="_blank">
+                    <span>Report an issue</span>
+                </a>
+            </li>
             <li className="about-dialog__about-prune-button-container">
                 <a href="#" data-title="prune" id="about-dialog__about-prune-button" onClick={pruneSettings}>
                     <span>Prune Settings</span>

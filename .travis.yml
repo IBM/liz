@@ -14,6 +14,7 @@ notifications:
 before_script:
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
+  - perl -i -p -e 's/BUG_TRACKER/$ENV{BUG_TRACKER}/' src/components/About/About.jsx
   - perl -i -p -e 's/BUILD_DATE/$ENV{BUILD_DATE}/' src/components/About/About.jsx
   - perl -i -p -e 's/COMMIT_HASH_SHORT/$ENV{COMMIT_HASH_SHORT}/' src/components/About/About.jsx
   - perl -i -p -e 's/COMMIT_HASH_LONG/$ENV{COMMIT_HASH_LONG}/' src/components/About/About.jsx

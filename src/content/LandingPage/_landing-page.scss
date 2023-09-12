@@ -60,3 +60,11 @@
   background: themes.$layer-01;
   margin-right: 0;
 }
+
+.landing-page__legal-banner {
+  float: right;
+
+  &.cds--inline-notification {
+    max-width: 100%;
+  }
+}
