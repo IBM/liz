@@ -65,6 +65,10 @@
           &:hover {
               background: themes.$background-inverse-hover;
           }
+
+          >svg {
+            vertical-align: middle;
+          }
         }
   
         :first-of-type {
