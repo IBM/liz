@@ -47,15 +47,15 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
     }
   ];
 
-  const updateSelectedDistributionName = (selectedDistributionName) => {
+  const updateSelectedDistributionName = (selectedDistributionName, callback) => {
     setState((prevState) => ({...prevState, selectedDistributionName, origin: STATE_ORIGIN_USER}));
   }
 
-  const updateSelectedDistributionVersion = (selectedDistributionVersion) => {
+  const updateSelectedDistributionVersion = (selectedDistributionVersion, callback) => {
     setState((prevState) => ({...prevState, selectedDistributionVersion, origin: STATE_ORIGIN_USER}));
   }
 
-  const isComplete = () => {
+  const isComplete = (callback) => {
     if (
       typeof state.selectedDistributionName === "object" &&
       typeof state.selectedDistributionName.label === "string" &&
@@ -64,12 +64,30 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
       typeof state.selectedDistributionVersion.label === "string" &&
       state.selectedDistributionVersion.label.length > 0
     ) {
-      return true;
+      return callback(null, true);
     }
-    return false;
+    return callback(null, false);
   }
 
   useEffect(() => {
+    isComplete((error, isComplete) => {
+      if (!error) {
+        patchState({
+          steps: {
+            inputFileSelection: {
+              distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
+              distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
+              memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
+              diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
+              machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
+              docLink,
+              complete: isComplete,
+              localStorageKey
+            }
+          }
+        });
+      }
+    })
     const initialState = getInitialState(true);
     const stateOriginsFromStorage = state && state.origin === STATE_ORIGIN_STORAGE;
 
@@ -78,7 +96,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
     } else if (canWriteToLocalStorage) {
       return localStorage.setItem(localStorageKey, JSON.stringify(state));
     }
-  });
+  }, [state]);
 
   return (
     <Layer>
@@ -108,20 +126,6 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
                 disabled={false}
                 onChange={({ selectedItem }) => {
                   updateSelectedDistributionName(selectedItem);
-                  patchState({
-                    steps: {
-                      inputFileSelection: {
-                        distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
-                        distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
-                        memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
-                        diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
-                        machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
-                        docLink,
-                        complete: isComplete() || false,
-                        localStorageKey
-                      }
-                    }
-                  });
                 }}
                 selectedItem={state.selectedDistributionName}
               />
@@ -136,20 +140,6 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
                 disabled={false}
                 onChange={({ selectedItem }) => {
                   updateSelectedDistributionVersion(selectedItem);
-                  patchState({
-                    steps: {
-                      inputFileSelection: {
-                        distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
-                        distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
-                        memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
-                        diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
-                        machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
-                        docLink,
-                        complete: isComplete() || false,
-                        localStorageKey
-                      }
-                    }
-                  });
                 }}
                 selectedItem={state.selectedDistributionVersion}
               />
