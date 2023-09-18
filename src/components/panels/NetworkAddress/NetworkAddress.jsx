@@ -458,8 +458,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
                     const localAddressValue = localAddress && localAddress.target && localAddress.target.value
                       ? localAddress.target.value
                       : "";
-                    const localAddressValueIsValid = isIpv4NetworkAddressValid(localAddressValue);
-                    updateIpv4Address(localAddressValue, localAddressValueIsValid);
+                    // while editing we don't update the validity but set it to true
+                    // cause we don't want to have the form validation logic kick in.
+                    updateIpv4Address(localAddressValue, true);
                   }}
                   onBlur={(localAddress) => {
                     const localAddressValue = localAddress && localAddress.target && localAddress.target.value
@@ -485,9 +486,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
                     const localCidrValue = localCidr && localCidr.target && localCidr.target.value
                       ? localCidr.target.value
                       : "";
-                    const localCidrValueIsValid = isCidr(ADDRESS_TYPE_IPV4, localCidrValue);
-
-                    updateIpv4Cidr(localCidrValue, localCidrValueIsValid);
+                    // while editing we don't update the validity but set it to true
+                    // cause we don't want to have the form validation logic kick in.
+                    updateIpv4Cidr(localCidrValue, true);
                   }}
                   onBlur={(localCidr) => {
                     const localCidrValue = localCidr && localCidr.target && localCidr.target.value
@@ -520,9 +521,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
                     const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
                       ? localNetmask.target.value
                       : "";
-                    const localNetmaskValueIsValid = isIpv4NetworkAddressValid(localNetmaskValue);
-
-                    updateNetmask(localNetmaskValue, localNetmaskValueIsValid);
+                    // while editing we don't update the validity but set it to true
+                    // cause we don't want to have the form validation logic kick in.
+                    updateNetmask(localNetmaskValue, true);
                   }}
                   onBlur={(localNetmask) => {
                     const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
@@ -567,8 +568,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
                     const localAddressValue = localAddress && localAddress.target && localAddress.target.value
                       ? localAddress.target.value
                       : "";
-                    const localAddressValueIsValid = isIpv6NetworkAddressValid(localAddressValue);
-                    updateIpv6Address(localAddressValue, localAddressValueIsValid);
+                    // while editing we don't update the validity but set it to true
+                    // cause we don't want to have the form validation logic kick in.
+                    updateIpv6Address(localAddressValue, true);
                   }}
                   onBlur={(localAddress) => {
                     const localAddressValue = localAddress && localAddress.target && localAddress.target.value
@@ -594,9 +596,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
                     const localCidrValue = localCidr && localCidr.target && localCidr.target.value
                       ? localCidr.target.value
                       : "";
-                    const localCidrValueIsValid = isCidr(ADDRESS_TYPE_IPV6, localCidrValue);
-
-                    updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
+                    // while editing we don't update the validity but set it to true
+                    // cause we don't want to have the form validation logic kick in.
+                    updateIpv6Cidr(localCidrValue, true);
                   }}
                   onBlur={(localCidr) => {
                     const localCidrValue = localCidr && localCidr.target && localCidr.target.value
@@ -629,10 +631,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 const localGatewayIpAddressValue = localGatewayIpAddress && localGatewayIpAddress.target && localGatewayIpAddress.target.value
                   ? localGatewayIpAddress.target.value
                   : "";
-                const localGatewayIpAddressValueIsValid = state.addressType === ADDRESS_TYPE_IPV4
-                  ? isIpv4NetworkAddressValid(localGatewayIpAddressValue)
-                  : isIpv6NetworkAddressValid(localGatewayIpAddressValue);
-                updateGatewayAddress(localGatewayIpAddressValue, localGatewayIpAddressValueIsValid);
+                // while editing we don't update the validity but set it to true
+                // cause we don't want to have the form validation logic kick in.
+                updateGatewayAddress(localGatewayIpAddressValue, true);
               }}
               onBlur={(localGatewayIpAddress) => {
                 const localGatewayIpAddressValue = localGatewayIpAddress && localGatewayIpAddress.target && localGatewayIpAddress.target.value
@@ -660,10 +661,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 const localNameserverIpAddressValue = localNameserverIpAddress && localNameserverIpAddress.target && localNameserverIpAddress.target.value
                   ? localNameserverIpAddress.target.value
                   : "";
-                const localNameserverIpAddressValueIsValid = state.addressType === ADDRESS_TYPE_IPV4
-                  ? isIpv4NetworkAddressValid(localNameserverIpAddressValue)
-                  : isIpv6NetworkAddressValid(localNameserverIpAddressValue);
-                updateNameserverAddress(localNameserverIpAddressValue, localNameserverIpAddressValueIsValid);
+                // while editing we don't update the validity but set it to true
+                // cause we don't want to have the form validation logic kick in.
+                updateNameserverAddress(localNameserverIpAddressValue, true);
               }}
               onBlur={(localNameserverIpAddress) => {
                 const localNameserverIpAddressValue = localNameserverIpAddress && localNameserverIpAddress.target && localNameserverIpAddress.target.value
