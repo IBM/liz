@@ -14,10 +14,13 @@ import "./_download-param-file.scss";
 const DownloadParamFile = (patchState, stateToParamFile, globalState, localStorageKey) => {
   const paramFileContent = stateToParamFile(globalState);
   const getInitialState = () => {
+    const localParamFileContent = paramFileContent && paramFileContent.contents && typeof paramFileContent === "string"
+      ? paramFileContent.contents
+      : stateToParamFile(globalState).contents;
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
       copied: false,
-      paramFileContent
+      paramFileContent: localParamFileContent
     };
 
     if (initialState) {
@@ -107,8 +110,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             )}
             className={textAreaClasses}
             rows={10}
-            defaultValue={state.paramFileContent ? state.paramFileContent : ""}
-            value={state.paramFileContent ? state.paramFileContent : ""}
+            value={state.paramFileContent ? state.paramFileContent : paramFileContent.contents}
             onChange={(localParamFileContent) => {
               const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
                 ? localParamFileContent.target.value
@@ -121,7 +123,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             <InlineNotification
               hideCloseButton
               statusIconDescription="notification"
-              subtitle="The data provided is incomplete. The param file generated my be unusable."
+              subtitle="The data provided is incomplete or invalid. The param file generated my be unusable."
               title="Incomplete data."
               kind="info"
               className="download-param-file__incomplete-data-banner"
@@ -129,7 +131,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
           }
           {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
           <ButtonSet className={buttonClasses}>
-            <CopyToClipboard text={state.paramFileValue || paramFileContent.contents} onCopy={ updateCopied }>
+            <CopyToClipboard text={state.paramFileContent || paramFileContent.contents} onCopy={ updateCopied }>
               <Button kind="secondary" size="xl" className="download-param-file_button">
                 Copy to clipboard
               </Button>
@@ -143,9 +145,64 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     </Layer>
   );
 
+  const isCompleteAndValid = (callback) => {
+    let isComplete = false;
+    let isValid = false;
+  
+    if (
+      typeof state.paramFileContent === "string" &&
+      state.installationAddress.length > 0
+    ) {
+      isComplete = true;
+      isValid = paramFileContent.hasIncompleteData;
+    }
+
+    if (isComplete && isValid) {
+      return callback(null, {isComplete, isValid});
+    }
+
+    return callback(new Error('Form data is incomplete or invalid'), {isComplete, isValid});
+  }
+
   useEffect(() => {
+    isCompleteAndValid((error, isCompleteAndValid) => {
+      if (!error) {
+        patchState({
+          steps: {
+            downloadParamFile: {
+              contents: state.paramFileContent,
+              complete: true,
+              invalid: false,
+              localStorageKey
+            }
+          }
+        });
+      } else if (isCompleteAndValid.isComplete) {
+        patchState({
+          steps: {
+            downloadParamFile: {
+              contents: state.paramFileContent,
+              complete: isCompleteAndValid.isComplete,
+              invalid: !isCompleteAndValid.isValid,
+              localStorageKey
+            }
+          }
+        });
+      } else {
+        patchState({
+          steps: {
+            downloadParamFile: {
+              complete: false,
+              disabled: false,
+              invalid: true
+            }
+          }
+        });
+      }
+    });
+
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-  });
+  }, [state]);
 
   return (markup);
 };

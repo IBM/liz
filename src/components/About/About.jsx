@@ -49,7 +49,7 @@ const About = ({closeNotification, pruneSettings}) => {
             <li>
                 <div className="about-dialog__about-build-info">
                     <div className="about-dialog__about-build-info__date">
-                        <span>Build date: BUILD_DATE</span>
+                        <span>Build date: <code>BUILD_DATE</code></span>
                         <span title="Copy">
                         <CopyToClipboard text="BUILD_DATE">
                             <Copy size="16" />
@@ -57,7 +57,7 @@ const About = ({closeNotification, pruneSettings}) => {
                         </span>
                     </div>
                     <div className="about-dialog__about-build-info__commit-hash">
-                        <span>Commit hash: COMMIT_HASH_SHORT</span>
+                        <span>Commit hash: <code>COMMIT_HASH_SHORT</code></span>
                         <span title="Copy">
                         <CopyToClipboard text="COMMIT_HASH_LONG">
                             <Copy size="16" />

@@ -97,18 +97,81 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const useSshToggled = state.useSsh;
   const useVncToggled = state.useVnc;
 
+  const isCompleteAndValid = (callback) => {
+    let isComplete = false;
+    let isValid = false;
+  
+    if (
+      typeof state.installationAddress === "object" &&
+      typeof state.installationAddress.value === "string" &&
+      state.installationAddress.value.length > 0
+    ) {
+      isComplete = true;
+      isValid = isInstallationAddressInputValid(state.installationAddress.value);
+    }
+
+    if (isComplete && isValid) {
+      return callback(null, {isComplete, isValid});
+    }
+
+    return callback(new Error('Form data is incomplete or invalid'), {isComplete, isValid});
+  }
+
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-    patchState({
-      steps: {
-        installationParameters: {
-          complete: true,
-          disabled: true,
-          invalid: false
-        }
+
+    isCompleteAndValid((error, isCompleteAndValid) => {
+      if (!error) {
+        patchState({
+          steps: {
+            installationParameters: {
+              networkInstallationUrl: state.installationAddress.value,
+              vnc: {
+                password: state.vncPassword,
+                enabled: state.useVnc
+              },
+              ssh: {
+                host: state.sshHost,
+                enabled: state.useSsh
+              },
+              localStorageKey,
+              complete: true,
+              invalid: false
+            }
+          }
+        });
+      } else if (isCompleteAndValid.isComplete) {
+        patchState({
+          steps: {
+            installationParameters: {
+              networkInstallationUrl: state.installationAddress.value,
+              vnc: {
+                password: state.vncPassword,
+                enabled: state.useVnc
+              },
+              ssh: {
+                host: state.sshHost,
+                enabled: state.useSsh
+              },
+              localStorageKey,
+              complete: isCompleteAndValid.isComplete,
+              invalid: !isCompleteAndValid.isValid
+            }
+          }
+        });
+      } else {
+        patchState({
+          steps: {
+            installationParameters: {
+              complete: false,
+              disabled: false,
+              invalid: true
+            }
+          }
+        });
       }
     });
-  }, []);
+  }, [state]);
 
   return (
     <Layer>
@@ -130,31 +193,14 @@ const InstallationParameters = (patchState, localStorageKey) => {
             value={state.installationAddress ? state.installationAddress.value : ""}
             onChange={(url) => {
               const urlValue = url && url.target ? url.target.value : "";
-              const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-              updateInstallationAddress(urlValue, urlValueIsValid);
+              // while editing we don't update the validity but set it to true
+              // cause we don't want to have the form validation logic kick in.
+              updateInstallationAddress(urlValue, true);
             }}
             onBlur={(url) => {
               const urlValue = url && url.target ? url.target.value : "";
               const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-            
-              if (urlValueIsValid) {
-                patchState({
-                  steps: {
-                    installationParameters: {
-                      networkInstallationUrl: state.installationAddress.value,
-                      vnc: {
-                        password: state.vncPassword,
-                        enabled: useVncToggled
-                      },
-                      ssh: {
-                        host: state.sshHost,
-                        enabled: useSshToggled
-                      },
-                      localStorageKey
-                    }
-                  }
-                });
-              }
+              updateInstallationAddress(urlValue, urlValueIsValid);
             }}
           />
         </Column>
@@ -174,22 +220,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
                 } else {
                   updateUseVnc(true);
                 }
-                patchState({
-                  steps: {
-                    installationParameters: {
-                      networkInstallationUrl: state.installationAddress,
-                      vnc: {
-                        password: state.vncPassword,
-                        enabled: useVncToggled
-                      },
-                      ssh: {
-                        host: state.sshHost,
-                        enabled: useSshToggled
-                      },
-                      localStorageKey
-                    }
-                  }
-                });
               }}
             />
             {useVncToggled &&
@@ -210,22 +240,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
                 }}
                 onBlur={(password) => {
                   updateVncPassword(password && password.target ? password.target.value : "");
-                  patchState({
-                    steps: {
-                      installationParameters: {
-                        networkInstallationUrl: state.installationAddress,
-                        vnc: {
-                          password: state.vncPassword,
-                          enabled: useVncToggled
-                        },
-                        ssh: {
-                          host: state.sshHost,
-                          enabled: useSshToggled
-                        },
-                        localStorageKey
-                      }
-                    }
-                  });
                 }}
               />
             }
@@ -245,21 +259,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
                 } else {
                   updateUseSsh(true);
                 }
-                patchState({
-                  steps: {
-                    installationParameters: {
-                      networkInstallationUrl: state.installationAddress,
-                      vnc: {
-                        password: state.vncPassword,
-                        enabled: useVncToggled
-                      },
-                      ssh: {
-                        host: state.sshHost,
-                        enabled: useSshToggled
-                      }
-                    }
-                  }
-                });
               }}
             />
           </div>

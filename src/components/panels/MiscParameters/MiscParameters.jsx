@@ -30,16 +30,21 @@ const MiscParameters = (patchState, localStorageKey) => {
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
+    // Since the data is user provided and won't be validated
+    // it is considered to be always valid and thus complete.
+    // This also applies if no data has been provided.
     patchState({
       steps: {
         miscParameters: {
+          params: state.miscParameterContent,
           complete: true,
           disabled: true,
-          invalid: false
+          invalid: false,
+          localStorageKey
         }
       }
     });
-  }, []);
+  }, [state]);
 
   const textAreaLabel = (
     <>
@@ -69,24 +74,12 @@ const MiscParameters = (patchState, localStorageKey) => {
             rows={8}
             id="misc-parameters-input"
             className="misc-parameters_textarea"
-            defaultValue={state.miscParameterContent ? state.miscParameterContent : ""}
             value={state.miscParameterContent ? state.miscParameterContent : ""}
             onChange={(localMiscParameterContent) => {
               const localMiscParameterContentValue = localMiscParameterContent && localMiscParameterContent.target && localMiscParameterContent.target.value
                 ? localMiscParameterContent.target.value
                 : "";
               updateMiscParameterContent(localMiscParameterContentValue);
-            }}
-            onBlur={(content) => {
-              patchState({
-                steps: {
-                  miscParameters: {
-                    params: state.miscParameterContent,
-                    complete: true,
-                    localStorageKey
-                  }
-                }
-              });
             }}
           />
         </Column>

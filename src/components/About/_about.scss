@@ -91,6 +91,10 @@
     .about-dialog__about-build-info__date {
       padding-bottom: layout.$spacing-02;
 
+      code {
+        @include type.type-style("code-01"); 
+      }
+
       :first-of-type {
         margin-right: layout.$spacing-03;
       }

@@ -140,6 +140,8 @@ const stateToMiscParams = (state) => {
   return paramFileContents;
 }
 
+const removeEmptyLines = str => str.split(/\r?\n/).filter(line => line.trim() !== '').join('\n');
+
 const stateToParamFile = (state) => {
   const stateToParamFile = `rd.znet=qeth,0.0.bdf0,0.0.bdf1,0.0.bdf2,
 layer2=1,
@@ -162,12 +164,12 @@ nameserver=172.18.0.1`;
   }
 
   return {
-    contents: `${stateToParamFile}
+    contents: removeEmptyLines(`${stateToParamFile}
 ${stateToInstallationRepoParamsResult.contents}
 ${stateToVncParamsResult.contents}
 ${stateToSshParamsResult.contents}
 ${stateToMiscParamsResult.contents}
-`,
+`),
     hasIncompleteData 
   };
 }
@@ -184,7 +186,7 @@ const getProgressStepState = (state, forProgressStepState) => {
       hint: state.steps.hint[forProgressStepState],
       networkDevice: state.steps.networkDevice[forProgressStepState],
       networkAddress: state.steps.networkAddress[forProgressStepState],
-      installationParameters: state.steps.miscParameters[forProgressStepState],
+      installationParameters: state.steps.installationParameters[forProgressStepState],
       miscParameters: state.steps.miscParameters[forProgressStepState],
       downloadParamFile: state.steps.downloadParamFile[forProgressStepState],
       nextSteps: state.steps.nextSteps[forProgressStepState]

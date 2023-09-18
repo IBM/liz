@@ -87,7 +87,8 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
           }
         });
       }
-    })
+    });
+
     const initialState = getInitialState(true);
     const stateOriginsFromStorage = state && state.origin === STATE_ORIGIN_STORAGE;
 
