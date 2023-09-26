@@ -161,6 +161,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
     return false;
   }
 
+  const isValid = () => {
+    return false;
+  }
+
   const deviceTypeList = [
     {
       id: "network-device_osa-option",
@@ -196,9 +200,96 @@ const NetworkDevice = (patchState, localStorageKey) => {
     );
   }
 
+  const isComplete = () => {
+    return false;
+  }
+
+  const isCompleteAndValid = (callback) => {
+    let localIsComplete = false;
+    let localIsValid = false;
+  
+    if (
+      isComplete()
+    ) {
+      localIsComplete = true;
+      localIsValid = isValid();
+    }
+
+    if (localIsComplete && localIsValid) {
+      return callback(null, {
+        isComplete: localIsComplete,
+        isValid: localIsValid
+      });
+    }
+
+    return callback(new Error('Form data is incomplete or invalid'), {
+      isComplete: localIsComplete,
+      isValid: localIsValid
+    });
+  }
+
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
-  });
+    isCompleteAndValid((error, isCompleteAndValid) => {
+      if (!error) {
+        patchState({
+          steps: {
+            networkDevice: {
+              deviceType: "",
+              osa: {
+                readChannel: "",
+                writeChannel: "",
+                dataChannel: "",
+                portNumber: 0,
+                layer: 0,
+              },
+              roce: {
+                fid: "",
+                uid: ""
+              },
+              vlanId: "",
+              complete: true,
+              invalid: false,
+              localStorageKey
+            }
+          }
+        });
+      } else if (isCompleteAndValid.isComplete) {
+        patchState({
+          steps: {
+            networkDevice: {
+              deviceType: "",
+              osa: {
+                readChannel: "",
+                writeChannel: "",
+                dataChannel: "",
+                portNumber: 0,
+                layer: 0,
+              },
+              roce: {
+                fid: "",
+                uid: ""
+              },
+              vlanId: "",
+              complete: isCompleteAndValid.isComplete,
+              invalid: !isCompleteAndValid.isValid,
+              localStorageKey
+            }
+          }
+        });
+      } else {
+        patchState({
+          steps: {
+            networkDevice: {
+              complete: false,
+              disabled: false,
+              invalid: true
+            }
+          }
+        });
+      }
+    });
+  }, [state]);
 
   return (
     <Layer>

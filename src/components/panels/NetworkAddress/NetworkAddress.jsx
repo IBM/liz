@@ -266,8 +266,8 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const isIpv4CidrComplete = () => {
     return typeof state.ipv4Cidr === "object" &&
-      typeof state.ipv4Cidr.value === "string" &&
-      state.ipv4Cidr.value.length > 0;
+      typeof state.ipv4Cidr.value === "number" &&
+      state.ipv4Cidr.value > 0;
   }
 
   const isIpv4NetmaskComplete = () => {
@@ -291,8 +291,8 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const isIpv6CidrComplete = () => {
     return typeof state.ipv6Cidr === "object" &&
-      typeof state.ipv6Cidr.value === "string" &&
-      state.ipv6Cidr.value.length > 0;
+      typeof state.ipv6Cidr.value === "number" &&
+      state.ipv6Cidr.value > 0;
   }
 
   const isIpv6DataComplete = () => {
@@ -349,6 +349,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   useEffect(() => () => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
+
     isCompleteAndValid((error, isCompleteAndValid) => {
       if (!error) {
         patchState({
@@ -410,6 +411,183 @@ const NetworkAddress = (patchState, localStorageKey) => {
     });
   }, [state]);
 
+  const getIpv4Markup = () => {
+    return (
+      <>
+        <TextInput
+          id="network-address_ipv4-input"
+          invalidText="A valid value is required"
+          invalid={state && state.ipv4Address ? !state.ipv4Address.valid : false}
+          labelText={getLabel(
+            "IPv4 address",
+            "Show information",
+            content
+          )}
+          placeholder="192.168.178.22"
+          defaultValue={state.ipv4Address ? state.ipv4Address.value : ""}
+          value={state.ipv4Address ? state.ipv4Address.value : ""}
+          onChange={(localAddress) => {
+            const localAddressValue = localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+            // while editing we don't update the validity but set it to true
+            // cause we don't want to have the form validation logic kick in.
+            updateIpv4Address(localAddressValue, true);
+          }}
+          onBlur={(localAddress) => {
+            const localAddressValue = localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+            const localAddressValueIsValid = isIpv4NetworkAddressValid(localAddressValue);
+            updateIpv4Address(localAddressValue, localAddressValueIsValid);
+          }}
+        />
+        <TextInput
+          id="network-address_ipv4-prefix"
+          invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
+          invalidText="A valid value is required"
+          labelText={getLabel(
+            "IPv4 prefix",
+            "Show information",
+            content
+          )}
+          placeholder="32"
+          defaultValue={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
+          value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
+          onChange={(localCidr) => {
+            const localCidrValue = localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+            // while editing we don't update the validity but set it to true
+            // cause we don't want to have the form validation logic kick in.
+            updateIpv4Cidr(localCidrValue, true);
+          }}
+          onBlur={(localCidr) => {
+            const localCidrValue = localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+            const parsed = cidrToNetmask(localCidrValue);
+            const localCidrValueIsValid = isCidr(ADDRESS_TYPE_IPV4, localCidrValue);
+
+            updateIpv4Cidr(localCidrValue, localCidrValueIsValid);
+
+            if (localCidrValueIsValid && parsed) {
+              updateNetmask(parsed, true);
+              updateBinary(netmaskToBinary(parsed));
+            }
+          }}
+        />
+        <TextInput
+          id="network-address_ipv4-netmask"
+          invalid={state && state.netmask ? !state.netmask.valid : false}
+          invalidText="A valid value is required"
+          labelText={getLabel(
+            "IPv4 netmask",
+            "Show information",
+            content
+          )}
+          placeholder="255.255.128.0"
+          defaultValue={state.netmask ? state.netmask.value : ""}
+          value={state.netmask ? state.netmask.value : ""}
+          onChange={(localNetmask) => {
+            const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
+              ? localNetmask.target.value
+              : "";
+            // while editing we don't update the validity but set it to true
+            // cause we don't want to have the form validation logic kick in.
+            updateNetmask(localNetmaskValue, true);
+          }}
+          onBlur={(localNetmask) => {
+            const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
+              ? localNetmask.target.value
+              : "";
+            const parsed = netmaskToCidr(localNetmaskValue);
+            const localNetmaskValueIsValid = isIpv4NetworkAddressValid(localNetmaskValue);
+
+            updateNetmask(localNetmaskValue, localNetmaskValueIsValid);
+
+            if (localNetmaskValueIsValid && parsed) {
+              updateIpv4Cidr(parsed, true);
+              updateBinary(netmaskToBinary(localNetmaskValue));
+            }
+          }}
+        />
+        <TextInput
+          readOnly
+          id="network-address_ipv4-binary"
+          invalidText="A valid value is required"
+          labelText="IPv4 binary representation"
+          placeholder="11111111.11111111.10000000.00000000"
+          value={state.binary}
+        />
+      </>
+    );
+  }
+
+  const getIpv6Markup = () => {
+    return (
+      <>
+        <TextInput
+          id="network-address_ipv6-input"
+          invalid={state && state.ipv6Address ? !state.ipv6Address.valid : false}
+          invalidText="A valid value is required"
+          labelText={getLabel(
+            "IPv6 address",
+            "Show information",
+            content
+          )}
+          placeholder="2001:0db8:85a3:0:0:8a2e:370:7334"
+          defaultValue={state.ipv6Address ? state.ipv6Address.value : ""}
+          value={state.ipv6Address ? state.ipv6Address.value : ""}
+          onChange={(localAddress) => {
+            const localAddressValue = localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+            // while editing we don't update the validity but set it to true
+            // cause we don't want to have the form validation logic kick in.
+            updateIpv6Address(localAddressValue, true);
+          }}
+          onBlur={(localAddress) => {
+            const localAddressValue = localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+            const localAddressValueIsValid = isIpv6NetworkAddressValid(localAddressValue);
+            updateIpv6Address(localAddressValue, localAddressValueIsValid);
+          }}
+        />
+        <TextInput
+          id="network-address_ipv6-prefix"
+          invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
+          invalidText="A valid value is required"
+          labelText={getLabel(
+            "IPv6 prefix",
+            "Show information",
+            content
+          )}
+          placeholder="128"
+          defaultValue={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
+          value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
+          onChange={(localCidr) => {
+            const localCidrValue = localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+            // while editing we don't update the validity but set it to true
+            // cause we don't want to have the form validation logic kick in.
+            updateIpv6Cidr(localCidrValue, true);
+          }}
+          onBlur={(localCidr) => {
+            const localCidrValue = localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+            const localCidrValueIsValid = isCidr(ADDRESS_TYPE_IPV6, localCidrValue);
+
+            updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
+          }}
+        />
+      </>
+    );
+  }
+
   return (
     <Layer>
       <Grid className="network-address__horizontal-grid" fullWidth>
@@ -440,177 +618,8 @@ const NetworkAddress = (patchState, localStorageKey) => {
       <Grid className="network-address__vertical-grid" fullWidth>
         <Column sm={2} md={3} lg={5}>
           <div className="network-address_column-left">
-            {state.addressType === ADDRESS_TYPE_IPV4 &&
-              <>
-                <TextInput
-                  id="network-address_ipv4-input"
-                  invalidText="A valid value is required"
-                  invalid={state && state.ipv4Address ? !state.ipv4Address.valid : false}
-                  labelText={getLabel(
-                    "IPv4 address",
-                    "Show information",
-                    content
-                  )}
-                  placeholder="192.168.178.22"
-                  defaultValue={state.ipv4Address ? state.ipv4Address.value : ""}
-                  value={state.ipv4Address ? state.ipv4Address.value : ""}
-                  onChange={(localAddress) => {
-                    const localAddressValue = localAddress && localAddress.target && localAddress.target.value
-                      ? localAddress.target.value
-                      : "";
-                    // while editing we don't update the validity but set it to true
-                    // cause we don't want to have the form validation logic kick in.
-                    updateIpv4Address(localAddressValue, true);
-                  }}
-                  onBlur={(localAddress) => {
-                    const localAddressValue = localAddress && localAddress.target && localAddress.target.value
-                      ? localAddress.target.value
-                      : "";
-                    const localAddressValueIsValid = isIpv4NetworkAddressValid(localAddressValue);
-                    updateIpv4Address(localAddressValue, localAddressValueIsValid);
-                  }}
-                />
-                <TextInput
-                  id="network-address_ipv4-prefix"
-                  invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
-                  invalidText="A valid value is required"
-                  labelText={getLabel(
-                    "IPv4 prefix",
-                    "Show information",
-                    content
-                  )}
-                  placeholder="32"
-                  defaultValue={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
-                  value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
-                  onChange={(localCidr) => {
-                    const localCidrValue = localCidr && localCidr.target && localCidr.target.value
-                      ? localCidr.target.value
-                      : "";
-                    // while editing we don't update the validity but set it to true
-                    // cause we don't want to have the form validation logic kick in.
-                    updateIpv4Cidr(localCidrValue, true);
-                  }}
-                  onBlur={(localCidr) => {
-                    const localCidrValue = localCidr && localCidr.target && localCidr.target.value
-                      ? localCidr.target.value
-                      : "";
-                    const parsed = cidrToNetmask(localCidrValue);
-                    const localCidrValueIsValid = isCidr(ADDRESS_TYPE_IPV4, localCidrValue);
-
-                    updateIpv4Cidr(localCidrValue, localCidrValueIsValid);
-
-                    if (localCidrValueIsValid && parsed) {
-                      updateNetmask(parsed, true);
-                      updateBinary(netmaskToBinary(parsed));
-                    }
-                  }}
-                />
-                <TextInput
-                  id="network-address_ipv4-netmask"
-                  invalid={state && state.netmask ? !state.netmask.valid : false}
-                  invalidText="A valid value is required"
-                  labelText={getLabel(
-                    "IPv4 netmask",
-                    "Show information",
-                    content
-                  )}
-                  placeholder="255.255.128.0"
-                  defaultValue={state.netmask ? state.netmask.value : ""}
-                  value={state.netmask ? state.netmask.value : ""}
-                  onChange={(localNetmask) => {
-                    const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
-                      ? localNetmask.target.value
-                      : "";
-                    // while editing we don't update the validity but set it to true
-                    // cause we don't want to have the form validation logic kick in.
-                    updateNetmask(localNetmaskValue, true);
-                  }}
-                  onBlur={(localNetmask) => {
-                    const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
-                      ? localNetmask.target.value
-                      : "";
-                    const parsed = netmaskToCidr(localNetmaskValue);
-                    const localNetmaskValueIsValid = isIpv4NetworkAddressValid(localNetmaskValue);
-
-                    updateNetmask(localNetmaskValue, localNetmaskValueIsValid);
-
-                    if (localNetmaskValueIsValid && parsed) {
-                      updateIpv4Cidr(parsed, true);
-                      updateBinary(netmaskToBinary(localNetmaskValue));
-                    }
-                  }}
-                />
-                <TextInput
-                  readOnly
-                  id="network-address_ipv4-binary"
-                  invalidText="A valid value is required"
-                  labelText="IPv4 binary representation"
-                  placeholder="11111111.11111111.10000000.00000000"
-                  value={state.binary}
-                />
-              </>
-            }
-            {state.addressType === "radio-ipv6" &&
-              <>
-                <TextInput
-                  id="network-address_ipv6-input"
-                  invalid={state && state.ipv6Address ? !state.ipv6Address.valid : false}
-                  invalidText="A valid value is required"
-                  labelText={getLabel(
-                    "IPv6 address",
-                    "Show information",
-                    content
-                  )}
-                  placeholder="2001:0db8:85a3:0:0:8a2e:370:7334"
-                  defaultValue={state.ipv6Address ? state.ipv6Address.value : ""}
-                  value={state.ipv6Address ? state.ipv6Address.value : ""}
-                  onChange={(localAddress) => {
-                    const localAddressValue = localAddress && localAddress.target && localAddress.target.value
-                      ? localAddress.target.value
-                      : "";
-                    // while editing we don't update the validity but set it to true
-                    // cause we don't want to have the form validation logic kick in.
-                    updateIpv6Address(localAddressValue, true);
-                  }}
-                  onBlur={(localAddress) => {
-                    const localAddressValue = localAddress && localAddress.target && localAddress.target.value
-                      ? localAddress.target.value
-                      : "";
-                    const localAddressValueIsValid = isIpv6NetworkAddressValid(localAddressValue);
-                    updateIpv6Address(localAddressValue, localAddressValueIsValid);
-                  }}
-                />
-                <TextInput
-                  id="network-address_ipv6-prefix"
-                  invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
-                  invalidText="A valid value is required"
-                  labelText={getLabel(
-                    "IPv6 prefix",
-                    "Show information",
-                    content
-                  )}
-                  placeholder="128"
-                  defaultValue={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
-                  value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
-                  onChange={(localCidr) => {
-                    const localCidrValue = localCidr && localCidr.target && localCidr.target.value
-                      ? localCidr.target.value
-                      : "";
-                    // while editing we don't update the validity but set it to true
-                    // cause we don't want to have the form validation logic kick in.
-                    updateIpv6Cidr(localCidrValue, true);
-                  }}
-                  onBlur={(localCidr) => {
-                    const localCidrValue = localCidr && localCidr.target && localCidr.target.value
-                      ? localCidr.target.value
-                      : "";
-                    const localCidrValueIsValid = isCidr(ADDRESS_TYPE_IPV6, localCidrValue);
-
-                    updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
-                  }}
-                />
-              </>
-            }
+            {state.addressType && state.addressType === ADDRESS_TYPE_IPV4 && getIpv4Markup()}
+            {state.addressType && state.addressType === "radio-ipv6" && getIpv6Markup()}
           </div>
         </Column>
         <Column sm={2} md={3} lg={5}>

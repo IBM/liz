@@ -5,32 +5,43 @@
  */
 
  @use "@carbon/react" with (
-    $font-path: "@ibm/plex"
+    $font-path: "@ibm/plex",
+    $use-flexbox-grid: true
 );
 @use "@carbon/type";
 @use "@carbon/layout";
 @use "@carbon/colors";
 @use "@carbon/themes";
 
+.help-content__panel-component-header {
+    padding: 0 layout.$spacing-05 0 layout.$spacing-05;
+
+    .help-content__panel-component-header__title {
+        @include type.type-style("heading-01");
+        @include type.font-weight("semibold");
+      
+        float: left;
+        padding: layout.$spacing-03 0 layout.$spacing-07 0;
+    }
+      
+    span:first-of-type {
+        float: right;
+        right: 0;
+    }
+}
+
 .help-content__grid {
-    &.cds--css-grid {
+    &.cds--grid {
         padding: 0 layout.$spacing-05 0 layout.$spacing-05;
     }
 
+    .help-content__grid__row {
+        width: 100%;
+    }
     
-}
-
-.help-content__panel-component-header__title {
-    @include type.type-style("heading-01");
-    @include type.font-weight("semibold");
-  
-    float: left;
-    padding: layout.$spacing-03 0 layout.$spacing-07 0;
-}
-  
-.help-content__panel-component-header__button {
-    float: right;
-    right: 0;
+    .help-content__grid__column {
+        width: 100%;
+    }
 }
 
 .help-content__grid-header-column__right > span {
