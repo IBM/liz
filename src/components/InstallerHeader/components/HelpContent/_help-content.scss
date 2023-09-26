@@ -44,11 +44,6 @@
     }
 }
 
-.help-content__grid-header-column__right > span {
-    float: right;
-    right: 0;
-}
-
 .help-content__dummy-content {
     @include type.type-style("body-compact-01");
 
