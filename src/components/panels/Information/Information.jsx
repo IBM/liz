@@ -45,7 +45,7 @@ const Information = (patchState, distribution, systemRequirements, docLink, loca
     });
   }, []);
 
-  return (
+  const markup = (
     <Layer>
       <div className="information_heading">Requirements</div>
       <div className="information_content">
@@ -88,6 +88,9 @@ const Information = (patchState, distribution, systemRequirements, docLink, loca
       </div>
     </Layer>
   );
+
+
+  return (markup);
 };
 
 Information.propTypes = {

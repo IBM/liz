@@ -5,12 +5,19 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+  $font-path: "@ibm/plex",
+  $use-flexbox-grid: true
 );
 @use "@carbon/type";
 @use "@carbon/layout";
 @use "@carbon/colors";
 @use "@carbon/themes";
+
+.network-device__grid {
+  &.cds--grid {
+    padding: 0;
+  }
+}
 
 .network-device_column-left {
   .cds--dropdown__wrapper,

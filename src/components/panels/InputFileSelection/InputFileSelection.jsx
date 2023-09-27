@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, /* FileUploader, */ Grid, Column, Layer } from "@carbon/react";
+import { Dropdown, /* FileUploader, */ FlexGrid, Row, Column, Layer } from "@carbon/react";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = (patchState, systemRequirements, docLink, localStorageKey, useStateFromLocalStorage, canWriteToLocalStorage) => {
@@ -99,78 +99,101 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
     }
   }, [state]);
 
+  const gridContentsMarkupRowOne = (
+    <>
+      {/* <div className="input-file-selection__heading">edgedancer9487</div> */}
+    </>
+  );
+  const gridContentsMarkupRowTwo = (
+    <>
+      <div>
+        <div className="input-file-selection__subheading">Host OS</div>
+      </div>
+    </>
+  );
+  const gridContentsMarkupRowThreeColumnOne = (
+    <div>
+      <div className="input-file-selection__contentRowIntro">
+        Choose from a base template
+      </div>
+      <div className="input-file-selection__contentRowDropdowns">
+        <Dropdown
+          aria-label="Select a distribution"
+          id="distribution-selection"
+          items={distributionList}
+          label="Dropdown menu options"
+          size="md"
+          warn={false}
+          invalid={false}
+          disabled={false}
+          onChange={({ selectedItem }) => {
+            updateSelectedDistributionName(selectedItem);
+          }}
+          selectedItem={state.selectedDistributionName}
+        />
+        <Dropdown
+          aria-label="Select a version"
+          id="version-selection"
+          items={versionList}
+          label="Select a version"
+          size="md"
+          warn={false}
+          invalid={false}
+          disabled={false}
+          onChange={({ selectedItem }) => {
+            updateSelectedDistributionVersion(selectedItem);
+          }}
+          selectedItem={state.selectedDistributionVersion}
+        />
+      </div>
+    </div>
+  );
+  const gridContentsMarkupRowThreeColumnTwo = (
+    <div>
+      <div></div>
+      <div>
+        {/*
+        <FileUploader
+          labelTitle="Already have a custom ISO file?"
+          labelDescription="Drag and drop or upload your ISO file here."
+          buttonLabel="Add file"
+          buttonKind="primary"
+          size="md"
+          filenameStatus="edit"
+          role="button"
+          accept={[".iso"]}
+          multiple={true}
+          disabled={false}
+          iconDescription="Delete file"
+          name=""
+        />
+        */}
+      </div>
+    </div>
+  );
+
   return (
     <Layer>
-      <Grid className="input-file-selection__grid">
-        <Column sm={4} md={8} lg={16}>
-          {/* <div className="input-file-selection__heading">edgedancer9487</div> */}
-        </Column>
-        <Column sm={4} md={8} lg={16}>
-          <div>
-            <div className="input-file-selection__subheading">Host OS</div>
-          </div>
-        </Column>
-        <Column sm={4} md={6} lg={8}>
-          <div>
-            <div className="input-file-selection__contentRowIntro">
-              Choose from a base template
-            </div>
-            <div className="input-file-selection__contentRowDropdowns">
-              <Dropdown
-                aria-label="Select a distribution"
-                id="distribution-selection"
-                items={distributionList}
-                label="Dropdown menu options"
-                size="md"
-                warn={false}
-                invalid={false}
-                disabled={false}
-                onChange={({ selectedItem }) => {
-                  updateSelectedDistributionName(selectedItem);
-                }}
-                selectedItem={state.selectedDistributionName}
-              />
-              <Dropdown
-                aria-label="Select a version"
-                id="version-selection"
-                items={versionList}
-                label="Select a version"
-                size="md"
-                warn={false}
-                invalid={false}
-                disabled={false}
-                onChange={({ selectedItem }) => {
-                  updateSelectedDistributionVersion(selectedItem);
-                }}
-                selectedItem={state.selectedDistributionVersion}
-              />
-            </div>
-          </div>
-        </Column>
-        <Column sm={4} md={6} lg={8}>
-          <div>
-            <div></div>
-            <div>
-              {/*
-              <FileUploader
-                labelTitle="Already have a custom ISO file?"
-                labelDescription="Drag and drop or upload your ISO file here."
-                buttonLabel="Add file"
-                buttonKind="primary"
-                size="md"
-                filenameStatus="edit"
-                role="button"
-                accept={[".iso"]}
-                multiple={true}
-                disabled={false}
-                iconDescription="Delete file"
-                name=""
-              />
-              */}
-            </div>
-          </div>
-        </Column>
-      </Grid>
+      <FlexGrid className="input-file-selection__grid">
+        <Row>
+          <Column>
+            {gridContentsMarkupRowOne}
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            {gridContentsMarkupRowTwo}
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            {gridContentsMarkupRowThreeColumnOne}
+          </Column>
+          <Column>
+            {gridContentsMarkupRowThreeColumnTwo}
+          </Column>
+        </Row>
+      </FlexGrid>
     </Layer>
   );
 };

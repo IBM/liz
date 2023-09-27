@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Layer, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, FlexGrid, Row, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import "./_misc-parameters.scss";
 
@@ -64,28 +64,38 @@ const MiscParameters = (patchState, localStorageKey) => {
     </>
   );
 
-  return (
+  const gridContentsMarkup = (
+    <>
+      <TextArea
+        labelText={textAreaLabel}
+        helperText=""
+        rows={8}
+        id="misc-parameters-input"
+        className="misc-parameters_textarea"
+        value={state.miscParameterContent ? state.miscParameterContent : ""}
+        onChange={(localMiscParameterContent) => {
+          const localMiscParameterContentValue = localMiscParameterContent && localMiscParameterContent.target && localMiscParameterContent.target.value
+            ? localMiscParameterContent.target.value
+            : "";
+          updateMiscParameterContent(localMiscParameterContentValue);
+        }}
+      />
+    </>
+  );
+
+  const markup = (
     <Layer>
-      <Grid className="misc-parameters_grid" fullWidth>
-        <Column sm={4} md={6} lg={10}>
-          <TextArea
-            labelText={textAreaLabel}
-            helperText=""
-            rows={8}
-            id="misc-parameters-input"
-            className="misc-parameters_textarea"
-            value={state.miscParameterContent ? state.miscParameterContent : ""}
-            onChange={(localMiscParameterContent) => {
-              const localMiscParameterContentValue = localMiscParameterContent && localMiscParameterContent.target && localMiscParameterContent.target.value
-                ? localMiscParameterContent.target.value
-                : "";
-              updateMiscParameterContent(localMiscParameterContentValue);
-            }}
-          />
-        </Column>
-      </Grid>
+      <FlexGrid className="misc-parameters_grid">
+        <Row>
+          <Column>
+            {gridContentsMarkup}
+          </Column>
+        </Row>
+      </FlexGrid>
     </Layer>
   );
+
+  return (markup);
 };
 
 MiscParameters.propTypes = {

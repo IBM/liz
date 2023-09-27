@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, RadioButtonGroup, RadioButton, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
+import { Layer, RadioButtonGroup, RadioButton, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, FlexGrid, Row, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import "./_network-address.scss";
 
@@ -588,105 +588,119 @@ const NetworkAddress = (patchState, localStorageKey) => {
     );
   }
 
+  const gridContentsMarkupRowOne = (
+    <div className="network-address_column-left">
+      <RadioButtonGroup
+        className="network-address_ip-version-group"
+        legendText="Internet protocol version"
+        name="network-address_ip-version-group"
+        defaultSelected={state.addressType}
+        onChange={(selected) => {
+          updateAddressType(selected);
+        }}>
+        <RadioButton
+          labelText="IPv4"
+          value={ADDRESS_TYPE_IPV4}
+          id="network-address_ipv4-radio"
+        />
+        <RadioButton
+          labelText="IPv6"
+          value={ADDRESS_TYPE_IPV6}
+          id="network-address_ipv6-radio"
+        />
+      </RadioButtonGroup>
+    </div>
+  );
+
+  const gridContentsMarkupRowTwoColumnOne = (
+    <div className="network-address_column-left">
+      {state.addressType && state.addressType === ADDRESS_TYPE_IPV4 && getIpv4Markup()}
+      {state.addressType && state.addressType === "radio-ipv6" && getIpv6Markup()}
+    </div>
+  );
+
+  const gridContentsMarkupRowTwoColumnTwo = (
+    <div className="network-address_column-right">
+      <TextInput
+        id="network-address_gateway-input"
+        invalid={state && state.gatewayIpAddress ? !state.gatewayIpAddress.valid : false}
+        invalidText="A valid value is required"
+        labelText={getLabel(
+          "Gateway IP address",
+          "Show information",
+          content
+        )}
+        placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_GATEWAY_ADDRESS_IPV4 : PLACEHOLDER_GATEWAY_ADDRESS_IPV6}
+        defaultValue={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
+        value={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
+        onChange={(localGatewayIpAddress) => {
+          const localGatewayIpAddressValue = localGatewayIpAddress && localGatewayIpAddress.target && localGatewayIpAddress.target.value
+            ? localGatewayIpAddress.target.value
+            : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateGatewayAddress(localGatewayIpAddressValue, true);
+        }}
+        onBlur={(localGatewayIpAddress) => {
+          const localGatewayIpAddressValue = localGatewayIpAddress && localGatewayIpAddress.target && localGatewayIpAddress.target.value
+            ? localGatewayIpAddress.target.value
+            : "";
+          const localGatewayIpAddressValueIsValid = state.addressType === ADDRESS_TYPE_IPV4
+            ? isIpv4NetworkAddressValid(localGatewayIpAddressValue)
+            : isIpv6NetworkAddressValid(localGatewayIpAddressValue);
+          updateGatewayAddress(localGatewayIpAddressValue, localGatewayIpAddressValueIsValid);
+        }}
+      />
+      <TextInput
+        id="network-address_nameserver-input"
+        invalid={state && state.nameserverIpAddress ? !state.nameserverIpAddress.valid : false}
+        invalidText="A valid value is required"
+        labelText={getLabel(
+          "Nameserver IP address",
+          "Show information",
+          content
+        )}
+        placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 : PLACEHOLDER_NAMESERVER_ADDRESS_IPV6}
+        defaultValue={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
+        value={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
+        onChange={(localNameserverIpAddress) => {
+          const localNameserverIpAddressValue = localNameserverIpAddress && localNameserverIpAddress.target && localNameserverIpAddress.target.value
+            ? localNameserverIpAddress.target.value
+            : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateNameserverAddress(localNameserverIpAddressValue, true);
+        }}
+        onBlur={(localNameserverIpAddress) => {
+          const localNameserverIpAddressValue = localNameserverIpAddress && localNameserverIpAddress.target && localNameserverIpAddress.target.value
+            ? localNameserverIpAddress.target.value
+            : "";
+          const localNameserverIpAddressValueIsValid = state.addressType === ADDRESS_TYPE_IPV4
+            ? isIpv4NetworkAddressValid(localNameserverIpAddressValue)
+            : isIpv6NetworkAddressValid(localNameserverIpAddressValue);
+          updateNameserverAddress(localNameserverIpAddressValue, localNameserverIpAddressValueIsValid);
+        }}
+      />
+    </div>
+  );
+
   return (
     <Layer>
-      <Grid className="network-address__horizontal-grid" fullWidth>
-        <Column sm={2} md={6} lg={10}>
-          <div className="network-address_column-left">
-            <RadioButtonGroup
-              className="network-address_ip-version-group"
-              legendText="Internet protocol version"
-              name="network-address_ip-version-group"
-              defaultSelected={state.addressType}
-              onChange={(selected) => {
-                updateAddressType(selected);
-              }}>
-              <RadioButton
-                labelText="IPv4"
-                value={ADDRESS_TYPE_IPV4}
-                id="network-address_ipv4-radio"
-              />
-              <RadioButton
-                labelText="IPv6"
-                value={ADDRESS_TYPE_IPV6}
-                id="network-address_ipv6-radio"
-              />
-            </RadioButtonGroup>
-          </div>
-        </Column>
-      </Grid>
-      <Grid className="network-address__vertical-grid" fullWidth>
-        <Column sm={2} md={3} lg={5}>
-          <div className="network-address_column-left">
-            {state.addressType && state.addressType === ADDRESS_TYPE_IPV4 && getIpv4Markup()}
-            {state.addressType && state.addressType === "radio-ipv6" && getIpv6Markup()}
-          </div>
-        </Column>
-        <Column sm={2} md={3} lg={5}>
-          <div className="network-address_column-right">
-            <TextInput
-              id="network-address_gateway-input"
-              invalid={state && state.gatewayIpAddress ? !state.gatewayIpAddress.valid : false}
-              invalidText="A valid value is required"
-              labelText={getLabel(
-                "Gateway IP address",
-                "Show information",
-                content
-              )}
-              placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_GATEWAY_ADDRESS_IPV4 : PLACEHOLDER_GATEWAY_ADDRESS_IPV6}
-              defaultValue={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
-              value={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
-              onChange={(localGatewayIpAddress) => {
-                const localGatewayIpAddressValue = localGatewayIpAddress && localGatewayIpAddress.target && localGatewayIpAddress.target.value
-                  ? localGatewayIpAddress.target.value
-                  : "";
-                // while editing we don't update the validity but set it to true
-                // cause we don't want to have the form validation logic kick in.
-                updateGatewayAddress(localGatewayIpAddressValue, true);
-              }}
-              onBlur={(localGatewayIpAddress) => {
-                const localGatewayIpAddressValue = localGatewayIpAddress && localGatewayIpAddress.target && localGatewayIpAddress.target.value
-                  ? localGatewayIpAddress.target.value
-                  : "";
-                const localGatewayIpAddressValueIsValid = state.addressType === ADDRESS_TYPE_IPV4
-                  ? isIpv4NetworkAddressValid(localGatewayIpAddressValue)
-                  : isIpv6NetworkAddressValid(localGatewayIpAddressValue);
-                updateGatewayAddress(localGatewayIpAddressValue, localGatewayIpAddressValueIsValid);
-              }}
-            />
-            <TextInput
-              id="network-address_nameserver-input"
-              invalid={state && state.nameserverIpAddress ? !state.nameserverIpAddress.valid : false}
-              invalidText="A valid value is required"
-              labelText={getLabel(
-                "Nameserver IP address",
-                "Show information",
-                content
-              )}
-              placeholder={state.addressType === ADDRESS_TYPE_IPV4 ? PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 : PLACEHOLDER_NAMESERVER_ADDRESS_IPV6}
-              defaultValue={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
-              value={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
-              onChange={(localNameserverIpAddress) => {
-                const localNameserverIpAddressValue = localNameserverIpAddress && localNameserverIpAddress.target && localNameserverIpAddress.target.value
-                  ? localNameserverIpAddress.target.value
-                  : "";
-                // while editing we don't update the validity but set it to true
-                // cause we don't want to have the form validation logic kick in.
-                updateNameserverAddress(localNameserverIpAddressValue, true);
-              }}
-              onBlur={(localNameserverIpAddress) => {
-                const localNameserverIpAddressValue = localNameserverIpAddress && localNameserverIpAddress.target && localNameserverIpAddress.target.value
-                  ? localNameserverIpAddress.target.value
-                  : "";
-                const localNameserverIpAddressValueIsValid = state.addressType === ADDRESS_TYPE_IPV4
-                  ? isIpv4NetworkAddressValid(localNameserverIpAddressValue)
-                  : isIpv6NetworkAddressValid(localNameserverIpAddressValue);
-                updateNameserverAddress(localNameserverIpAddressValue, localNameserverIpAddressValueIsValid);
-              }}
-            />
-          </div>
-        </Column>
-      </Grid>
+      <FlexGrid className="network-address__grid">
+        <Row>
+          <Column>
+            {gridContentsMarkupRowOne}
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            {gridContentsMarkupRowTwoColumnOne}
+          </Column>
+          <Column>
+            {gridContentsMarkupRowTwoColumnTwo}
+          </Column>
+        </Row>
+      </FlexGrid>
     </Layer>
   );
 };

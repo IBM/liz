@@ -5,12 +5,19 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+  $font-path: "@ibm/plex",
+  $use-flexbox-grid: true
 );
 @use "@carbon/type";
 @use "@carbon/layout";
 @use "@carbon/colors";
 @use "@carbon/themes";
+
+.download-param-file_grid {
+  &.cds--grid {
+    padding: 0;
+  }
+}
 
 .download-param-file_textarea {
   > div > textarea {

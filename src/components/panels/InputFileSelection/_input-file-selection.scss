@@ -5,7 +5,8 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+  $font-path: "@ibm/plex",
+  $use-flexbox-grid: true
 );
 @use "@carbon/type";
 @use "@carbon/layout";
@@ -52,8 +53,9 @@
 }
 
 .input-file-selection__grid {
-  padding-left: 0;
-  padding-right: layout.$spacing-01;
+  &.cds--grid {
+    padding: 0;
+  }
 
   .cds--dropdown__wrapper,
   .cds--form-item {

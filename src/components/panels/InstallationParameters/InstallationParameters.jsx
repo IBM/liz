@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, Grid, Column } from "@carbon/react";
+import { Layer, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, FlexGrid, Row, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import "./_installation-parameters.scss";
 
@@ -173,97 +173,113 @@ const InstallationParameters = (patchState, localStorageKey) => {
     });
   }, [state]);
 
+  const gridContentsMarkupRowOne = (
+    <>
+      <TextInput
+        helperText=""
+        id="installation-address-input"
+        invalid={state && state.installationAddress ? !state.installationAddress.valid : false}
+        invalidText="A valid value is required"
+        labelText={getLabel(
+          "Installation address",
+          "Show information",
+          content
+        )}
+        placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
+        className="installation-parameters_installation-address-input"
+        defaultValue={state.installationAddress ? state.installationAddress.value : ""}
+        value={state.installationAddress ? state.installationAddress.value : ""}
+        onChange={(url) => {
+          const urlValue = url && url.target ? url.target.value : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateInstallationAddress(urlValue, true);
+        }}
+        onBlur={(url) => {
+          const urlValue = url && url.target ? url.target.value : "";
+          const urlValueIsValid = isInstallationAddressInputValid(urlValue);
+          updateInstallationAddress(urlValue, urlValueIsValid);
+        }}
+      />
+    </>
+  );
+
+  const gridContentsMarkupRowTwoColumnOne = (
+    <div className="installation-parameters_column-left">
+      <Toggle
+        labelText="VNC for installation"
+        labelA="Disable"
+        labelB="Enable"
+        id="vnc-toggle"
+        defaultToggled={useVncToggled}
+        onToggle={() => {
+          if (useVncToggled) {
+            updateUseVnc(false);
+          } else {
+            updateUseVnc(true);
+          }
+        }}
+      />
+      {useVncToggled &&
+        <TextInput
+          helperText=""
+          id="vnc-password-input"
+          invalidText="A valid value is required"
+          labelText={getLabel(
+            "VNC password",
+            "Show information",
+            content
+          )}
+          placeholder="VNC password here"
+          defaultValue={state.vncPassword ? state.vncPassword : ""}
+          value={state.vncPassword ? state.vncPassword : ""}
+          onChange={(password) => {
+            updateVncPassword(password && password.target ? password.target.value : "");
+          }}
+          onBlur={(password) => {
+            updateVncPassword(password && password.target ? password.target.value : "");
+          }}
+        />
+      }
+    </div>
+  );
+
+  const gridContentsMarkupRowTwoColumnTwo = (
+    <div className="installation-parameters_column-right">
+      <Toggle
+        labelText="SSH for installation"
+        labelA="Disable"
+        labelB="Enable"
+        id="ssh-toggle"
+        defaultToggled={useSshToggled}
+        onToggle={() => {
+          if (useSshToggled) {
+            updateUseSsh(false);
+          } else {
+            updateUseSsh(true);
+          }
+        }}
+      />
+    </div>
+  );
+
   return (
     <Layer>
-      <Grid className="installation-parameters__grid" fullWidth>
-        <Column max={10}>
-          <TextInput
-            helperText=""
-            id="installation-address-input"
-            invalid={state && state.installationAddress ? !state.installationAddress.valid : false}
-            invalidText="A valid value is required"
-            labelText={getLabel(
-              "Installation address",
-              "Show information",
-              content
-            )}
-            placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
-            className="installation-parameters_installation-address-input"
-            defaultValue={state.installationAddress ? state.installationAddress.value : ""}
-            value={state.installationAddress ? state.installationAddress.value : ""}
-            onChange={(url) => {
-              const urlValue = url && url.target ? url.target.value : "";
-              // while editing we don't update the validity but set it to true
-              // cause we don't want to have the form validation logic kick in.
-              updateInstallationAddress(urlValue, true);
-            }}
-            onBlur={(url) => {
-              const urlValue = url && url.target ? url.target.value : "";
-              const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-              updateInstallationAddress(urlValue, urlValueIsValid);
-            }}
-          />
-        </Column>
-      </Grid>
-      <Grid className="installation-parameters__grid" fullWidth>
-        <Column sm={4}>
-          <div className="installation-parameters_column-left">
-            <Toggle
-              labelText="VNC for installation"
-              labelA="Disable"
-              labelB="Enable"
-              id="vnc-toggle"
-              defaultToggled={useVncToggled}
-              onToggle={() => {
-                if (useVncToggled) {
-                  updateUseVnc(false);
-                } else {
-                  updateUseVnc(true);
-                }
-              }}
-            />
-            {useVncToggled &&
-              <TextInput
-                helperText=""
-                id="vnc-password-input"
-                invalidText="A valid value is required"
-                labelText={getLabel(
-                  "VNC password",
-                  "Show information",
-                  content
-                )}
-                placeholder="VNC password here"
-                defaultValue={state.vncPassword ? state.vncPassword : ""}
-                value={state.vncPassword ? state.vncPassword : ""}
-                onChange={(password) => {
-                  updateVncPassword(password && password.target ? password.target.value : "");
-                }}
-                onBlur={(password) => {
-                  updateVncPassword(password && password.target ? password.target.value : "");
-                }}
-              />
-            }
-          </div>
-        </Column>
-        <Column sm={4}>
-          <div className="installation-parameters_column-right">
-            <Toggle
-              labelText="SSH for installation"
-              labelA="Disable"
-              labelB="Enable"
-              id="ssh-toggle"
-              defaultToggled={useSshToggled}
-              onToggle={() => {
-                if (useSshToggled) {
-                  updateUseSsh(false);
-                } else {
-                  updateUseSsh(true);
-                }
-              }}
-            />
-          </div>
-        </Column>
-      </Grid>
+      <FlexGrid className="installation-parameters__grid">
+        <Row>
+          <Column>
+            {gridContentsMarkupRowOne}
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            {gridContentsMarkupRowTwoColumnOne}
+          </Column>
+          <Column>
+            {gridContentsMarkupRowTwoColumnTwo}
+          </Column>
+        </Row>
+      </FlexGrid>
     </Layer>    
   );
 };

@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, Dropdown, TextInput, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Layer, Dropdown, TextInput, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, FlexGrid, Row, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import {
   toChannelSegments,
@@ -291,72 +291,117 @@ const NetworkDevice = (patchState, localStorageKey) => {
     });
   }, [state]);
 
-  return (
-    <Layer>
-      <Grid className="network-device__horizontal-grid" fullWidth>
-        <Column sm={2} md={4} lg={6}>
-          <div className="network-device_column-left">
-            <Dropdown
-              className="network-device_device-type-dropdown"
-              titleText={getLabel(
-                "Device type",
-                "Show information",
-                content
-              )}
-              aria-label="Select a device type"
-              id="network-device_device-type-selection"
-              items={deviceTypeList}
-              label="Select a device type"
-              helperText=""
-              size="md"
-              warn={false}
-              invalid={false}
-              disabled={false}
-              onChange={({ selectedItem }) => {
-                updateSelectedDeviceType(selectedItem);
-                patchState({
-                });
-              }}
-              selectedItem={state.selectedDeviceType}
-            />
-          </div>
-        </Column>
-      </Grid>
-      <Grid className="network-device__vertical-grid" fullWidth>
-        <Column max={6}>
-          <div className="network-device_column-left">
-            <DeviceSettings
-              deviceSettingsId={state.selectedDeviceType ? state.selectedDeviceType.id : ""}
-              updateFunction={updateFunction}
-              patchState={patchState}
-              state={state}
-            />
+  const gridContentsMarkupRowOne = (
+    <div className="network-device_column-left">
+      <Dropdown
+        className="network-device_device-type-dropdown"
+        titleText={getLabel(
+          "Device type",
+          "Show information",
+          content
+        )}
+        aria-label="Select a device type"
+        id="network-device_device-type-selection"
+        items={deviceTypeList}
+        label="Select a device type"
+        helperText=""
+        size="md"
+        warn={false}
+        invalid={false}
+        disabled={false}
+        onChange={({ selectedItem }) => {
+          updateSelectedDeviceType(selectedItem);
+          patchState({
+          });
+        }}
+        selectedItem={state.selectedDeviceType}
+      />
+    </div>
+  );
+
+  const gridContentsMarkupRowTwoColumnOne = (
+    <div className="network-device_column-left">
+      <DeviceSettings
+        deviceSettingsId={state.selectedDeviceType ? state.selectedDeviceType.id : ""}
+        updateFunction={updateFunction}
+        patchState={patchState}
+        state={state}
+      />
+      <TextInput
+        helperText=""
+        id="network-device_vlan-id-input"
+        invalidText="A valid value is required"
+        invalid={state && state.vlanId ? !state.vlanId.valid : false}
+        labelText={getLabel(
+          "VLAN ID (optional)",
+          "Show information",
+          content
+        )}
+        placeholder="ex: 88"
+        onChange={(vlanId) => {
+          const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
+            ? vlanId.target.value
+            : "";
+          const vlanIdIsValid = isVlanIdValid(vlanIdValue);
+          updateVlanId(vlanIdValue, vlanIdIsValid);
+        }}
+        onBlur={(vlanId) => {
+          const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
+            ? vlanId.target.value
+            : "";
+          const vlanIdIsValid = isVlanIdValid(vlanIdValue);
+          updateVlanId(vlanIdValue, vlanIdIsValid);
+
+          if (vlanIdIsValid) {
+            patchState({
+            });
+          } else {
+            patchState({
+              steps: {
+                networkDevice: {
+                  invalid: true,
+                  complete: true
+                }
+              }
+            });
+          }
+        }}
+      />
+    </div>
+  );
+
+  const gridContentsMarkupRowTwoColumnTwo = (
+    <div className="network-device_column-right">
+      {state.selectedDeviceType && state.selectedDeviceType.id === "network-device_osa-option"
+        ?
+        (
+          <>
             <TextInput
               helperText=""
-              id="network-device_vlan-id-input"
+              id="network-device_read-channel-input"
               invalidText="A valid value is required"
-              invalid={state && state.vlanId ? !state.vlanId.valid : false}
+              invalid={state && state.readChannelId ? !state.readChannelId.valid : false}
               labelText={getLabel(
-                "VLAN ID (optional)",
+                "Read channel",
                 "Show information",
                 content
               )}
-              placeholder="ex: 88"
-              onChange={(vlanId) => {
-                const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
-                  ? vlanId.target.value
+              placeholder="ex: 0.0.bdf0"
+              value={state.readChannelId ? state.readChannelId.value : ""}
+              onChange={(readChannelId) => {
+                const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
+                  ? readChannelId.target.value
                   : "";
-                const vlanIdIsValid = isVlanIdValid(vlanIdValue);
-                updateVlanId(vlanIdValue, vlanIdIsValid);
+                updateReadChannelId(readChannelIdValue, false);
               }}
-              onBlur={(vlanId) => {
-                const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
-                  ? vlanId.target.value
+              onBlur={(readChannelId) => {
+                const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
+                  ? readChannelId.target.value
                   : "";
-                const vlanIdIsValid = isVlanIdValid(vlanIdValue);
-                updateVlanId(vlanIdValue, vlanIdIsValid);
+                const readChannelIdIsValid = isReadChannelIdValid(readChannelIdValue);
+                updateReadChannelId(readChannelIdValue, false);
 
-                if (vlanIdIsValid) {
+                if (readChannelIdIsValid) {
                   patchState({
                   });
                 } else {
@@ -371,143 +416,112 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 }
               }}
             />
-          </div>
-        </Column>
-        <Column max={5}>
-          <div className="network-device_column-right">
-            {state.selectedDeviceType && state.selectedDeviceType.id === "network-device_osa-option"
-              ?
-              (
-                <>
-                  <TextInput
-                    helperText=""
-                    id="network-device_read-channel-input"
-                    invalidText="A valid value is required"
-                    invalid={state && state.readChannelId ? !state.readChannelId.valid : false}
-                    labelText={getLabel(
-                      "Read channel",
-                      "Show information",
-                      content
-                    )}
-                    placeholder="ex: 0.0.bdf0"
-                    value={state.readChannelId ? state.readChannelId.value : ""}
-                    onChange={(readChannelId) => {
-                      const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
-                        ? readChannelId.target.value
-                        : "";
-                      updateReadChannelId(readChannelIdValue, false);
-                    }}
-                    onBlur={(readChannelId) => {
-                      const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
-                        ? readChannelId.target.value
-                        : "";
-                      const readChannelIdIsValid = isReadChannelIdValid(readChannelIdValue);
-                      updateReadChannelId(readChannelIdValue, false);
+            <TextInput
+              helperText=""
+              id="network-device_write-channel-input"
+              invalidText="A valid value is required"
+              invalid={state && state.writeChannelId ? !state.writeChannelId.valid : false}
+              labelText={getLabel(
+                "Write channel",
+                "Show information",
+                content
+              )}
+              placeholder="ex: 0.0.bdf1"
+              value={state.writeChannelId ? state.writeChannelId.value : ""}
+              onChange={(writeChannelId) => {
+                const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
+                  ? writeChannelId.target.value
+                  : "";
+                updateWriteChannelId(writeChannelIdValue, false);
+              }}
+              onBlur={(writeChannelId) => {
+                const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
+                  ? writeChannelId.target.value
+                  : "";
+                const writeChannelIdIsValid = isWriteChannelIdValid(writeChannelIdValue);
+                updateWriteChannelId(writeChannelIdValue, false);
 
-                      if (readChannelIdIsValid) {
-                        patchState({
-                        });
-                      } else {
-                        patchState({
-                          steps: {
-                            networkDevice: {
-                              invalid: true,
-                              complete: true
-                            }
-                          }
-                        });
+                if (writeChannelIdIsValid) {
+                  patchState({
+                  });
+                } else {
+                  patchState({
+                    steps: {
+                      networkDevice: {
+                        invalid: true,
+                        complete: true
                       }
-                    }}
-                  />
-                  <TextInput
-                    helperText=""
-                    id="network-device_write-channel-input"
-                    invalidText="A valid value is required"
-                    invalid={state && state.writeChannelId ? !state.writeChannelId.valid : false}
-                    labelText={getLabel(
-                      "Write channel",
-                      "Show information",
-                      content
-                    )}
-                    placeholder="ex: 0.0.bdf1"
-                    value={state.writeChannelId ? state.writeChannelId.value : ""}
-                    onChange={(writeChannelId) => {
-                      const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
-                        ? writeChannelId.target.value
-                        : "";
-                      updateWriteChannelId(writeChannelIdValue, false);
-                    }}
-                    onBlur={(writeChannelId) => {
-                      const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
-                        ? writeChannelId.target.value
-                        : "";
-                      const writeChannelIdIsValid = isWriteChannelIdValid(writeChannelIdValue);
-                      updateWriteChannelId(writeChannelIdValue, false);
+                    }
+                  });
+                }
+              }}
 
-                      if (writeChannelIdIsValid) {
-                        patchState({
-                        });
-                      } else {
-                        patchState({
-                          steps: {
-                            networkDevice: {
-                              invalid: true,
-                              complete: true
-                            }
-                          }
-                        });
+            />
+            <TextInput
+              helperText=""
+              id="network-device_data-channel-input"
+              invalidText="A valid value is required"
+              invalid={state && state.dataChannelId ? !state.dataChannelId.valid : false}
+              labelText={getLabel(
+                "Data channel",
+                "Show information",
+                content
+              )}
+              placeholder="ex: 0.0.bdf2"
+              value={state.dataChannelId ? state.dataChannelId.value : ""}
+              onChange={(dataChannelId) => {
+                const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
+                  ? dataChannelId.target.value
+                  : "";
+                updateDataChannelId(dataChannelIdValue, false);
+              }}
+              onBlur={(dataChannelId) => {
+                const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
+                  ? dataChannelId.target.value
+                  : "";
+                const dataChannelIdIsValid = isDataChannelIdValid(dataChannelIdValue);
+                updateDataChannelId(dataChannelIdValue, false);
+
+                if (dataChannelIdIsValid) {
+                  patchState({
+                  });
+                } else {
+                  patchState({
+                    steps: {
+                      networkDevice: {
+                        invalid: true,
+                        complete: true
                       }
-                    }}
+                    }
+                  });
+                }
+              }}
+            />
+          </>
+        )
+        :
+        (null) 
+      }
+    </div>
+  );
 
-                  />
-                  <TextInput
-                    helperText=""
-                    id="network-device_data-channel-input"
-                    invalidText="A valid value is required"
-                    invalid={state && state.dataChannelId ? !state.dataChannelId.valid : false}
-                    labelText={getLabel(
-                      "Data channel",
-                      "Show information",
-                      content
-                    )}
-                    placeholder="ex: 0.0.bdf2"
-                    value={state.dataChannelId ? state.dataChannelId.value : ""}
-                    onChange={(dataChannelId) => {
-                      const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
-                        ? dataChannelId.target.value
-                        : "";
-                      updateDataChannelId(dataChannelIdValue, false);
-                    }}
-                    onBlur={(dataChannelId) => {
-                      const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
-                        ? dataChannelId.target.value
-                        : "";
-                      const dataChannelIdIsValid = isDataChannelIdValid(dataChannelIdValue);
-                      updateDataChannelId(dataChannelIdValue, false);
-
-                      if (dataChannelIdIsValid) {
-                        patchState({
-                        });
-                      } else {
-                        patchState({
-                          steps: {
-                            networkDevice: {
-                              invalid: true,
-                              complete: true
-                            }
-                          }
-                        });
-                      }
-                    }}
-                  />
-                </>
-              )
-              :
-              (null) 
-            }
-          </div>
-        </Column>
-      </Grid>
+  return (
+    <Layer>
+      <FlexGrid className="network-device__grid">
+        <Row>
+          <Column>
+            {gridContentsMarkupRowOne}
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            {gridContentsMarkupRowTwoColumnOne}
+          </Column>
+          <Column>
+            {gridContentsMarkupRowTwoColumnTwo}
+          </Column>
+        </Row>
+      </FlexGrid>
     </Layer>
   );
 };

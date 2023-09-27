@@ -13,7 +13,9 @@
 @use "@carbon/themes";
 
 .device-settings_grid {
-  /* empty block */
+  &.cds--css-grid {
+    padding: 0;
+  }
 }
 
 .device-settings_grid-column-left {

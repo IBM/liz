@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, Button, ButtonSet, InlineNotification, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
+import { Layer, Button, ButtonSet, InlineNotification, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, FlexGrid, Row, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
@@ -96,52 +96,60 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const textAreaClasses = `download-param-file_textarea ${textAreaPaddingClass}`;
   const buttonPaddingClass = paramFileContent.hasIncompleteData ? "download-param-file_buttons__padding" : "";
   const buttonClasses = `download-param-file_buttons ${buttonPaddingClass}`;
+
+  const gridContentsMarkup = (
+    <>
+      <TextArea
+        enableCounter
+        id="download-param-file_textarea"
+        labelText={getLabel(
+          "Param text file",
+          "Show information",
+          content
+        )}
+        className={textAreaClasses}
+        rows={10}
+        value={state.paramFileContent ? state.paramFileContent : paramFileContent.contents}
+        onChange={(localParamFileContent) => {
+          const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
+            ? localParamFileContent.target.value
+            : "";
+          updateParamFileContent(localParamFileContentValue);
+        }}
+      >
+      </TextArea>
+      {paramFileContent.hasIncompleteData &&
+        <InlineNotification
+          hideCloseButton
+          statusIconDescription="notification"
+          subtitle="The data provided is incomplete or invalid. The param file generated my be unusable."
+          title="Incomplete data."
+          kind="info"
+          className="download-param-file__incomplete-data-banner"
+        />
+      }
+      {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
+      <ButtonSet className={buttonClasses}>
+        <CopyToClipboard text={state.paramFileContent || paramFileContent.contents} onCopy={ updateCopied }>
+          <Button kind="secondary" size="xl" className="download-param-file_button">
+            Copy to clipboard
+          </Button>
+        </CopyToClipboard>
+        <Button kind="primary" size="xl" className="download-param-file_button" onClick={ saveParamFileContent }>
+          Download param file
+        </Button>
+      </ButtonSet>
+    </>
+  );
   const markup = (
     <Layer>
-      <Grid className="download-param-file_grid" fullWidth>
-        <Column sm={4} md={6} lg={12}>
-          <TextArea
-            enableCounter
-            id="download-param-file_textarea"
-            labelText={getLabel(
-              "Param text file",
-              "Show information",
-              content
-            )}
-            className={textAreaClasses}
-            rows={10}
-            value={state.paramFileContent ? state.paramFileContent : paramFileContent.contents}
-            onChange={(localParamFileContent) => {
-              const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
-                ? localParamFileContent.target.value
-                : "";
-              updateParamFileContent(localParamFileContentValue);
-            }}
-          >
-          </TextArea>
-          {paramFileContent.hasIncompleteData &&
-            <InlineNotification
-              hideCloseButton
-              statusIconDescription="notification"
-              subtitle="The data provided is incomplete or invalid. The param file generated my be unusable."
-              title="Incomplete data."
-              kind="info"
-              className="download-param-file__incomplete-data-banner"
-            />
-          }
-          {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
-          <ButtonSet className={buttonClasses}>
-            <CopyToClipboard text={state.paramFileContent || paramFileContent.contents} onCopy={ updateCopied }>
-              <Button kind="secondary" size="xl" className="download-param-file_button">
-                Copy to clipboard
-              </Button>
-            </CopyToClipboard>
-            <Button kind="primary" size="xl" className="download-param-file_button" onClick={ saveParamFileContent }>
-              Download param file
-            </Button>
-          </ButtonSet>
-        </Column>
-      </Grid>
+      <FlexGrid className="download-param-file_grid">
+        <Row>
+          <Column>
+            {gridContentsMarkup}
+          </Column>
+        </Row>
+      </FlexGrid>
     </Layer>
   );
 
