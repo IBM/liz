@@ -25,10 +25,6 @@
   margin: layout.$spacing-05 0 layout.$spacing-05 0;
 }
 
-.landing-page__r2 {
-  margin-top: rem(-40px);
-}
-
 .landing-page__subheading {
   @include type.type-style("heading-03");
   @include type.font-weight("semibold");
