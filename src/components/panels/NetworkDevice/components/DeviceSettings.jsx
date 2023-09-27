@@ -51,7 +51,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
 
     const osaMarkup = (
         <Grid className="device-settings_grid" condensed>
-          <Column sm={2} md={4} max={8}>
+          <Column sm={2} md={3} max={4}>
             <div className="device-settings_grid-column-left">
                 <Toggle
                     labelText="Layer2"
@@ -87,7 +87,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                 />
             </div>
           </Column>
-          <Column sm={2} md={4} max={8}>
+          <Column sm={2} md={3} max={4}>
             <div className="device-settings_grid-column-right">
                 <Toggle
                     labelText="Portno"
