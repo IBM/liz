@@ -240,12 +240,12 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 readChannel: state.readChannelId ? state.readChannelId.value : "",
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
                 dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
-                portNumber: 0,
-                layer: 0,
+                portNumber: state.layer ? state.layer : 0,
+                layer: state.portNo ? state.portNo : 0,
               },
               roce: {
-                fid: "",
-                uid: ""
+                fid: state.pciFunctionId ? state.pciFunctionId.value : "",
+                uid: state.userIdentifier ? state.userIdentifier.value: ""
               },
               vlanId: state.vlanId ? state.vlanId.value : "",
               complete: true,
@@ -263,12 +263,12 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 readChannel: state.readChannelId ? state.readChannelId.value : "",
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
                 dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
-                portNumber: 0,
-                layer: 0,
+                portNumber: state.layer ? state.layer : 0,
+                layer: state.portNo ? state.portNo : 0,
               },
               roce: {
-                fid: "",
-                uid: ""
+                fid: state.pciFunctionId ? state.pciFunctionId.value : "",
+                uid: state.userIdentifier ? state.userIdentifier.value: ""
               },
               vlanId: state.vlanId ? state.vlanId.value : "",
               complete: isCompleteAndValid.isComplete,
@@ -311,8 +311,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
         disabled={false}
         onChange={({ selectedItem }) => {
           updateSelectedDeviceType(selectedItem);
-          patchState({
-          });
         }}
         selectedItem={state.selectedDeviceType}
       />
@@ -343,8 +341,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
           const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
             ? vlanId.target.value
             : "";
-          const vlanIdIsValid = isVlanIdValid(vlanIdValue);
-          updateVlanId(vlanIdValue, vlanIdIsValid);
+          updateVlanId(vlanIdValue, true);
         }}
         onBlur={(vlanId) => {
           const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
@@ -379,7 +376,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
                   ? readChannelId.target.value
                   : "";
-                updateReadChannelId(readChannelIdValue, false);
+                updateReadChannelId(readChannelIdValue, true);
               }}
               onBlur={(readChannelId) => {
                 const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
@@ -405,7 +402,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
                   ? writeChannelId.target.value
                   : "";
-                updateWriteChannelId(writeChannelIdValue, false);
+                updateWriteChannelId(writeChannelIdValue, true);
               }}
               onBlur={(writeChannelId) => {
                 const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
@@ -432,7 +429,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
                   ? dataChannelId.target.value
                   : "";
-                updateDataChannelId(dataChannelIdValue, false);
+                updateDataChannelId(dataChannelIdValue, true);
               }}
               onBlur={(dataChannelId) => {
                 const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value

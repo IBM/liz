@@ -8,6 +8,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TextInput, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, Grid, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
+import {
+    isHex
+} from "../../common";
 import "./_device-settings.scss";
 
 const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state }) => {
@@ -17,11 +20,17 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
     const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
     const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
-    const isPciFunctionIdValid = () => {
+    const isPciFunctionIdValid = (pciFunctionIdValue) => {
+        if (isHex(pciFunctionIdValue)) {
+            return true;
+        }
         return false;
     }
 
-    const isUserIdentifierValid = () => {
+    const isUserIdentifierValid = (pciUserIdValue) => {
+        if (isHex(pciUserIdValue)) {
+            return true;
+        }
         return false;
     }
 
@@ -57,7 +66,6 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     labelText="Layer2"
                     labelA="0"
                     labelB="1"
-                    defaultToggled
                     id="layer2-toggle"
                     onToggle={(toggleState) => {
                         updateFunction(UPDATE_FUNCTION__LAYER, toggleState);
@@ -71,7 +79,6 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     labelText="Portno"
                     labelA="0"
                     labelB="1"
-                    defaultToggled
                     id="portno-toggle"
                     onToggle={(toggleState) => {
                         updateFunction(UPDATE_FUNCTION__PORT_NO, toggleState);
@@ -100,7 +107,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         const pciFunctionIdValue = pciFunctionId && pciFunctionId.target && pciFunctionId.target.value
                             ? pciFunctionId.target.value
                             : "";
-                        updateFunction(UPDATE_FUNCTION__PCI_FUNCTION_ID, pciFunctionIdValue, false);
+                        updateFunction(UPDATE_FUNCTION__PCI_FUNCTION_ID, pciFunctionIdValue, true);
                     }}
                     onBlur={(pciFunctionId) => {
                         const pciFunctionIdValue = pciFunctionId && pciFunctionId.target && pciFunctionId.target.value
@@ -124,7 +131,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         const userIdentifierValue = userIdentifier && userIdentifier.target && userIdentifier.target.value
                             ? userIdentifier.target.value
                             : "";
-                        updateFunction(UPDATE_FUNCTION__USER_IDENTIFIER, userIdentifierValue, false);
+                        updateFunction(UPDATE_FUNCTION__USER_IDENTIFIER, userIdentifierValue, true);
                     }}
                     onBlur={(userIdentifier) => {
                         const userIdentifierValue = userIdentifier && userIdentifier.target && userIdentifier.target.value
