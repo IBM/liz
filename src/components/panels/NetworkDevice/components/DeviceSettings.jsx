@@ -61,28 +61,6 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     id="layer2-toggle"
                     onToggle={(toggleState) => {
                         updateFunction(UPDATE_FUNCTION__LAYER, toggleState);
-                        patchState({
-                            steps: {
-                                networkDevice: {
-                                    deviceType: deviceSettingsId,
-                                    osa: {
-                                      readChannel: state.readChannelId ? state.readChannelId.value : "",
-                                      writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
-                                      dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
-                                      portNumber: 0,
-                                      layer: 0,
-                                    },
-                                    roce: {
-                                      fid: state.pciFunctionId ? state.pciFunctionId.value : "",
-                                      uid: state.userIdentifier ? state.userIdentifier.value : ""
-                                    },
-                                    vlanId: "",
-                                    complete: false,
-                                    invalid: false,
-                                    localStorageKey: "com.ibm.systems.linux.z.networkDevice"
-                                }
-                            }
-                        });
                     }}
                 />
             </div>
@@ -97,8 +75,6 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     id="portno-toggle"
                     onToggle={(toggleState) => {
                         updateFunction(UPDATE_FUNCTION__PORT_NO, toggleState);
-                        patchState({
-                        });
                     }}
                 />
             </div>
@@ -131,21 +107,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                             ? pciFunctionId.target.value
                             : "";
                         const pciFunctionIdIsValid = isPciFunctionIdValid(pciFunctionIdValue);
-                        updateFunction(UPDATE_FUNCTION__PCI_FUNCTION_ID, pciFunctionIdValue, false);
-
-                        if (pciFunctionIdIsValid) {
-                            patchState({
-                            });
-                        } else {
-                            patchState({
-                                steps: {
-                                    networkDevice: {
-                                        invalid: true,
-                                        complete: true
-                                    }
-                                }
-                            });
-                        }
+                        updateFunction(UPDATE_FUNCTION__PCI_FUNCTION_ID, pciFunctionIdValue, pciFunctionIdIsValid);
                     }}
                 />
                 <TextInput
@@ -169,21 +131,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                             ? userIdentifier.target.value
                             : "";
                         const userIdentifierIsValid = isUserIdentifierValid(userIdentifierValue);
-                        updateFunction(UPDATE_FUNCTION__USER_IDENTIFIER, userIdentifierValue, false);
-
-                        if (userIdentifierIsValid) {
-                            patchState({
-                            });
-                        } else {
-                            patchState({
-                                steps: {
-                                    networkDevice: {
-                                        invalid: true,
-                                        complete: true
-                                    }
-                                }
-                            });
-                        }
+                        updateFunction(UPDATE_FUNCTION__USER_IDENTIFIER, userIdentifierValue, userIdentifierIsValid);
                     }}
                 />
             </div>

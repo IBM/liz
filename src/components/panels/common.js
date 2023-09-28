@@ -6,7 +6,7 @@
 
 const toChannelSegments = (value) => {
   const hasSegments = value.indexOf(".") >= 0 &&
-    (value.match(/\./g) || []).length === 3;
+    (value.match(/\./g) || []).length === 2;
 
   if (typeof value === "string" && hasSegments) {
     return value.split(".");

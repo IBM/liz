@@ -235,11 +235,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
         patchState({
           steps: {
             networkDevice: {
-              deviceType: "",
+              deviceType: state.selectedDeviceType ? state.selectedDeviceType.id : "",
               osa: {
-                readChannel: "",
-                writeChannel: "",
-                dataChannel: "",
+                readChannel: state.readChannelId ? state.readChannelId.value : "",
+                writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
+                dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
                 portNumber: 0,
                 layer: 0,
               },
@@ -247,7 +247,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 fid: "",
                 uid: ""
               },
-              vlanId: "",
+              vlanId: state.vlanId ? state.vlanId.value : "",
               complete: true,
               invalid: false,
               localStorageKey
@@ -258,11 +258,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
         patchState({
           steps: {
             networkDevice: {
-              deviceType: "",
+              deviceType: state.selectedDeviceType ? state.selectedDeviceType.id : "",
               osa: {
-                readChannel: "",
-                writeChannel: "",
-                dataChannel: "",
+                readChannel: state.readChannelId ? state.readChannelId.value : "",
+                writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
+                dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
                 portNumber: 0,
                 layer: 0,
               },
@@ -270,7 +270,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 fid: "",
                 uid: ""
               },
-              vlanId: "",
+              vlanId: state.vlanId ? state.vlanId.value : "",
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
               localStorageKey
@@ -338,6 +338,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
           content
         )}
         placeholder="ex: 88"
+        value={state.vlanId ? state.vlanId.value : ""}
         onChange={(vlanId) => {
           const vlanIdValue = vlanId && vlanId.target && vlanId.target.value
             ? vlanId.target.value
@@ -351,20 +352,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
             : "";
           const vlanIdIsValid = isVlanIdValid(vlanIdValue);
           updateVlanId(vlanIdValue, vlanIdIsValid);
-
-          if (vlanIdIsValid) {
-            patchState({
-            });
-          } else {
-            patchState({
-              steps: {
-                networkDevice: {
-                  invalid: true,
-                  complete: true
-                }
-              }
-            });
-          }
         }}
       />
     </div>
@@ -399,21 +386,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                   ? readChannelId.target.value
                   : "";
                 const readChannelIdIsValid = isReadChannelIdValid(readChannelIdValue);
-                updateReadChannelId(readChannelIdValue, false);
-
-                if (readChannelIdIsValid) {
-                  patchState({
-                  });
-                } else {
-                  patchState({
-                    steps: {
-                      networkDevice: {
-                        invalid: true,
-                        complete: true
-                      }
-                    }
-                  });
-                }
+                updateReadChannelId(readChannelIdValue, readChannelIdIsValid);
               }}
             />
             <TextInput
@@ -439,21 +412,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                   ? writeChannelId.target.value
                   : "";
                 const writeChannelIdIsValid = isWriteChannelIdValid(writeChannelIdValue);
-                updateWriteChannelId(writeChannelIdValue, false);
-
-                if (writeChannelIdIsValid) {
-                  patchState({
-                  });
-                } else {
-                  patchState({
-                    steps: {
-                      networkDevice: {
-                        invalid: true,
-                        complete: true
-                      }
-                    }
-                  });
-                }
+                updateWriteChannelId(writeChannelIdValue, writeChannelIdIsValid);
               }}
 
             />
@@ -480,21 +439,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                   ? dataChannelId.target.value
                   : "";
                 const dataChannelIdIsValid = isDataChannelIdValid(dataChannelIdValue);
-                updateDataChannelId(dataChannelIdValue, false);
-
-                if (dataChannelIdIsValid) {
-                  patchState({
-                  });
-                } else {
-                  patchState({
-                    steps: {
-                      networkDevice: {
-                        invalid: true,
-                        complete: true
-                      }
-                    }
-                  });
-                }
+                updateDataChannelId(dataChannelIdValue, dataChannelIdIsValid);
               }}
             />
           </>
