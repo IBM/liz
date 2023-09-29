@@ -32,7 +32,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         value: "",
         valid: false
       },
-      layer: false,
+      layer: true,
       portNo: false,
       pciFunctionId: {
         value: "",
@@ -54,6 +54,9 @@ const NetworkDevice = (patchState, localStorageKey) => {
     return defaultState;
   }
   const [state, setState] = useState(getInitialState);
+
+  const DEVICE_TYPE_OSA = "network-device_osa-option";
+  // const DEVICE_TYPE_ROCE = "network-device_roce-option";
 
   const UPDATE_FUNCTION__SELECT_DEVICE_TYPE = "selectedDeviceType";
   const UPDATE_FUNCTION__READ_CHANNEL_ID = "readChannelId";
@@ -161,8 +164,71 @@ const NetworkDevice = (patchState, localStorageKey) => {
     return false;
   }
 
-  const isValid = () => {
+  const isPortNumberValid = () => {
+    if (
+      state.portNo &&
+      typeof +state.portNo === "number" &&
+      +state.portNo >= 0
+    ) {
+      return true;
+    }
     return false;
+  }
+
+  const isLayerValid = () => {
+    if (
+      state.layer &&
+      typeof +state.layer === "number" &&
+      +state.layer >= 0
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  const areChannelIdsValid = () => {
+    if (
+      !state.readChannelId ||
+      !state.writeChannelId ||
+      !state.dataChannelId
+    ) {
+      return false;
+    }
+    return state.readChannelId.valid &&
+      state.writeChannelId.valid &&
+      state.dataChannelId.valid;
+  }
+
+  const areOsaDeviceSettingValid = () => {
+    return areChannelIdsValid() &&
+    (isPortNumberValid() || true) &&
+    (isLayerValid() || true);
+  }
+
+  const areRoCeDeviceSettingsValid = () => {
+    if (
+      !state.pciFunctionId ||
+      !state.userIdentifier
+    ) {
+      return false;
+    }
+    return state.pciFunctionId.valid &&
+      state.userIdentifier.valid;
+  }
+
+  const areDeviceSettingsValid = () => {
+    if (typeof state.selectedDeviceType === "object" && state.selectedDeviceType.id) {
+      return state.selectedDeviceType.id === DEVICE_TYPE_OSA
+      ? areOsaDeviceSettingValid()
+      : areRoCeDeviceSettingsValid();
+    }
+    return false;
+  }
+
+  const isValid = () => {
+    return areDeviceSettingsValid() &&
+      state.vlanId &&
+      state.vlanId.valid;
   }
 
   const deviceTypeList = [
@@ -200,8 +266,79 @@ const NetworkDevice = (patchState, localStorageKey) => {
     );
   }
 
-  const isComplete = () => {
+  const isReadChannelIdComplete = () => {
+    return typeof state.readChannelId === "object" &&
+      typeof state.readChannelId.value === "string" &&
+      state.readChannelId.value.length > 0;
+  }
+
+  const isWriteChannelIdComplete = () => {
+    return typeof state.writeChannelId === "object" &&
+      typeof state.writeChannelId.value === "string" &&
+      state.writeChannelId.value.length > 0;    
+  }
+
+  const isDataChannelIdComplete = () => {
+    return typeof state.dataChannelId === "object" &&
+      typeof state.dataChannelId.value === "string" &&
+      state.dataChannelId.value.length > 0;
+  }
+
+  const areChannelIdsComplete = () => {
+    return isReadChannelIdComplete() &&
+      isWriteChannelIdComplete() &&
+      isDataChannelIdComplete();
+  }
+
+  const isPortNumberComplete = () => {
+    return isPortNumberValid() || true;
+  }
+
+  const isLayerComplete = () => {
+    return isLayerValid() || true;
+  }
+
+  const areOsaDeviceSettingComplete = () => {
+    return areChannelIdsComplete() &&
+      isPortNumberComplete() &&
+      isLayerComplete();
+  }
+
+  const isPciFunctionIdComplete = () => {
+    return typeof state.pciFunctionId === "object" &&
+      typeof state.pciFunctionId.value === "string" &&
+      state.pciFunctionId.value.length > 0;
+  }
+
+  const isUserIdentifierComplete = () => {
+    return typeof state.userIdentifier === "object" &&
+      typeof state.userIdentifier.value === "string" &&
+      state.userIdentifier.value.length > 0;
+  }
+
+  const areRoCeDeviceSettingComplete = () => {
+    return isPciFunctionIdComplete() &&
+    isUserIdentifierComplete();
+  }
+
+  const isVlanIdComplete = () => {
+    return typeof state.vlanId === "object" &&
+      typeof state.vlanId.value === "string" &&
+      state.vlanId.value.length > 0;
+  }
+
+  const areDeviceSettingsComplete = () => {
+    if (typeof state.selectedDeviceType === "object" && state.selectedDeviceType.id) {
+      return state.selectedDeviceType.id === DEVICE_TYPE_OSA
+      ? areOsaDeviceSettingComplete()
+      : areRoCeDeviceSettingComplete();
+    }
     return false;
+  }
+
+  const isComplete = () => {
+    return areDeviceSettingsComplete() &&
+      isVlanIdComplete();
   }
 
   const isCompleteAndValid = (callback) => {
@@ -241,7 +378,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
                 dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
                 portNumber: state.layer ? state.layer : 0,
-                layer: state.portNo ? state.portNo : 0,
+                layer: state.portNo ? state.portNo : 1,
               },
               roce: {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
@@ -264,7 +401,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
                 dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
                 portNumber: state.layer ? state.layer : 0,
-                layer: state.portNo ? state.portNo : 0,
+                layer: state.portNo ? state.portNo : 1,
               },
               roce: {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
@@ -283,7 +420,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
             networkDevice: {
               complete: false,
               disabled: false,
-              invalid: true
+              invalid: true,
+              localStorageKey
             }
           }
         });
