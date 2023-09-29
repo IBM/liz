@@ -31,11 +31,84 @@ import {
   DownloadParamFile as DownloadParamFileContent
 } from "./components/help";
 import LandingPage from "./content/LandingPage";
+import { getInterfaceName } from "./components/panels/common";
 import "./App.scss";
 
 const PROGRESS_STEP_STATE_COMPLETE = "complete";
 const PROGRESS_STATE_INVALID = "invalid";
 const PROGRESS_STATE_DISABLED = "disabled";
+
+const DEVICE_TYPE_OSA = "network-device_osa-option";
+
+const stateToOsaNetworkDeviceParams = (installationParameters) => {
+  if (
+    installationParameters &&
+    installationParameters.osa &&
+    installationParameters.osa.readChannel &&
+    installationParameters.osa.writeChannel &&
+    installationParameters.osa.dataChannel &&
+    typeof installationParameters.osa.layer === "number" &&
+    typeof installationParameters.osa.portNumber === "number"
+  ) {
+    const readChannel = installationParameters.osa.readChannel;
+    const writeChannel = installationParameters.osa.writeChannel;
+    const dataChannel = installationParameters.osa.dataChannel;
+    const layer = installationParameters.osa.layer;
+    const portNumber = installationParameters.osa.portNumber;
+  
+    return `rd.znet=qeth,${readChannel},${writeChannel},${dataChannel},layer2=${layer},portno=${portNumber}`;
+  }
+
+  return ``;
+}
+
+const stateToRoCeNetworkDeviceParams = (installationParameters) => {
+  return ``;
+}
+
+const getInterfaceNameFromReadChannel = (installationParameters) => {
+  if (
+    installationParameters &&
+    installationParameters.osa &&
+    installationParameters.osa.readChannel
+  ) {
+    const readChannel = installationParameters.osa.readChannel;
+  
+    return getInterfaceName(readChannel);
+  }
+
+  return "";
+}
+
+const stateToNetworkDeviceParams = (state) => {
+  const installationParameters = state && state.steps && state.steps.networkDevice ? state.steps.networkDevice : {};
+  const networkDeviceSettings = installationParameters && installationParameters.deviceType === DEVICE_TYPE_OSA
+    ? stateToOsaNetworkDeviceParams(installationParameters)
+    : stateToRoCeNetworkDeviceParams(installationParameters);
+  let paramFileContents = {
+    contents: "",
+    complete: false
+  };
+
+  // => rd.znet...
+  if (
+    installationParameters &&
+    installationParameters.vlanId &&
+    installationParameters.vlanId.length > 0
+  ) {
+    const interfaceName = getInterfaceNameFromReadChannel(installationParameters);
+    const vlanId = `vlan=${interfaceName}.${installationParameters.vlanId}:${interfaceName}`;
+    const installationRepoLine = `${networkDeviceSettings}
+${vlanId}
+`;
+    paramFileContents = {
+      contents: `${installationRepoLine}`,
+      complete: true
+    };
+  }
+
+  return paramFileContents;
+}
 
 const stateToInstallationRepoParams = (state) => {
   const installationParameters = state && state.steps && state.steps.installationParameters ? state.steps.installationParameters : {};
@@ -143,28 +216,28 @@ const stateToMiscParams = (state) => {
 const removeEmptyLines = str => str.split(/\r?\n/).filter(line => line.trim() !== '').join('\n');
 
 const stateToParamFile = (state) => {
-  const stateToParamFile = `rd.znet=qeth,0.0.bdf0,0.0.bdf1,0.0.bdf2,
-layer2=1,
-portno=0,
-ip=172.18.132.1::172.18.0.1:15:t3560001.lnxne.boe:encbdf0:none,
+  const stateToParamFile = `ip=172.18.132.1::172.18.0.1:15:t3560001.lnxne.boe:encbdf0:none,
 nameserver=172.18.0.1`;
   const stateToInstallationRepoParamsResult = stateToInstallationRepoParams(state);
   const stateToVncParamsResult = stateToVncParams(state);
   const stateToSshParamsResult = stateToSshParams(state);
   const stateToMiscParamsResult = stateToMiscParams(state);
+  const stateToNetworkDeviceParamsResult = stateToNetworkDeviceParams(state);
   let hasIncompleteData = true;
 
   if (
-    stateToInstallationRepoParams.complete &&
-    stateToVncParams.complete &&
-    stateToSshParams.complete &&
-    stateToMiscParams.complete
+    stateToInstallationRepoParamsResult.complete &&
+    stateToVncParamsResult.complete &&
+    stateToSshParamsResult.complete &&
+    stateToMiscParamsResult.complete &&
+    stateToNetworkDeviceParamsResult.complete
   ) {
     hasIncompleteData = false;
   }
 
   return {
-    contents: removeEmptyLines(`${stateToParamFile}
+    contents: removeEmptyLines(`${stateToNetworkDeviceParamsResult.contents}
+${stateToParamFile}
 ${stateToInstallationRepoParamsResult.contents}
 ${stateToVncParamsResult.contents}
 ${stateToSshParamsResult.contents}

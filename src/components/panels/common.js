@@ -4,6 +4,34 @@
  * (C) Copyright IBM Corp. 2023
  */
 
+const getInterfaceName = (readChannelId) => {
+  const channelSegments = readChannelId && typeof readChannelId === "string"
+    ? toChannelSegments(readChannelId)
+    : [];
+
+  if (
+    channelSegments.length === 3 &&
+    channelSegments[0] === "0" &&
+    channelSegments[1] === "0" &&
+    channelSegments[2] === "0"
+  ) {
+    return "enc0";
+  } else if (
+    channelSegments.length === 3 &&
+    channelSegments[0] === "0" &&
+    channelSegments[1] === "0"
+  ) {
+    return `enc${channelSegments[2].replace(/^0+/, '')}`;
+  } else if (
+    channelSegments.length === 3 &&
+    channelSegments[0] === "0"
+  ) {
+    return `enc${channelSegments[1].replace(/^0+/, '')}.${channelSegments[2].replace(/^0+/, '')}`;
+  }
+
+  return "";
+}
+
 const toChannelSegments = (value) => {
   const hasSegments = value.indexOf(".") >= 0 &&
     (value.match(/\./g) || []).length === 2;
@@ -35,6 +63,7 @@ const isHex = (value) => {
 }
 
 export {
+  getInterfaceName,
   toChannelSegments,
   validateSegments,
   isHex
