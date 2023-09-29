@@ -63,6 +63,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
           <Column sm={2} md={3} max={4}>
             <div className="device-settings_grid-column-left">
                 <Toggle
+                    defaultToggled
                     labelText="Layer2"
                     labelA="0"
                     labelB="1"

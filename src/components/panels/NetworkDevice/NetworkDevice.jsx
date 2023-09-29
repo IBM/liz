@@ -377,8 +377,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 readChannel: state.readChannelId ? state.readChannelId.value : "",
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
                 dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
-                portNumber: state.layer ? state.layer : 0,
-                layer: state.portNo ? state.portNo : 1,
+                layer: typeof state.layer === "boolean" ? +state.layer : 1,
+                portNumber: typeof state.portNo === "boolean" ? +state.portNo : 0,
               },
               roce: {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
@@ -400,8 +400,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 readChannel: state.readChannelId ? state.readChannelId.value : "",
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
                 dataChannel: state.dataChannelId ? state.dataChannelId.value : "",
-                portNumber: state.layer ? state.layer : 0,
-                layer: state.portNo ? state.portNo : 1,
+                layer: typeof state.layer === "boolean" ? +state.layer : 1,
+                portNumber: typeof state.portNo === "boolean" ? +state.portNo : 0,
               },
               roce: {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
