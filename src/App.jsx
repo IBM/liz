@@ -292,11 +292,9 @@ const stateToInstallationRepoParams = (state) => {
   if (
     installationParameters &&
     installationParameters.networkInstallationUrl &&
-    installationParameters.networkInstallationUrl &&
-    installationParameters.networkInstallationUrl.value &&
-    installationParameters.networkInstallationUrl.value.length > 0
+    installationParameters.networkInstallationUrl.length > 0
   ) {
-    const installationRepoLine = `inst.repo=${installationParameters.networkInstallationUrl.value}`;
+    const installationRepoLine = `inst.repo=${installationParameters.networkInstallationUrl}`;
     paramFileContents = {
       contents: `${installationRepoLine}`,
       complete: true

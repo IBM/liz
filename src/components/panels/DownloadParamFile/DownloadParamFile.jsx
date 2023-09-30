@@ -6,7 +6,20 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, Button, ButtonSet, InlineNotification, TextArea, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, FlexGrid, Row, Column } from "@carbon/react";
+import {
+  Layer,
+  Button,
+  ButtonSet,
+  InlineNotification,
+  TextArea,
+  ToggletipLabel,
+  Toggletip,
+  ToggletipButton,
+  ToggletipContent,
+  FlexGrid,
+  Row,
+  Column
+} from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
@@ -20,6 +33,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
       copied: false,
+      modified: false,
       paramFileContent: localParamFileContent
     };
 
@@ -36,6 +50,10 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       setState((prevState) => ({...prevState, copied: false}));
     }, 2000);
     return () => clearTimeout(timer);
+  }
+
+  const updateModified = (modified) => {
+    setState((prevState) => ({...prevState, modified}));
   }
 
   const updateParamFileContent = (paramFileContent) => {
@@ -92,9 +110,10 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     );
   }
 
-  const textAreaPaddingClass = paramFileContent.hasIncompleteData ? "download-param-file_textarea__padding" : "";
-  const textAreaClasses = `download-param-file_textarea ${textAreaPaddingClass}`;
-  const buttonPaddingClass = paramFileContent.hasIncompleteData ? "download-param-file_buttons__padding" : "";
+  const textAreaModifiedClass = state.modified ? "download-param-file_textarea__modified": "";
+  const textAreaPaddingClass = (paramFileContent.hasIncompleteData || state.modified) ? "download-param-file_textarea__padding" : "";
+  const textAreaClasses = `download-param-file_textarea ${textAreaPaddingClass} ${textAreaModifiedClass}`;
+  const buttonPaddingClass = (paramFileContent.hasIncompleteData || state.modified) ? "download-param-file_buttons__padding" : "";
   const buttonClasses = `download-param-file_buttons ${buttonPaddingClass}`;
 
   const gridContentsMarkup = (
@@ -115,6 +134,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             ? localParamFileContent.target.value
             : "";
           updateParamFileContent(localParamFileContentValue);
+          updateModified(true);
         }}
       >
       </TextArea>
@@ -127,6 +147,16 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
           kind="info"
           className="download-param-file__incomplete-data-banner"
         />
+      }
+      {state.modified &&
+        <InlineNotification
+          hideCloseButton
+          statusIconDescription="notification"
+          subtitle="The data provided is has been modified. The param file generated my be unusable."
+          title="Modified data."
+          kind="warning"
+          className="download-param-file__incomplete-data-banner"
+      />
       }
       {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
       <ButtonSet className={buttonClasses}>
@@ -159,10 +189,10 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   
     if (
       typeof state.paramFileContent === "string" &&
-      state.installationAddress.length > 0
+      state.paramFileContent.length > 0
     ) {
       isComplete = true;
-      isValid = paramFileContent.hasIncompleteData;
+      isValid = !paramFileContent.hasIncompleteData;
     }
 
     if (isComplete && isValid) {

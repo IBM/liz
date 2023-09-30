@@ -27,6 +27,10 @@
   &.download-param-file_textarea__padding {
     padding: 0 0 layout.$spacing-09 0;
   }
+
+  &.download-param-file_textarea__modified > div > textarea {
+    border: layout.$spacing-01 solid colors.$red-60;
+  }
 }
 
 .download-param-file_copied-label {
