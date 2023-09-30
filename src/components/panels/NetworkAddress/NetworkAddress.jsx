@@ -46,6 +46,14 @@ const NetworkAddress = (patchState, localStorageKey) => {
       nameserverIpAddress: {
         value: "",
         valid: false
+      },
+      hostName: {
+        value: "",
+        valid: false
+      },
+      domainSearchPath: {
+        value: "",
+        valid: false
       }
     };
 
@@ -90,6 +98,14 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const updateNameserverAddress = (nameserverIpAddress, valid) => {
     setState((prevState) => ({...prevState, nameserverIpAddress: { value: nameserverIpAddress, valid }}));
+  }
+
+  const updateHostName = (hostName, valid) => {
+    setState((prevState) => ({...prevState, hostName: { value: hostName, valid }}));
+  }
+
+  const updateDomainSearchPath = (domainSearchPath, valid) => {
+    setState((prevState) => ({...prevState, domainSearchPath: { value: domainSearchPath, valid }}));
   }
 
   const isCidr = (addressType, cidr) => {
@@ -160,6 +176,44 @@ const NetworkAddress = (patchState, localStorageKey) => {
     return binary;
   }
 
+  const domainNameHasValidLabels = (domainName) => {
+    let hasValidLabels = false;
+
+    if (
+      domainName &&
+      typeof domainName === "string" &&
+      domainName.length > 0
+    ) {
+      const labels = domainName.split(".");
+
+      for (let i = 0; i < labels.length; i++) {
+        if (labels[i].length <= 63) {
+          hasValidLabels = true;
+        } else {
+          hasValidLabels = false;
+          // we don't need to continue if there's one invalid label.
+          return;
+        }
+      }
+    }
+
+    return hasValidLabels;
+  }
+
+  const isDomainNameValid = (domainName) => {
+    // the domain name for hostName and domainSearchPath is optional,
+    // if it is a zero length string mark it as a valid value.
+    if (typeof domainName === "string" && domainName.length === 0) {
+      return true;
+    }
+
+    return domainName &&
+      typeof domainName === "string" &&
+      domainName.length <= 253 &&
+      domainNameHasValidLabels(domainName) &&
+      /^[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,6}$/i.test(domainName);
+  }
+
   const isIpv4NetworkAddressValid = (ipv4Address) => {
     const match = ipv4Address.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
     return match != null &&
@@ -223,10 +277,28 @@ const NetworkAddress = (patchState, localStorageKey) => {
     return nameserverIpAddressValueIsValid;
   }
 
+  const isHostNameValid = () => {
+    if (state.hostName) {
+      return state.hostName.valid;
+    }
+    // return true since hostName is optional
+    return true;
+  }
+
+  const isDomainSearchPathValid = () => {
+    if (state.domainSearchPath) {
+      return state.domainSearchPath.valid;
+    }
+    // return true since domainSearchPath is optional
+    return true;
+  }
+
   const isValid = () => {
     return isIpAddressValid() &&
       isGatewayIpAddressValid() &&
-      isNameserverIpAddressValid();
+      isNameserverIpAddressValid() &&
+      isHostNameValid() &&
+      isDomainSearchPathValid();
   }
 
   const content = (
@@ -317,10 +389,32 @@ const NetworkAddress = (patchState, localStorageKey) => {
       state.nameserverIpAddress.value.length > 0;
   }
 
+  const isHostNameComplete = () => {
+    if (state.hostName) {
+      return typeof state.hostName === "object" &&
+        typeof state.hostName.value === "string" &&
+        state.hostName.value.length > 0;
+    }
+    // return true since hostName is optional
+    return true;
+  }
+
+  const isDomainSearchPathComplete = () => {
+    if (state.domainSearchPath) {
+      return typeof state.domainSearchPath === "object" &&
+        typeof state.domainSearchPath.value === "string" &&
+        state.domainSearchPath.value.length > 0;
+    }
+    // return true since domainSearchPath is optional
+    return true;
+  }
+
   const isComplete = () => {
     return isIpDataComplete() &&
       isGatewayIpAddressComplete() &&
-      isNameserverIpAddressComplete();
+      isNameserverIpAddressComplete() &&
+      isHostNameComplete() &&
+      isDomainSearchPathComplete();
   }
 
   const isCompleteAndValid = (callback) => {
@@ -368,6 +462,8 @@ const NetworkAddress = (patchState, localStorageKey) => {
               },
               gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
               nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+              hostName: state.hostName ? state.hostName.value : "",
+              domainSearchPath: state.domainSearchPath ? state.domainSearchPath.value : "",
               complete: true,
               invalid: false,
               localStorageKey
@@ -391,6 +487,8 @@ const NetworkAddress = (patchState, localStorageKey) => {
               },
               gatewayIpAddress: state.gatewayIpAddress ? state.gatewayIpAddress.value : "",
               nameserverIpAddress: state.nameserverIpAddress ? state.nameserverIpAddress.value : "",
+              hostName: state.hostName ? state.hostName.value : "",
+              domainSearchPath: state.domainSearchPath ? state.domainSearchPath.value : "",
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
               localStorageKey
@@ -679,6 +777,62 @@ const NetworkAddress = (patchState, localStorageKey) => {
             ? isIpv4NetworkAddressValid(localNameserverIpAddressValue)
             : isIpv6NetworkAddressValid(localNameserverIpAddressValue);
           updateNameserverAddress(localNameserverIpAddressValue, localNameserverIpAddressValueIsValid);
+        }}
+      />
+      <TextInput
+        id="network-address_hostname-input"
+        invalid={state && state.hostName ? !state.hostName.valid : false}
+        invalidText="A valid value is required"
+        labelText={getLabel(
+          "Host name (optional)",
+          "Show information",
+          content
+        )}
+        placeholder="ex: linux.domain.com"
+        defaultValue={state.hostName ? state.hostName.value : ""}
+        value={state.hostName ? state.hostName.value : ""}
+        onChange={(localHostName) => {
+          const localHostNameValue = localHostName && localHostName.target && localHostName.target.value
+            ? localHostName.target.value
+            : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateHostName(localHostNameValue, true);
+        }}
+        onBlur={(localHostName) => {
+          const localHostNameValue = localHostName && localHostName.target && localHostName.target.value
+            ? localHostName.target.value
+            : "";
+          const localHostNameValueIsValid = isDomainNameValid(localHostNameValue);
+          updateHostName(localHostNameValue, localHostNameValueIsValid);
+        }}
+      />
+      <TextInput
+        id="network-address_domain-search-path-input"
+        invalid={state && state.domainSearchPath ? !state.domainSearchPath.valid : false}
+        invalidText="A valid value is required"
+        labelText={getLabel(
+          "Domain search (optional)",
+          "Show information",
+          content
+        )}
+        placeholder="ex: domain.com"
+        defaultValue={state.domainSearchPath ? state.domainSearchPath.value : ""}
+        value={state.domainSearchPath ? state.domainSearchPath.value : ""}
+        onChange={(localDomainSearchPath) => {
+          const localDomainSearchPathValue = localDomainSearchPath && localDomainSearchPath.target && localDomainSearchPath.target.value
+            ? localDomainSearchPath.target.value
+            : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateDomainSearchPath(localDomainSearchPathValue, true);
+        }}
+        onBlur={(localDomainSearchPath) => {
+          const localDomainSearchPathValue = localDomainSearchPath && localDomainSearchPath.target && localDomainSearchPath.target.value
+            ? localDomainSearchPath.target.value
+            : "";
+          const localDomainSearchPathValueIsValid = isDomainNameValid(localDomainSearchPathValue);
+          updateDomainSearchPath(localDomainSearchPathValue, localDomainSearchPathValueIsValid);
         }}
       />
     </div>

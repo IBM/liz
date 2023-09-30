@@ -226,9 +226,13 @@ const NetworkDevice = (patchState, localStorageKey) => {
   }
 
   const isValid = () => {
-    return areDeviceSettingsValid() &&
-      state.vlanId &&
-      state.vlanId.valid;
+    if (state.vlanId) {
+      return areDeviceSettingsValid() &&
+        state.vlanId &&
+        state.vlanId.valid;
+    }
+  
+    return areDeviceSettingsValid();
   }
 
   const deviceTypeList = [
@@ -322,9 +326,17 @@ const NetworkDevice = (patchState, localStorageKey) => {
   }
 
   const isVlanIdComplete = () => {
-    return typeof state.vlanId === "object" &&
-      typeof state.vlanId.value === "string" &&
-      state.vlanId.value.length > 0;
+    if (state.vlanId) {
+      // for string values other than those with
+      // zero length explicitely check for the length.
+      return typeof state.vlanId === "object" &&
+        typeof state.vlanId.value === "string" &&
+        state.vlanId.value.length > 0;
+    }
+
+    // vlanId is optional and thus it could have
+    // a zero length.
+    return true;
   }
 
   const areDeviceSettingsComplete = () => {

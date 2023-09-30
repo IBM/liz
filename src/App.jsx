@@ -39,6 +39,150 @@ const PROGRESS_STATE_INVALID = "invalid";
 const PROGRESS_STATE_DISABLED = "disabled";
 
 const DEVICE_TYPE_OSA = "network-device_osa-option";
+const ADDRESS_TYPE_IPV4 = "radio-ipv4";
+
+const getNetdevName = (vlanId = "", interfaceName = "") => {
+  if (
+    vlanId &&
+    typeof vlanId === "string" &&
+    vlanId.length > 0 &&
+    interfaceName &&
+    typeof interfaceName === "string" &&
+    interfaceName.length > 0
+  ) {
+    return getVlanName(interfaceName, vlanId);
+  } else if (
+    interfaceName &&
+    typeof interfaceName === "string" &&
+    interfaceName.length > 0
+  ) {
+    return interfaceName;
+  }
+
+  return ``;
+}
+
+const getVlanName = (interfaceName, vlanId) => {
+  if (interfaceName && vlanId) {
+    return `${interfaceName}.${vlanId}`;
+  }
+  return ``;
+}
+
+const stateToIpv4NetworkAddressParams = (state) => {
+  const installationParameters = state && state.steps && state.steps.networkAddress ? state.steps.networkAddress : {};
+  const networkDeviceInstallationParameters = state && state.steps && state.steps.networkDevice ? state.steps.networkDevice : {};
+
+  if (
+    installationParameters.ipv4 &&
+    installationParameters.ipv4.address &&
+    installationParameters.ipv4.cidr &&
+    installationParameters.ipv4.netmask &&
+    installationParameters.gatewayIpAddress
+  ) {
+    const ipAddress = installationParameters.ipv4.address;
+    const gatewayIpAddress = installationParameters.gatewayIpAddress;
+    const prefixLength = installationParameters.ipv4.cidr;
+    const vlanId = networkDeviceInstallationParameters.vlanId;
+    const hostName = installationParameters.hostName;
+    const interfaceName = getInterfaceNameParamContents(networkDeviceInstallationParameters);
+    const netdevName = getNetdevName(vlanId, interfaceName);
+
+    const ipAddressParamArray = [
+      `ip=${ipAddress}::${gatewayIpAddress}:${prefixLength}`
+    ];
+
+    if (
+      hostName &&
+      typeof hostName === "string" &&
+      hostName.length > 0
+    ) {
+      ipAddressParamArray.push(`:${hostName}`);
+    }
+    if (
+      netdevName &&
+      typeof netdevName === "string" &&
+      netdevName.length > 0
+    ) {
+      ipAddressParamArray.push(`:${netdevName}`);
+    }
+    ipAddressParamArray.push(`:none`);
+    return ipAddressParamArray.join("");
+  }
+
+  return "";
+}
+
+const stateToIpv6NetworkAddressParams = (state) => {
+  const installationParameters = state && state.steps && state.steps.networkAddress ? state.steps.networkAddress : {};
+  const networkDeviceInstallationParameters = state && state.steps && state.steps.networkDevice ? state.steps.networkDevice : {};
+
+  if (
+    installationParameters.ipv6 &&
+    installationParameters.ipv6.address &&
+    installationParameters.ipv6.cidr &&
+    installationParameters.gatewayIpAddress
+  ) {
+    const ipAddress = installationParameters.ipv6.address;
+    const gatewayIpAddress = installationParameters.gatewayIpAddress;
+    const prefixLength = installationParameters.ipv6.cidr;
+    const vlanId = networkDeviceInstallationParameters.vlanId;
+    const hostName = installationParameters.hostName;
+    const interfaceName = getInterfaceNameParamContents(networkDeviceInstallationParameters);
+    const netdevName = getNetdevName(vlanId, interfaceName);
+
+    const ipAddressParamArray = [
+      `ip=${ipAddress}::${gatewayIpAddress}:${prefixLength}`
+    ];
+
+    if (
+      hostName &&
+      typeof hostName === "string" &&
+      hostName.length > 0
+    ) {
+      ipAddressParamArray.push(`:${hostName}`);
+    }
+    if (
+      netdevName &&
+      typeof netdevName === "string" &&
+      netdevName.length > 0
+    ) {
+      ipAddressParamArray.push(`:${netdevName}`);
+    }
+    ipAddressParamArray.push(`:none`);
+    return ipAddressParamArray.join("");
+  }
+
+  return "";
+}
+
+const stateToNetworkAddressParams = (state) => {
+  const installationParameters = state && state.steps && state.steps.networkAddress ? state.steps.networkAddress : {};
+  let paramFileContents = {
+    contents: "",
+    complete: false
+  };
+
+  // => ip=...
+  if (
+    installationParameters &&
+    installationParameters.addressType
+  ) {
+    const ipAddressParemeters = installationParameters && installationParameters.addressType === ADDRESS_TYPE_IPV4
+      ? stateToIpv4NetworkAddressParams(state)
+      : stateToIpv6NetworkAddressParams(state);
+    const nameserver = `nameserver=172.18.0.1`;
+    const installationRepoLine = `${ipAddressParemeters}
+${nameserver}
+`;
+    paramFileContents = {
+      contents: `${installationRepoLine}`,
+      complete: true
+    };
+  }
+
+  return paramFileContents;
+}
 
 const stateToOsaNetworkDeviceParams = (installationParameters) => {
   if (
@@ -62,7 +206,19 @@ const stateToOsaNetworkDeviceParams = (installationParameters) => {
   return ``;
 }
 
-const stateToRoCeNetworkDeviceParams = (installationParameters) => {
+const getInterfaceNameFromFidUid = (installationParameters) => {
+  if (
+    installationParameters &&
+    installationParameters.roce &&
+    installationParameters.roce.fid &&
+    installationParameters.roce.uid
+  ) {
+    const fid = installationParameters.roce.fid;
+    const uid = installationParameters.roce.uid;
+
+    return getInterfaceName("", fid, uid);
+  }
+
   return ``;
 }
 
@@ -80,31 +236,46 @@ const getInterfaceNameFromReadChannel = (installationParameters) => {
   return "";
 }
 
+const getInterfaceNameParamContents = (installationParameters) => {
+  const interfaceName = installationParameters && installationParameters.deviceType === DEVICE_TYPE_OSA
+    ? getInterfaceNameFromReadChannel(installationParameters)
+    : getInterfaceNameFromFidUid(installationParameters);
+
+  return interfaceName;
+}
+
 const stateToNetworkDeviceParams = (state) => {
   const installationParameters = state && state.steps && state.steps.networkDevice ? state.steps.networkDevice : {};
   const networkDeviceSettings = installationParameters && installationParameters.deviceType === DEVICE_TYPE_OSA
     ? stateToOsaNetworkDeviceParams(installationParameters)
-    : stateToRoCeNetworkDeviceParams(installationParameters);
+    : ``;
+  const hasVlanId = installationParameters.vlanId &&
+    installationParameters.vlanId.length > 0;
   let paramFileContents = {
     contents: "",
     complete: false
   };
 
   // => rd.znet...
-  if (
-    installationParameters &&
-    installationParameters.vlanId &&
-    installationParameters.vlanId.length > 0
-  ) {
-    const interfaceName = getInterfaceNameFromReadChannel(installationParameters);
-    const vlanId = `vlan=${interfaceName}.${installationParameters.vlanId}:${interfaceName}`;
-    const installationRepoLine = `${networkDeviceSettings}
+  if (installationParameters) {
+    const interfaceName = getInterfaceNameParamContents(installationParameters);
+
+    if (hasVlanId) {
+      const vlanId = `vlan=${getVlanName(interfaceName, installationParameters.vlanId)}:${interfaceName}`;
+      const installationRepoLine = `${networkDeviceSettings}
 ${vlanId}
 `;
-    paramFileContents = {
-      contents: `${installationRepoLine}`,
-      complete: true
-    };
+          paramFileContents = {
+            contents: `${installationRepoLine}`,
+            complete: true
+          };
+    } else {
+      const installationRepoLine = `${networkDeviceSettings}`;
+          paramFileContents = {
+            contents: `${installationRepoLine}`,
+            complete: true
+          };
+    }
   }
 
   return paramFileContents;
@@ -216,13 +387,12 @@ const stateToMiscParams = (state) => {
 const removeEmptyLines = str => str.split(/\r?\n/).filter(line => line.trim() !== '').join('\n');
 
 const stateToParamFile = (state) => {
-  const stateToParamFile = `ip=172.18.132.1::172.18.0.1:15:t3560001.lnxne.boe:encbdf0:none,
-nameserver=172.18.0.1`;
   const stateToInstallationRepoParamsResult = stateToInstallationRepoParams(state);
   const stateToVncParamsResult = stateToVncParams(state);
   const stateToSshParamsResult = stateToSshParams(state);
   const stateToMiscParamsResult = stateToMiscParams(state);
   const stateToNetworkDeviceParamsResult = stateToNetworkDeviceParams(state);
+  const stateToNetworkAddressParamsResult = stateToNetworkAddressParams(state);
   let hasIncompleteData = true;
 
   if (
@@ -237,7 +407,7 @@ nameserver=172.18.0.1`;
 
   return {
     contents: removeEmptyLines(`${stateToNetworkDeviceParamsResult.contents}
-${stateToParamFile}
+${stateToNetworkAddressParamsResult.contents}
 ${stateToInstallationRepoParamsResult.contents}
 ${stateToVncParamsResult.contents}
 ${stateToSshParamsResult.contents}
@@ -442,6 +612,8 @@ const App = () => {
           },
           gatewayIpAddress: "",
           nameserverIpAddress: "",
+          hostName: "",
+          domainSearchPath: "",
           complete: false,
           disabled: true,
           invalid: false,

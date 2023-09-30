@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-const getInterfaceName = (readChannelId) => {
+const getOsaInterfaceName = (readChannelId) => {
   const channelSegments = readChannelId && typeof readChannelId === "string"
     ? toChannelSegments(readChannelId)
     : [];
@@ -30,6 +30,47 @@ const getInterfaceName = (readChannelId) => {
   }
 
   return "";
+}
+
+const getRoCeInterfaceName = (fid = "", uid = "") => {
+  if (uid && uid.length > 0) {
+    return `eno${parseInt(uid, 16)}`;
+  } else if (fid && fid.length > 0) {
+    return `ens${parseInt(fid, 16)}`;
+  }
+
+  return "";
+}
+
+const getInterfaceName = (readChannelId = "", fid = "", uid = "") => {
+  if (
+    readChannelId &&
+    typeof readChannelId === "string" &&
+    readChannelId.length > 0
+  ) {
+    return getOsaInterfaceName(readChannelId);
+  } else if (
+    uid &&
+    typeof uid === "string" &&
+    uid.length > 0
+  ) {
+    return getRoCeInterfaceName(uid);
+  } else if (
+    fid &&
+    typeof fid === "string" &&
+    fid.length > 0
+  ) {
+    return getRoCeInterfaceName(fid);
+  } else if (
+    fid &&
+    uid &&
+    typeof fid === "string" &&
+    typeof uid === "string" &&
+    fid.length > 0 &&
+    uid.length > 0
+  ) {
+    return getRoCeInterfaceName(fid, uid);
+  }
 }
 
 const toChannelSegments = (value) => {
