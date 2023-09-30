@@ -142,7 +142,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
         <InlineNotification
           hideCloseButton
           statusIconDescription="notification"
-          subtitle="The data provided is incomplete or invalid. The param file generated my be unusable."
+          subtitle="The data provided is incomplete or invalid. The param file generated may be unusable."
           title="Incomplete data."
           kind="info"
           className="download-param-file__incomplete-data-banner"
@@ -152,7 +152,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
         <InlineNotification
           hideCloseButton
           statusIconDescription="notification"
-          subtitle="The data provided is has been modified. The param file generated my be unusable."
+          subtitle="The data provided is has been modified. The param file generated may be unusable."
           title="Modified data."
           kind="warning"
           className="download-param-file__incomplete-data-banner"
