@@ -47,14 +47,6 @@
     .download-param-file_textarea-button-bar__button {
       cursor: pointer;
       padding: layout.$spacing-03;
-
-      &:hover {
-        background: themes.$background-hover;
-      }
-
-      > svg {
-        vertical-align: middle;
-      }
     }
   }
 

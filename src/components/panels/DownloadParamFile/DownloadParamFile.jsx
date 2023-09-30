@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
+  Button,
   Layer,
   InlineNotification,
   TextArea,
@@ -116,22 +117,43 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       <div className="download-param-file_textarea-container">
         <div className="download-param-file_textarea-button-bar">
           <CopyToClipboard text={state.paramFileContent || paramFileContent.contents} onCopy={ updateCopied }>
-            <div className="download-param-file_textarea-button-bar__button" title="Copy to clipboard" onClick="">
-              <Copy size="32" />
+            <div className="download-param-file_textarea-button-bar__button" title="Copy to clipboard">
+              <Button
+                size="32"
+                kind="ghost"
+                renderIcon={Copy}
+                iconDescription="Copy to clipboard"
+                tooltipPosition="left"
+                hasIconOnly
+              />
             </div>
           </CopyToClipboard>
           {state.modified &&
-            <div className="download-param-file_textarea-button-bar__button" title="Reset param file" onClick={() => {
+            <div className="download-param-file_textarea-button-bar__button" onClick={() => {
               const localParamFileContentValue = stateToParamFile(globalState);
   
               updateParamFileContent(localParamFileContentValue.contents);
               updateModified(false);
             }}>
-              <Reset size="32" />
+              <Button
+                size="32"
+                kind="ghost"
+                renderIcon={Reset}
+                iconDescription="Reset param file"
+                tooltipPosition="left"
+                hasIconOnly
+              />
             </div>
           }
-          <div className="download-param-file_textarea-button-bar__button" title="Download param file" onClick={ saveParamFileContent }>
-            <Download size="32" />
+          <div className="download-param-file_textarea-button-bar__button" onClick={ saveParamFileContent }>
+            <Button
+              size="32"
+              kind="ghost"
+              renderIcon={Download}
+              iconDescription="Download param file"
+              tooltipPosition="left"
+              hasIconOnly
+            />
           </div>
         </div>
         <TextArea
