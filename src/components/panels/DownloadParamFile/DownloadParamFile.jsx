@@ -8,8 +8,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Layer,
-  Button,
-  ButtonSet,
   InlineNotification,
   TextArea,
   ToggletipLabel,
@@ -20,7 +18,7 @@ import {
   Row,
   Column
 } from "@carbon/react";
-import { Information } from '@carbon/react/icons';
+import { Copy, Download, Information, Reset } from '@carbon/react/icons';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import "./_download-param-file.scss";
 
@@ -97,46 +95,66 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const getLabel = (label, buttonLabel, content) => {
     return (
         <>
-        <ToggletipLabel>{label}</ToggletipLabel>
-        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
-            <ToggletipButton label={buttonLabel}>
-            <Information/>
-            </ToggletipButton>
-            <ToggletipContent>
-            {content}
-            </ToggletipContent>
-        </Toggletip>
+          <ToggletipLabel>{label}</ToggletipLabel>
+          <Toggletip className="misc-parameters_info-icon" align="right-bottom">
+              <ToggletipButton label={buttonLabel}>
+              <Information/>
+              </ToggletipButton>
+              <ToggletipContent>
+              {content}
+              </ToggletipContent>
+          </Toggletip>
         </>
     );
   }
 
   const textAreaModifiedClass = state.modified ? "download-param-file_textarea__modified": "";
   const textAreaClasses = `download-param-file_textarea ${textAreaModifiedClass}`;
-  const buttonPaddingClass = (paramFileContent.hasIncompleteData || state.modified) ? "download-param-file_buttons__padding" : "";
-  const buttonClasses = `download-param-file_buttons ${buttonPaddingClass}`;
 
   const gridContentsMarkup = (
     <>
-      <TextArea
-        enableCounter
-        id="download-param-file_textarea"
-        labelText={getLabel(
-          "Param text file",
-          "Show information",
-          content
-        )}
-        className={textAreaClasses}
-        rows={10}
-        value={state.paramFileContent ? state.paramFileContent : paramFileContent.contents}
-        onChange={(localParamFileContent) => {
-          const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
-            ? localParamFileContent.target.value
-            : "";
-          updateParamFileContent(localParamFileContentValue);
-          updateModified(true);
-        }}
-      >
-      </TextArea>
+      <div className="download-param-file_textarea-container">
+        <div className="download-param-file_textarea-button-bar">
+          <CopyToClipboard text={state.paramFileContent || paramFileContent.contents} onCopy={ updateCopied }>
+            <div className="download-param-file_textarea-button-bar__button" title="Copy to clipboard" onClick="">
+              <Copy size="32" />
+            </div>
+          </CopyToClipboard>
+          {state.modified &&
+            <div className="download-param-file_textarea-button-bar__button" title="Reset param file" onClick={() => {
+              const localParamFileContentValue = stateToParamFile(globalState);
+  
+              updateParamFileContent(localParamFileContentValue.contents);
+              updateModified(false);
+            }}>
+              <Reset size="32" />
+            </div>
+          }
+          <div className="download-param-file_textarea-button-bar__button" title="Download param file" onClick={ saveParamFileContent }>
+            <Download size="32" />
+          </div>
+        </div>
+        <TextArea
+          enableCounter
+          id="download-param-file_textarea"
+          labelText={getLabel(
+            "Param text file",
+            "Show information",
+            content
+          )}
+          className={textAreaClasses}
+          rows={10}
+          value={state.paramFileContent ? state.paramFileContent : paramFileContent.contents}
+          onChange={(localParamFileContent) => {
+            const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
+              ? localParamFileContent.target.value
+              : "";
+            updateParamFileContent(localParamFileContentValue);
+            updateModified(true);
+          }}
+        >
+        </TextArea>
+      </div>
       {paramFileContent.hasIncompleteData &&
         <InlineNotification
           hideCloseButton
@@ -158,26 +176,6 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       />
       }
       {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
-      <ButtonSet className={buttonClasses}>
-        <CopyToClipboard text={state.paramFileContent || paramFileContent.contents} onCopy={ updateCopied }>
-          <Button kind="secondary" size="xl" className="download-param-file_button">
-            Copy to clipboard
-          </Button>
-        </CopyToClipboard>
-        {state.modified &&
-          <Button kind="secondary" size="xl" className="download-param-file_button" onClick={() => {
-            const localParamFileContentValue = stateToParamFile(globalState);
-
-            updateParamFileContent(localParamFileContentValue.contents);
-            updateModified(false);
-          }}>
-              Reset param file
-          </Button>
-        }
-        <Button kind="primary" size="xl" className="download-param-file_button" onClick={ saveParamFileContent }>
-          Download param file
-        </Button>
-      </ButtonSet>
     </>
   );
   const markup = (
