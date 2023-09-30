@@ -111,8 +111,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   }
 
   const textAreaModifiedClass = state.modified ? "download-param-file_textarea__modified": "";
-  const textAreaPaddingClass = (paramFileContent.hasIncompleteData || state.modified) ? "download-param-file_textarea__padding" : "";
-  const textAreaClasses = `download-param-file_textarea ${textAreaPaddingClass} ${textAreaModifiedClass}`;
+  const textAreaClasses = `download-param-file_textarea ${textAreaModifiedClass}`;
   const buttonPaddingClass = (paramFileContent.hasIncompleteData || state.modified) ? "download-param-file_buttons__padding" : "";
   const buttonClasses = `download-param-file_buttons ${buttonPaddingClass}`;
 
@@ -152,7 +151,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
         <InlineNotification
           hideCloseButton
           statusIconDescription="notification"
-          subtitle="The data provided is has been modified. The param file generated may be unusable."
+          subtitle="The data provided has been modified. The param file generated may be unusable."
           title="Modified data."
           kind="warning"
           className="download-param-file__incomplete-data-banner"
@@ -165,6 +164,16 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             Copy to clipboard
           </Button>
         </CopyToClipboard>
+        {state.modified &&
+          <Button kind="secondary" size="xl" className="download-param-file_button" onClick={() => {
+            const localParamFileContentValue = stateToParamFile(globalState);
+
+            updateParamFileContent(localParamFileContentValue.contents);
+            updateModified(false);
+          }}>
+              Reset param file
+          </Button>
+        }
         <Button kind="primary" size="xl" className="download-param-file_button" onClick={ saveParamFileContent }>
           Download param file
         </Button>
