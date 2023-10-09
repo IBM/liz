@@ -357,8 +357,6 @@ const stateToParamFile = (state) => {
 
   if (
     stateToInstallationRepoParamsResult.complete &&
-    stateToVncParamsResult.complete &&
-    stateToSshParamsResult.complete &&
     stateToMiscParamsResult.complete &&
     stateToNetworkDeviceParamsResult.complete
   ) {
