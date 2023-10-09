@@ -392,8 +392,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
   const isHostNameComplete = () => {
     if (state.hostName) {
       return typeof state.hostName === "object" &&
-        typeof state.hostName.value === "string" &&
-        state.hostName.value.length > 0;
+        typeof state.hostName.value === "string"
     }
     // return true since hostName is optional
     return true;
@@ -402,8 +401,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
   const isDomainSearchPathComplete = () => {
     if (state.domainSearchPath) {
       return typeof state.domainSearchPath === "object" &&
-        typeof state.domainSearchPath.value === "string" &&
-        state.domainSearchPath.value.length > 0;
+        typeof state.domainSearchPath.value === "string"
     }
     // return true since domainSearchPath is optional
     return true;
