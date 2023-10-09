@@ -88,26 +88,7 @@ const stateToIpv4NetworkAddressParams = (state) => {
     const interfaceName = getInterfaceNameParamContents(networkDeviceInstallationParameters);
     const netdevName = getNetdevName(vlanId, interfaceName);
 
-    const ipAddressParamArray = [
-      `ip=${ipAddress}::${gatewayIpAddress}:${prefixLength}`
-    ];
-
-    if (
-      hostName &&
-      typeof hostName === "string" &&
-      hostName.length > 0
-    ) {
-      ipAddressParamArray.push(`:${hostName}`);
-    }
-    if (
-      netdevName &&
-      typeof netdevName === "string" &&
-      netdevName.length > 0
-    ) {
-      ipAddressParamArray.push(`:${netdevName}`);
-    }
-    ipAddressParamArray.push(`:none`);
-    return ipAddressParamArray.join("");
+    return `ip=${ipAddress}::${gatewayIpAddress}:${prefixLength}:${hostName}:${netdevName}:none`;
   }
 
   return "";
@@ -127,30 +108,11 @@ const stateToIpv6NetworkAddressParams = (state) => {
     const gatewayIpAddress = installationParameters.gatewayIpAddress;
     const prefixLength = installationParameters.ipv6.cidr;
     const vlanId = networkDeviceInstallationParameters.vlanId;
-    const hostName = installationParameters.hostName;
+    const hostName = installationParameters.hostName || "";
     const interfaceName = getInterfaceNameParamContents(networkDeviceInstallationParameters);
     const netdevName = getNetdevName(vlanId, interfaceName);
 
-    const ipAddressParamArray = [
-      `ip=${ipAddress}::${gatewayIpAddress}:${prefixLength}`
-    ];
-
-    if (
-      hostName &&
-      typeof hostName === "string" &&
-      hostName.length > 0
-    ) {
-      ipAddressParamArray.push(`:${hostName}`);
-    }
-    if (
-      netdevName &&
-      typeof netdevName === "string" &&
-      netdevName.length > 0
-    ) {
-      ipAddressParamArray.push(`:${netdevName}`);
-    }
-    ipAddressParamArray.push(`:none`);
-    return ipAddressParamArray.join("");
+    return `ip=${ipAddress}::${gatewayIpAddress}:${prefixLength}:${hostName}:${netdevName}:none`;
   }
 
   return "";
