@@ -330,8 +330,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
       // for string values other than those with
       // zero length explicitely check for the length.
       return typeof state.vlanId === "object" &&
-        typeof state.vlanId.value === "string" &&
-        state.vlanId.value.length > 0;
+        typeof state.vlanId.value === "string"
     }
 
     // vlanId is optional and thus it could have
