@@ -217,8 +217,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
   }
 
   const areDeviceSettingsValid = () => {
-    if (typeof state.selectedDeviceType === "object" && state.selectedDevicereact.id) {
-      return state.selectedDevicereact.id === DEVICE_TYPE_OSA
+    if (typeof state.selectedDeviceType === "object" && state.selectedDeviceType.id) {
+      return state.selectedDeviceType.id === DEVICE_TYPE_OSA
       ? areOsaDeviceSettingValid()
       : areRoCeDeviceSettingsValid();
     }
@@ -339,8 +339,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
   }
 
   const areDeviceSettingsComplete = () => {
-    if (typeof state.selectedDeviceType === "object" && state.selectedDevicereact.id) {
-      return state.selectedDevicereact.id === DEVICE_TYPE_OSA
+    if (typeof state.selectedDeviceType === "object" && state.selectedDeviceType.id) {
+      return state.selectedDeviceType.id === DEVICE_TYPE_OSA
       ? areOsaDeviceSettingComplete()
       : areRoCeDeviceSettingComplete();
     }
@@ -383,7 +383,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         patchState({
           steps: {
             networkDevice: {
-              deviceType: state.selectedDeviceType ? state.selectedDevicereact.id : "",
+              deviceType: state.selectedDeviceType ? state.selectedDeviceType.id : "",
               osa: {
                 readChannel: state.readChannelId ? state.readChannelId.value : "",
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
@@ -406,7 +406,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         patchState({
           steps: {
             networkDevice: {
-              deviceType: state.selectedDeviceType ? state.selectedDevicereact.id : "",
+              deviceType: state.selectedDeviceType ? state.selectedDeviceType.id : "",
               osa: {
                 readChannel: state.readChannelId ? state.readChannelId.value : "",
                 writeChannel: state.writeChannelId ? state.writeChannelId.value : "",
@@ -469,7 +469,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
   const gridContentsMarkupRowTwoColumnOne = (
     <div className="network-device_column-left">
       <DeviceSettings
-        deviceSettingsId={state.selectedDeviceType ? state.selectedDevicereact.id : ""}
+        deviceSettingsId={state.selectedDeviceType ? state.selectedDeviceType.id : ""}
         updateFunction={updateFunction}
         patchState={patchState}
         state={state}
@@ -505,7 +505,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
 
   const gridContentsMarkupRowTwoColumnTwo = (
     <div className="network-device_column-right">
-      {state.selectedDeviceType && state.selectedDevicereact.id === "network-device_osa-option"
+      {state.selectedDeviceType && state.selectedDeviceType.id === "network-device_osa-option"
         ?
         (
           <>
