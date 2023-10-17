@@ -7,11 +7,7 @@
  @use "@carbon/react" with (
     $font-path: "@ibm/plex"  
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .help-panel__hint__content {
-    @include type.type-style("body-compact-01");
+    @include react.type-style("body-compact-01");
 }

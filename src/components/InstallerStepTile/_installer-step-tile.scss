@@ -7,16 +7,11 @@
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/styles";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .installer-step-tile__outline {
-  border: layout.$spacing-01 solid themes.$background-brand;
-  margin: layout.$spacing-05 layout.$spacing-05 layout.$spacing-05 0 !important;
-  padding: layout.$spacing-05;
+  border: react.$spacing-01 solid react.$background-brand;
+  margin: react.$spacing-05 react.$spacing-05 react.$spacing-05 0 !important;
+  padding: react.$spacing-05;
 }
 
 .installer-step-tile__footer {

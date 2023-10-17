@@ -5,23 +5,18 @@
  */
 
  @use "@carbon/react" with (
-    $font-path: "@ibm/plex",
-    $use-flexbox-grid: true
+    $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .help-content__panel-component-header {
-    padding: 0 layout.$spacing-05 0 layout.$spacing-05;
+    padding: 0 react.$spacing-05 0 react.$spacing-05;
 
     .help-content__panel-component-header__title {
-        @include type.type-style("heading-01");
-        @include type.font-weight("semibold");
+        @include react.type-style("heading-01");
+        @include react.font-weight("semibold");
       
         float: left;
-        padding: layout.$spacing-03 0 layout.$spacing-07 0;
+        padding: react.$spacing-03 0 react.$spacing-07 0;
     }
       
     span:first-of-type {
@@ -32,7 +27,7 @@
 
 .help-content__grid {
     &.cds--grid {
-        padding: 0 layout.$spacing-05 0 layout.$spacing-05;
+        padding: 0 react.$spacing-05 0 react.$spacing-05;
     }
 
     .help-content__grid__row {
@@ -45,8 +40,8 @@
 }
 
 .help-content__dummy-content {
-    @include type.type-style("body-compact-01");
+    @include react.type-style("body-compact-01");
 
-    padding: layout.$spacing-07 0 0 0;
+    padding: react.$spacing-07 0 0 0;
 }
 

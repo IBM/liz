@@ -5,13 +5,8 @@
  */
  
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex",
-  $use-flexbox-grid: true
+  $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .installation-parameters__grid {
   &.cds--grid {
@@ -20,19 +15,19 @@
 }
 
 .installation-parameters_installation-address-input {
-  padding: 0 0 layout.$spacing-07 0;
+  padding: 0 0 react.$spacing-07 0;
 }
 
 .installation-parameters_column-left {
   .cds--form-item,
   .cds--toggle {
-    padding: 0 0 layout.$spacing-07 0;
+    padding: 0 0 react.$spacing-07 0;
   }
 }
 
 .installation-parameters_column-right {
   .cds--form-item,
   .cds--toggle {
-    padding: 0 0 layout.$spacing-07 0;
+    padding: 0 0 react.$spacing-07 0;
   }
 }

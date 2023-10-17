@@ -7,11 +7,6 @@
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/styles";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 @import "./overrides";
 
@@ -20,18 +15,18 @@
 }
 
 .landing-page__heading {
-  @include type.type-style("heading-05");
+  @include react.type-style("heading-05");
 
-  margin: layout.$spacing-05 0 layout.$spacing-05 0;
+  margin: react.$spacing-05 0 react.$spacing-05 0;
 }
 
 .landing-page__subheading {
-  @include type.type-style("heading-03");
-  @include type.font-weight("semibold");
+  @include react.type-style("heading-03");
+  @include react.font-weight("semibold");
 }
 
 .landing-page__label {
-  @include type.type-style("heading-01");
+  @include react.type-style("heading-01");
 }
 
 .landing-page__full-height {
@@ -39,21 +34,21 @@
 }
 
 .landing-page__installer-steps {
-  background: themes.$background;
-  border-right: themes.$layer-01 1px solid;
+  background: react.$background;
+  border-right: react.$layer-01 1px solid;
 }
 
 .landing-page__grid {
   height: 100%;
-  background: themes.$layer-01;
-  padding: layout.$spacing-06 0 0 layout.$spacing-05;
+  background: react.$layer-01;
+  padding: react.$spacing-06 0 0 react.$spacing-05;
   margin-left: 0;
   max-width: 100% !important;
   width: 100%;
 }
 
 .landing-page__grey-column-background {
-  background: themes.$layer-01;
+  background: react.$layer-01;
   margin-right: 0;
 }
 

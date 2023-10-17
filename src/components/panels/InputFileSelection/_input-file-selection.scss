@@ -5,50 +5,45 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex",
-  $use-flexbox-grid: true
+  $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .input-file-selection__heading {
-  @include type.type-style("heading-05");
+  @include react.type-style("heading-05");
 
-  margin: layout.$spacing-05 0 layout.$spacing-05 0;
+  margin: react.$spacing-05 0 react.$spacing-05 0;
 }
 
 .input-file-selection__subheading {
-  @include type.type-style("heading-01");
-  @include type.font-weight("semibold");
+  @include react.type-style("heading-01");
+  @include react.font-weight("semibold");
 
-  padding: 0 0 layout.$spacing-07 0;
+  padding: 0 0 react.$spacing-07 0;
 }
 
 .input-file-selection__label {
-  @include type.type-style("heading-01");
+  @include react.type-style("heading-01");
 }
 
 .input-file-selection__contentHeader {
-  background: themes.$background;
-  padding: layout.$spacing-05 0 layout.$spacing-05 0;
+  background: react.$background;
+  padding: react.$spacing-05 0 react.$spacing-05 0;
 }
 
 .input-file-selection__contentRow {
-  padding-bottom: layout.$spacing-05;
-  background: themes.$background;
+  padding-bottom: react.$spacing-05;
+  background: react.$background;
 }
 
 .input-file-selection__contentRowIntro {
-  @include type.type-style("body-compact-01");
+  @include react.type-style("body-compact-01");
 
-  padding: 0 0 layout.$spacing-05 0;
+  padding: 0 0 react.$spacing-05 0;
 }
 
 .input-file-selection__contentRowDropdowns {
   .bx--dropdown__wrapper {
-    padding: 0 0 layout.$spacing-05 0;
+    padding: 0 0 react.$spacing-05 0;
   }
 }
 
@@ -59,6 +54,6 @@
 
   .cds--dropdown__wrapper,
   .cds--form-item {
-    padding: 0 0 layout.$spacing-07 0;
+    padding: 0 0 react.$spacing-07 0;
   }
 }

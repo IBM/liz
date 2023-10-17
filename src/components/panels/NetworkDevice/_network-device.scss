@@ -5,13 +5,8 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex",
-  $use-flexbox-grid: true
+  $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .network-device__grid {
   &.cds--grid {
@@ -22,7 +17,7 @@
 .network-device_column-left {
   .cds--dropdown__wrapper,
   .cds--form-item {
-    padding: 0 0 layout.$spacing-07 0;
+    padding: 0 0 react.$spacing-07 0;
   }
 
   .network-device_device-type-dropdown {
@@ -31,14 +26,14 @@
 
   .device-settings_grid-column-left {
     .cds--toggle {
-      padding: 0 0 layout.$spacing-07 0;
+      padding: 0 0 react.$spacing-07 0;
     }
   }
 }
 
 .network-device_column-right {
   .cds--form-item {
-    padding: 0 0 layout.$spacing-07 0;
+    padding: 0 0 react.$spacing-07 0;
   }
 }
 

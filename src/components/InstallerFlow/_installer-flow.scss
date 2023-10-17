@@ -7,14 +7,9 @@
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/styles";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .installer-flow__heading {
-  @include type.type-style("heading-05");
+  @include react.type-style("heading-05");
 
-  margin: layout.$spacing-05 0 layout.$spacing-05 0;
+  margin: react.$spacing-05 0 react.$spacing-05 0;
 }

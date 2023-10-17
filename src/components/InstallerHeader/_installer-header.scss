@@ -7,28 +7,24 @@
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .installer-header__panel-component {
-  background: themes.$background;
+  background: react.$background;
 
   &.cds--header-panel--expanded {
-    width: calc(3 * layout.$spacing-13);
+    width: calc(3 * react.$spacing-13);
   }
 }
 
 .installer-header__sidenav-component {
-  padding: 0 layout.$spacing-05 0 layout.$spacing-05;
+  padding: 0 react.$spacing-05 0 react.$spacing-05;
 
   &.cds--side-nav--expanded {
-    width: calc(layout.$spacing-10 * 5);
+    width: calc(react.$spacing-10 * 5);
   }
 
   &.cds--side-nav {
-    max-width: calc(layout.$spacing-10 * 5);
+    max-width: calc(react.$spacing-10 * 5);
   }
 
   ul {
@@ -37,6 +33,6 @@
 }
 
 .installer-header__panel-component-header {
-  padding: 0 layout.$spacing-05 0 layout.$spacing-05;
+  padding: 0 react.$spacing-05 0 react.$spacing-05;
 }
 

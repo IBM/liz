@@ -5,13 +5,8 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex",
-  $use-flexbox-grid: true
+  $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .network-address__grid {
   &.cds--grid {
@@ -25,7 +20,7 @@
 
 .network-address_column-left {
   .cds--form-item {
-    padding: 0 0 layout.$spacing-07 0;
+    padding: 0 0 react.$spacing-07 0;
   }
 
   .network-address_ip-version-group {
@@ -35,7 +30,7 @@
 
 .network-address_column-right {
   .cds--form-item {
-    padding: 0 0 layout.$spacing-07 0;
+    padding: 0 0 react.$spacing-07 0;
   }
 }
 

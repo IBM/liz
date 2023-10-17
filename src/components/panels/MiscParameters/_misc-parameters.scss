@@ -5,13 +5,8 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex",
-  $use-flexbox-grid: true
+  $font-path: "@ibm/plex"
 );
-@use "@carbon/type";
-@use "@carbon/layout";
-@use "@carbon/colors";
-@use "@carbon/themes";
 
 .misc-parameters_grid {
   &.cds--grid {
@@ -24,7 +19,7 @@
 }
 
 .misc-parameters_textarea textarea {
-  @include type.type-style("code-02");  
+  @include react.type-style("code-02");  
 }
 
 
