@@ -10,6 +10,7 @@ import {
   Button,
   Layer,
   InlineNotification,
+  Tag,
   TextArea,
   ToggletipLabel,
   Toggletip,
@@ -26,9 +27,9 @@ import "./_download-param-file.scss";
 const DownloadParamFile = (patchState, stateToParamFile, globalState, localStorageKey) => {
   const paramFileContent = stateToParamFile(globalState);
   const getInitialState = () => {
-    const localParamFileContent = paramFileContent && paramFileContent.contents && typeof paramFileContent === "string"
-      ? paramFileContent.contents
-      : stateToParamFile(globalState).contents;
+    const localParamFileContent = paramFileContent && paramFileContent.data && typeof paramFileContent.data === "string"
+      ? paramFileContent.data
+      : stateToParamFile(globalState).data;
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
       copied: false,
@@ -65,7 +66,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   }
 
   const saveParamFileContent = () => {
-    const textFileAsBlob = new Blob([ paramFileContent.contents ], { type: "text/plain" });
+    const textFileAsBlob = new Blob([ paramFileContent.data ], { type: "text/plain" });
     const fileNameToSaveAs = "parmfile.txt";
 
     const downloadLink = document.createElement("a");
@@ -109,6 +110,62 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     );
   }
 
+  const getIncompleteOrInvalidMarkup = () => {
+    const notificationMarkup = (
+      <InlineNotification
+        hideCloseButton
+        statusIconDescription="notification"
+        subtitle="The data provided is incomplete or invalid. The param file generated may be unusable."
+        title="Incomplete data."
+        kind="info"
+        className="download-param-file__incomplete-data-banner"
+      />
+    );
+
+    const incompleteListMarkup = [];
+    const invalidListMarkup = [];
+    const steps = paramFileContent.metadata.steps;
+
+    if (paramFileContent.metadata.hasIncompleteData) {
+      for (const property in steps) {
+        if (steps[property].complete === false) {
+          incompleteListMarkup.push(
+            <Tag className="download-param-file_incomplete-data-tag" type="gray" title={property}>
+              {property}
+            </Tag>
+          );
+        }       
+      }
+    }
+    if (paramFileContent.metadata.hasInvalidData) {
+      for (const property in steps) {
+        if (steps[property].invalid === true) {
+          invalidListMarkup.push(
+            <Tag className="download-param-file_invalid-data-tag" type="gray" title={property}>
+              {property}
+            </Tag>
+          );
+        }
+      }
+    }
+
+    return (
+      <>
+        {notificationMarkup}
+        <div className="download-param-file_data-tag-container">
+          {incompleteListMarkup.length > 0 &&
+            <div className="download-param-file_data-tag_heading">Steps with incomplete data</div>
+          }
+          {incompleteListMarkup.length > 0 && incompleteListMarkup}
+          {invalidListMarkup.length > 0 &&
+            <div className="download-param-file_data-tag_heading">Steps with invalid data</div>
+          }
+          {invalidListMarkup.length > 0 && invalidListMarkup}
+        </div>
+      </>
+    );
+  }
+
   const textAreaModifiedClass = state.modified ? "download-param-file_textarea__modified": "";
   const textAreaClasses = `download-param-file_textarea ${textAreaModifiedClass}`;
 
@@ -132,7 +189,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             <div className="download-param-file_textarea-button-bar__button" onClick={() => {
               const localParamFileContentValue = stateToParamFile(globalState);
   
-              updateParamFileContent(localParamFileContentValue.contents);
+              updateParamFileContent(localParamFileContentValue.data);
               updateModified(false);
             }}>
               <Button
@@ -166,7 +223,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
           )}
           className={textAreaClasses}
           rows={10}
-          value={state.paramFileContent ? state.paramFileContent : paramFileContent.contents}
+          value={state.paramFileContent ? state.paramFileContent : paramFileContent.data}
           onChange={(localParamFileContent) => {
             const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
               ? localParamFileContent.target.value
@@ -177,15 +234,8 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
         >
         </TextArea>
       </div>
-      {paramFileContent.hasIncompleteData &&
-        <InlineNotification
-          hideCloseButton
-          statusIconDescription="notification"
-          subtitle="The data provided is incomplete or invalid. The param file generated may be unusable."
-          title="Incomplete data."
-          kind="info"
-          className="download-param-file__incomplete-data-banner"
-        />
+      {(paramFileContent.metadata.hasIncompleteData || paramFileContent.metadata.hasInvalidData) &&
+        getIncompleteOrInvalidMarkup()
       }
       {state.modified &&
         <InlineNotification
@@ -259,9 +309,11 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
         patchState({
           steps: {
             downloadParamFile: {
-              complete: false,
+              contents: state?.paramFileContent ?? "",
               disabled: false,
-              invalid: true
+              complete: isCompleteAndValid.isComplete,
+              invalid: !isCompleteAndValid.isValid,
+              localStorageKey
             }
           }
         });

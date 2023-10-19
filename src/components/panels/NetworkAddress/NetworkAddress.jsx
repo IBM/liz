@@ -338,7 +338,10 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const isIpv4CidrComplete = () => {
     return typeof state.ipv4Cidr === "object" &&
-      typeof state.ipv4Cidr.value === "number" &&
+      (
+        typeof state.ipv4Cidr.value === "number" ||
+        typeof state.ipv4Cidr.value === "string"
+      ) &&
       state.ipv4Cidr.value > 0;
   }
 
@@ -363,7 +366,10 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const isIpv6CidrComplete = () => {
     return typeof state.ipv6Cidr === "object" &&
-      typeof state.ipv6Cidr.value === "number" &&
+      (
+        typeof state.ipv6Cidr.value === "number" ||
+        typeof state.ipv6Cidr.value === "string"
+      ) &&
       state.ipv6Cidr.value > 0;
   }
 
@@ -497,9 +503,24 @@ const NetworkAddress = (patchState, localStorageKey) => {
         patchState({
           steps: {
             networkAddress: {
-              complete: false,
-              disabled: false,
-              invalid: true
+              addressType: state.addressType,
+              ipv4: {
+                cidr: state?.ipv4Cidr?.value ?? "",
+                binary: state?.binary ?? "",
+                netmask: state?.netmask?.value ?? "",
+                address: state?.ipv4Address?.value ?? ""
+              },
+              ipv6: {
+                cidr: state?.ipv6Cidr?.value ?? "",
+                address: state?.ipv6Address?.value ?? ""
+              },
+              gatewayIpAddress: state?.gatewayIpAddress?.value ?? "",
+              nameserverIpAddress: state?.nameserverIpAddress?.value ?? "",
+              hostName: state?.hostName?.value ?? "",
+              domainSearchPath: state?.domainSearchPath?.value ?? "",
+              complete: isCompleteAndValid.isComplete,
+              invalid: !isCompleteAndValid.isValid,
+              localStorageKey
             }
           }
         });

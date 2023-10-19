@@ -429,9 +429,22 @@ const NetworkDevice = (patchState, localStorageKey) => {
         patchState({
           steps: {
             networkDevice: {
-              complete: false,
+              deviceType: state?.selectedDeviceType?.id ?? "",
+              osa: {
+                readChannel: state?.readChannelId?.value ?? "",
+                writeChannel: state?.writeChannelId?.value ?? "",
+                dataChannel: state?.dataChannelId?.value ?? "",
+                layer: typeof state.layer === "boolean" ? +state.layer : 1,
+                portNumber: typeof state.portNo === "boolean" ? +state.portNo : 0,
+              },
+              roce: {
+                fid: state?.pciFunctionId?.value ?? "",
+                uid: state?.userIdentifier?.value ?? ""
+              },
+              vlanId: state?.vlanId?.value ?? "",
               disabled: false,
-              invalid: true,
+              complete: isCompleteAndValid.isComplete,
+              invalid: !isCompleteAndValid.isValid,
               localStorageKey
             }
           }

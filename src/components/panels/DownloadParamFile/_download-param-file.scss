@@ -15,6 +15,18 @@
   }
 }
 
+.download-param-file_data-tag-container {
+  padding: react.$spacing-06 0 0 0;
+
+  .download-param-file_data-tag_heading {
+    @include react.type-style("heading-01");
+    @include react.font-weight("semibold");
+
+    padding: react.$spacing-03 0 react.$spacing-03 0;
+  }
+
+}
+
 .download-param-file_textarea-container {
   position: relative;
   width: 100%;

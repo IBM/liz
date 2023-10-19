@@ -163,9 +163,19 @@ const InstallationParameters = (patchState, localStorageKey) => {
         patchState({
           steps: {
             installationParameters: {
-              complete: false,
+              networkInstallationUrl: state?.installationAddress?.value ?? "",
+              vnc: {
+                password: state?.vncPassword ?? "",
+                enabled: state?.useVnc ?? ""
+              },
+              ssh: {
+                host: state?.sshHost ?? "",
+                enabled: state?.useSsh ?? ""
+              },
+              localStorageKey,
               disabled: false,
-              invalid: true
+              complete: isCompleteAndValid.isComplete,
+              invalid: !isCompleteAndValid.isValid
             }
           }
         });
