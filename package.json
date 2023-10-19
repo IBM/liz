@@ -11,7 +11,7 @@
   "main": "index.js",
   "engines": {
     "node": "18.18.0",
-    "npm": "10.2.0"
+    "npm": "10.2.1"
   },
   "scripts": {
     "dev": "vite",
