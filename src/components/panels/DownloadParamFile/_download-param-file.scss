@@ -24,43 +24,11 @@
 
     padding: react.$spacing-03 0 react.$spacing-03 0;
   }
-
 }
 
 .download-param-file_textarea-container {
   position: relative;
   width: 100%;
-
-  .download-param-file_textarea {
-    > div > textarea {
-      @include react.type-style("code-02");
-    }
-  
-    &.download-param-file_textarea__padding {
-      padding: 0 0 react.$spacing-09 0;
-    }
-  
-    &.download-param-file_textarea__modified > div > textarea {
-      border: react.$spacing-01 solid react.$red-60;
-    }
-  }
-
-  .download-param-file_textarea-button-bar {
-    position: absolute;
-    top: react.$spacing-07;
-    right: react.$spacing-03; 
-    z-index: 10000;
-    display: none;
-
-    .download-param-file_textarea-button-bar__button {
-      cursor: pointer;
-      padding: react.$spacing-03;
-    }
-  }
-
-  &:hover .download-param-file_textarea-button-bar {
-    display: block;
-  }
 }
 
 .download-param-file_copied-label {

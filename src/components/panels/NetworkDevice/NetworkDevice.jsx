@@ -154,7 +154,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
       : Number.isInteger(vlanId);
     if (isInteger) {
       const decimal = Math.trunc(vlanId);
-      return decimal <= 4094;
+      return decimal > 0 && decimal <= 4094;
     }
     // VLAN ID is optional, if it is a zero length string
     // mark it as a valid value.

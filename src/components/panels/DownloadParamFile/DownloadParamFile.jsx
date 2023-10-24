@@ -7,21 +7,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
-  Button,
   Layer,
   InlineNotification,
   Tag,
-  TextArea,
-  ToggletipLabel,
-  Toggletip,
-  ToggletipButton,
-  ToggletipContent,
   FlexGrid,
   Row,
   Column
 } from "@carbon/react";
-import { Copy, Download, Information, Reset } from '@carbon/react/icons';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { ParamFileTextArea } from "../../ParamFileTextArea";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = (patchState, stateToParamFile, globalState, localStorageKey) => {
@@ -32,8 +25,8 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       : stateToParamFile(globalState).data;
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
-      copied: false,
-      modified: false,
+      paramFileContentCopied: false,
+      paramFileContentModified: false,
       paramFileContent: localParamFileContent
     };
 
@@ -45,15 +38,15 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const [state, setState] = useState(getInitialState);
 
   const updateCopied = () => {
-    setState((prevState) => ({...prevState, copied: true}));
+    setState((prevState) => ({...prevState, paramFileContentCopied: true}));
     const timer = setTimeout(() => {
-      setState((prevState) => ({...prevState, copied: false}));
+      setState((prevState) => ({...prevState, paramFileContentCopied: false}));
     }, 2000);
     return () => clearTimeout(timer);
   }
 
-  const updateModified = (modified) => {
-    setState((prevState) => ({...prevState, modified}));
+  const updateModified = (paramFileContentModified) => {
+    setState((prevState) => ({...prevState, paramFileContentModified}));
   }
 
   const updateParamFileContent = (paramFileContent) => {
@@ -94,22 +87,6 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     </p>
   );
 
-  const getLabel = (label, buttonLabel, content) => {
-    return (
-        <>
-          <ToggletipLabel>{label}</ToggletipLabel>
-          <Toggletip className="misc-parameters_info-icon" align="right-bottom">
-              <ToggletipButton label={buttonLabel}>
-              <Information/>
-              </ToggletipButton>
-              <ToggletipContent>
-              {content}
-              </ToggletipContent>
-          </Toggletip>
-        </>
-    );
-  }
-
   const getIncompleteOrInvalidMarkup = () => {
     const incompleteListMarkup = [];
     const invalidListMarkup = [];
@@ -130,7 +107,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       for (const property in steps) {
         if (steps[property].invalid === true) {
           invalidListMarkup.push(
-            <Tag className="download-param-file_invalid-data-tag" type="gray" title={property}>
+            <Tag className="download-param-file_invalid-data-tag" type="gray" title={property} id={`tag__${property}`}>
               {property}
             </Tag>
           );
@@ -152,9 +129,6 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     );
   }
 
-  const textAreaModifiedClass = state.modified ? "download-param-file_textarea__modified": "";
-  const textAreaClasses = `download-param-file_textarea ${textAreaModifiedClass}`;
-
   const notificationMarkup = (
     <InlineNotification
       hideCloseButton
@@ -168,58 +142,17 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const gridContentsMarkup = (
     <>
       <div className="download-param-file_textarea-container">
-        <div className="download-param-file_textarea-button-bar">
-          <CopyToClipboard text={state.paramFileContent || paramFileContent.contents} onCopy={ updateCopied }>
-            <div className="download-param-file_textarea-button-bar__button" title="Copy to clipboard">
-              <Button
-                size="32"
-                kind="ghost"
-                renderIcon={Copy}
-                iconDescription="Copy to clipboard"
-                tooltipPosition="left"
-                hasIconOnly
-              />
-            </div>
-          </CopyToClipboard>
-          {state.modified &&
-            <div className="download-param-file_textarea-button-bar__button" onClick={() => {
-              const localParamFileContentValue = stateToParamFile(globalState);
-  
-              updateParamFileContent(localParamFileContentValue.data);
-              updateModified(false);
-            }}>
-              <Button
-                size="32"
-                kind="ghost"
-                renderIcon={Reset}
-                iconDescription="Reset param file"
-                tooltipPosition="left"
-                hasIconOnly
-              />
-            </div>
-          }
-          <div className="download-param-file_textarea-button-bar__button" onClick={ saveParamFileContent }>
-            <Button
-              size="32"
-              kind="ghost"
-              renderIcon={Download}
-              iconDescription="Download param file"
-              tooltipPosition="left"
-              hasIconOnly
-            />
-          </div>
-        </div>
-        <TextArea
-          enableCounter
+        <ParamFileTextArea
           id="download-param-file_textarea"
-          labelText={getLabel(
-            "Param text file",
-            "Show information",
-            content
-          )}
-          className={textAreaClasses}
-          rows={10}
-          value={state.paramFileContent ? state.paramFileContent : paramFileContent.data}
+          contents={state.paramFileContent ? state.paramFileContent : paramFileContent.data}
+          copyContents={updateCopied}
+          resetContents={() => {
+            const localParamFileContentValue = stateToParamFile(globalState);
+
+            updateParamFileContent(localParamFileContentValue.data);
+            updateModified(false);
+          }}
+          downloadContents={saveParamFileContent}
           onChange={(localParamFileContent) => {
             const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
               ? localParamFileContent.target.value
@@ -227,10 +160,16 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
             updateParamFileContent(localParamFileContentValue);
             updateModified(true);
           }}
-        >
-        </TextArea>
+          allowCopy
+          allowReset={state.paramFileContentModified}
+          allowDownload
+          label={{
+            text: "Param text file",
+            content
+          }}
+        />
       </div>
-      {state.modified &&
+      {state.paramFileContentModified &&
         <InlineNotification
           hideCloseButton
           statusIconDescription="notification"
@@ -241,7 +180,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       />
       }
       {(paramFileContent.metadata.hasIncompleteData || paramFileContent.metadata.hasInvalidData) && notificationMarkup}
-      {state.copied ? <span className="download-param-file_copied-label">Copied.</span> : null}
+      {state.paramFileContentCopied ? <span className="download-param-file_copied-label">Copied.</span> : null}
       {(paramFileContent.metadata.hasIncompleteData || paramFileContent.metadata.hasInvalidData) &&
         getIncompleteOrInvalidMarkup()
       }
