@@ -106,6 +106,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         content
                     )}
                     placeholder="e.g. 0x0100"
+                    value={state?.pciFunctionId?.value ?? ""}
                     onChange={(pciFunctionId) => {
                         const pciFunctionIdValue = pciFunctionId && pciFunctionId.target && pciFunctionId.target.value
                             ? pciFunctionId.target.value
@@ -130,6 +131,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         content
                     )}
                     placeholder="e.g. 0x1234"
+                    value={state?.userIdentifier?.vale ?? ""}
                     onChange={(userIdentifier) => {
                         const userIdentifierValue = userIdentifier && userIdentifier.target && userIdentifier.target.value
                             ? userIdentifier.target.value
