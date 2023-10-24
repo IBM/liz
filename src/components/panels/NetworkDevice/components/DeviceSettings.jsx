@@ -64,6 +64,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
             <div className="device-settings_grid-column-left">
                 <Toggle
                     defaultToggled
+                    toggled={state.layer}
                     labelText="Layer2"
                     labelA="0"
                     labelB="1"
@@ -77,6 +78,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
           <Column sm={2} md={3} max={4}>
             <div className="device-settings_grid-column-right">
                 <Toggle
+                    toggled={state.portNo}
                     labelText="Portno"
                     labelA="0"
                     labelB="1"
