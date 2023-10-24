@@ -78,7 +78,13 @@ const toChannelSegments = (value) => {
     (value.match(/\./g) || []).length === 2;
 
   if (typeof value === "string" && hasSegments) {
-    return value.split(".");
+    const segments = value.split(".");
+
+    if (segments[2].length < 4) {
+      const lastSegment = segments.pop();
+      segments.push(lastSegment.padStart(4, "0"));
+    }
+    return segments;
   }
   return [];
 }
@@ -97,6 +103,8 @@ const isHex = (value) => {
   const intValue = parseInt(value, 16);
   if (typeof value === "string" && value.startsWith("0x")) {
     return (`0x${intValue.toString(16)}` === value.toLowerCase(value));
+  } else if (typeof value === "string" && value.startsWith("0") && value.length === 4) {
+    return (intValue.toString(16).padStart(4, "0") === value.toLowerCase(value));
   } else if (typeof value === "string") {
     return (intValue.toString(16) === value.toLowerCase(value));
   }

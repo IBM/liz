@@ -545,7 +545,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
                   ? readChannelId.target.value
                   : "";
                 const readChannelIdIsValid = isReadChannelIdValid(readChannelIdValue);
-                updateReadChannelId(readChannelIdValue.toLowerCase(), readChannelIdIsValid);
+                updateReadChannelId(
+                  toChannelSegments(readChannelIdValue.toLowerCase()).join("."),
+                  readChannelIdIsValid
+                );
               }}
             />
             <TextInput
@@ -571,7 +574,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
                   ? writeChannelId.target.value
                   : "";
                 const writeChannelIdIsValid = isWriteChannelIdValid(writeChannelIdValue);
-                updateWriteChannelId(writeChannelIdValue.toLowerCase(), writeChannelIdIsValid);
+                updateWriteChannelId(
+                  toChannelSegments(writeChannelIdValue.toLowerCase()).join("."),
+                  writeChannelIdIsValid
+                );
               }}
 
             />
@@ -598,7 +604,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
                   ? dataChannelId.target.value
                   : "";
                 const dataChannelIdIsValid = isDataChannelIdValid(dataChannelIdValue);
-                updateDataChannelId(dataChannelIdValue.toLowerCase(), dataChannelIdIsValid);
+                updateDataChannelId(
+                  toChannelSegments(dataChannelIdValue.toLowerCase()).join("."),
+                  dataChannelIdIsValid
+                );
               }}
             />
           </>
