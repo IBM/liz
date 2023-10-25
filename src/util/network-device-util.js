@@ -73,11 +73,11 @@ const getInterfaceName = (readChannelId = "", fid = "", uid = "") => {
   }
 }
 
-const toChannelSegmentArray = (value) => {
+const toChannelSegmentArray = (value, sanitise = true) => {
   if (value) {
     const segments = value.split(".");
 
-    if (segments[2].length < 4) {
+    if (sanitise && segments[2].length < 4) {
       const lastSegment = segments.pop();
       segments.push(lastSegment.padStart(4, "0"));
     }
@@ -86,14 +86,17 @@ const toChannelSegmentArray = (value) => {
   return [];
 }
 
-const toChannelSegments = (value) => {
+const toChannelSegments = (value, sanitise = true) => {
   const hasSegments = value.indexOf(".") >= 0 &&
     (value.match(/\./g) || []).length === 2;
 
   if (typeof value === "string" && hasSegments) {
-    return toChannelSegmentArray(value);
+    return toChannelSegmentArray(value, sanitise);
   } else if (typeof value === "string" && isShortFormat(value)) {
-    return toChannelSegmentArray(expandShortFormat(value));
+    return toChannelSegmentArray(
+      sanitise ? expandShortFormat(value) : value,
+      sanitise
+    );
   }
   return [];
 }

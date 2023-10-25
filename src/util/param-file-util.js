@@ -4,7 +4,10 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import { getInterfaceName } from "./network-device-util";
+import {
+    getInterfaceName,
+    toChannelSegments
+} from "./network-device-util";
 
 const DEVICE_TYPE_OSA = "network-device_osa-option";
 const ADDRESS_TYPE_IPV4 = "radio-ipv4";
@@ -97,12 +100,18 @@ ${nameserver}
 
 const stateToOsaNetworkDeviceParams = (installationParameters) => {
   const readChannel = installationParameters?.osa?.readChannel ?? "";
+  const sanitisedReadChannel = toChannelSegments(readChannel.toLowerCase()).join(".");
+
   const writeChannel = installationParameters?.osa?.writeChannel ?? "";
+  const sanitisedWriteChannel = toChannelSegments(writeChannel.toLowerCase()).join(".");
+
   const dataChannel = installationParameters?.osa?.dataChannel ?? "";
+  const sanitisedDataChannel = toChannelSegments(dataChannel.toLowerCase()).join(".");
+
   const layer = installationParameters?.osa?.layer ?? "";
   const portNumber = installationParameters?.osa?.portNumber ?? "";
 
-  return `rd.znet=qeth,${readChannel},${writeChannel},${dataChannel},layer2=${layer},portno=${portNumber}`;
+  return `rd.znet=qeth,${sanitisedReadChannel},${sanitisedWriteChannel},${sanitisedDataChannel},layer2=${layer},portno=${portNumber}`;
 }
 
 const getInterfaceNameFromFidUid = (installationParameters) => {

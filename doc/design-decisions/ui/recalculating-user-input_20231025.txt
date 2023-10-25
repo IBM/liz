@@ -1,0 +1,42 @@
+Background
+==========
+
+On the UI as proposed we have user input fields that allow the user
+to provide data using a long or short format. The discussion was 
+whether to recalculate or expand the short format while the user
+is typing so that the user would eventually end up with the long
+format similar to what auto complete or spell checking does while
+typing.
+
+We discussed that expanding, completing or recalculating user
+provided data inline as the user is typing or right after the user
+did finish typing may confuse the user cause such data gets
+instantly altered. Something the user may not want and also may
+not understand cause the logic used to alter data is not known
+by the user.
+
+We discussed the following
+==========================
+
+1.
+
+On the network device panel we won't alter the data the user did
+provide. In other words we won't expand data that represnents a
+short ID so that the user would end up with the long ID while
+typing or right after having provided such a short ID.
+
+2.
+
+On the step for the param file generation where the param file
+is provided, the short ID or any other data that needs to be
+expanded, completed or recalculated, would be presented as expanded,
+completed or recalculated data. In other words the short ID would
+be tronsformed into a long ID and the param file generation step
+would only use the long ID and never the short ID.
+
+3.
+
+On the network address step where the prefix is used to calculate
+the netmask and vice versa, the above considerations won't apply
+cause the data is not expanded, completed or recalculated inline
+but using a second input field where the user is not typing.

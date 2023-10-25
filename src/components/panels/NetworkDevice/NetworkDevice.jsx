@@ -549,9 +549,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 const readChannelIdValue = readChannelId?.target?.value ?? "";
                 const readChannelIdIsValid = isReadChannelIdValid(readChannelIdValue);
                 updateReadChannelId(
-                  readChannelIdIsValid
-                    ? toChannelSegments(readChannelIdValue.toLowerCase()).join(".")
-                    : readChannelIdValue,
+                  readChannelIdValue,
                   readChannelIdIsValid
                 );
               }}
@@ -576,9 +574,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 const writeChannelIdValue = writeChannelId?.target?.value ?? "";
                 const writeChannelIdIsValid = isWriteChannelIdValid(writeChannelIdValue);
                 updateWriteChannelId(
-                  writeChannelIdIsValid
-                    ? toChannelSegments(writeChannelIdValue.toLowerCase()).join(".")
-                    : writeChannelIdValue,
+                  writeChannelIdValue,
                   writeChannelIdIsValid
                 );
               }}
@@ -604,9 +600,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 const dataChannelIdValue = dataChannelId?.target?.value ?? "";
                 const dataChannelIdIsValid = isDataChannelIdValid(dataChannelIdValue);
                 updateDataChannelId(
-                  dataChannelIdIsValid
-                    ? toChannelSegments(dataChannelIdValue.toLowerCase()).join(".")
-                    : dataChannelIdValue,
+                  dataChannelIdValue,
                   dataChannelIdIsValid
                 );
               }}
