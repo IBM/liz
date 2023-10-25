@@ -10,8 +10,9 @@ import { Layer, Dropdown, TextInput, ToggletipLabel, Toggletip, ToggletipButton,
 import { Information } from '@carbon/react/icons';
 import {
   toChannelSegments,
-  validateSegments
-} from "../common";
+  validateSegments,
+  isShortFormat
+} from "../../../util/network-device-util";
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
@@ -128,6 +129,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
     const segments = toChannelSegments(readChannelIdValue);
     if (segments.length === 3) {
       return validateSegments(segments);
+    } else if (segments.length === 0) {
+      return isShortFormat(readChannelIdValue);
     }
     return false;
   }
@@ -136,6 +139,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
     const segments = toChannelSegments(writeChannelIdValue);
     if (segments.length === 3) {
       return validateSegments(segments);
+    } else if (segments.length === 0) {
+      return isShortFormat(writeChannelIdValue);
     }
     return false;
   }
@@ -144,6 +149,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
     const segments = toChannelSegments(dataChannelIdValue);
     if (segments.length === 3) {
       return validateSegments(segments);
+    } else if (segments.length === 0) {
+      return isShortFormat(dataChannelIdValue);
     }
     return false;
   }
@@ -535,18 +542,16 @@ const NetworkDevice = (patchState, localStorageKey) => {
               placeholder="ex: 0.0.bdf0"
               value={state.readChannelId ? state.readChannelId.value : ""}
               onChange={(readChannelId) => {
-                const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
-                  ? readChannelId.target.value
-                  : "";
+                const readChannelIdValue = readChannelId?.target?.value ?? "";
                 updateReadChannelId(readChannelIdValue, true);
               }}
               onBlur={(readChannelId) => {
-                const readChannelIdValue = readChannelId && readChannelId.target && readChannelId.target.value
-                  ? readChannelId.target.value
-                  : "";
+                const readChannelIdValue = readChannelId?.target?.value ?? "";
                 const readChannelIdIsValid = isReadChannelIdValid(readChannelIdValue);
                 updateReadChannelId(
-                  toChannelSegments(readChannelIdValue.toLowerCase()).join("."),
+                  readChannelIdIsValid
+                    ? toChannelSegments(readChannelIdValue.toLowerCase()).join(".")
+                    : readChannelIdValue,
                   readChannelIdIsValid
                 );
               }}
@@ -564,18 +569,16 @@ const NetworkDevice = (patchState, localStorageKey) => {
               placeholder="ex: 0.0.bdf1"
               value={state.writeChannelId ? state.writeChannelId.value : ""}
               onChange={(writeChannelId) => {
-                const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
-                  ? writeChannelId.target.value
-                  : "";
+                const writeChannelIdValue = writeChannelId?.target?.value ?? "";
                 updateWriteChannelId(writeChannelIdValue, true);
               }}
               onBlur={(writeChannelId) => {
-                const writeChannelIdValue = writeChannelId && writeChannelId.target && writeChannelId.target.value
-                  ? writeChannelId.target.value
-                  : "";
+                const writeChannelIdValue = writeChannelId?.target?.value ?? "";
                 const writeChannelIdIsValid = isWriteChannelIdValid(writeChannelIdValue);
                 updateWriteChannelId(
-                  toChannelSegments(writeChannelIdValue.toLowerCase()).join("."),
+                  writeChannelIdIsValid
+                    ? toChannelSegments(writeChannelIdValue.toLowerCase()).join(".")
+                    : writeChannelIdValue,
                   writeChannelIdIsValid
                 );
               }}
@@ -594,18 +597,16 @@ const NetworkDevice = (patchState, localStorageKey) => {
               placeholder="ex: 0.0.bdf2"
               value={state.dataChannelId ? state.dataChannelId.value : ""}
               onChange={(dataChannelId) => {
-                const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
-                  ? dataChannelId.target.value
-                  : "";
+                const dataChannelIdValue = dataChannelId?.target?.value ?? "";
                 updateDataChannelId(dataChannelIdValue, true);
               }}
               onBlur={(dataChannelId) => {
-                const dataChannelIdValue = dataChannelId && dataChannelId.target && dataChannelId.target.value
-                  ? dataChannelId.target.value
-                  : "";
+                const dataChannelIdValue = dataChannelId?.target?.value ?? "";
                 const dataChannelIdIsValid = isDataChannelIdValid(dataChannelIdValue);
                 updateDataChannelId(
-                  toChannelSegments(dataChannelIdValue.toLowerCase()).join("."),
+                  dataChannelIdIsValid
+                    ? toChannelSegments(dataChannelIdValue.toLowerCase()).join(".")
+                    : dataChannelIdValue,
                   dataChannelIdIsValid
                 );
               }}

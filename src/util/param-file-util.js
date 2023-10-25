@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import { getInterfaceName } from "../components/panels/common";
+import { getInterfaceName } from "./network-device-util";
 
 const DEVICE_TYPE_OSA = "network-device_osa-option";
 const ADDRESS_TYPE_IPV4 = "radio-ipv4";

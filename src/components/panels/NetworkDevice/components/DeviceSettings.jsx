@@ -10,7 +10,7 @@ import { TextInput, Toggle, ToggletipLabel, Toggletip, ToggletipButton, Toggleti
 import { Information } from '@carbon/react/icons';
 import {
     isHex
-} from "../../common";
+} from "../../../../util/network-device-util";
 import "./_device-settings.scss";
 
 const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state }) => {

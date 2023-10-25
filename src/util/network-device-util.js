@@ -73,11 +73,8 @@ const getInterfaceName = (readChannelId = "", fid = "", uid = "") => {
   }
 }
 
-const toChannelSegments = (value) => {
-  const hasSegments = value.indexOf(".") >= 0 &&
-    (value.match(/\./g) || []).length === 2;
-
-  if (typeof value === "string" && hasSegments) {
+const toChannelSegmentArray = (value) => {
+  if (value) {
     const segments = value.split(".");
 
     if (segments[2].length < 4) {
@@ -85,6 +82,18 @@ const toChannelSegments = (value) => {
       segments.push(lastSegment.padStart(4, "0"));
     }
     return segments;
+  }
+  return [];
+}
+
+const toChannelSegments = (value) => {
+  const hasSegments = value.indexOf(".") >= 0 &&
+    (value.match(/\./g) || []).length === 2;
+
+  if (typeof value === "string" && hasSegments) {
+    return toChannelSegmentArray(value);
+  } else if (typeof value === "string" && isShortFormat(value)) {
+    return toChannelSegmentArray(expandShortFormat(value));
   }
   return [];
 }
@@ -111,9 +120,27 @@ const isHex = (value) => {
   return false;
 }
 
+const isShortFormat = (value) => {
+  if (value && value.length <= 4 && isHex(value) && value.indexOf(".") < 0) {
+    return true;
+  }
+  return false;
+}
+
+const expandShortFormat = (value) => {
+  if (value && isShortFormat(value) && value.length < 4) {
+    return `0.0.${value.padStart(4, "0")}`;
+  } else if (value && isShortFormat(value)) {
+    return `0.0.${value}`;
+  }
+  return value;
+}
+
 export {
+  expandShortFormat,
   getInterfaceName,
   toChannelSegments,
   validateSegments,
+  isShortFormat,
   isHex
 };
