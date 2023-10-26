@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, FlexGrid, Row, Column } from "@carbon/react";
+import { Layer, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, PasswordInput, FlexGrid, Row, Column } from "@carbon/react";
 import { Information } from '@carbon/react/icons';
 import "./_installation-parameters.scss";
 
@@ -307,7 +307,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         invalid={state && state.userName ? !state.userName.valid : false}
         invalidText="A valid value is required"
         labelText={getLabel(
-          "Username",
+          "Username (optional)",
           "Show information",
           content
         )}
@@ -317,25 +317,36 @@ const InstallationParameters = (patchState, localStorageKey) => {
         value={state.userName ? state.userName.value : ""}
         onChange={(userName) => {
           const userNameValue = userName && userName.target ? userName.target.value : "";
-          const computedUrlValue = computeInstallationAddress(
-            state.installationAddress.value,
-            userNameValue
-          );
+          const computedUrlValue = state.installationAddress
+            ? computeInstallationAddress(
+                state.installationAddress.value,
+                userNameValue
+              )
+            : "";
           // while editing we don't update the validity but set it to true
           // cause we don't want to have the form validation logic kick in.
           updateUserName(userNameValue, true);
-          updateInstallationAddress(state.installationAddress.value, state.installationAddress.computed, true);
-          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+          updateInstallationAddress(
+            state?.installationAddress?.value ?? "",
+            computedUrlValue,
+            true
+          );
         }}
         onBlur={(userName) => {
           const userNameValue = userName && userName.target ? userName.target.value : "";
-          const computedUrlValue = computeInstallationAddress(
-            state.installationAddress.value,
-            userNameValue
-          );
+          const computedUrlValue = state.installationAddress
+            ? computeInstallationAddress(
+                state.installationAddress.value,
+                userNameValue
+              )
+            : "";
           const userNameValueIsValid = isUserNameInputValid(userNameValue);
           updateUserName(userNameValue, userNameValueIsValid);
-          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+          updateInstallationAddress(
+            state?.installationAddress?.value ?? "",
+            computedUrlValue,
+            true
+          );
         }}
       />
     </div>
@@ -343,14 +354,14 @@ const InstallationParameters = (patchState, localStorageKey) => {
 
   const gridContentsMarkupRowTwoColumnTwo = (
     <div className="installation-parameters_column-right">
-      <TextInput.PasswordInput
+      <PasswordInput
         autoComplete="true"
         helperText=""
         id="password-input"
         invalid={state && state.password ? !state.password.valid : false}
         invalidText="A valid value is required"
         labelText={getLabel(
-          "Password",
+          "Password (optional)",
           "Show information",
           content
         )}
@@ -360,26 +371,38 @@ const InstallationParameters = (patchState, localStorageKey) => {
         value={state.password ? state.password.value : ""}
         onChange={(password) => {
           const passwordValue = password && password.target ? password.target.value : "";
-          const computedUrlValue = computeInstallationAddress(
-            state.installationAddress.value,
-            state.userName.value,
-            passwordValue
-          );
+          const computedUrlValue = state.installationAddress
+            ? computeInstallationAddress(
+                state.installationAddress.value,
+                state?.userName?.value ?? "",
+                passwordValue
+              )
+            : "";
           // while editing we don't update the validity but set it to true
           // cause we don't want to have the form validation logic kick in.
           updatePassword(passwordValue, true);
-          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+          updateInstallationAddress(
+            state?.installationAddress?.value ?? "",
+            computedUrlValue,
+            true
+          );
         }}
         onBlur={(password) => {
           const passwordValue = password && password.target ? password.target.value : "";
-          const computedUrlValue = computeInstallationAddress(
-            state.installationAddress.value,
-            state.userName.value,
-            passwordValue
-          );
+          const computedUrlValue = state.installationAddress
+            ? computeInstallationAddress(
+                state.installationAddress.value,
+                state?.userName?.value ?? "",
+                passwordValue
+              )
+            : "";
           const passwordValueIsValid = isPasswordInputValid(passwordValue);
           updatePassword(passwordValue, passwordValueIsValid);
-          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+          updateInstallationAddress(
+            state?.installationAddress?.value ?? "",
+            computedUrlValue,
+            true
+          );
         }}
       />
     </div>
@@ -406,7 +429,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         }}
       />
       {useVncToggled &&
-        <TextInput.PasswordInput
+        <PasswordInput
           autoComplete="true"
           helperText=""
           id="vnc-password-input"
