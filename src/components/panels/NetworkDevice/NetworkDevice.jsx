@@ -23,14 +23,17 @@ const NetworkDevice = (patchState, localStorageKey) => {
       selectedDeviceType: {},
       readChannelId: {
         value: "",
+        computed: "",
         valid: false
       },
       writeChannelId: {
         value: "",
+        computed: "",
         valid: false
       },
       dataChannelId: {
         value: "",
+        computed: "",
         valid: false
       },
       layer: true,
@@ -93,16 +96,16 @@ const NetworkDevice = (patchState, localStorageKey) => {
     setState((prevState) => ({...prevState, selectedDeviceType}));
   }
 
-  const updateReadChannelId = (readChannelId, valid) => {
-    setState((prevState) => ({...prevState, readChannelId: { value: readChannelId, valid }}));
+  const updateReadChannelId = (readChannelId, computedReadChannelId, valid) => {
+    setState((prevState) => ({...prevState, readChannelId: { value: readChannelId, computed: computedReadChannelId, valid }}));
   }
 
-  const updateWriteChannelId = (writeChannelId, valid) => {
-    setState((prevState) => ({...prevState, writeChannelId: { value: writeChannelId, valid }}));
+  const updateWriteChannelId = (writeChannelId, computedWriteChannelId, valid) => {
+    setState((prevState) => ({...prevState, writeChannelId: { value: writeChannelId, computed: computedWriteChannelId, valid }}));
   }
 
-  const updateDataChannelId = (dataChannelId, valid) => {
-    setState((prevState) => ({...prevState, dataChannelId: { value: dataChannelId, valid }}));
+  const updateDataChannelId = (dataChannelId, computedDataChannelId, valid) => {
+    setState((prevState) => ({...prevState, dataChannelId: { value: dataChannelId, computed: computedDataChannelId, valid }}));
   }
 
   const updateLayer = (layer) => {
@@ -253,13 +256,13 @@ const NetworkDevice = (patchState, localStorageKey) => {
     }
   ];
 
-  const content = (
-    <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
-      do eiusmod tempor incididunt ut fsil labore et dolore magna
-      aliqua.
-    </p>
-  );
+  const getContent = (value) => {
+    return (
+      <p>
+        {value}
+      </p>
+    );
+  }
 
   const getLabel = (label, buttonLabel, content) => {
     return (
@@ -467,7 +470,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         titleText={getLabel(
           "Device type",
           "Show information",
-          content
+          getContent("OSA (Open Systems Adapter) or RoCE (PCI RDMA over Converged Ethernet)")
         )}
         aria-label="Select a device type"
         id="network-device_device-type-selection"
@@ -502,7 +505,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         labelText={getLabel(
           "VLAN ID (optional)",
           "Show information",
-          content
+          getContent("Enter a VLAN ID between 1 and 4094, or leave empty for no VLAN ID.")
         )}
         placeholder="ex: 88"
         value={state.vlanId ? state.vlanId.value : ""}
@@ -537,22 +540,37 @@ const NetworkDevice = (patchState, localStorageKey) => {
               labelText={getLabel(
                 "Read channel",
                 "Show information",
-                content
+                getContent("Device bus-ID of the OSA read channel in the format x.y.zzzz.")
               )}
               placeholder="ex: 0.0.bdf0"
               value={state.readChannelId ? state.readChannelId.value : ""}
               onChange={(readChannelId) => {
                 const readChannelIdValue = readChannelId?.target?.value ?? "";
-                updateReadChannelId(readChannelIdValue, true);
+                const computedReadChannelIdValue = toChannelSegments(readChannelIdValue.toLowerCase()).join(".");
+                updateReadChannelId(readChannelIdValue, computedReadChannelIdValue, true);
               }}
               onBlur={(readChannelId) => {
                 const readChannelIdValue = readChannelId?.target?.value ?? "";
+                const computedReadChannelIdValue = toChannelSegments(readChannelIdValue.toLowerCase()).join(".");
                 const readChannelIdIsValid = isReadChannelIdValid(readChannelIdValue);
                 updateReadChannelId(
                   readChannelIdValue,
+                  computedReadChannelIdValue,
                   readChannelIdIsValid
                 );
               }}
+            />
+            <TextInput
+              readOnly
+              helperText=""
+              id="network-device_computed-read-channel-input"
+              labelText={getLabel(
+                "Read channel (computed)",
+                "Show information",
+                getContent("Sanitized device bus-ID of the OSA read channel.")
+              )}
+              placeholder="ex: 0.0.bdf0"
+              value={state.readChannelId ? state.readChannelId.computed : ""}
             />
             <TextInput
               helperText=""
@@ -562,23 +580,37 @@ const NetworkDevice = (patchState, localStorageKey) => {
               labelText={getLabel(
                 "Write channel",
                 "Show information",
-                content
+                getContent("Device bus-ID of the OSA write channel in the format x.y.zzzz.")
               )}
               placeholder="ex: 0.0.bdf1"
               value={state.writeChannelId ? state.writeChannelId.value : ""}
               onChange={(writeChannelId) => {
                 const writeChannelIdValue = writeChannelId?.target?.value ?? "";
-                updateWriteChannelId(writeChannelIdValue, true);
+                const computedWriteChannelIdValue = toChannelSegments(writeChannelIdValue.toLowerCase()).join(".");
+                updateWriteChannelId(writeChannelIdValue, computedWriteChannelIdValue, true);
               }}
               onBlur={(writeChannelId) => {
                 const writeChannelIdValue = writeChannelId?.target?.value ?? "";
+                const computedWriteChannelIdValue = toChannelSegments(writeChannelIdValue.toLowerCase()).join(".");
                 const writeChannelIdIsValid = isWriteChannelIdValid(writeChannelIdValue);
                 updateWriteChannelId(
                   writeChannelIdValue,
+                  computedWriteChannelIdValue,
                   writeChannelIdIsValid
                 );
               }}
-
+            />
+            <TextInput
+              readOnly
+              helperText=""
+              id="network-device_computed-write-channel-input"
+              labelText={getLabel(
+                "Write channel (computed)",
+                "Show information",
+                getContent("Sanitized device bus-ID of the OSA write channel.")
+              )}
+              placeholder="ex: 0.0.bdf1"
+              value={state.writeChannelId ? state.writeChannelId.computed : ""}
             />
             <TextInput
               helperText=""
@@ -588,22 +620,37 @@ const NetworkDevice = (patchState, localStorageKey) => {
               labelText={getLabel(
                 "Data channel",
                 "Show information",
-                content
+                getContent("Device bus-ID of the OSA data channel in the format x.y.zzzz.")
               )}
               placeholder="ex: 0.0.bdf2"
               value={state.dataChannelId ? state.dataChannelId.value : ""}
               onChange={(dataChannelId) => {
                 const dataChannelIdValue = dataChannelId?.target?.value ?? "";
-                updateDataChannelId(dataChannelIdValue, true);
+                const computedDataChannelIdValue = toChannelSegments(dataChannelIdValue.toLowerCase()).join(".");
+                updateDataChannelId(dataChannelIdValue, computedDataChannelIdValue, true);
               }}
               onBlur={(dataChannelId) => {
                 const dataChannelIdValue = dataChannelId?.target?.value ?? "";
+                const computedDataChannelIdValue = toChannelSegments(dataChannelIdValue.toLowerCase()).join(".");
                 const dataChannelIdIsValid = isDataChannelIdValid(dataChannelIdValue);
                 updateDataChannelId(
                   dataChannelIdValue,
+                  computedDataChannelIdValue,
                   dataChannelIdIsValid
                 );
               }}
+            />
+            <TextInput
+              readOnly
+              helperText=""
+              id="network-device_computed-data-channel-input"
+              labelText={getLabel(
+                "Data channel (computed)",
+                "Show information",
+                getContent("Sanitized device bus-ID of the OSA data channel.")
+              )}
+              placeholder="ex: 0.0.bdf2"
+              value={state.dataChannelId ? state.dataChannelId.computed : ""}
             />
           </>
         )

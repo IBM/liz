@@ -34,13 +34,13 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
         return false;
     }
 
-    const content = (
-        <p>
-          Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
-          do eiusmod tempor incididunt ut fsil labore et dolore magna
-          aliqua.
-        </p>
-    );
+    const getContent = (value) => {
+        return (
+            <p>
+              {value}
+            </p>
+        );
+    }
     
     const getLabel = (label, buttonLabel, content) => {
         return (
@@ -68,7 +68,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     labelText={getLabel(
                         "Layer2",
                         "Show information",
-                        content
+                        getContent("Select 1 for Layer 2 (ethernet) mode, or 0 for Layer 3 (IP) mode")
                     )}
                     labelA="0"
                     labelB="1"
@@ -86,7 +86,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     labelText={getLabel(
                         "Portno",
                         "Show information",
-                        content
+                        getContent("Network port to use (0 or 1) in case of networking cards with multiple ports.")
                     )}
                     labelA="0"
                     labelB="1"
@@ -111,7 +111,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     labelText={getLabel(
                         "PCI function ID (FID)",
                         "Show information",
-                        content
+                        getContent("Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.")
                     )}
                     placeholder="e.g. 0x0100"
                     value={state?.pciFunctionId?.value ?? ""}
@@ -136,7 +136,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     labelText={getLabel(
                         "User identifier (UID)",
                         "Show information",
-                        content
+                        getContent("Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.")
                     )}
                     placeholder="e.g. 0x1234"
                     value={state?.userIdentifier?.vale ?? ""}

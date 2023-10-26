@@ -121,14 +121,21 @@ const InstallationParameters = (patchState, localStorageKey) => {
     const password = pwd || (state?.password?.value ?? "");
 
     if (address && address.length > 0) {
-      const installationAddressUrl = new URL(address);
-      if (userName && userName.length > 0) {
-        installationAddressUrl.username = userName;
+      try {
+        const installationAddressUrl = new URL(address);
+        if (userName && userName.length > 0) {
+          installationAddressUrl.username = userName;
+        }
+        if (installationAddressUrl.password && installationAddressUrl.password.length > 0) {
+          installationAddressUrl.password = hexEncodePassword(installationAddressUrl.password);
+        }
+        if (!installationAddressUrl.password && password && password.length > 0) {
+          installationAddressUrl.password = hexEncodePassword(password);
+        }
+        return installationAddressUrl.toString();
+      } catch (error) {
+        console.log("Error while attempting to construct an URL object.")
       }
-      if (password && password.length > 0) {
-        installationAddressUrl.password = hexEncodePassword(password);
-      }
-      return installationAddressUrl.toString();
     }
     return "";
   }
