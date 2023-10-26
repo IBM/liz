@@ -139,7 +139,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                         getContent("Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.")
                     )}
                     placeholder="e.g. 0x1234"
-                    value={state?.userIdentifier?.vale ?? ""}
+                    value={state?.userIdentifier?.value ?? ""}
                     onChange={(userIdentifier) => {
                         const userIdentifierValue = userIdentifier && userIdentifier.target && userIdentifier.target.value
                             ? userIdentifier.target.value
