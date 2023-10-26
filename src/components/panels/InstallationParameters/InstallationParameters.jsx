@@ -24,6 +24,15 @@ const InstallationParameters = (patchState, localStorageKey) => {
       useVnc: false,
       installationAddress: {
         value: "",
+        computed: "",
+        valid: false
+      },
+      userName: {
+        value: "",
+        valid: false
+      },
+      password: {
+        value: "",
         valid: false
       },
       vncHost: "",
@@ -46,12 +55,38 @@ const InstallationParameters = (patchState, localStorageKey) => {
     setState((prevState) => ({...prevState, useVnc: flag}));
   }
 
-  const updateInstallationAddress = (address, valid) => {
-    setState((prevState) => ({...prevState, installationAddress: { value: address, valid }}));
+  const updateInstallationAddress = (address, computedAddress, valid) => {
+    setState((prevState) => ({...prevState, installationAddress: { value: address, computed: computedAddress, valid }}));
+  }
+
+  const updateUserName = (userName, valid) => {
+    setState((prevState) => ({...prevState, userName: { value: userName, valid }}));
+  }
+
+  const updatePassword = (password, valid) => {
+    setState((prevState) => ({...prevState, password: { value: password, valid }}));
   }
 
   const updateVncPassword = (password) => {
     setState((prevState) => ({...prevState, vncPassword: password}));
+  }
+
+  const isUserNameInputValid = (userName) => {
+    // The username is optional, if it is a zero length string
+    // mark it as a valid value.
+    if (typeof userName === "string" && userName.length >= 0) {
+      return true;
+    }
+    return false;
+  }
+
+  const isPasswordInputValid = (password) => {
+    // The password is optional, if it is a zero length string
+    // mark it as a valid value.
+    if (typeof password === "string" && password.length >= 0) {
+      return true;
+    }
+    return false;
   }
 
   const isInstallationAddressInputValid = (url) => {
@@ -68,6 +103,34 @@ const InstallationParameters = (patchState, localStorageKey) => {
     }
 
     return installationAddressInputIsValid;
+  }
+
+  const hexEncodePassword = (password) => {
+    if (password && typeof password === "string" && password.length > 0) {
+      return "%" + password
+        .split("")
+        .map(c => c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("%");
+    }
+    return "";
+  }
+
+  const computeInstallationAddress = (url = "", uid = "", pwd = "") => {
+    const address = url || (state?.installationAddress?.value ?? "");
+    const userName = uid || (state?.userName?.value ?? "");
+    const password = pwd || (state?.password?.value ?? "");
+
+    if (address && address.length > 0) {
+      const installationAddressUrl = new URL(address);
+      if (userName && userName.length > 0) {
+        installationAddressUrl.username = userName;
+      }
+      if (password && password.length > 0) {
+        installationAddressUrl.password = hexEncodePassword(password);
+      }
+      return installationAddressUrl.toString();
+    }
+    return "";
   }
 
   const content = (
@@ -125,7 +188,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         patchState({
           steps: {
             installationParameters: {
-              networkInstallationUrl: state.installationAddress.value,
+              networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
                 enabled: state.useVnc
@@ -144,7 +207,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         patchState({
           steps: {
             installationParameters: {
-              networkInstallationUrl: state.installationAddress.value,
+              networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
                 enabled: state.useVnc
@@ -163,7 +226,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         patchState({
           steps: {
             installationParameters: {
-              networkInstallationUrl: state?.installationAddress?.value ?? "",
+              networkInstallationUrl: state?.installationAddress?.computed ?? "",
               vnc: {
                 password: state?.vncPassword ?? "",
                 enabled: state?.useVnc ?? ""
@@ -201,23 +264,128 @@ const InstallationParameters = (patchState, localStorageKey) => {
         value={state.installationAddress ? state.installationAddress.value : ""}
         onChange={(url) => {
           const urlValue = url && url.target ? url.target.value : "";
+          const computedUrlValue = computeInstallationAddress();
           // while editing we don't update the validity but set it to true
           // cause we don't want to have the form validation logic kick in.
-          updateInstallationAddress(urlValue, true);
+          updateInstallationAddress(urlValue, computedUrlValue, true);
         }}
         onBlur={(url) => {
           const urlValue = url && url.target ? url.target.value : "";
+          const computedUrlValue = computeInstallationAddress();
           const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-          updateInstallationAddress(urlValue, urlValueIsValid);
+          updateInstallationAddress(urlValue, computedUrlValue, urlValueIsValid);
         }}
+      />
+      <TextInput
+        readOnly
+        helperText=""
+        id="computed-installation-address-input"
+        labelText={getLabel(
+          "Installation address (computed)",
+          "Show information",
+          content
+        )}
+        placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
+        className="installation-parameters_installation-address-input"
+        value={state.installationAddress ? state.installationAddress.computed : ""}
       />
     </>
   );
 
   const gridContentsMarkupRowTwoColumnOne = (
     <div className="installation-parameters_column-left">
+      <TextInput
+        helperText=""
+        id="username-input"
+        invalid={state && state.userName ? !state.userName.valid : false}
+        invalidText="A valid value is required"
+        labelText={getLabel(
+          "Username",
+          "Show information",
+          content
+        )}
+        placeholder="ex: johndoe"
+        className="installation-parameters_username-input"
+        defaultValue={state.userName ? state.userName.value : ""}
+        value={state.userName ? state.userName.value : ""}
+        onChange={(userName) => {
+          const userNameValue = userName && userName.target ? userName.target.value : "";
+          const computedUrlValue = computeInstallationAddress(
+            state.installationAddress.value,
+            userNameValue
+          );
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateUserName(userNameValue, true);
+          updateInstallationAddress(state.installationAddress.value, state.installationAddress.computed, true);
+          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+        }}
+        onBlur={(userName) => {
+          const userNameValue = userName && userName.target ? userName.target.value : "";
+          const computedUrlValue = computeInstallationAddress(
+            state.installationAddress.value,
+            userNameValue
+          );
+          const userNameValueIsValid = isUserNameInputValid(userNameValue);
+          updateUserName(userNameValue, userNameValueIsValid);
+          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+        }}
+      />
+    </div>
+  );
+
+  const gridContentsMarkupRowTwoColumnTwo = (
+    <div className="installation-parameters_column-right">
+      <TextInput.PasswordInput
+        autoComplete="true"
+        helperText=""
+        id="password-input"
+        invalid={state && state.password ? !state.password.valid : false}
+        invalidText="A valid value is required"
+        labelText={getLabel(
+          "Password",
+          "Show information",
+          content
+        )}
+        placeholder="ex: foobar"
+        className="installation-parameters_password-input"
+        defaultValue={state.password ? state.password.value : ""}
+        value={state.password ? state.password.value : ""}
+        onChange={(password) => {
+          const passwordValue = password && password.target ? password.target.value : "";
+          const computedUrlValue = computeInstallationAddress(
+            state.installationAddress.value,
+            state.userName.value,
+            passwordValue
+          );
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updatePassword(passwordValue, true);
+          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+        }}
+        onBlur={(password) => {
+          const passwordValue = password && password.target ? password.target.value : "";
+          const computedUrlValue = computeInstallationAddress(
+            state.installationAddress.value,
+            state.userName.value,
+            passwordValue
+          );
+          const passwordValueIsValid = isPasswordInputValid(passwordValue);
+          updatePassword(passwordValue, passwordValueIsValid);
+          updateInstallationAddress(state.installationAddress.value, computedUrlValue, true);
+        }}
+      />
+    </div>
+  );
+
+  const gridContentsMarkupRowThreeColumnOne = (
+    <div className="installation-parameters_column-left">
       <Toggle
-        labelText="VNC for installation"
+        labelText={getLabel(
+          "VNC for installation",
+          "Show information",
+          content
+        )}
         labelA="Disable"
         labelB="Enable"
         id="vnc-toggle"
@@ -231,7 +399,8 @@ const InstallationParameters = (patchState, localStorageKey) => {
         }}
       />
       {useVncToggled &&
-        <TextInput
+        <TextInput.PasswordInput
+          autoComplete="true"
           helperText=""
           id="vnc-password-input"
           invalidText="A valid value is required"
@@ -254,10 +423,14 @@ const InstallationParameters = (patchState, localStorageKey) => {
     </div>
   );
 
-  const gridContentsMarkupRowTwoColumnTwo = (
+  const gridContentsMarkupRowThreeColumnTwo = (
     <div className="installation-parameters_column-right">
       <Toggle
-        labelText="SSH for installation"
+        labelText={getLabel(
+          "SSH for installation",
+          "Show information",
+          content
+        )}
         labelA="Disable"
         labelB="Enable"
         id="ssh-toggle"
@@ -282,11 +455,19 @@ const InstallationParameters = (patchState, localStorageKey) => {
           </Column>
         </Row>
         <Row>
-          <Column>
+        <Column>
             {gridContentsMarkupRowTwoColumnOne}
           </Column>
           <Column>
             {gridContentsMarkupRowTwoColumnTwo}
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            {gridContentsMarkupRowThreeColumnOne}
+          </Column>
+          <Column>
+            {gridContentsMarkupRowThreeColumnTwo}
           </Column>
         </Row>
       </FlexGrid>

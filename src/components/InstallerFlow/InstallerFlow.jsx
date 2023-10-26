@@ -82,7 +82,7 @@ const InstallerFlow = ({ onProgress, progressStep, progressStepComplete, progres
           disabled={progressStepDisabled.installationParameters}
           current={progressStep === 5}
           label="Installation parameters"
-          secondaryLabel="Optional."
+          secondaryLabel=""
           description={getDescriptionForStep("installationParameters")}
         />
         <ProgressStep

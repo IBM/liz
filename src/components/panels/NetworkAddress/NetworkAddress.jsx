@@ -633,7 +633,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
           readOnly
           id="network-address_ipv4-binary"
           invalidText="A valid value is required"
-          labelText="IPv4 binary representation"
+          labelText="IPv4 binary representation (computed)"
           placeholder="11111111.11111111.10000000.00000000"
           value={state.binary}
         />

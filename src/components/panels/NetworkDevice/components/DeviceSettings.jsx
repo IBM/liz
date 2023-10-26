@@ -65,7 +65,11 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                 <Toggle
                     defaultToggled
                     toggled={state.layer}
-                    labelText="Layer2"
+                    labelText={getLabel(
+                        "Layer2",
+                        "Show information",
+                        content
+                    )}
                     labelA="0"
                     labelB="1"
                     id="layer2-toggle"
@@ -79,7 +83,11 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
             <div className="device-settings_grid-column-right">
                 <Toggle
                     toggled={state.portNo}
-                    labelText="Portno"
+                    labelText={getLabel(
+                        "Portno",
+                        "Show information",
+                        content
+                    )}
                     labelA="0"
                     labelB="1"
                     id="portno-toggle"
