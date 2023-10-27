@@ -19,11 +19,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
     const defaultState = {
       netmask: {
         value: "",
-        valid: false
+        valid: false,
+        computed: false
       },
       ipv4Cidr: {
         value: "",
-        valid: false
+        valid: false,
+        computed: false
       },
       ipv6Cidr: {
         value: "",
@@ -64,12 +66,12 @@ const NetworkAddress = (patchState, localStorageKey) => {
   }
   const [state, setState] = useState(getInitialState);
 
-  const updateNetmask = (netmask, valid) => {
-    setState((prevState) => ({...prevState, netmask: { value: netmask, valid }}));
+  const updateNetmask = (netmask, valid, computed) => {
+    setState((prevState) => ({...prevState, netmask: { value: netmask, valid, computed }}));
   }
 
-  const updateIpv4Cidr = (ipv4Cidr, valid) => {
-    setState((prevState) => ({...prevState, ipv4Cidr: { value: ipv4Cidr, valid }}));
+  const updateIpv4Cidr = (ipv4Cidr, valid, computed) => {
+    setState((prevState) => ({...prevState, ipv4Cidr: { value: ipv4Cidr, valid, computed }}));
   }
 
   const updateIpv6Cidr = (ipv6Cidr, valid) => {
@@ -564,7 +566,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
           invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
           invalidText="A valid value is required"
           labelText={getLabel(
-            "IPv4 prefix",
+            state && state.ipv4Cidr && state.ipv4Cidr.computed
+              ? "IPv4 prefix (computed)"
+              : "IPv4 prefix",
             "Show information",
             content
           )}
@@ -577,7 +581,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
               : "";
             // while editing we don't update the validity but set it to true
             // cause we don't want to have the form validation logic kick in.
-            updateIpv4Cidr(localCidrValue, true);
+            updateIpv4Cidr(localCidrValue, true, false);
           }}
           onBlur={(localCidr) => {
             const localCidrValue = localCidr && localCidr.target && localCidr.target.value
@@ -586,10 +590,10 @@ const NetworkAddress = (patchState, localStorageKey) => {
             const parsed = cidrToNetmask(localCidrValue);
             const localCidrValueIsValid = isCidr(ADDRESS_TYPE_IPV4, localCidrValue);
 
-            updateIpv4Cidr(localCidrValue, localCidrValueIsValid);
+            updateIpv4Cidr(localCidrValue, localCidrValueIsValid, false);
 
             if (localCidrValueIsValid && parsed) {
-              updateNetmask(parsed, true);
+              updateNetmask(parsed, true, true);
               updateBinary(netmaskToBinary(parsed));
             }
           }}
@@ -599,7 +603,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
           invalid={state && state.netmask ? !state.netmask.valid : false}
           invalidText="A valid value is required"
           labelText={getLabel(
-            "IPv4 netmask",
+            state && state.netmask && state.netmask.computed
+              ? "IPv4 netmask (computed)"
+              : "IPv4 netmask",
             "Show information",
             content
           )}
@@ -612,7 +618,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
               : "";
             // while editing we don't update the validity but set it to true
             // cause we don't want to have the form validation logic kick in.
-            updateNetmask(localNetmaskValue, true);
+            updateNetmask(localNetmaskValue, true, false);
           }}
           onBlur={(localNetmask) => {
             const localNetmaskValue = localNetmask && localNetmask.target && localNetmask.target.value
@@ -621,10 +627,10 @@ const NetworkAddress = (patchState, localStorageKey) => {
             const parsed = netmaskToCidr(localNetmaskValue);
             const localNetmaskValueIsValid = isIpv4NetworkAddressValid(localNetmaskValue);
 
-            updateNetmask(localNetmaskValue, localNetmaskValueIsValid);
+            updateNetmask(localNetmaskValue, localNetmaskValueIsValid, false);
 
             if (localNetmaskValueIsValid && parsed) {
-              updateIpv4Cidr(parsed, true);
+              updateIpv4Cidr(parsed, true, true);
               updateBinary(netmaskToBinary(localNetmaskValue));
             }
           }}
