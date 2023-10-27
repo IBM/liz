@@ -35,6 +35,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         value: "",
         valid: false
       },
+      userAndPwdAreDisabled: true,
       vncHost: "",
       vncPassword: "",
       sshHost: ""
@@ -56,7 +57,17 @@ const InstallationParameters = (patchState, localStorageKey) => {
   }
 
   const updateInstallationAddress = (address, computedAddress, valid) => {
-    setState((prevState) => ({...prevState, installationAddress: { value: address, computed: computedAddress, valid }}));
+    setState((prevState) => (
+      {
+        ...prevState,
+        installationAddress: {
+          value: address,
+          computed: computedAddress,
+          valid
+        },
+        userAndPwdAreDisabled: !address || address.length === 0
+      }
+    ));
   }
 
   const updateUserName = (userName, valid) => {
@@ -302,6 +313,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const gridContentsMarkupRowTwoColumnOne = (
     <div className="installation-parameters_column-left">
       <TextInput
+        disabled={state?.userAndPwdAreDisabled ?? true}
         helperText=""
         id="username-input"
         invalid={state && state.userName ? !state.userName.valid : false}
@@ -355,6 +367,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const gridContentsMarkupRowTwoColumnTwo = (
     <div className="installation-parameters_column-right">
       <PasswordInput
+        disabled={state?.userAndPwdAreDisabled ?? true}
         autoComplete="true"
         helperText=""
         id="password-input"
