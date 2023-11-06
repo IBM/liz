@@ -65,7 +65,23 @@ const InstallationParameters = (patchState, localStorageKey) => {
           computed: computedAddress,
           valid
         },
-        userAndPwdAreDisabled: !address || address.length === 0
+        userAndPwdAreDisabled: !address || address.length === 0 || installationAddressContainsUidOrPwd(address),
+        userName: {
+          value: installationAddressContainsUidOrPwd(address)
+            ? ""
+            : prevState?.userName?.value ?? "",
+          valid: installationAddressContainsUidOrPwd(address)
+            ? true
+            : prevState?.userName?.valid ?? true
+        },
+        password: {
+          value: installationAddressContainsUidOrPwd(address)
+            ? ""
+            : prevState?.password?.value ?? "",
+          valid: installationAddressContainsUidOrPwd(address)
+            ? true
+            : prevState?.password?.valid ?? true
+        }
       }
     ));
   }
@@ -124,6 +140,25 @@ const InstallationParameters = (patchState, localStorageKey) => {
         .join("%");
     }
     return "";
+  }
+
+  const installationAddressContainsUidOrPwd = (address) => {
+    if (address && address.length > 0) {
+      try {
+        const installationAddressUrl = new URL(address);
+        const username = installationAddressUrl.username;
+        const password = installationAddressUrl.password;
+        if (
+          (username && username.length > 0) ||
+          (password && password.length > 0)
+        ) {
+          return true;
+        }
+      }  catch (error) {
+        console.log("Error while attempting to construct an URL object.")
+      }
+    }
+    return false;
   }
 
   const computeInstallationAddress = (url = "", uid = "", pwd = "") => {
