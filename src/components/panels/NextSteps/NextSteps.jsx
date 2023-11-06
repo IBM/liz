@@ -6,7 +6,19 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, ListItem, UnorderedList, FlexGrid, Row, Column } from "@carbon/react";
+import {
+  Layer,
+  ListItem,
+  UnorderedList,
+  FlexGrid,
+  Row,
+  Column,
+  ToggletipLabel,
+  Toggletip,
+  ToggletipButton,
+  ToggletipContent
+} from "@carbon/react";
+import { Information } from '@carbon/react/icons';
 import "./_next-steps.scss";
 
 const NextSteps = (useSsh, useVnc, networkAddress = "<host-IP-address>", vncPassword = "<vncpassword>", patchState, localStorageKey) => {
@@ -36,6 +48,30 @@ const NextSteps = (useSsh, useVnc, networkAddress = "<host-IP-address>", vncPass
     });
   }, []);
 
+  const getContent = (value) => {
+    return (
+      <p>
+        {value}
+      </p>
+    );
+  }
+
+  const getLabel = (label, buttonLabel, content) => {
+    return (
+      <>
+        <ToggletipLabel>{label}</ToggletipLabel>
+        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
+          <ToggletipButton label={buttonLabel}>
+            <Information/>
+          </ToggletipButton>
+          <ToggletipContent>
+            {content}
+          </ToggletipContent>
+        </Toggletip>
+      </>
+    );
+  }
+
   const gridContentsMarkup = (
     <>
       <div className="next-steps_heading">Next steps</div>
@@ -62,7 +98,13 @@ const NextSteps = (useSsh, useVnc, networkAddress = "<host-IP-address>", vncPass
             Once the installer is started, use a VNC client to connect to the system at the following address:
           </div>
           <UnorderedList>
-            <ListItem>VNC host: {networkAddress}</ListItem>
+            <ListItem>VNC host: {networkAddress || "<host-IP-address>"}{!networkAddress &&
+              getLabel(
+                "",
+                "Show information",
+                getContent("The network address was not yet provided.")
+              )
+            }</ListItem>
             <ListItem>VNC password: {vncPassword}</ListItem>
           </UnorderedList>
         </>
@@ -73,7 +115,13 @@ const NextSteps = (useSsh, useVnc, networkAddress = "<host-IP-address>", vncPass
             Once the installer is started, use an SSH client to connect to the system at the following address:
           </div>
           <UnorderedList>
-            <ListItem>SSH host: installer@{networkAddress}</ListItem>
+            <ListItem>SSH host: installer@{networkAddress || "<host-IP-address>"}{!networkAddress &&
+              getLabel(
+                "",
+                "Show information",
+                getContent("The network address was not yet provided.")
+              )
+            }</ListItem>
           </UnorderedList>
         </>
       }
