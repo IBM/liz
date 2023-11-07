@@ -54,7 +54,7 @@ const getInterfaceName = (readChannelId = "", fid = "", uid = "") => {
     typeof uid === "string" &&
     uid.length > 0
   ) {
-    return getRoCeInterfaceName(uid);
+    return getRoCeInterfaceName(null, uid);
   } else if (
     fid &&
     typeof fid === "string" &&
