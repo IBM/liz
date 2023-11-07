@@ -66,7 +66,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     defaultToggled
                     toggled={state.layer}
                     labelText={getLabel(
-                        "Layer2",
+                        "Layer 2",
                         "Show information",
                         getContent("Select 1 for Layer 2 (ethernet) mode, or 0 for Layer 3 (IP) mode")
                     )}
@@ -84,7 +84,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                 <Toggle
                     toggled={state.portNo}
                     labelText={getLabel(
-                        "Portno",
+                        "Port number",
                         "Show information",
                         getContent("Network port to use (0 or 1) in case of networking cards with multiple ports.")
                     )}
