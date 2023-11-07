@@ -111,7 +111,7 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     labelText={getLabel(
                         "PCI function ID (FID)",
                         "Show information",
-                        getContent("Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.")
+                        getContent("Function ID (FID) of the PCI network device in hexadecimal format.")
                     )}
                     placeholder="e.g. 0x0100"
                     value={state?.pciFunctionId?.value ?? ""}
@@ -134,9 +134,9 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     invalidText="A valid value is required"
                     invalid={state && state.userIdentifier ? !state.userIdentifier.valid : false}
                     labelText={getLabel(
-                        "User identifier (UID)",
+                        "PCI User-defined identifier (UID)",
                         "Show information",
-                        getContent("Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.")
+                        getContent("User-defined identifier (UID) of the PCI network device in hexadecimal format.")
                     )}
                     placeholder="e.g. 0x1234"
                     value={state?.userIdentifier?.value ?? ""}
