@@ -331,8 +331,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
   }
 
   const areRoCeDeviceSettingComplete = () => {
-    return isPciFunctionIdComplete() &&
-    isUserIdentifierComplete();
+    return isPciFunctionIdComplete() ||
+      isUserIdentifierComplete();
   }
 
   const isVlanIdComplete = () => {

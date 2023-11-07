@@ -21,6 +21,15 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
     const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
     const isPciFunctionIdValid = (pciFunctionIdValue) => {
+        const userIdentifierValue = state?.userIdentifier?.value ?? "";
+
+        if (
+            userIdentifierValue.length > 0 &&
+            typeof pciFunctionIdValue === "string" &&
+            pciFunctionIdValue.length === 0
+        ) {
+            return true;
+        }
         if (isHex(pciFunctionIdValue)) {
             return true;
         }
@@ -28,6 +37,15 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
     }
 
     const isUserIdentifierValid = (pciUserIdValue) => {
+        const pciFunctionIdValue = state?.pciFunctionId?.value ?? "";
+
+        if (
+            pciFunctionIdValue.length > 0 &&
+            typeof pciUserIdValue === "string" &&
+            pciUserIdValue.length === 0
+        ) {
+            return true;
+        }
         if (isHex(pciUserIdValue)) {
             return true;
         }
