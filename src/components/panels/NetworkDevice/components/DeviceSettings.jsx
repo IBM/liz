@@ -118,6 +118,19 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
         </Grid>
     );
 
+    const roceLabelHasOptionalTag = (forLabel, label, optionalLabel) => {
+        const hasValue = state[forLabel]?.value?.length > 0 ?? false;
+        const allValuesArePresent = 
+            (state?.pciFunctionId?.value?.length > 0 ?? false) &&
+            (state?.userIdentifier?.value?.length > 0 ?? false);
+
+        if (hasValue && !allValuesArePresent) {
+            return optionalLabel;
+        }
+
+        return label;
+    }
+
     const roceMarkup = (
         <Grid className="device-settings_grid" fullWidth>
           <Column sm={2} md={8} lg={16}>
@@ -127,7 +140,11 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     invalidText="A valid value is required"
                     invalid={state && state.pciFunctionId ? !state.pciFunctionId.valid : false}
                     labelText={getLabel(
-                        "PCI function ID (FID)",
+                        roceLabelHasOptionalTag(
+                            "userIdentifier",
+                            "PCI function ID (FID)",
+                            "PCI function ID (FID, optional)"
+                        ),
                         "Show information",
                         getContent("Function ID (FID) of the PCI network device in hexadecimal format.")
                     )}
@@ -152,7 +169,11 @@ const DeviceSettings = ({ deviceSettingsId, patchState, updateFunction, state })
                     invalidText="A valid value is required"
                     invalid={state && state.userIdentifier ? !state.userIdentifier.valid : false}
                     labelText={getLabel(
-                        "PCI User-defined identifier (UID)",
+                        roceLabelHasOptionalTag(
+                            "pciFunctionId",
+                            "PCI User-defined identifier (UID)",
+                            "PCI User-defined identifier (UID, optional)"
+                        ),
                         "Show information",
                         getContent("User-defined identifier (UID) of the PCI network device in hexadecimal format.")
                     )}
