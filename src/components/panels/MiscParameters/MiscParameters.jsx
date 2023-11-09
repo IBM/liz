@@ -11,36 +11,43 @@ import { ParamFileTextArea } from "../../ParamFileTextArea";
 import "./_misc-parameters.scss";
 
 const MiscParameters = (patchState, localStorageKey) => {
+  const DEFAULT_PARAM_CONTENT = "ro ramdisk_size=40000 cio_ignore=all,!condev";
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
-      miscParameterContent: "",
+      miscParameterContent: DEFAULT_PARAM_CONTENT,
       miscParameterContentCopied: false,
-      miscParameterContentModified: false
+      miscParameterContentModified: false,
     };
 
     if (initialState) {
-      return initialState
+      return initialState;
     }
     return defaultState;
-  }
-  const [state, setState] = useState(getInitialState);
+  };
+  const [state, setState] = useState(getInitialState());
 
   const updateMiscParameterContent = (miscParameterContent) => {
-    setState((prevState) => ({...prevState, miscParameterContent}));
-  }
+    setState((prevState) => ({ ...prevState, miscParameterContent }));
+  };
 
   const updateCopied = () => {
-    setState((prevState) => ({...prevState, miscParameterContentCopied: true}));
+    setState((prevState) => ({
+      ...prevState,
+      miscParameterContentCopied: true,
+    }));
     const timer = setTimeout(() => {
-      setState((prevState) => ({...prevState, miscParameterContentCopied: false}));
+      setState((prevState) => ({
+        ...prevState,
+        miscParameterContentCopied: false,
+      }));
     }, 2000);
     return () => clearTimeout(timer);
-  }
+  };
 
   const updateModified = (miscParameterContentModified) => {
-    setState((prevState) => ({...prevState, miscParameterContentModified}));
-  }
+    setState((prevState) => ({ ...prevState, miscParameterContentModified }));
+  };
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
@@ -54,17 +61,16 @@ const MiscParameters = (patchState, localStorageKey) => {
           complete: true,
           disabled: true,
           invalid: false,
-          localStorageKey
-        }
-      }
+          localStorageKey,
+        },
+      },
     });
   }, [state]);
 
   const content = (
     <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
-      do eiusmod tempor incididunt ut fsil labore et dolore magna
-      aliqua.
+      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
+      eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
     </p>
   );
 
@@ -73,16 +79,23 @@ const MiscParameters = (patchState, localStorageKey) => {
       <div className="misc-parameters_textarea-container">
         <ParamFileTextArea
           id="misc-parameters_textarea"
-          contents={state.miscParameterContent ? state.miscParameterContent : ""}
+          contents={
+            state.miscParameterContent
+              ? state.miscParameterContent
+              : DEFAULT_PARAM_CONTENT
+          }
           copyContents={updateCopied}
           resetContents={() => {
             updateMiscParameterContent("");
             updateModified(false);
           }}
           onChange={(localMiscParameterContent) => {
-            const localMiscParameterContentValue = localMiscParameterContent && localMiscParameterContent.target && localMiscParameterContent.target.value
-              ? localMiscParameterContent.target.value
-              : "";
+            const localMiscParameterContentValue =
+              localMiscParameterContent &&
+              localMiscParameterContent.target &&
+              localMiscParameterContent.target.value
+                ? localMiscParameterContent.target.value
+                : "";
             updateMiscParameterContent(localMiscParameterContentValue);
             updateModified(true);
           }}
@@ -90,11 +103,13 @@ const MiscParameters = (patchState, localStorageKey) => {
           allowReset={state.miscParameterContentModified}
           label={{
             text: "Miscellaneous parameters",
-            content
+            content,
           }}
         />
       </div>
-      {state.miscParameterContentCopied ? <span className="misc-parameters_copied-label">Copied.</span> : null}
+      {state.miscParameterContentCopied ? (
+        <span className="misc-parameters_copied-label">Copied.</span>
+      ) : null}
     </>
   );
 
@@ -102,20 +117,18 @@ const MiscParameters = (patchState, localStorageKey) => {
     <Layer>
       <FlexGrid className="misc-parameters_grid">
         <Row>
-          <Column>
-            {gridContentsMarkup}
-          </Column>
+          <Column>{gridContentsMarkup}</Column>
         </Row>
       </FlexGrid>
     </Layer>
   );
 
-  return (markup);
+  return markup;
 };
 
 MiscParameters.propTypes = {
   patchState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired
+  localStorageKey: PropTypes.string.isRequired,
 };
 
 export default MiscParameters;
