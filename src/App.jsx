@@ -17,7 +17,7 @@ import {
   NetworkAddress,
   NetworkDevice,
   NextSteps,
-  DownloadParamFile
+  DownloadParamFile,
 } from "./components/panels";
 import {
   Information as InformationContent,
@@ -28,7 +28,7 @@ import {
   NetworkAddress as NetworkAddressContent,
   NetworkDevice as NetworkDeviceContent,
   NextSteps as NextStepsContent,
-  DownloadParamFile as DownloadParamFileContent
+  DownloadParamFile as DownloadParamFileContent,
 } from "./components/help";
 import { stateToParamFile } from "./util/param-file-util";
 import LandingPage from "./content/LandingPage";
@@ -50,14 +50,15 @@ const getProgressStepState = (state, forProgressStepState) => {
       hint: state.steps.hint[forProgressStepState],
       networkDevice: state.steps.networkDevice[forProgressStepState],
       networkAddress: state.steps.networkAddress[forProgressStepState],
-      installationParameters: state.steps.installationParameters[forProgressStepState],
+      installationParameters:
+        state.steps.installationParameters[forProgressStepState],
       miscParameters: state.steps.miscParameters[forProgressStepState],
       downloadParamFile: state.steps.downloadParamFile[forProgressStepState],
-      nextSteps: state.steps.nextSteps[forProgressStepState]
-    }
+      nextSteps: state.steps.nextSteps[forProgressStepState],
+    };
   }
   return {};
-}
+};
 
 const renderHelpContent = (step) => {
   let markup;
@@ -95,53 +96,76 @@ const renderHelpContent = (step) => {
   }
 
   return markup;
-}
+};
 
 const renderPanel = (step, patchState, state) => {
   let markup;
 
   switch (step) {
     case 0:
-      markup = InputFileSelection(patchState, {
-        disk: state.steps.inputFileSelection.diskSize,
-        memory: state.steps.inputFileSelection.memorySize,
-        level: state.steps.inputFileSelection.machineLevel
-      },
-      state.steps.inputFileSelection.docLink,
-      state.steps.inputFileSelection.localStorageKey,
-      state.steps.useStateFromLocalStorage,
-      state.steps.useExistingSettingsModalOpened);
+      markup = InputFileSelection(
+        patchState,
+        {
+          disk: state.steps.inputFileSelection.diskSize,
+          memory: state.steps.inputFileSelection.memorySize,
+          level: state.steps.inputFileSelection.machineLevel,
+        },
+        state.steps.inputFileSelection.docLink,
+        state.steps.inputFileSelection.localStorageKey,
+        state.steps.useStateFromLocalStorage,
+        state.steps.useExistingSettingsModalOpened,
+      );
       break;
     case 1:
-      markup = Information(patchState, {
-        name: state.steps.inputFileSelection.distributionName,
-        version: state.steps.inputFileSelection.distributionVersion
-      },
-      {
-        disk: state.steps.inputFileSelection.diskSize,
-        memory: state.steps.inputFileSelection.memorySize,
-        level: state.steps.inputFileSelection.machineLevel
-      },
-      state.steps.inputFileSelection.docLink,
-      state.steps.information.localStorageKey);
+      markup = Information(
+        patchState,
+        {
+          name: state.steps.inputFileSelection.distributionName,
+          version: state.steps.inputFileSelection.distributionVersion,
+        },
+        {
+          disk: state.steps.inputFileSelection.diskSize,
+          memory: state.steps.inputFileSelection.memorySize,
+          level: state.steps.inputFileSelection.machineLevel,
+        },
+        state.steps.inputFileSelection.docLink,
+        state.steps.information.localStorageKey,
+      );
       break;
     case 2:
       markup = Hint(patchState, state.steps.hint.localStorageKey);
       break;
     case 3:
-      markup = NetworkDevice(patchState, state.steps.networkDevice.localStorageKey);
+      markup = NetworkDevice(
+        patchState,
+        state.steps.networkDevice.localStorageKey,
+      );
       break;
     case 4:
-      markup = NetworkAddress(patchState, state.steps.networkAddress.localStorageKey);
+      markup = NetworkAddress(
+        patchState,
+        state.steps.networkAddress.localStorageKey,
+      );
       break;
     case 5:
-      markup = InstallationParameters(patchState, state.steps.installationParameters.localStorageKey);
+      markup = InstallationParameters(
+        patchState,
+        state.steps.installationParameters.localStorageKey,
+      );
       break;
     case 6:
-      markup = MiscParameters(patchState, state.steps.miscParameters.localStorageKey);
+      markup = MiscParameters(
+        patchState,
+        state.steps.miscParameters.localStorageKey,
+      );
       break;
     case 7:
-      markup = DownloadParamFile(patchState, stateToParamFile, state, state.steps.downloadParamFile.localStorageKey);
+      markup = DownloadParamFile(
+        patchState,
+        stateToParamFile,
+        state,
+        state.steps.downloadParamFile.localStorageKey,
+      );
       break;
     case 8:
       markup = NextSteps(
@@ -152,7 +176,7 @@ const renderPanel = (step, patchState, state) => {
           : state.steps.networkAddress.ipv6.address,
         state.steps.installationParameters.vnc.password,
         patchState,
-        state.steps.nextSteps.localStorageKey
+        state.steps.nextSteps.localStorageKey,
       );
       break;
     default:
@@ -164,7 +188,9 @@ const renderPanel = (step, patchState, state) => {
 
 const App = () => {
   const getInitialState = (useStateFromLocalStorage) => {
-    const initialState = JSON.parse(localStorage.getItem("com.ibm.systems.linux.z.app"));
+    const initialState = JSON.parse(
+      localStorage.getItem("com.ibm.systems.linux.z.app"),
+    );
     const defaultState = {
       steps: {
         inputFileSelection: {
@@ -173,51 +199,52 @@ const App = () => {
           memorySize: 3,
           diskSize: 10,
           machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
-          docLink: "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
+          docLink:
+            "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
           complete: false,
           disabled: false,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.inputFileSelection"
+          localStorageKey: "com.ibm.systems.linux.z.inputFileSelection",
         },
         information: {
           complete: false,
           disabled: true,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.information"
+          localStorageKey: "com.ibm.systems.linux.z.information",
         },
         downloadParamFile: {
           contents: "",
           complete: false,
           disabled: true,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.downloadParamFile"
+          localStorageKey: "com.ibm.systems.linux.z.downloadParamFile",
         },
         hint: {
           complete: false,
           disabled: true,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.hint"
+          localStorageKey: "com.ibm.systems.linux.z.hint",
         },
         installationParameters: {
           networkInstallationUrl: "",
           vnc: {
             password: "",
-            enabled: false
+            enabled: false,
           },
           ssh: {
-            enabled: false
+            enabled: false,
           },
           complete: false,
           disabled: true,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.installationParameters"
+          localStorageKey: "com.ibm.systems.linux.z.installationParameters",
         },
         miscParameters: {
           params: "",
-          complete: false,
+          complete: true,
           disabled: true,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.miscParameters"
+          localStorageKey: "com.ibm.systems.linux.z.miscParameters",
         },
         networkAddress: {
           addressType: "",
@@ -225,11 +252,11 @@ const App = () => {
             cidr: "",
             binary: "",
             netmask: "",
-            address: ""
+            address: "",
           },
           ipv6: {
             cidr: "",
-            address: ""
+            address: "",
           },
           gatewayIpAddress: "",
           nameserverIpAddress: "",
@@ -238,7 +265,7 @@ const App = () => {
           complete: false,
           disabled: true,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.networkAddress"
+          localStorageKey: "com.ibm.systems.linux.z.networkAddress",
         },
         networkDevice: {
           deviceType: "",
@@ -251,20 +278,20 @@ const App = () => {
           },
           roce: {
             fid: "",
-            uid: ""
+            uid: "",
           },
           vlanId: "",
           complete: false,
           disabled: true,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.networkDevice"
+          localStorageKey: "com.ibm.systems.linux.z.networkDevice",
         },
         nextSteps: {
           disabled: true,
           complete: false,
           invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.nextSteps"
-        }
+          localStorageKey: "com.ibm.systems.linux.z.nextSteps",
+        },
       },
       showNotification: false,
       isDirty: false,
@@ -272,7 +299,7 @@ const App = () => {
       showConfirmationModal: false,
       showUseExistingSettingsModal: false,
       useExistingSettingsModalOpened: true,
-      useStateFromLocalStorage: false
+      useStateFromLocalStorage: false,
     };
 
     if (initialState && useStateFromLocalStorage) {
@@ -280,13 +307,13 @@ const App = () => {
       initialState.showConfirmationModal = false;
       initialState.showUseExistingSettingsModal = true;
       initialState.useStateFromLocalStorage = true;
-      return initialState
+      return initialState;
     } else if (initialState && !useStateFromLocalStorage) {
       defaultState.showUseExistingSettingsModal = true;
       return defaultState;
     }
     return defaultState;
-  }
+  };
   const [step, setStep] = useState(0);
   const [state, setState] = useState(getInitialState);
   const patchState = (patch) => {
@@ -294,30 +321,32 @@ const App = () => {
     const mergedSteps = Object.assign(stateCopy.steps, patch.steps);
 
     stateCopy.steps = mergedSteps;
-    setState((prevState) => (Object.assign(prevState, stateCopy)));
+    setState((prevState) => Object.assign(prevState, stateCopy));
     updateIsDirty(true);
     updateIsDisabled(stateCopy);
     localStorage.setItem("com.ibm.systems.linux.z.app", JSON.stringify(state));
     console.log(state);
-  }
+  };
   const updateShowNotification = (showNotification) => {
-    setState((prevState) => ({...prevState, showNotification}));
-  }
+    setState((prevState) => ({ ...prevState, showNotification }));
+  };
   const updateIsHelpPanelExpanded = (isHelpPanelExpanded) => {
-    setState((prevState) => ({...prevState, isHelpPanelExpanded}));
-  }
+    setState((prevState) => ({ ...prevState, isHelpPanelExpanded }));
+  };
   const updateShowConfirmationModal = (showConfirmationModal) => {
-    setState((prevState) => ({...prevState, showConfirmationModal}));
-  }
+    setState((prevState) => ({ ...prevState, showConfirmationModal }));
+  };
   const updateShowUseExistingSettingsModal = (showUseExistingSettingsModal) => {
-    setState((prevState) => ({...prevState, showUseExistingSettingsModal}));
-  }
-  const updateUseExistingSettingsModalOpened = (useExistingSettingsModalOpened) => {
-    setState((prevState) => ({...prevState, useExistingSettingsModalOpened}));
-  }
+    setState((prevState) => ({ ...prevState, showUseExistingSettingsModal }));
+  };
+  const updateUseExistingSettingsModalOpened = (
+    useExistingSettingsModalOpened,
+  ) => {
+    setState((prevState) => ({ ...prevState, useExistingSettingsModalOpened }));
+  };
   const updateIsDirty = (isDirty) => {
-    setState((prevState) => ({...prevState, isDirty}));
-  }
+    setState((prevState) => ({ ...prevState, isDirty }));
+  };
   const setNavigationalStepsActivity = (flag = false, localState) => {
     const stateCopy = JSON.parse(JSON.stringify(localState));
     const keys = Object.keys(stateCopy.steps);
@@ -329,24 +358,26 @@ const App = () => {
       if (stateKey !== "inputFileSelection") {
         stateCopy.steps[stateKey].disabled = flag;
       }
-      setState((prevState) => ({...prevState, ...stateCopy}));
+      setState((prevState) => ({ ...prevState, ...stateCopy }));
     }
-  }
+  };
   const updateIsDisabled = (localState) => {
-    const hasInputFileSelection = localState && localState.steps && localState.steps.inputFileSelection;
-    const isComplete = hasInputFileSelection && localState.steps.inputFileSelection.complete;
+    const hasInputFileSelection =
+      localState && localState.steps && localState.steps.inputFileSelection;
+    const isComplete =
+      hasInputFileSelection && localState.steps.inputFileSelection.complete;
 
     if (hasInputFileSelection && !isComplete) {
       setNavigationalStepsActivity(true, localState);
     } else if (hasInputFileSelection && isComplete) {
       setNavigationalStepsActivity(false, localState);
     }
-  }
+  };
   const helpContentMarkup = renderHelpContent(step);
   const panelMarkup = renderPanel(step, patchState, state);
   const showHelpPanel = (flag) => {
     updateIsHelpPanelExpanded(flag);
-  }
+  };
   const showNotification = (callback) => {
     if (callback) {
       if (state.showNotification) {
@@ -356,8 +387,10 @@ const App = () => {
       updateShowNotification(true);
       return callback();
     }
-    return state.showNotification ? updateShowNotification(false) : updateShowNotification(true);
-  }
+    return state.showNotification
+      ? updateShowNotification(false)
+      : updateShowNotification(true);
+  };
   const closeNotification = (settingsWereDeleted) => {
     if (settingsWereDeleted && typeof settingsWereDeleted === "boolean") {
       showNotification(() => {
@@ -365,10 +398,19 @@ const App = () => {
       });
     }
     return updateShowNotification(false);
-  }
-  const progressStepComplete = getProgressStepState(state, PROGRESS_STEP_STATE_COMPLETE);
-  const progressStepInvalid = getProgressStepState(state, PROGRESS_STATE_INVALID);
-  const progressStepDisabled = getProgressStepState(state, PROGRESS_STATE_DISABLED);
+  };
+  const progressStepComplete = getProgressStepState(
+    state,
+    PROGRESS_STEP_STATE_COMPLETE,
+  );
+  const progressStepInvalid = getProgressStepState(
+    state,
+    PROGRESS_STATE_INVALID,
+  );
+  const progressStepDisabled = getProgressStepState(
+    state,
+    PROGRESS_STATE_DISABLED,
+  );
   const getLocalStorageKeys = () => {
     const keys = Object.keys(state.steps);
     const localStorageKeys = [];
@@ -380,25 +422,32 @@ const App = () => {
       localStorageKeys.push(currentLocalStorageKey);
     }
     return localStorageKeys;
-  }
+  };
   const getInlineNotification = () => {
-    const inlineNotification = JSON.parse(localStorage.getItem("com.ibm.systems.linux.z.inlineNotification"));
+    const inlineNotification = JSON.parse(
+      localStorage.getItem("com.ibm.systems.linux.z.inlineNotification"),
+    );
     const defaultInlineNotification = {
       show: true,
       kind: "warning",
       title: "IBM Internal Use only",
-      subtitle: "Code is not legally cleared."
+      subtitle: "Code is not legally cleared.",
     };
 
     if (inlineNotification) {
-      return inlineNotification
+      return inlineNotification;
     }
-    localStorage.setItem("com.ibm.systems.linux.z.inlineNotification", JSON.stringify(defaultInlineNotification));
+    localStorage.setItem(
+      "com.ibm.systems.linux.z.inlineNotification",
+      JSON.stringify(defaultInlineNotification),
+    );
     return defaultInlineNotification;
   };
-  const contentClassName = state.isHelpPanelExpanded ? "app__full-height": "app__full-height__collapsed";
+  const contentClassName = state.isHelpPanelExpanded
+    ? "app__full-height"
+    : "app__full-height__collapsed";
 
-  window.addEventListener('beforeunload', (event) => {
+  window.addEventListener("beforeunload", (event) => {
     if (state.isDirty) {
       event.returnValue = `Are you sure you want to leave?`;
     }
@@ -423,8 +472,8 @@ const App = () => {
         onRequestClose={() => {
           updateShowConfirmationModal(false);
         }}
-        modalHeading="The param file settings have been pruned from your browser cache.">
-      </Modal>
+        modalHeading="The param file settings have been pruned from your browser cache."
+      ></Modal>
       <Modal
         preventCloseOnClickOutside
         open={state.showUseExistingSettingsModal}
