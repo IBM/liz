@@ -6,15 +6,23 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Layer, Toggle, ToggletipLabel, Toggletip, ToggletipButton, ToggletipContent, TextInput, PasswordInput, FlexGrid, Row, Column } from "@carbon/react";
-import { Information } from '@carbon/react/icons';
+import {
+  Layer,
+  Toggle,
+  ToggletipLabel,
+  Toggletip,
+  ToggletipButton,
+  ToggletipContent,
+  TextInput,
+  PasswordInput,
+  FlexGrid,
+  Row,
+  Column,
+} from "@carbon/react";
+import { Information } from "@carbon/react/icons";
 import "./_installation-parameters.scss";
 
-const SUPPORTED_PROTOCOLS = [
-  "http",
-  "https",
-  "ftp"
-];
+const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
 
 const InstallationParameters = (patchState, localStorageKey) => {
   const getInitialState = () => {
@@ -25,78 +33,85 @@ const InstallationParameters = (patchState, localStorageKey) => {
       installationAddress: {
         value: "",
         computed: "",
-        valid: false
+        valid: false,
       },
       userName: {
         value: "",
-        valid: false
+        valid: false,
       },
       password: {
         value: "",
-        valid: false
+        valid: false,
       },
       userAndPwdAreDisabled: true,
       vncHost: "",
       vncPassword: "",
-      sshHost: ""
+      sshHost: "",
     };
 
     if (initialState) {
-      return initialState
+      return initialState;
     }
     return defaultState;
-  }
+  };
   const [state, setState] = useState(getInitialState);
 
   const updateUseSsh = (flag) => {
-    setState((prevState) => ({...prevState, useSsh: flag}));
-  }
+    setState((prevState) => ({ ...prevState, useSsh: flag }));
+  };
 
   const updateUseVnc = (flag) => {
-    setState((prevState) => ({...prevState, useVnc: flag}));
-  }
+    setState((prevState) => ({ ...prevState, useVnc: flag }));
+  };
 
   const updateInstallationAddress = (address, computedAddress, valid) => {
-    setState((prevState) => (
-      {
-        ...prevState,
-        installationAddress: {
-          value: address,
-          computed: computedAddress,
-          valid
-        },
-        userAndPwdAreDisabled: !address || address.length === 0 || installationAddressContainsUidOrPwd(address),
-        userName: {
-          value: installationAddressContainsUidOrPwd(address)
-            ? ""
-            : prevState?.userName?.value ?? "",
-          valid: installationAddressContainsUidOrPwd(address)
-            ? true
-            : prevState?.userName?.valid ?? true
-        },
-        password: {
-          value: installationAddressContainsUidOrPwd(address)
-            ? ""
-            : prevState?.password?.value ?? "",
-          valid: installationAddressContainsUidOrPwd(address)
-            ? true
-            : prevState?.password?.valid ?? true
-        }
-      }
-    ));
-  }
+    setState((prevState) => ({
+      ...prevState,
+      installationAddress: {
+        value: address,
+        computed: computedAddress,
+        valid,
+      },
+      userAndPwdAreDisabled:
+        !address ||
+        address.length === 0 ||
+        installationAddressContainsUidOrPwd(address),
+      userName: {
+        value: installationAddressContainsUidOrPwd(address)
+          ? ""
+          : prevState?.userName?.value ?? "",
+        valid: installationAddressContainsUidOrPwd(address)
+          ? true
+          : prevState?.userName?.valid ?? true,
+      },
+      password: {
+        value: installationAddressContainsUidOrPwd(address)
+          ? ""
+          : prevState?.password?.value ?? "",
+        valid: installationAddressContainsUidOrPwd(address)
+          ? true
+          : prevState?.password?.valid ?? true,
+      },
+    }));
+  };
 
   const updateUserName = (userName, valid) => {
-    setState((prevState) => ({...prevState, userName: { value: userName, valid }}));
-  }
+    setState((prevState) => ({
+      ...prevState,
+      userName: { value: userName, valid },
+    }));
+  };
 
   const updatePassword = (password, valid) => {
-    setState((prevState) => ({...prevState, password: { value: password, valid }}));
-  }
+    setState((prevState) => ({
+      ...prevState,
+      password: { value: password, valid },
+    }));
+  };
 
   const updateVncPassword = (password) => {
-    setState((prevState) => ({...prevState, vncPassword: password}));
-  }
+    setState((prevState) => ({ ...prevState, vncPassword: password }));
+  };
 
   const isUserNameInputValid = (userName) => {
     // The username is optional, if it is a zero length string
@@ -105,7 +120,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
       return true;
     }
     return false;
-  }
+  };
 
   const isPasswordInputValid = (password) => {
     // The password is optional, if it is a zero length string
@@ -114,12 +129,13 @@ const InstallationParameters = (patchState, localStorageKey) => {
       return true;
     }
     return false;
-  }
+  };
 
   const isInstallationAddressInputValid = (url) => {
     let installationAddressInputIsValid = false;
 
-    const expression = /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
+    const expression =
+      /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
     const regex = new RegExp(expression);
 
     if (url.match(regex)) {
@@ -130,17 +146,20 @@ const InstallationParameters = (patchState, localStorageKey) => {
     }
 
     return installationAddressInputIsValid;
-  }
+  };
 
   const hexEncodePassword = (password) => {
     if (password && typeof password === "string" && password.length > 0) {
-      return "%" + password
-        .split("")
-        .map(c => c.charCodeAt(0).toString(16).padStart(2, "0"))
-        .join("%");
+      return (
+        "%" +
+        password
+          .split("")
+          .map((c) => c.charCodeAt(0).toString(16).padStart(2, "0"))
+          .join("%")
+      );
     }
     return "";
-  }
+  };
 
   const installationAddressContainsUidOrPwd = (address) => {
     if (address && address.length > 0) {
@@ -154,12 +173,12 @@ const InstallationParameters = (patchState, localStorageKey) => {
         ) {
           return true;
         }
-      }  catch (error) {
-        console.log("Error while attempting to construct an URL object.")
+      } catch (error) {
+        console.log("Error while attempting to construct an URL object.");
       }
     }
     return false;
-  }
+  };
 
   const computeInstallationAddress = (url = "", uid = "", pwd = "") => {
     const address = url || (state?.installationAddress?.value ?? "");
@@ -172,43 +191,49 @@ const InstallationParameters = (patchState, localStorageKey) => {
         if (userName && userName.length > 0) {
           installationAddressUrl.username = userName;
         }
-        if (installationAddressUrl.password && installationAddressUrl.password.length > 0) {
-          installationAddressUrl.password = hexEncodePassword(installationAddressUrl.password);
+        if (
+          installationAddressUrl.password &&
+          installationAddressUrl.password.length > 0
+        ) {
+          installationAddressUrl.password = hexEncodePassword(
+            installationAddressUrl.password,
+          );
         }
-        if (!installationAddressUrl.password && password && password.length > 0) {
+        if (
+          !installationAddressUrl.password &&
+          password &&
+          password.length > 0
+        ) {
           installationAddressUrl.password = hexEncodePassword(password);
         }
         return installationAddressUrl.toString();
       } catch (error) {
-        console.log("Error while attempting to construct an URL object.")
+        console.log("Error while attempting to construct an URL object.");
       }
     }
     return "";
-  }
+  };
 
   const content = (
     <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
-      do eiusmod tempor incididunt ut fsil labore et dolore magna
-      aliqua.
+      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
+      eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
     </p>
   );
 
   const getLabel = (label, buttonLabel, content) => {
     return (
-        <>
+      <>
         <ToggletipLabel>{label}</ToggletipLabel>
         <Toggletip className="misc-parameters_info-icon" align="right-bottom">
-            <ToggletipButton label={buttonLabel}>
-            <Information/>
-            </ToggletipButton>
-            <ToggletipContent>
-            {content}
-            </ToggletipContent>
+          <ToggletipButton label={buttonLabel}>
+            <Information />
+          </ToggletipButton>
+          <ToggletipContent>{content}</ToggletipContent>
         </Toggletip>
-        </>
+      </>
     );
-  }
+  };
 
   const useSshToggled = state.useSsh;
   const useVncToggled = state.useVnc;
@@ -216,22 +241,27 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const isCompleteAndValid = (callback) => {
     let isComplete = false;
     let isValid = false;
-  
+
     if (
       typeof state.installationAddress === "object" &&
       typeof state.installationAddress.value === "string" &&
       state.installationAddress.value.length > 0
     ) {
       isComplete = true;
-      isValid = isInstallationAddressInputValid(state.installationAddress.value);
+      isValid = isInstallationAddressInputValid(
+        state.installationAddress.value,
+      );
     }
 
     if (isComplete && isValid) {
-      return callback(null, {isComplete, isValid});
+      return callback(null, { isComplete, isValid });
     }
 
-    return callback(new Error('Form data is incomplete or invalid'), {isComplete, isValid});
-  }
+    return callback(new Error("Form data is incomplete or invalid"), {
+      isComplete,
+      isValid,
+    });
+  };
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
@@ -244,17 +274,17 @@ const InstallationParameters = (patchState, localStorageKey) => {
               networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
-                enabled: state.useVnc
+                enabled: state.useVnc,
               },
               ssh: {
                 host: state.sshHost,
-                enabled: state.useSsh
+                enabled: state.useSsh,
               },
               localStorageKey,
               complete: true,
-              invalid: false
-            }
-          }
+              invalid: false,
+            },
+          },
         });
       } else if (isCompleteAndValid.isComplete) {
         patchState({
@@ -263,37 +293,38 @@ const InstallationParameters = (patchState, localStorageKey) => {
               networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
-                enabled: state.useVnc
+                enabled: state.useVnc,
               },
               ssh: {
                 host: state.sshHost,
-                enabled: state.useSsh
+                enabled: state.useSsh,
               },
               localStorageKey,
               complete: isCompleteAndValid.isComplete,
-              invalid: !isCompleteAndValid.isValid
-            }
-          }
+              invalid: !isCompleteAndValid.isValid,
+            },
+          },
         });
       } else {
         patchState({
           steps: {
             installationParameters: {
-              networkInstallationUrl: state?.installationAddress?.computed ?? "",
+              networkInstallationUrl:
+                state?.installationAddress?.computed ?? "",
               vnc: {
                 password: state?.vncPassword ?? "",
-                enabled: state?.useVnc ?? ""
+                enabled: state?.useVnc ?? "",
               },
               ssh: {
                 host: state?.sshHost ?? "",
-                enabled: state?.useSsh ?? ""
+                enabled: state?.useSsh ?? "",
               },
               localStorageKey,
               disabled: false,
               complete: isCompleteAndValid.isComplete,
-              invalid: !isCompleteAndValid.isValid
-            }
-          }
+              invalid: !isCompleteAndValid.isValid,
+            },
+          },
         });
       }
     });
@@ -303,17 +334,24 @@ const InstallationParameters = (patchState, localStorageKey) => {
     <>
       <TextInput
         helperText=""
+        type="url"
         id="installation-address-input"
-        invalid={state && state.installationAddress ? !state.installationAddress.valid : false}
+        invalid={
+          state && state.installationAddress
+            ? !state.installationAddress.valid
+            : false
+        }
         invalidText="A valid value is required"
         labelText={getLabel(
           "Installation address",
           "Show information",
-          content
+          content,
         )}
         placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
         className="installation-parameters_installation-address-input"
-        defaultValue={state.installationAddress ? state.installationAddress.value : ""}
+        defaultValue={
+          state.installationAddress ? state.installationAddress.value : ""
+        }
         value={state.installationAddress ? state.installationAddress.value : ""}
         onChange={(url) => {
           const urlValue = url && url.target ? url.target.value : "";
@@ -326,7 +364,11 @@ const InstallationParameters = (patchState, localStorageKey) => {
           const urlValue = url && url.target ? url.target.value : "";
           const computedUrlValue = computeInstallationAddress();
           const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-          updateInstallationAddress(urlValue, computedUrlValue, urlValueIsValid);
+          updateInstallationAddress(
+            urlValue,
+            computedUrlValue,
+            urlValueIsValid,
+          );
         }}
       />
       <TextInput
@@ -336,11 +378,13 @@ const InstallationParameters = (patchState, localStorageKey) => {
         labelText={getLabel(
           "Installation address (computed)",
           "Show information",
-          content
+          content,
         )}
         placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
         className="installation-parameters_installation-address-input"
-        value={state.installationAddress ? state.installationAddress.computed : ""}
+        value={
+          state.installationAddress ? state.installationAddress.computed : ""
+        }
       />
     </>
   );
@@ -353,21 +397,18 @@ const InstallationParameters = (patchState, localStorageKey) => {
         id="username-input"
         invalid={state && state.userName ? !state.userName.valid : false}
         invalidText="A valid value is required"
-        labelText={getLabel(
-          "Username (optional)",
-          "Show information",
-          content
-        )}
+        labelText={getLabel("Username (optional)", "Show information", content)}
         placeholder="ex: johndoe"
         className="installation-parameters_username-input"
         defaultValue={state.userName ? state.userName.value : ""}
         value={state.userName ? state.userName.value : ""}
         onChange={(userName) => {
-          const userNameValue = userName && userName.target ? userName.target.value : "";
+          const userNameValue =
+            userName && userName.target ? userName.target.value : "";
           const computedUrlValue = state.installationAddress
             ? computeInstallationAddress(
                 state.installationAddress.value,
-                userNameValue
+                userNameValue,
               )
             : "";
           // while editing we don't update the validity but set it to true
@@ -376,15 +417,16 @@ const InstallationParameters = (patchState, localStorageKey) => {
           updateInstallationAddress(
             state?.installationAddress?.value ?? "",
             computedUrlValue,
-            true
+            true,
           );
         }}
         onBlur={(userName) => {
-          const userNameValue = userName && userName.target ? userName.target.value : "";
+          const userNameValue =
+            userName && userName.target ? userName.target.value : "";
           const computedUrlValue = state.installationAddress
             ? computeInstallationAddress(
                 state.installationAddress.value,
-                userNameValue
+                userNameValue,
               )
             : "";
           const userNameValueIsValid = isUserNameInputValid(userNameValue);
@@ -392,7 +434,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
           updateInstallationAddress(
             state?.installationAddress?.value ?? "",
             computedUrlValue,
-            true
+            true,
           );
         }}
       />
@@ -408,22 +450,19 @@ const InstallationParameters = (patchState, localStorageKey) => {
         id="password-input"
         invalid={state && state.password ? !state.password.valid : false}
         invalidText="A valid value is required"
-        labelText={getLabel(
-          "Password (optional)",
-          "Show information",
-          content
-        )}
+        labelText={getLabel("Password (optional)", "Show information", content)}
         placeholder="ex: foobar"
         className="installation-parameters_password-input"
         defaultValue={state.password ? state.password.value : ""}
         value={state.password ? state.password.value : ""}
         onChange={(password) => {
-          const passwordValue = password && password.target ? password.target.value : "";
+          const passwordValue =
+            password && password.target ? password.target.value : "";
           const computedUrlValue = state.installationAddress
             ? computeInstallationAddress(
                 state.installationAddress.value,
                 state?.userName?.value ?? "",
-                passwordValue
+                passwordValue,
               )
             : "";
           // while editing we don't update the validity but set it to true
@@ -432,16 +471,17 @@ const InstallationParameters = (patchState, localStorageKey) => {
           updateInstallationAddress(
             state?.installationAddress?.value ?? "",
             computedUrlValue,
-            true
+            true,
           );
         }}
         onBlur={(password) => {
-          const passwordValue = password && password.target ? password.target.value : "";
+          const passwordValue =
+            password && password.target ? password.target.value : "";
           const computedUrlValue = state.installationAddress
             ? computeInstallationAddress(
                 state.installationAddress.value,
                 state?.userName?.value ?? "",
-                passwordValue
+                passwordValue,
               )
             : "";
           const passwordValueIsValid = isPasswordInputValid(passwordValue);
@@ -449,7 +489,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
           updateInstallationAddress(
             state?.installationAddress?.value ?? "",
             computedUrlValue,
-            true
+            true,
           );
         }}
       />
@@ -462,7 +502,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         labelText={getLabel(
           "VNC for installation",
           "Show information",
-          content
+          content,
         )}
         labelA="Disable"
         labelB="Enable"
@@ -476,28 +516,28 @@ const InstallationParameters = (patchState, localStorageKey) => {
           }
         }}
       />
-      {useVncToggled &&
+      {useVncToggled && (
         <PasswordInput
           autoComplete="true"
           helperText=""
           id="vnc-password-input"
           invalidText="A valid value is required"
-          labelText={getLabel(
-            "VNC password",
-            "Show information",
-            content
-          )}
+          labelText={getLabel("VNC password", "Show information", content)}
           placeholder="VNC password here"
           defaultValue={state.vncPassword ? state.vncPassword : ""}
           value={state.vncPassword ? state.vncPassword : ""}
           onChange={(password) => {
-            updateVncPassword(password && password.target ? password.target.value : "");
+            updateVncPassword(
+              password && password.target ? password.target.value : "",
+            );
           }}
           onBlur={(password) => {
-            updateVncPassword(password && password.target ? password.target.value : "");
+            updateVncPassword(
+              password && password.target ? password.target.value : "",
+            );
           }}
         />
-      }
+      )}
     </div>
   );
 
@@ -507,7 +547,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         labelText={getLabel(
           "SSH for installation",
           "Show information",
-          content
+          content,
         )}
         labelA="Disable"
         labelB="Enable"
@@ -528,34 +568,24 @@ const InstallationParameters = (patchState, localStorageKey) => {
     <Layer>
       <FlexGrid className="installation-parameters__grid">
         <Row>
-          <Column>
-            {gridContentsMarkupRowOne}
-          </Column>
+          <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
         <Row>
-        <Column>
-            {gridContentsMarkupRowTwoColumnOne}
-          </Column>
-          <Column>
-            {gridContentsMarkupRowTwoColumnTwo}
-          </Column>
+          <Column>{gridContentsMarkupRowTwoColumnOne}</Column>
+          <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
         </Row>
         <Row>
-          <Column>
-            {gridContentsMarkupRowThreeColumnOne}
-          </Column>
-          <Column>
-            {gridContentsMarkupRowThreeColumnTwo}
-          </Column>
+          <Column>{gridContentsMarkupRowThreeColumnOne}</Column>
+          <Column>{gridContentsMarkupRowThreeColumnTwo}</Column>
         </Row>
       </FlexGrid>
-    </Layer>    
+    </Layer>
   );
 };
 
 InstallationParameters.propTypes = {
   patchState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired
+  localStorageKey: PropTypes.string.isRequired,
 };
 
 export default InstallationParameters;
