@@ -6,10 +6,23 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, /* FileUploader, */ FlexGrid, Row, Column, Layer } from "@carbon/react";
+import {
+  Dropdown,
+  /* FileUploader, */ FlexGrid,
+  Row,
+  Column,
+  Layer,
+} from "@carbon/react";
 import "./_input-file-selection.scss";
 
-const InputFileSelection = (patchState, systemRequirements, docLink, localStorageKey, useStateFromLocalStorage, canWriteToLocalStorage) => {
+const InputFileSelection = (
+  patchState,
+  systemRequirements,
+  docLink,
+  localStorageKey,
+  useStateFromLocalStorage,
+  canWriteToLocalStorage,
+) => {
   const STATE_ORIGIN_USER = "user";
   const STATE_ORIGIN_DEFAULT = "default";
   const STATE_ORIGIN_STORAGE = "storage";
@@ -19,41 +32,59 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
     const defaultState = {
       selectedDistributionName: {},
       selectedDistributionVersion: {},
-      origin: STATE_ORIGIN_DEFAULT
+      origin: STATE_ORIGIN_DEFAULT,
     };
 
     if (useDefault) {
       return defaultState;
-    } else if (initialState && !useStateFromLocalStorage && canWriteToLocalStorage) {
+    } else if (
+      initialState &&
+      !useStateFromLocalStorage &&
+      canWriteToLocalStorage
+    ) {
       return defaultState;
     } else if (!initialState) {
       return defaultState;
     }
     initialState.origin = STATE_ORIGIN_STORAGE;
-    return initialState
-  }
+    return initialState;
+  };
   const [state, setState] = useState(getInitialState);
 
   const distributionList = [
     {
       id: "rhel",
       label: "Red Hat Enterprise Linux 9 (RHEL 9)",
-    }
+    },
   ];
   const versionList = [
     {
-      id: "version-9.0",
-      label: "9.0",
-    }
+      id: "version-9.x",
+      label: "9.x",
+    },
   ];
 
-  const updateSelectedDistributionName = (selectedDistributionName, callback) => {
-    setState((prevState) => ({...prevState, selectedDistributionName, origin: STATE_ORIGIN_USER}));
-  }
+  const updateSelectedDistributionName = (
+    selectedDistributionName,
+    callback,
+  ) => {
+    setState((prevState) => ({
+      ...prevState,
+      selectedDistributionName,
+      origin: STATE_ORIGIN_USER,
+    }));
+  };
 
-  const updateSelectedDistributionVersion = (selectedDistributionVersion, callback) => {
-    setState((prevState) => ({...prevState, selectedDistributionVersion, origin: STATE_ORIGIN_USER}));
-  }
+  const updateSelectedDistributionVersion = (
+    selectedDistributionVersion,
+    callback,
+  ) => {
+    setState((prevState) => ({
+      ...prevState,
+      selectedDistributionVersion,
+      origin: STATE_ORIGIN_USER,
+    }));
+  };
 
   const isComplete = (callback) => {
     if (
@@ -67,7 +98,7 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
       return callback(null, true);
     }
     return callback(null, false);
-  }
+  };
 
   useEffect(() => {
     isComplete((error, isComplete) => {
@@ -75,25 +106,50 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
         patchState({
           steps: {
             inputFileSelection: {
-              distributionName: state.selectedDistributionName && state.selectedDistributionName.label ? state.selectedDistributionName.label : "",
-              distributionVersion: state.selectedDistributionVersion && state.selectedDistributionVersion.label ? state.selectedDistributionVersion.label : "",
-              memorySize: systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0,
-              diskSize: systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0,
-              machineLevel: systemRequirements && systemRequirements.level ? systemRequirements.level : "",
+              distributionName:
+                state.selectedDistributionName &&
+                state.selectedDistributionName.label
+                  ? state.selectedDistributionName.label
+                  : "",
+              distributionVersion:
+                state.selectedDistributionVersion &&
+                state.selectedDistributionVersion.label
+                  ? state.selectedDistributionVersion.label
+                  : "",
+              memorySize:
+                systemRequirements && systemRequirements.memory
+                  ? systemRequirements.memory
+                  : 0,
+              diskSize:
+                systemRequirements && systemRequirements.disk
+                  ? systemRequirements.disk
+                  : 0,
+              machineLevel:
+                systemRequirements && systemRequirements.level
+                  ? systemRequirements.level
+                  : "",
               docLink,
               complete: isComplete,
-              localStorageKey
-            }
-          }
+              localStorageKey,
+            },
+          },
         });
       }
     });
 
     const initialState = getInitialState(true);
-    const stateOriginsFromStorage = state && state.origin === STATE_ORIGIN_STORAGE;
+    const stateOriginsFromStorage =
+      state && state.origin === STATE_ORIGIN_STORAGE;
 
-    if (canWriteToLocalStorage && !useStateFromLocalStorage && stateOriginsFromStorage) {
-      return localStorage.setItem(localStorageKey, JSON.stringify(initialState));
+    if (
+      canWriteToLocalStorage &&
+      !useStateFromLocalStorage &&
+      stateOriginsFromStorage
+    ) {
+      return localStorage.setItem(
+        localStorageKey,
+        JSON.stringify(initialState),
+      );
     } else if (canWriteToLocalStorage) {
       return localStorage.setItem(localStorageKey, JSON.stringify(state));
     }
@@ -176,22 +232,14 @@ const InputFileSelection = (patchState, systemRequirements, docLink, localStorag
     <Layer>
       <FlexGrid className="input-file-selection__grid">
         <Row>
-          <Column>
-            {gridContentsMarkupRowOne}
-          </Column>
+          <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
         <Row>
-          <Column>
-            {gridContentsMarkupRowTwo}
-          </Column>
+          <Column>{gridContentsMarkupRowTwo}</Column>
         </Row>
         <Row>
-          <Column>
-            {gridContentsMarkupRowThreeColumnOne}
-          </Column>
-          <Column>
-            {gridContentsMarkupRowThreeColumnTwo}
-          </Column>
+          <Column>{gridContentsMarkupRowThreeColumnOne}</Column>
+          <Column>{gridContentsMarkupRowThreeColumnTwo}</Column>
         </Row>
       </FlexGrid>
     </Layer>
@@ -203,12 +251,12 @@ InputFileSelection.propTypes = {
   systemRequirements: PropTypes.shape({
     disk: PropTypes.number.isRequired,
     memory: PropTypes.number.isRequired,
-    level: PropTypes.string.isRequired
+    level: PropTypes.string.isRequired,
   }).isRequired,
   docLink: PropTypes.string.isRequired,
   localStorageKey: PropTypes.string.isRequired,
   useStateFromLocalStorage: PropTypes.bool.isRequired,
-  canWriteToLocalStorage: PropTypes.bool.isRequired
+  canWriteToLocalStorage: PropTypes.bool.isRequired,
 };
 
 export default InputFileSelection;
