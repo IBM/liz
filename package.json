@@ -36,10 +36,16 @@
     "@carbon/styles": "1.42.0",
     "@carbon/themes": "11.27.0",
     "@carbon/type": "11.25.1",
+    "i18next": "^23.7.3",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "i18next-hmr": "^3.0.3",
+    "i18next-http-backend": "^2.4.1",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.2.0",
-    "react-router-dom": "6.18.0"
+    "react-i18next": "^13.4.0",
+    "react-router-dom": "6.18.0",
+    "vite-plugin-i18next-loader": "^2.0.4"
   },
   "devDependencies": {
     "@babel/preset-env": "7.23.3",

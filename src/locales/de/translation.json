@@ -1,0 +1,5 @@
+{
+  "modalHeading.localStorageHasBeenPrunedConfirmation": "Die lokalen Einstellungen fuer die Erzeugung eines Param Files wurden geloescht.",
+  "modalHeading.useExistingSettingsPrompt": "Es sind bereits Param File Einstellungen vorhanden. Sollen diese als Basis fuer die aktuelle Session verwendet werden?",
+  "modalLabel.useExistingSettingsPrompt": "Es sind Einstellungen vornhanden."
+}

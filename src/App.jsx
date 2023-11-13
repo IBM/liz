@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal, Content } from "@carbon/react";
 import { Routes, Route } from "react-router-dom";
 import InstallerHeader from "./components/InstallerHeader";
@@ -187,6 +188,7 @@ const renderPanel = (step, patchState, state) => {
 };
 
 const App = () => {
+  const { t } = useTranslation();
   const getInitialState = (useStateFromLocalStorage) => {
     const initialState = JSON.parse(
       localStorage.getItem("com.ibm.systems.linux.z.app"),
@@ -472,13 +474,16 @@ const App = () => {
         onRequestClose={() => {
           updateShowConfirmationModal(false);
         }}
-        modalHeading="The param file settings have been pruned from your browser cache."
+        modalHeading={t("modalHeading.localStorageHasBeenPrunedConfirmation")}
       ></Modal>
       <Modal
         preventCloseOnClickOutside
         open={state.showUseExistingSettingsModal}
-        modalHeading="There are existing param file settings. Do you want to use them as a baseline for this session?"
-        modalLabel="Existing settings found"
+        modalHeading={t("modalHeading.useExistingSettingsPrompt")}
+        modalLabel={t(
+          "modalLabel.useExistingSettingsPrompt",
+          "Existing settings found",
+        )}
         primaryButtonText="Yes"
         secondaryButtonText="No"
         onRequestSubmit={() => {

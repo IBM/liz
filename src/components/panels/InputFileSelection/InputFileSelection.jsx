@@ -130,6 +130,8 @@ const InputFileSelection = (
                   : "",
               docLink,
               complete: isComplete,
+              disabled: false,
+              invalid: false,
               localStorageKey,
             },
           },
@@ -177,6 +179,7 @@ const InputFileSelection = (
           aria-label="Select a distribution"
           id="distribution-selection"
           items={distributionList}
+          titleText=""
           label="Dropdown menu options"
           size="md"
           warn={false}
@@ -191,6 +194,7 @@ const InputFileSelection = (
           aria-label="Select a version"
           id="version-selection"
           items={versionList}
+          titleText=""
           label="Select a version"
           size="md"
           warn={false}

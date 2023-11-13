@@ -10,7 +10,13 @@ import PropTypes from "prop-types";
 import About from "../../components/About";
 import "./_landing-page.scss";
 
-const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeNotification, localStorageKeys }) => {
+const LandingPage = ({
+  panelMarkup,
+  showNotification,
+  inlineNotification,
+  closeNotification,
+  localStorageKeys,
+}) => {
   const pruneSettings = () => {
     let i;
     for (i = 0; i < localStorageKeys.length; i++) {
@@ -19,26 +25,30 @@ const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeN
     localStorage.removeItem("com.ibm.systems.linux.z.app");
     localStorage.removeItem("com.ibm.systems.linux.z.inlineNotification");
     closeNotification(true);
-  }
-  const showInlineNotification = inlineNotification ? inlineNotification.show : false;
+  };
+  const showInlineNotification = inlineNotification
+    ? inlineNotification.show
+    : false;
   const onCloseInlineNotification = () => {
     const localInlineNotification = Object.assign({}, inlineNotification);
     localInlineNotification.show = false;
 
-    localStorage.setItem("com.ibm.systems.linux.z.inlineNotification", JSON.stringify(localInlineNotification));
+    localStorage.setItem(
+      "com.ibm.systems.linux.z.inlineNotification",
+      JSON.stringify(localInlineNotification),
+    );
   };
 
   return (
     <>
-      {showNotification &&
+      {showNotification && (
         <About
           closeNotification={closeNotification}
           pruneSettings={pruneSettings}
         />
-      }
-      {showInlineNotification &&
+      )}
+      {showInlineNotification && (
         <InlineNotification
-          actionButtonLabel="Action"
           aria-label="closes notification"
           onClose={onCloseInlineNotification}
           onCloseButtonClick={onCloseInlineNotification}
@@ -48,7 +58,7 @@ const LandingPage = ({ panelMarkup, showNotification, inlineNotification, closeN
           kind={inlineNotification.kind}
           className="landing-page__legal-banner"
         />
-      }
+      )}
       <Grid className="landing-page__grid">
         <Column
           sm={6}
@@ -70,10 +80,10 @@ LandingPage.propTypes = {
     show: PropTypes.bool.isRequired,
     kind: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    subtitle: PropTypes.string.isRequired
+    subtitle: PropTypes.string.isRequired,
   }).isRequired,
   closeNotification: PropTypes.func.isRequired,
-  localStorageKeys: PropTypes.array.isRequired
+  localStorageKeys: PropTypes.array.isRequired,
 };
 
 export default LandingPage;
