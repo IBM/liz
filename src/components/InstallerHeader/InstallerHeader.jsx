@@ -16,7 +16,6 @@ import {
   Layer,
   SkipToContent,
   SideNav,
-  SideNavItems,
 } from "@carbon/react";
 import { Help, LinuxAlt } from "@carbon/icons-react";
 import PropTypes from "prop-types";
@@ -24,26 +23,24 @@ import InstallerFlow from "../InstallerFlow";
 import HelpContent from "./components/HelpContent";
 import "./_installer-header.scss";
 
-const InstallerHeader = (
-  {
-    onShowNotification,
-    onShowHelpPanel,
-    onProgress,
-    progressStep,
-    progressStepComplete,
-    progressStepInvalid,
-    progressStepDisabled,
-    helpContent
-  }
-) => {
+const InstallerHeader = ({
+  onShowNotification,
+  onShowHelpPanel,
+  onProgress,
+  progressStep,
+  progressStepComplete,
+  progressStepInvalid,
+  progressStepDisabled,
+  helpContent,
+}) => {
   const [state, setState] = useState({
-    expanded: true
+    expanded: true,
   });
 
   const updateExpanded = (expanded) => {
     setState({ ...state, expanded });
     onShowHelpPanel(expanded);
-  }
+  };
 
   return (
     <Layer>
@@ -63,7 +60,9 @@ const InstallerHeader = (
               <HeaderGlobalAction
                 aria-label="Help"
                 onClick={() => {
-                  return state.expanded ? updateExpanded(false) : updateExpanded(true);
+                  return state.expanded
+                    ? updateExpanded(false)
+                    : updateExpanded(true);
                 }}
               >
                 <Help size="24" />
@@ -82,15 +81,13 @@ const InstallerHeader = (
               expanded={true}
               className="installer-header__sidenav-component"
             >
-              <SideNavItems>
-                <InstallerFlow
-                  onProgress={onProgress}
-                  progressStep={progressStep}
-                  progressStepComplete={progressStepComplete}
-                  progressStepInvalid={progressStepInvalid}
-                  progressStepDisabled={progressStepDisabled}
-                />
-              </SideNavItems>
+              <InstallerFlow
+                onProgress={onProgress}
+                progressStep={progressStep}
+                progressStepComplete={progressStepComplete}
+                progressStepInvalid={progressStepInvalid}
+                progressStepDisabled={progressStepDisabled}
+              />
             </SideNav>
             <HeaderPanel
               expanded={state.expanded}
@@ -124,7 +121,7 @@ InstallerHeader.propTypes = {
     installationParameters: PropTypes.bool.isRequired,
     miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
-    nextSteps: PropTypes.bool.isRequired
+    nextSteps: PropTypes.bool.isRequired,
   }).isRequired,
   progressStepInvalid: PropTypes.shape({
     inputFileSelection: PropTypes.bool.isRequired,
@@ -135,7 +132,7 @@ InstallerHeader.propTypes = {
     installationParameters: PropTypes.bool.isRequired,
     miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
-    nextSteps: PropTypes.bool.isRequired
+    nextSteps: PropTypes.bool.isRequired,
   }).isRequired,
   progressStepDisabled: PropTypes.shape({
     inputFileSelection: PropTypes.bool.isRequired,
@@ -146,9 +143,9 @@ InstallerHeader.propTypes = {
     installationParameters: PropTypes.bool.isRequired,
     miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
-    nextSteps: PropTypes.bool.isRequired
+    nextSteps: PropTypes.bool.isRequired,
   }).isRequired,
-  helpContent: PropTypes.node.isRequired
+  helpContent: PropTypes.node.isRequired,
 };
 
 export default InstallerHeader;
