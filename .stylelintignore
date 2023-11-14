@@ -17,6 +17,7 @@ jest.config.json
 **/*.snap
 **/*.html
 .husky/*
+.github/*
 src/locales/**/*.json
 .env
 .env.github
