@@ -9,6 +9,9 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 
+// import enJSON from './locales/en/translation.json'
+// import deJSON from './locales/de/translation.json'
+
 i18n
   .use(Backend)
   .use(LanguageDetector)
@@ -16,6 +19,10 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     debug: true,
+    // resources: {
+    //     en: { ...enJSON },
+    //     de: { ...deJSON }
+    // },
     lng: "en",
     fallbackLng: "en",
     preload: ["en", "de"],

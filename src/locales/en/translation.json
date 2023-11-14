@@ -1,5 +1,7 @@
 {
-  "modalHeading.localStorageHasBeenPrunedConfirmation": "The param file settings have been pruned from your browser cache.",
-  "modalHeading.useExistingSettingsPrompt": "There are existing param file settings. Do you want to use them as a baseline for this session?",
-  "modalLabel.useExistingSettingsPrompt": "Existing settings found"
+  "translation": {
+    "modalHeading.localStorageHasBeenPrunedConfirmation": "The param file settings have been pruned from your browser cache.",
+    "modalHeading.useExistingSettingsPrompt": "There are existing param file settings. Do you want to use them as a baseline for this session?",
+    "modalLabel.useExistingSettingsPrompt": "Existing settings found"
+  }
 }
