@@ -5,14 +5,17 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = () => {
-    return (
-        <div className="help-panel__input-file-selection__content">
-            Help contents for input file selection panel.
-        </div>
-    );
-}
+  const { t } = useTranslation();
+
+  return (
+    <div className="help-panel__input-file-selection__content">
+      {t("helpPanelContents.inputFileSelection", { ns: "help" })}
+    </div>
+  );
+};
 
 export default InputFileSelection;

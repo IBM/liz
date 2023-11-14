@@ -5,14 +5,17 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./_hint.scss";
 
 const Hint = () => {
-    return (
-        <div className="help-panel__hint__content">
-            Help contents for hint panel.
-        </div>
-    );
-}
+  const { t } = useTranslation();
+
+  return (
+    <div className="help-panel__hint__content">
+      {t("helpPanelContents.hint", { ns: "help" })}
+    </div>
+  );
+};
 
 export default Hint;

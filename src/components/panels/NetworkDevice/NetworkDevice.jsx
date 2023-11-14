@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
@@ -28,6 +29,7 @@ import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
 const NetworkDevice = (patchState, localStorageKey) => {
+  const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
@@ -533,16 +535,14 @@ const NetworkDevice = (patchState, localStorageKey) => {
       <Dropdown
         className="network-device_device-type-dropdown"
         titleText={getLabel(
-          "Device type",
-          "Show information",
-          getContent(
-            "OSA (Open Systems Adapter) or RoCE (PCI RDMA over Converged Ethernet)",
-          ),
+          t("panel.networkDevice.deviceTypeTextLabel"),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(t("panel.networkDevice.deviceTypeHelp")),
         )}
-        aria-label="Select a device type"
+        aria-label={t("panel.networkDevice.deviceTypeLabel")}
         id="network-device_device-type-selection"
         items={deviceTypeList}
-        label="Select a device type"
+        label={t("panel.networkDevice.deviceTypeLabel")}
         helperText=""
         size="md"
         warn={false}
@@ -569,11 +569,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
       <TextInput
         helperText=""
         id="network-device_vlan-id-input"
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         invalid={state && state.vlanId ? !state.vlanId.valid : false}
         labelText={getLabel(
           "VLAN ID (optional)",
-          "Show information",
+          t("showInformationLabel", { ns: "common" }),
           getContent(
             "Enter a VLAN ID between 1 and 4094, or leave empty for no VLAN ID.",
           ),
@@ -613,7 +613,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
             }
             labelText={getLabel(
               "Read channel",
-              "Show information",
+              t("showInformationLabel", { ns: "common" }),
               getContent(
                 "Device bus-ID of the OSA read channel in the format x.y.zzzz.",
               ),
@@ -656,7 +656,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
             }
             labelText={getLabel(
               "Write channel",
-              "Show information",
+              t("showInformationLabel", { ns: "common" }),
               getContent(
                 "Device bus-ID of the OSA write channel in the format x.y.zzzz.",
               ),
@@ -697,7 +697,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
             }
             labelText={getLabel(
               "Data channel",
-              "Show information",
+              t("showInformationLabel", { ns: "common" }),
               getContent(
                 "Device bus-ID of the OSA data channel in the format x.y.zzzz.",
               ),

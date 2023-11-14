@@ -5,21 +5,29 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { Layer, ListItem, UnorderedList, FlexGrid, Row, Column } from "@carbon/react";
+import {
+  Layer,
+  ListItem,
+  UnorderedList,
+  FlexGrid,
+  Row,
+  Column,
+} from "@carbon/react";
 import "./_hint.scss";
 
 const Hint = (patchState, localStorageKey) => {
+  const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
-    const defaultState = {
-    };
+    const defaultState = {};
 
     if (initialState) {
-      return initialState
+      return initialState;
     }
     return defaultState;
-  }
+  };
   // eslint-disable-next-line
   const [state, setState] = useState(getInitialState);
 
@@ -30,35 +38,32 @@ const Hint = (patchState, localStorageKey) => {
         hint: {
           complete: true,
           disabled: true,
-          invalid: false
-        }
-      }
+          invalid: false,
+        },
+      },
     });
   }, []);
 
   const gridContentsMarkup = (
     <>
-      <div className="hint_heading">Before you begin</div>
-      <div className="hint_intro">
-        You will need the following information to complete this dialog.
-        The listed information is typically provided by hardware or network administrators of the system to be installed.
-      </div>
+      <div className="hint_heading">{t("panel.hint.header")}</div>
+      <div className="hint_intro">{t("panel.hint.explanation")}</div>
       <UnorderedList>
-        <ListItem>Networking device parameters</ListItem>
+        <ListItem>{t("panel.hint.listItem1")}</ListItem>
         <UnorderedList>
-          <ListItem>OSA device number, layer 2 setting and port number, or</ListItem>
-          <ListItem>PCI device FID or UID</ListItem>
-          <ListItem>VLAN ID (if applicable)</ListItem>
+          <ListItem>{t("panel.hint.listItem2")}</ListItem>
+          <ListItem>{t("panel.hint.listItem3")}</ListItem>
+          <ListItem>{t("panel.hint.listItem4")}</ListItem>
         </UnorderedList>
-        <ListItem>Networking parameters</ListItem>
+        <ListItem>{t("panel.hint.listItem5")}</ListItem>
         <UnorderedList>
-          <ListItem>Hostname and domain name</ListItem>
-          <ListItem>IP address</ListItem>
-          <ListItem>IP netmask or prefix</ListItem>
-          <ListItem>IP gateway address</ListItem>
-          <ListItem>Nameserver IP addres</ListItem>
-        </UnorderedList>          
-        <ListItem>Network URL of installation source</ListItem>
+          <ListItem>{t("panel.hint.listItem6")}</ListItem>
+          <ListItem>{t("panel.hint.listItem7")}</ListItem>
+          <ListItem>{t("panel.hint.listItem8")}</ListItem>
+          <ListItem>{t("panel.hint.listItem9")}</ListItem>
+          <ListItem>{t("panel.hint.listItem10")}</ListItem>
+        </UnorderedList>
+        <ListItem>{t("panel.hint.listItem11")}</ListItem>
       </UnorderedList>
     </>
   );
@@ -66,20 +71,18 @@ const Hint = (patchState, localStorageKey) => {
     <Layer>
       <FlexGrid className="hint_grid">
         <Row>
-          <Column>
-            {gridContentsMarkup}
-          </Column>
+          <Column>{gridContentsMarkup}</Column>
         </Row>
       </FlexGrid>
     </Layer>
   );
 
-  return (markup);
+  return markup;
 };
 
 Hint.propTypes = {
   patchState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired
+  localStorageKey: PropTypes.string.isRequired,
 };
 
 export default Hint;

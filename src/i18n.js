@@ -9,8 +9,12 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 
-// import enJSON from './locales/en/translation.json'
-// import deJSON from './locales/de/translation.json'
+import enTranslationJSON from "./locales/en/translation.json";
+import deTranslationJSON from "./locales/de/translation.json";
+import enCommonJSON from "./locales/en/common.json";
+import deCommonJSON from "./locales/de/common.json";
+import enHelpJSON from "./locales/en/help.json";
+import deHelpJSON from "./locales/de/help.json";
 
 i18n
   .use(Backend)
@@ -19,14 +23,14 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     debug: true,
-    // resources: {
-    //     en: { ...enJSON },
-    //     de: { ...deJSON }
-    // },
-    lng: "en",
+    resources: {
+      en: { ...enTranslationJSON, ...enCommonJSON, ...enHelpJSON },
+      de: { ...deTranslationJSON, ...deCommonJSON, ...deHelpJSON },
+    },
+    // lng: "en",
     fallbackLng: "en",
     preload: ["en", "de"],
-    ns: ["translation"],
+    ns: ["translation", "common", "help"],
     defaultNS: "translation",
     backend: {
       // load from GHE liz repo

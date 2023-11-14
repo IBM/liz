@@ -5,33 +5,49 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Layer, Link } from "@carbon/react";
 // import { IsoFilled } from "@carbon/icons-react";
 import "./_information.scss";
 
-const Information = (patchState, distribution, systemRequirements, docLink, localStorageKey) => {
+const Information = (
+  patchState,
+  distribution,
+  systemRequirements,
+  docLink,
+  localStorageKey,
+) => {
+  const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
-    const defaultState = {
-    };
+    const defaultState = {};
 
     if (initialState) {
-      return initialState
+      return initialState;
     }
     return defaultState;
-  }
+  };
   // eslint-disable-next-line
   const [state, setState] = useState(getInitialState);
-  const distributionName = distribution && distribution.name ? distribution.name : "";
-  const distributionVersion = distribution && distribution.version ? distribution.version : "";
-  const memorySize = systemRequirements && systemRequirements.memory ? systemRequirements.memory : 0;
-  const diskSize = systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0;
-  const machineLevel = systemRequirements && systemRequirements.level ? systemRequirements.level : "";
+  const distributionName =
+    distribution && distribution.name ? distribution.name : "";
+  const distributionVersion =
+    distribution && distribution.version ? distribution.version : "";
+  const memorySize =
+    systemRequirements && systemRequirements.memory
+      ? systemRequirements.memory
+      : 0;
+  const diskSize =
+    systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0;
+  const machineLevel =
+    systemRequirements && systemRequirements.level
+      ? systemRequirements.level
+      : "";
 
   const DEFAULT_MEMORY_SIZE_UNIT = "GiB";
   const DEFAULT_DISK_SIZE_UNIT = "GiB";
-  
+
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
     patchState({
@@ -39,38 +55,124 @@ const Information = (patchState, distribution, systemRequirements, docLink, loca
         information: {
           complete: true,
           disabled: true,
-          invalid: false
-        }
-      }
+          invalid: false,
+        },
+      },
     });
   }, []);
 
   const markup = (
     <Layer>
-      <div className="information_heading">Requirements</div>
-      <div className="information_content">
-        The requirements shown are minimum requirements as indicated in the documentation.
+      <div className="information_heading">
+        {t("panel.information.requirementsHeader")}
       </div>
-      <div className="table-container" role="table" aria-label="Display Information">
-        <div className="flex-table row" id="display-iformation__table-header-row" role="rowgroup">
-          <div className="flex-row" id="display-iformation__table-header-row__name" role="columnheader">Name OS</div>
-          <div className="flex-row" id="display-iformation__table-content-row__name" role="cell">{distributionName}</div>
+      <div className="information_content">
+        {t("panel.information.requirementsExplanation")}
+      </div>
+      <div
+        className="table-container"
+        role="table"
+        aria-label="Display Information"
+      >
+        <div
+          className="flex-table row"
+          id="display-iformation__table-header-row"
+          role="rowgroup"
+        >
+          <div
+            className="flex-row"
+            id="display-iformation__table-header-row__name"
+            role="columnheader"
+          >
+            {t("panel.information.table.nameOsLabel")}
+          </div>
+          <div
+            className="flex-row"
+            id="display-iformation__table-content-row__name"
+            role="cell"
+          >
+            {distributionName}
+          </div>
         </div>
-        <div className="flex-table row" id="display-iformation__table-header-row" role="rowgroup">
-          <div className="flex-row" id="display-iformation__table-header-row__version" role="columnheader">Version</div>
-          <div className="flex-row" id="display-iformation__table-content-row__version" role="cell">{distributionVersion}</div>
+        <div
+          className="flex-table row"
+          id="display-iformation__table-header-row"
+          role="rowgroup"
+        >
+          <div
+            className="flex-row"
+            id="display-iformation__table-header-row__version"
+            role="columnheader"
+          >
+            {t("panel.information.table.versionLabel")}
+          </div>
+          <div
+            className="flex-row"
+            id="display-iformation__table-content-row__version"
+            role="cell"
+          >
+            {distributionVersion}
+          </div>
         </div>
-        <div className="flex-table row" id="display-iformation__table-header-row" role="rowgroup">
-          <div className="flex-row" id="display-iformation__table-header-row__distribution" role="columnheader">Memory</div>
-          <div className="flex-row" id="display-iformation__table-content-row__memory-size" role="cell">{memorySize} {DEFAULT_MEMORY_SIZE_UNIT}</div>
+        <div
+          className="flex-table row"
+          id="display-iformation__table-header-row"
+          role="rowgroup"
+        >
+          <div
+            className="flex-row"
+            id="display-iformation__table-header-row__distribution"
+            role="columnheader"
+          >
+            {t("panel.information.table.memoryLabel")}
+          </div>
+          <div
+            className="flex-row"
+            id="display-iformation__table-content-row__memory-size"
+            role="cell"
+          >
+            {memorySize} {DEFAULT_MEMORY_SIZE_UNIT}
+          </div>
         </div>
-        <div className="flex-table row" id="display-iformation__table-header-row" role="rowgroup">
-          <div className="flex-row" id="display-iformation__table-header-row__distribution" role="columnheader">Disk</div>
-          <div className="flex-row" id="display-iformation__table-content-row__disk-size" role="cell">{diskSize} {DEFAULT_DISK_SIZE_UNIT}</div>
+        <div
+          className="flex-table row"
+          id="display-iformation__table-header-row"
+          role="rowgroup"
+        >
+          <div
+            className="flex-row"
+            id="display-iformation__table-header-row__distribution"
+            role="columnheader"
+          >
+            {t("panel.information.table.diskLabel")}
+          </div>
+          <div
+            className="flex-row"
+            id="display-iformation__table-content-row__disk-size"
+            role="cell"
+          >
+            {diskSize} {DEFAULT_DISK_SIZE_UNIT}
+          </div>
         </div>
-        <div className="flex-table row" id="display-iformation__table-header-row" role="rowgroup">
-          <div className="flex-row" id="display-iformation__table-header-row__distribution" role="columnheader">Machine Level</div>
-          <div className="flex-row" id="display-iformation__table-content-row__machine-level" role="cell">{machineLevel}</div>
+        <div
+          className="flex-table row"
+          id="display-iformation__table-header-row"
+          role="rowgroup"
+        >
+          <div
+            className="flex-row"
+            id="display-iformation__table-header-row__distribution"
+            role="columnheader"
+          >
+            {t("panel.information.table.machineLevelLabel")}
+          </div>
+          <div
+            className="flex-row"
+            id="display-iformation__table-content-row__machine-level"
+            role="cell"
+          >
+            {machineLevel}
+          </div>
         </div>
         {/*
         <div className="flex-table row" id="display-iformation__table-header-row" role="rowgroup">
@@ -82,30 +184,34 @@ const Information = (patchState, distribution, systemRequirements, docLink, loca
         </div>
         */}
       </div>
-      <div className="information_heading_alt">Information</div>
+      <div className="information_heading_alt">
+        {t("panel.information.informationHeader")}
+      </div>
       <div className="information_content">
-        Link to distribution-specific documentation: <Link href={docLink} target="_blank">{distributionName}</Link>
+        {t("panel.information.informationExplanation")}
+        <Link href={docLink} target="_blank">
+          {distributionName}
+        </Link>
       </div>
     </Layer>
   );
 
-
-  return (markup);
+  return markup;
 };
 
 Information.propTypes = {
   patchState: PropTypes.func.isRequired,
   distribution: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    version: PropTypes.string.isRequired
+    version: PropTypes.string.isRequired,
   }).isRequired,
   systemRequirements: PropTypes.shape({
     disk: PropTypes.number.isRequired,
     memory: PropTypes.number.isRequired,
-    level: PropTypes.string.isRequired
+    level: PropTypes.string.isRequired,
   }).isRequired,
   docLink: PropTypes.string.isRequired,
-  localStorageKey: PropTypes.string.isRequired
+  localStorageKey: PropTypes.string.isRequired,
 };
 
 export default Information;

@@ -5,12 +5,14 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Layer, FlexGrid, Row, Column } from "@carbon/react";
 import { ParamFileTextArea } from "../../ParamFileTextArea";
 import "./_misc-parameters.scss";
 
 const MiscParameters = (patchState, localStorageKey) => {
+  const { t } = useTranslation();
   const DEFAULT_PARAM_CONTENT = "ro ramdisk_size=40000 cio_ignore=all,!condev";
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
@@ -102,7 +104,7 @@ const MiscParameters = (patchState, localStorageKey) => {
           allowCopy
           allowReset={state.miscParameterContentModified}
           label={{
-            text: "Miscellaneous parameters",
+            text: t("panel.miscParameters.textLabel"),
             content,
           }}
         />

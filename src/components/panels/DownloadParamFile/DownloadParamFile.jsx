@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
@@ -12,54 +13,68 @@ import {
   Tag,
   FlexGrid,
   Row,
-  Column
+  Column,
 } from "@carbon/react";
 import { ParamFileTextArea } from "../../ParamFileTextArea";
 import "./_download-param-file.scss";
 
-const DownloadParamFile = (patchState, stateToParamFile, globalState, localStorageKey) => {
+const DownloadParamFile = (
+  patchState,
+  stateToParamFile,
+  globalState,
+  localStorageKey,
+) => {
+  const { t } = useTranslation();
   const paramFileContent = stateToParamFile(globalState);
   const getInitialState = () => {
-    const localParamFileContent = paramFileContent && paramFileContent.data && typeof paramFileContent.data === "string"
-      ? paramFileContent.data
-      : stateToParamFile(globalState).data;
+    const localParamFileContent =
+      paramFileContent &&
+      paramFileContent.data &&
+      typeof paramFileContent.data === "string"
+        ? paramFileContent.data
+        : stateToParamFile(globalState).data;
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
       paramFileContentCopied: false,
       paramFileContentModified: false,
-      paramFileContent: localParamFileContent
+      paramFileContent: localParamFileContent,
     };
 
     if (initialState) {
-      return initialState
+      return initialState;
     }
     return defaultState;
-  }
+  };
   const [state, setState] = useState(getInitialState);
 
   const updateCopied = () => {
-    setState((prevState) => ({...prevState, paramFileContentCopied: true}));
+    setState((prevState) => ({ ...prevState, paramFileContentCopied: true }));
     const timer = setTimeout(() => {
-      setState((prevState) => ({...prevState, paramFileContentCopied: false}));
+      setState((prevState) => ({
+        ...prevState,
+        paramFileContentCopied: false,
+      }));
     }, 2000);
     return () => clearTimeout(timer);
-  }
+  };
 
   const updateModified = (paramFileContentModified) => {
-    setState((prevState) => ({...prevState, paramFileContentModified}));
-  }
+    setState((prevState) => ({ ...prevState, paramFileContentModified }));
+  };
 
   const updateParamFileContent = (paramFileContent) => {
-    setState((prevState) => ({...prevState, paramFileContent}));
-  }
+    setState((prevState) => ({ ...prevState, paramFileContent }));
+  };
 
   const destroyClickedElement = (event) => {
     // remove the link from the DOM
     document.body.removeChild(event.target);
-  }
+  };
 
   const saveParamFileContent = () => {
-    const textFileAsBlob = new Blob([ paramFileContent.data ], { type: "text/plain" });
+    const textFileAsBlob = new Blob([paramFileContent.data], {
+      type: "text/plain",
+    });
     const fileNameToSaveAs = "parmfile.txt";
 
     const downloadLink = document.createElement("a");
@@ -75,15 +90,14 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       downloadLink.style.display = "none";
       document.body.appendChild(downloadLink);
     }
-  
+
     downloadLink.click();
-  }
+  };
 
   const content = (
     <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed
-      do eiusmod tempor incididunt ut fsil labore et dolore magna
-      aliqua.
+      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
+      eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
     </p>
   );
 
@@ -96,20 +110,29 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       for (const property in steps) {
         if (steps[property].complete === false) {
           incompleteListMarkup.push(
-            <Tag className="download-param-file_incomplete-data-tag" type="gray" title={property}>
+            <Tag
+              className="download-param-file_incomplete-data-tag"
+              type="gray"
+              title={property}
+            >
               {property}
-            </Tag>
+            </Tag>,
           );
-        }       
+        }
       }
     }
     if (paramFileContent.metadata.hasInvalidData) {
       for (const property in steps) {
         if (steps[property].invalid === true) {
           invalidListMarkup.push(
-            <Tag className="download-param-file_invalid-data-tag" type="gray" title={property} id={`tag__${property}`}>
+            <Tag
+              className="download-param-file_invalid-data-tag"
+              type="gray"
+              title={property}
+              id={`tag__${property}`}
+            >
               {property}
-            </Tag>
+            </Tag>,
           );
         }
       }
@@ -117,24 +140,32 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
 
     return (
       <div className="download-param-file_data-tag-container">
-        {incompleteListMarkup.length > 0 &&
-          <div className="download-param-file_data-tag_heading">Steps with incomplete data</div>
-        }
+        {incompleteListMarkup.length > 0 && (
+          <div className="download-param-file_data-tag_heading">
+            {t("panel.downloadParamFile.stepsWithIncompleteData")}
+          </div>
+        )}
         {incompleteListMarkup.length > 0 && incompleteListMarkup}
-        {invalidListMarkup.length > 0 &&
-          <div className="download-param-file_data-tag_heading">Steps with invalid data</div>
-        }
+        {invalidListMarkup.length > 0 && (
+          <div className="download-param-file_data-tag_heading">
+            {t("panel.downloadParamFile.stepsWithInvalidData")}
+          </div>
+        )}
         {invalidListMarkup.length > 0 && invalidListMarkup}
       </div>
     );
-  }
+  };
 
   const notificationMarkup = (
     <InlineNotification
       hideCloseButton
       statusIconDescription="notification"
-      subtitle="The data provided is incomplete or invalid. The param file generated may be unusable."
-      title="Incomplete data."
+      subtitle={t(
+        "panel.downloadParamFile.incompletOrInvalidDataNotificationSubtitle",
+      )}
+      title={t(
+        "panel.downloadParamFile.incompletOrInvalidDataNotificationTitle",
+      )}
       kind="info"
       className="download-param-file__incomplete-data-banner"
     />
@@ -144,7 +175,11 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
       <div className="download-param-file_textarea-container">
         <ParamFileTextArea
           id="download-param-file_textarea"
-          contents={state.paramFileContent ? state.paramFileContent : paramFileContent.data}
+          contents={
+            state.paramFileContent
+              ? state.paramFileContent
+              : paramFileContent.data
+          }
           copyContents={updateCopied}
           resetContents={() => {
             const localParamFileContentValue = stateToParamFile(globalState);
@@ -154,9 +189,12 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
           }}
           downloadContents={saveParamFileContent}
           onChange={(localParamFileContent) => {
-            const localParamFileContentValue = localParamFileContent && localParamFileContent.target && localParamFileContent.target.value
-              ? localParamFileContent.target.value
-              : "";
+            const localParamFileContentValue =
+              localParamFileContent &&
+              localParamFileContent.target &&
+              localParamFileContent.target.value
+                ? localParamFileContent.target.value
+                : "";
             updateParamFileContent(localParamFileContentValue);
             updateModified(true);
           }}
@@ -164,35 +202,39 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
           allowReset={state.paramFileContentModified}
           allowDownload
           label={{
-            text: "Param text file",
-            content
+            text: t("panel.downloadParamFile.paramFileTextLabel"),
+            content,
           }}
         />
       </div>
-      {state.paramFileContentModified &&
+      {state.paramFileContentModified && (
         <InlineNotification
           hideCloseButton
           statusIconDescription="notification"
-          subtitle="The data provided has been modified. The param file generated may be unusable."
-          title="Modified data."
+          subtitle={t(
+            "panel.downloadParamFile.modifiedDataNotificationSubtitle",
+          )}
+          title={t("panel.downloadParamFile.modifiedDataNotificationTitle")}
           kind="warning"
           className="download-param-file__incomplete-data-banner"
-      />
-      }
-      {(paramFileContent.metadata.hasIncompleteData || paramFileContent.metadata.hasInvalidData) && notificationMarkup}
-      {state.paramFileContentCopied ? <span className="download-param-file_copied-label">Copied.</span> : null}
-      {(paramFileContent.metadata.hasIncompleteData || paramFileContent.metadata.hasInvalidData) &&
-        getIncompleteOrInvalidMarkup()
-      }
+        />
+      )}
+      {(paramFileContent.metadata.hasIncompleteData ||
+        paramFileContent.metadata.hasInvalidData) &&
+        notificationMarkup}
+      {state.paramFileContentCopied ? (
+        <span className="download-param-file_copied-label">Copied.</span>
+      ) : null}
+      {(paramFileContent.metadata.hasIncompleteData ||
+        paramFileContent.metadata.hasInvalidData) &&
+        getIncompleteOrInvalidMarkup()}
     </>
   );
   const markup = (
     <Layer>
       <FlexGrid className="download-param-file_grid">
         <Row>
-          <Column>
-            {gridContentsMarkup}
-          </Column>
+          <Column>{gridContentsMarkup}</Column>
         </Row>
       </FlexGrid>
     </Layer>
@@ -201,7 +243,7 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
   const isCompleteAndValid = (callback) => {
     let isComplete = false;
     let isValid = false;
-  
+
     if (
       typeof state.paramFileContent === "string" &&
       state.paramFileContent.length > 0
@@ -211,11 +253,14 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     }
 
     if (isComplete && isValid) {
-      return callback(null, {isComplete, isValid});
+      return callback(null, { isComplete, isValid });
     }
 
-    return callback(new Error('Form data is incomplete or invalid'), {isComplete, isValid});
-  }
+    return callback(new Error("Form data is incomplete or invalid"), {
+      isComplete,
+      isValid,
+    });
+  };
 
   useEffect(() => {
     isCompleteAndValid((error, isCompleteAndValid) => {
@@ -226,9 +271,9 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
               contents: state.paramFileContent,
               complete: true,
               invalid: false,
-              localStorageKey
-            }
-          }
+              localStorageKey,
+            },
+          },
         });
       } else if (isCompleteAndValid.isComplete) {
         patchState({
@@ -237,9 +282,9 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
               contents: state.paramFileContent,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
-              localStorageKey
-            }
-          }
+              localStorageKey,
+            },
+          },
         });
       } else {
         patchState({
@@ -249,9 +294,9 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
               disabled: false,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
-              localStorageKey
-            }
-          }
+              localStorageKey,
+            },
+          },
         });
       }
     });
@@ -259,14 +304,14 @@ const DownloadParamFile = (patchState, stateToParamFile, globalState, localStora
     localStorage.setItem(localStorageKey, JSON.stringify(state));
   }, [state]);
 
-  return (markup);
+  return markup;
 };
 
 DownloadParamFile.propTypes = {
   patchState: PropTypes.func.isRequired,
   stateToParamFile: PropTypes.func.isRequired,
   globalState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired
+  localStorageKey: PropTypes.string.isRequired,
 };
 
 export default DownloadParamFile;

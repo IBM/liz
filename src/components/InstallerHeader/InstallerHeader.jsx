@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Header,
   HeaderContainer,
@@ -33,6 +34,8 @@ const InstallerHeader = ({
   progressStepDisabled,
   helpContent,
 }) => {
+  const { t } = useTranslation();
+
   const [state, setState] = useState({
     expanded: true,
   });
@@ -46,7 +49,7 @@ const InstallerHeader = ({
     <Layer>
       <HeaderContainer
         render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-          <Header aria-label="Installation assistant for Linux on IBM Z">
+          <Header aria-label={t("header.productName", { ns: "common" })}>
             <SkipToContent />
             <HeaderMenuButton
               aria-label="Open menu"
@@ -54,11 +57,11 @@ const InstallerHeader = ({
               isActive={isSideNavExpanded}
             />
             <HeaderName href="#" prefix="">
-              Installation assistant for Linux on IBM Z
+              {t("header.productName", { ns: "common" })}
             </HeaderName>
             <HeaderGlobalBar>
               <HeaderGlobalAction
-                aria-label="Help"
+                aria-label={t("header.button.help", { ns: "common" })}
                 onClick={() => {
                   return state.expanded
                     ? updateExpanded(false)
@@ -68,7 +71,7 @@ const InstallerHeader = ({
                 <Help size="24" />
               </HeaderGlobalAction>
               <HeaderGlobalAction
-                aria-label="Profile settings"
+                aria-label={t("header.button.profileSettings")}
                 onClick={() => {
                   return onShowNotification();
                 }}
@@ -91,7 +94,7 @@ const InstallerHeader = ({
             </SideNav>
             <HeaderPanel
               expanded={state.expanded}
-              aria-label="Help"
+              aria-label={t("header.button.help", { ns: "common" })}
               className="installer-header__panel-component"
             >
               <HelpContent

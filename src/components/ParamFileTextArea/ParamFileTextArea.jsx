@@ -5,6 +5,7 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -12,101 +13,111 @@ import {
   ToggletipLabel,
   Toggletip,
   ToggletipButton,
-  ToggletipContent
+  ToggletipContent,
 } from "@carbon/react";
-import { Information , Copy, Download, Reset } from '@carbon/react/icons';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Information, Copy, Download, Reset } from "@carbon/react/icons";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./_param-file-text-area.scss";
 
-const ParamFileTextArea = (
-    {
-      contents,
-      copyContents,
-      resetContents,
-      downloadContents,
-      onChange,
-      allowCopy,
-      allowReset,
-      allowDownload,
-      label
-    }
-) => {
+const ParamFileTextArea = ({
+  contents,
+  copyContents,
+  resetContents,
+  downloadContents,
+  onChange,
+  allowCopy,
+  allowReset,
+  allowDownload,
+  label,
+}) => {
+  const { t } = useTranslation();
 
   const getLabel = (label, buttonLabel, content) => {
-      return (
-          <>
-            <ToggletipLabel>{label}</ToggletipLabel>
-            <Toggletip className="param-file-text-area_info-icon" align="right-bottom">
-                <ToggletipButton label={buttonLabel}>
-                  <Information/>
-                </ToggletipButton>
-                <ToggletipContent>
-                  {content}
-                </ToggletipContent>
-            </Toggletip>
-          </>
-      );
-  }
+    return (
+      <>
+        <ToggletipLabel>{label}</ToggletipLabel>
+        <Toggletip
+          className="param-file-text-area_info-icon"
+          align="right-bottom"
+        >
+          <ToggletipButton label={buttonLabel}>
+            <Information />
+          </ToggletipButton>
+          <ToggletipContent>{content}</ToggletipContent>
+        </Toggletip>
+      </>
+    );
+  };
 
   const buttonBarMarkup = (
     <div className="param-file-text-area_textarea-button-bar">
-      {allowCopy &&
+      {allowCopy && (
         <CopyToClipboard text={contents} onCopy={copyContents}>
-          <div className="param-file-text-area_textarea-button-bar__button" title="Copy to clipboard">
+          <div
+            className="param-file-text-area_textarea-button-bar__button"
+            title={t("btnLabel.Copy", { ns: "common" })}
+          >
             <Button
               size="32"
               kind="ghost"
               renderIcon={Copy}
-              iconDescription="Copy to clipboard"
+              iconDescription={t("btnLabel.Copy", { ns: "common" })}
               tooltipPosition="left"
               hasIconOnly
             />
           </div>
         </CopyToClipboard>
-      }
-      {allowReset &&
-        <div className="param-file-text-area_textarea-button-bar__button" onClick={resetContents}>
+      )}
+      {allowReset && (
+        <div
+          className="param-file-text-area_textarea-button-bar__button"
+          onClick={resetContents}
+        >
           <Button
             size="32"
             kind="ghost"
             renderIcon={Reset}
-            iconDescription="Reset param file"
+            iconDescription={t("btnLabel.Reset", { ns: "common" })}
             tooltipPosition="left"
             hasIconOnly
           />
         </div>
-      }
-      {allowDownload &&
-        <div className="param-file-text-area_textarea-button-bar__button" onClick={downloadContents}>
+      )}
+      {allowDownload && (
+        <div
+          className="param-file-text-area_textarea-button-bar__button"
+          onClick={downloadContents}
+        >
           <Button
             size="32"
             kind="ghost"
             renderIcon={Download}
-            iconDescription="Download param file"
+            iconDescription={t("btnLabel.Download", { ns: "common" })}
             tooltipPosition="left"
             hasIconOnly
           />
         </div>
-      }
+      )}
     </div>
   );
 
-  const textAreaModifiedClass = allowReset ? "param-file-text-area_textarea__modified": "";
+  const textAreaModifiedClass = allowReset
+    ? "param-file-text-area_textarea__modified"
+    : "";
   const textAreaClasses = `param-file-text-area_textarea ${textAreaModifiedClass}`;
   const textAreaMarkup = (
     <TextArea
       enableCounter
       labelText={getLabel(
         label.text,
-        "Show information",
-        label.content
+        t("showInformationLabel", { ns: "common" }),
+        label.content,
       )}
       className={textAreaClasses}
       rows={10}
       value={contents}
       onChange={onChange}
-    >
-    </TextArea>
+    ></TextArea>
   );
 
   return (
@@ -114,8 +125,8 @@ const ParamFileTextArea = (
       {buttonBarMarkup}
       {textAreaMarkup}
     </>
-  )
-}
+  );
+};
 
 ParamFileTextArea.propTypes = {
   contents: PropTypes.string,
@@ -127,9 +138,9 @@ ParamFileTextArea.propTypes = {
   allowReset: PropTypes.bool,
   allowDownload: PropTypes.bool,
   label: PropTypes.shape({
-      text: PropTypes.string,
-      content: PropTypes.object
-  })
+    text: PropTypes.string,
+    content: PropTypes.object,
+  }),
 };
-  
+
 export default ParamFileTextArea;

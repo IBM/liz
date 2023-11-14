@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
@@ -26,6 +27,7 @@ const ADDRESS_TYPE_IPV4 = "radio-ipv4";
 const ADDRESS_TYPE_IPV6 = "radio-ipv6";
 
 const NetworkAddress = (patchState, localStorageKey) => {
+  const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
@@ -618,7 +620,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
       <>
         <TextInput
           id="network-address_ipv4-input"
-          invalidText="A valid value is required"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
           invalid={
             state && state.ipv4Address ? !state.ipv4Address.valid : false
           }

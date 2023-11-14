@@ -5,14 +5,17 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./_network-device.scss";
 
 const NetworkDevice = () => {
-    return (
-        <div className="help-panel__network-device__content">
-            Help contents for network device panel.
-        </div>
-    );
-}
+  const { t } = useTranslation();
+
+  return (
+    <div className="help-panel__network-device__content">
+      {t("helpPanelContents.networkDevice", { ns: "help" })}
+    </div>
+  );
+};
 
 export default NetworkDevice;

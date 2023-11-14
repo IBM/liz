@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
@@ -25,6 +26,7 @@ import "./_installation-parameters.scss";
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
 
 const InstallationParameters = (patchState, localStorageKey) => {
+  const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
@@ -341,7 +343,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
             ? !state.installationAddress.valid
             : false
         }
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
           "Installation address",
           "Show information",

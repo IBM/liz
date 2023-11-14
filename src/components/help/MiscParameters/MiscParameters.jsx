@@ -5,14 +5,17 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./_misc-parameters.scss";
 
 const MiscParameters = () => {
-    return (
-        <div className="help-panel__misc-parameters__content">
-            Help contents for misc parameters panel.
-        </div>
-    );
-}
+  const { t } = useTranslation();
+
+  return (
+    <div className="help-panel__misc-parameters__content">
+      {t("helpPanelContents.miscParameters", { ns: "help" })}
+    </div>
+  );
+};
 
 export default MiscParameters;

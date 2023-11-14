@@ -5,14 +5,17 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./_next-steps.scss";
 
 const NextSteps = () => {
-    return (
-        <div className="help-panel__next-steps__content">
-            Help contents for next steps panel.
-        </div>
-    );
-}
+  const { t } = useTranslation();
+
+  return (
+    <div className="help-panel__next-steps__content">
+      {t("helpPanelContents.nextSteps", { ns: "help" })}
+    </div>
+  );
+};
 
 export default NextSteps;

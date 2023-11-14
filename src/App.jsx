@@ -432,8 +432,8 @@ const App = () => {
     const defaultInlineNotification = {
       show: true,
       kind: "warning",
-      title: "IBM Internal Use only",
-      subtitle: "Code is not legally cleared.",
+      title: t("legalNotice.headerLabel"),
+      subtitle: t("legalNotice.contentLabel"),
     };
 
     if (inlineNotification) {
@@ -451,7 +451,7 @@ const App = () => {
 
   window.addEventListener("beforeunload", (event) => {
     if (state.isDirty) {
-      event.returnValue = `Are you sure you want to leave?`;
+      event.returnValue = t("browserPrompt.reloadWarning");
     }
   });
 
@@ -480,12 +480,9 @@ const App = () => {
         preventCloseOnClickOutside
         open={state.showUseExistingSettingsModal}
         modalHeading={t("modalHeading.useExistingSettingsPrompt")}
-        modalLabel={t(
-          "modalLabel.useExistingSettingsPrompt",
-          "Existing settings found",
-        )}
-        primaryButtonText="Yes"
-        secondaryButtonText="No"
+        modalLabel={t("modalLabel.useExistingSettingsPrompt")}
+        primaryButtonText={t("btnLabel.Yes", { ns: "common" })}
+        secondaryButtonText={t("btnLabel.No", { ns: "common" })}
         onRequestSubmit={() => {
           patchState(getInitialState(true));
           updateShowUseExistingSettingsModal(false);

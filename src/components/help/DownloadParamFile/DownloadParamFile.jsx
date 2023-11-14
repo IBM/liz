@@ -5,14 +5,17 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = () => {
-    return (
-        <div className="help-panel__download-param-file__content">
-            Help contents for download param file panel.
-        </div>
-    );
-}
+  const { t } = useTranslation();
+
+  return (
+    <div className="help-panel__download-param-file__content">
+      {t("helpPanelContents.downloadParamFile", { ns: "help" })}
+    </div>
+  );
+};
 
 export default DownloadParamFile;

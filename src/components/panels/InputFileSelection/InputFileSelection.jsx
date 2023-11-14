@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Dropdown,
@@ -23,6 +24,8 @@ const InputFileSelection = (
   useStateFromLocalStorage,
   canWriteToLocalStorage,
 ) => {
+  const { t } = useTranslation();
+
   const STATE_ORIGIN_USER = "user";
   const STATE_ORIGIN_DEFAULT = "default";
   const STATE_ORIGIN_STORAGE = "storage";
@@ -165,14 +168,16 @@ const InputFileSelection = (
   const gridContentsMarkupRowTwo = (
     <>
       <div>
-        <div className="input-file-selection__subheading">Host OS</div>
+        <div className="input-file-selection__subheading">
+          {t("panel.inputFileSelection.hostOS")}
+        </div>
       </div>
     </>
   );
   const gridContentsMarkupRowThreeColumnOne = (
     <div>
       <div className="input-file-selection__contentRowIntro">
-        Choose from a base template
+        {t("panel.inputFileSelection.chooseFromeTemplate")}
       </div>
       <div className="input-file-selection__contentRowDropdowns">
         <Dropdown

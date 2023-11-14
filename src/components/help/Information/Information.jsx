@@ -5,14 +5,17 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./_information.scss";
 
 const Information = () => {
-    return (
-        <div className="help-panel__information__content">
-            Help contents for information panel.
-        </div>
-    );
-}
+  const { t } = useTranslation();
+
+  return (
+    <div className="help-panel__information__content">
+      {t("helpPanelContents.information", { ns: "help" })}
+    </div>
+  );
+};
 
 export default Information;
