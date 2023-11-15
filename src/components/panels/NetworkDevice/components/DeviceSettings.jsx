@@ -5,6 +5,7 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   TextInput,
@@ -30,6 +31,8 @@ const DeviceSettings = ({
   const UPDATE_FUNCTION__PORT_NO = "portNo";
   const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
   const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
+
+  const { t } = useTranslation();
 
   const isPciFunctionIdValid = (pciFunctionIdValue) => {
     const userIdentifierValue = state?.userIdentifier?.value ?? "";
@@ -89,11 +92,9 @@ const DeviceSettings = ({
             defaultToggled
             toggled={state.layer}
             labelText={getLabel(
-              "Layer 2",
-              "Show information",
-              getContent(
-                "Select 1 for Layer 2 (ethernet) mode, or 0 for Layer 3 (IP) mode",
-              ),
+              t("panel.networkDevice.layerTwoToggleTextLabel"),
+              t("showInformationLabel", { ns: "common" }),
+              getContent(t("panel.networkDevice.layerTwoToggleHelp")),
             )}
             labelA="0"
             labelB="1"
@@ -109,11 +110,9 @@ const DeviceSettings = ({
           <Toggle
             toggled={state.portNo}
             labelText={getLabel(
-              "Port number",
-              "Show information",
-              getContent(
-                "Network port to use (0 or 1) in case of networking cards with multiple ports.",
-              ),
+              t("panel.networkDevice.portNumberToggleTextLabel"),
+              t("showInformationLabel", { ns: "common" }),
+              getContent(t("panel.networkDevice.portNumberToggleHelp")),
             )}
             labelA="0"
             labelB="1"
@@ -146,22 +145,20 @@ const DeviceSettings = ({
         <div className="device-settings_grid-column-single">
           <TextInput
             id="pci-function-input"
-            invalidText="A valid value is required"
+            invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={
               state && state.pciFunctionId ? !state.pciFunctionId.valid : false
             }
             labelText={getLabel(
               roceLabelHasOptionalTag(
                 "userIdentifier",
-                "PCI function ID (FID)",
-                "PCI function ID (FID, optional)",
+                t("panel.networkDevice.fidTextLabel"),
+                t("panel.networkDevice.fidTextLabelOptional"),
               ),
-              "Show information",
-              getContent(
-                "Function ID (FID) of the PCI network device in hexadecimal format.",
-              ),
+              t("showInformationLabel", { ns: "common" }),
+              getContent(t("panel.networkDevice.fidHelp")),
             )}
-            placeholder="e.g. 0x0100"
+            placeholder={t("panel.networkDevice.fidPlaceholder")}
             value={state?.pciFunctionId?.value ?? ""}
             onChange={(pciFunctionId) => {
               const pciFunctionIdValue =
@@ -194,7 +191,7 @@ const DeviceSettings = ({
           />
           <TextInput
             id="user-identifier-input"
-            invalidText="A valid value is required"
+            invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={
               state && state.userIdentifier
                 ? !state.userIdentifier.valid
@@ -203,15 +200,13 @@ const DeviceSettings = ({
             labelText={getLabel(
               roceLabelHasOptionalTag(
                 "pciFunctionId",
-                "PCI User-defined identifier (UID)",
-                "PCI User-defined identifier (UID, optional)",
+                t("panel.networkDevice.uidTextLabel"),
+                t("panel.networkDevice.uidTextLabelOptional"),
               ),
-              "Show information",
-              getContent(
-                "User-defined identifier (UID) of the PCI network device in hexadecimal format.",
-              ),
+              t("showInformationLabel", { ns: "common" }),
+              getContent(t("panel.networkDevice.uidHelp")),
             )}
-            placeholder="e.g. 0x1234"
+            placeholder={t("panel.networkDevice.uidPlaceholder")}
             value={state?.userIdentifier?.value ?? ""}
             onChange={(userIdentifier) => {
               const userIdentifierValue =

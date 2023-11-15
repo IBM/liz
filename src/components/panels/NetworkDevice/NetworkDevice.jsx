@@ -572,13 +572,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
         invalidText={t("invalidTextLabel", { ns: "common" })}
         invalid={state && state.vlanId ? !state.vlanId.valid : false}
         labelText={getLabel(
-          "VLAN ID (optional)",
+          t("panel.networkDevice.vlanIdTextLabel"),
           t("showInformationLabel", { ns: "common" }),
-          getContent(
-            "Enter a VLAN ID between 1 and 4094, or leave empty for no VLAN ID.",
-          ),
+          getContent(t("panel.networkDevice.vlanIdHelp")),
         )}
-        placeholder="ex: 88"
+        placeholder={t("panel.networkDevice.vlanIdPlaceholder")}
         value={state.vlanId ? state.vlanId.value : ""}
         onChange={(vlanId) => {
           const vlanIdValue =
@@ -607,18 +605,16 @@ const NetworkDevice = (patchState, localStorageKey) => {
           <TextInput
             helperText=""
             id="network-device_read-channel-input"
-            invalidText="A valid value is required"
+            invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={
               state && state.readChannelId ? !state.readChannelId.valid : false
             }
             labelText={getLabel(
-              "Read channel",
+              t("panel.networkDevice.readChannelTextLabel"),
               t("showInformationLabel", { ns: "common" }),
-              getContent(
-                "Device bus-ID of the OSA read channel in the format x.y.zzzz.",
-              ),
+              getContent(t("panel.networkDevice.readChannelHelp")),
             )}
-            placeholder="ex: 0.0.bdf0"
+            placeholder={t("panel.networkDevice.readChannelPlaceholder")}
             value={state.readChannelId ? state.readChannelId.value : ""}
             onChange={(readChannelId) => {
               const readChannelIdValue = readChannelId?.target?.value ?? "";
@@ -648,20 +644,18 @@ const NetworkDevice = (patchState, localStorageKey) => {
           <TextInput
             helperText=""
             id="network-device_write-channel-input"
-            invalidText="A valid value is required"
+            invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={
               state && state.writeChannelId
                 ? !state.writeChannelId.valid
                 : false
             }
             labelText={getLabel(
-              "Write channel",
+              t("panel.networkDevice.writeChannelTextLabel"),
               t("showInformationLabel", { ns: "common" }),
-              getContent(
-                "Device bus-ID of the OSA write channel in the format x.y.zzzz.",
-              ),
+              getContent(t("panel.networkDevice.writeChannelHelp")),
             )}
-            placeholder="ex: 0.0.bdf1"
+            placeholder={t("panel.networkDevice.writeChannelPlaceholder")}
             value={state.writeChannelId ? state.writeChannelId.value : ""}
             onChange={(writeChannelId) => {
               const writeChannelIdValue = writeChannelId?.target?.value ?? "";
@@ -691,18 +685,16 @@ const NetworkDevice = (patchState, localStorageKey) => {
           <TextInput
             helperText=""
             id="network-device_data-channel-input"
-            invalidText="A valid value is required"
+            invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={
               state && state.dataChannelId ? !state.dataChannelId.valid : false
             }
             labelText={getLabel(
-              "Data channel",
+              t("panel.networkDevice.dataChannelTextLabel"),
               t("showInformationLabel", { ns: "common" }),
-              getContent(
-                "Device bus-ID of the OSA data channel in the format x.y.zzzz.",
-              ),
+              getContent(t("panel.networkDevice.dataChannelHelp")),
             )}
-            placeholder="ex: 0.0.bdf2"
+            placeholder={t("panel.networkDevice.dataChannelPlaceholder")}
             value={state.dataChannelId ? state.dataChannelId.value : ""}
             onChange={(dataChannelId) => {
               const dataChannelIdValue = dataChannelId?.target?.value ?? "";

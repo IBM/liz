@@ -650,7 +650,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         <TextInput
           id="network-address_ipv4-prefix"
           invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
-          invalidText="A valid value is required"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={getLabel(
             state && state.ipv4Cidr && state.ipv4Cidr.computed
               ? "IPv4 prefix (computed)"
@@ -692,7 +692,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         <TextInput
           id="network-address_ipv4-netmask"
           invalid={state && state.netmask ? !state.netmask.valid : false}
-          invalidText="A valid value is required"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={getLabel(
             state && state.netmask && state.netmask.computed
               ? "IPv4 netmask (computed)"
@@ -732,7 +732,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         <TextInput
           readOnly
           id="network-address_ipv4-binary"
-          invalidText="A valid value is required"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText="IPv4 binary representation (computed)"
           placeholder="11111111.11111111.10000000.00000000"
           value={state.binary}
@@ -749,7 +749,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
           invalid={
             state && state.ipv6Address ? !state.ipv6Address.valid : false
           }
-          invalidText="A valid value is required"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={getLabel("IPv6 address", "Show information", content)}
           placeholder="2001:0db8:85a3:0:0:8a2e:370:7334"
           defaultValue={state.ipv6Address ? state.ipv6Address.value : ""}
@@ -776,7 +776,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         <TextInput
           id="network-address_ipv6-prefix"
           invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
-          invalidText="A valid value is required"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={getLabel("IPv6 prefix", "Show information", content)}
           placeholder="128"
           defaultValue={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
@@ -852,7 +852,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
             ? !state.gatewayIpAddress.valid
             : false
         }
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel("Gateway IP address", "Show information", content)}
         placeholder={
           state.addressType === ADDRESS_TYPE_IPV6
@@ -898,7 +898,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
             ? !state.nameserverIpAddress.valid
             : false
         }
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
           "Nameserver IP address",
           "Show information",
@@ -944,7 +944,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
       <TextInput
         id="network-address_hostname-input"
         invalid={state && state.hostName ? !state.hostName.valid : false}
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
           "Host name (optional)",
           "Show information",
@@ -979,7 +979,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
             ? !state.domainSearchPath.valid
             : false
         }
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
           "Domain search (optional)",
           "Show information",

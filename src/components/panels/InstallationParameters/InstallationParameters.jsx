@@ -398,7 +398,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         helperText=""
         id="username-input"
         invalid={state && state.userName ? !state.userName.valid : false}
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel("Username (optional)", "Show information", content)}
         placeholder="ex: johndoe"
         className="installation-parameters_username-input"
@@ -451,7 +451,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         helperText=""
         id="password-input"
         invalid={state && state.password ? !state.password.valid : false}
-        invalidText="A valid value is required"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel("Password (optional)", "Show information", content)}
         placeholder="ex: foobar"
         className="installation-parameters_password-input"
@@ -523,7 +523,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
           autoComplete="true"
           helperText=""
           id="vnc-password-input"
-          invalidText="A valid value is required"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={getLabel("VNC password", "Show information", content)}
           placeholder="VNC password here"
           defaultValue={state.vncPassword ? state.vncPassword : ""}
