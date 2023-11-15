@@ -94,12 +94,9 @@ const DownloadParamFile = (
     downloadLink.click();
   };
 
-  const content = (
-    <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
-      eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
-    </p>
-  );
+  const getContent = (value) => {
+    return <p>{value}</p>;
+  };
 
   const getIncompleteOrInvalidMarkup = () => {
     const incompleteListMarkup = [];
@@ -142,13 +139,17 @@ const DownloadParamFile = (
       <div className="download-param-file_data-tag-container">
         {incompleteListMarkup.length > 0 && (
           <div className="download-param-file_data-tag_heading">
-            {t("panel.downloadParamFile.stepsWithIncompleteData")}
+            {t("panel.downloadParamFile.stepsWithIncompleteData", {
+              ns: "panels",
+            })}
           </div>
         )}
         {incompleteListMarkup.length > 0 && incompleteListMarkup}
         {invalidListMarkup.length > 0 && (
           <div className="download-param-file_data-tag_heading">
-            {t("panel.downloadParamFile.stepsWithInvalidData")}
+            {t("panel.downloadParamFile.stepsWithInvalidData", {
+              ns: "panels",
+            })}
           </div>
         )}
         {invalidListMarkup.length > 0 && invalidListMarkup}
@@ -162,9 +163,11 @@ const DownloadParamFile = (
       statusIconDescription="notification"
       subtitle={t(
         "panel.downloadParamFile.incompletOrInvalidDataNotificationSubtitle",
+        { ns: "panels" },
       )}
       title={t(
         "panel.downloadParamFile.incompletOrInvalidDataNotificationTitle",
+        { ns: "panels" },
       )}
       kind="info"
       className="download-param-file__incomplete-data-banner"
@@ -202,8 +205,10 @@ const DownloadParamFile = (
           allowReset={state.paramFileContentModified}
           allowDownload
           label={{
-            text: t("panel.downloadParamFile.paramFileTextLabel"),
-            content,
+            text: t("panel.downloadParamFile.paramFileTextLabel", {
+              ns: "panels",
+            }),
+            content: getContent(t("panel.downloadParamFile.paramFileHelp")),
           }}
         />
       </div>
@@ -213,8 +218,11 @@ const DownloadParamFile = (
           statusIconDescription="notification"
           subtitle={t(
             "panel.downloadParamFile.modifiedDataNotificationSubtitle",
+            { ns: "panels" },
           )}
-          title={t("panel.downloadParamFile.modifiedDataNotificationTitle")}
+          title={t("panel.downloadParamFile.modifiedDataNotificationTitle", {
+            ns: "panels",
+          })}
           kind="warning"
           className="download-param-file__incomplete-data-banner"
         />

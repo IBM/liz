@@ -356,12 +356,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
     );
   };
 
-  const content = (
-    <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
-      eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
-    </p>
-  );
+  const getContent = (value) => {
+    return <p>{value}</p>;
+  };
 
   const getLabel = (label, buttonLabel, content) => {
     return (
@@ -377,12 +374,22 @@ const NetworkAddress = (patchState, localStorageKey) => {
     );
   };
 
-  const PLACEHOLDER_GATEWAY_ADDRESS_IPV4 = "192.168.178.1";
-  const PLACEHOLDER_GATEWAY_ADDRESS_IPV6 =
-    "0000:0000:0000:0000:0000:ffff:c0a8:b201";
-  const PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 = "192.168.178.20";
-  const PLACEHOLDER_NAMESERVER_ADDRESS_IPV6 =
-    "0000:0000:0000:0000:0000:ffff:c0a8:b214";
+  const PLACEHOLDER_GATEWAY_ADDRESS_IPV4 = t(
+    "panel.networkAddress.gatewayAddressPlaceholderIPv4",
+    { ns: "panels" },
+  );
+  const PLACEHOLDER_GATEWAY_ADDRESS_IPV6 = t(
+    "panel.networkAddress.gatewayAddressPlaceholderIPv6",
+    { ns: "panels" },
+  );
+  const PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 = t(
+    "panel.networkAddress.nameserverAddressPlaceholderIPv4",
+    { ns: "panels" },
+  );
+  const PLACEHOLDER_NAMESERVER_ADDRESS_IPV6 = t(
+    "panel.networkAddress.nameserverAddressPlaceholderIPv6",
+    { ns: "panels" },
+  );
 
   const isIpv4AddressComplete = () => {
     return (
@@ -624,8 +631,20 @@ const NetworkAddress = (patchState, localStorageKey) => {
           invalid={
             state && state.ipv4Address ? !state.ipv4Address.valid : false
           }
-          labelText={getLabel("IPv4 address", "Show information", content)}
-          placeholder="192.168.178.22"
+          labelText={getLabel(
+            t("panel.networkAddress.networkAddressIPv4TextLabel", {
+              ns: "panels",
+            }),
+            t("showInformationLabel", { ns: "common" }),
+            getContent(
+              t("panel.networkAddress.networkAddressIPv4Help", {
+                ns: "panels",
+              }),
+            ),
+          )}
+          placeholder={t("panel.networkAddress.networkAddressIPv4Placeholder", {
+            ns: "panels",
+          })}
           defaultValue={state.ipv4Address ? state.ipv4Address.value : ""}
           value={state.ipv4Address ? state.ipv4Address.value : ""}
           onChange={(localAddress) => {
@@ -653,12 +672,20 @@ const NetworkAddress = (patchState, localStorageKey) => {
           invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={getLabel(
             state && state.ipv4Cidr && state.ipv4Cidr.computed
-              ? "IPv4 prefix (computed)"
-              : "IPv4 prefix",
-            "Show information",
-            content,
+              ? t("panel.networkAddress.networkPrefixIPv4TextLabelComputed", {
+                  ns: "panels",
+                })
+              : t("panel.networkAddress.networkPrefixIPv4TextLabel", {
+                  ns: "panels",
+                }),
+            t("showInformationLabel", { ns: "common" }),
+            getContent(
+              t("panel.networkAddress.networkPrefixIPv4Help", { ns: "panels" }),
+            ),
           )}
-          placeholder="32"
+          placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
+            ns: "panels",
+          })}
           defaultValue={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
           value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
           onChange={(localCidr) => {
@@ -695,12 +722,20 @@ const NetworkAddress = (patchState, localStorageKey) => {
           invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={getLabel(
             state && state.netmask && state.netmask.computed
-              ? "IPv4 netmask (computed)"
-              : "IPv4 netmask",
-            "Show information",
-            content,
+              ? t("panel.networkAddress.netmaskIPv4TextLabelComputed", {
+                  ns: "panels",
+                })
+              : t("panel.networkAddress.netmaskIPv4TextLabel", {
+                  ns: "panels",
+                }),
+            t("showInformationLabel", { ns: "common" }),
+            getContent(
+              t("panel.networkAddress.netmaskIPv4Help", { ns: "panels" }),
+            ),
           )}
-          placeholder="255.255.128.0"
+          placeholder={t("panel.networkAddress.netmaskIPv4Placeholder", {
+            ns: "panels",
+          })}
           defaultValue={state.netmask ? state.netmask.value : ""}
           value={state.netmask ? state.netmask.value : ""}
           onChange={(localNetmask) => {
@@ -733,8 +768,14 @@ const NetworkAddress = (patchState, localStorageKey) => {
           readOnly
           id="network-address_ipv4-binary"
           invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText="IPv4 binary representation (computed)"
-          placeholder="11111111.11111111.10000000.00000000"
+          labelText={t(
+            "panel.networkAddress.networkAddressBinaryIPv4TextLabel",
+            { ns: "panels" },
+          )}
+          placeholder={t(
+            "panel.networkAddress.networkAddressBinaryIPv4Placeholder",
+            { ns: "panels" },
+          )}
           value={state.binary}
         />
       </>
@@ -750,8 +791,20 @@ const NetworkAddress = (patchState, localStorageKey) => {
             state && state.ipv6Address ? !state.ipv6Address.valid : false
           }
           invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel("IPv6 address", "Show information", content)}
-          placeholder="2001:0db8:85a3:0:0:8a2e:370:7334"
+          labelText={getLabel(
+            t("panel.networkAddress.networkAddressIPv6TextLabel", {
+              ns: "panels",
+            }),
+            t("showInformationLabel", { ns: "common" }),
+            getContent(
+              t("panel.networkAddress.networkAddressIPv6Help", {
+                ns: "panels",
+              }),
+            ),
+          )}
+          placeholder={t("panel.networkAddress.networkAddressIPv6TextLabel", {
+            ns: "panels",
+          })}
           defaultValue={state.ipv6Address ? state.ipv6Address.value : ""}
           value={state.ipv6Address ? state.ipv6Address.value : ""}
           onChange={(localAddress) => {
@@ -777,8 +830,18 @@ const NetworkAddress = (patchState, localStorageKey) => {
           id="network-address_ipv6-prefix"
           invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
           invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel("IPv6 prefix", "Show information", content)}
-          placeholder="128"
+          labelText={getLabel(
+            t("panel.networkAddress.networkPrefixIPv6TextLabel", {
+              ns: "panels",
+            }),
+            t("showInformationLabel", { ns: "common" }),
+            getContent(
+              t("panel.networkAddress.networkPrefixIPv6Help", { ns: "panels" }),
+            ),
+          )}
+          placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
+            ns: "panels",
+          })}
           defaultValue={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
           value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
           onChange={(localCidr) => {
@@ -811,7 +874,9 @@ const NetworkAddress = (patchState, localStorageKey) => {
     <div className="network-address_column-left">
       <RadioButtonGroup
         className="network-address_ip-version-group"
-        legendText="Internet protocol version"
+        legendText={t("panel.networkAddress.internetProtocolVersionTextLabel", {
+          ns: "panels",
+        })}
         name="network-address_ip-version-group"
         defaultSelected={state.addressType}
         onChange={(selected) => {
@@ -853,7 +918,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel("Gateway IP address", "Show information", content)}
+        labelText={getLabel(
+          t("panel.networkAddress.gatewayAddressTextLabel", { ns: "panels" }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.gatewayAddressHelp", { ns: "panels" }),
+          ),
+        )}
         placeholder={
           state.addressType === ADDRESS_TYPE_IPV6
             ? PLACEHOLDER_GATEWAY_ADDRESS_IPV6
@@ -900,9 +971,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
-          "Nameserver IP address",
-          "Show information",
-          content,
+          t("panel.networkAddress.nameserverAddressTextLabel", {
+            ns: "panels",
+          }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.nameserverAddressHelp", { ns: "panels" }),
+          ),
         )}
         placeholder={
           state.addressType === ADDRESS_TYPE_IPV6
@@ -946,11 +1021,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
         invalid={state && state.hostName ? !state.hostName.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
-          "Host name (optional)",
-          "Show information",
-          content,
+          t("panel.networkAddress.hostnameTextLabel", { ns: "panels" }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(t("panel.networkAddress.hostnameHelp", { ns: "panels" })),
         )}
-        placeholder="ex: linux.domain.com"
+        placeholder={t("panel.networkAddress.hostnamePlaceholder", {
+          ns: "panels",
+        })}
         defaultValue={state.hostName ? state.hostName.value : ""}
         value={state.hostName ? state.hostName.value : ""}
         onChange={(localHostName) => {
@@ -981,11 +1058,15 @@ const NetworkAddress = (patchState, localStorageKey) => {
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
-          "Domain search (optional)",
-          "Show information",
-          content,
+          t("panel.networkAddress.domainSearchPathTextLabel", { ns: "panels" }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.domainSearchPathHelp", { ns: "panels" }),
+          ),
         )}
-        placeholder="ex: domain.com"
+        placeholder={t("panel.networkAddress.domainSearchPathPlaceholder", {
+          ns: "panels",
+        })}
         defaultValue={
           state.domainSearchPath ? state.domainSearchPath.value : ""
         }

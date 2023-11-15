@@ -535,14 +535,14 @@ const NetworkDevice = (patchState, localStorageKey) => {
       <Dropdown
         className="network-device_device-type-dropdown"
         titleText={getLabel(
-          t("panel.networkDevice.deviceTypeTextLabel"),
+          t("panel.networkDevice.deviceTypeTextLabel", { ns: "panels" }),
           t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkDevice.deviceTypeHelp")),
+          getContent(t("panel.networkDevice.deviceTypeHelp", { ns: "panels" })),
         )}
-        aria-label={t("panel.networkDevice.deviceTypeLabel")}
+        aria-label={t("panel.networkDevice.deviceTypeLabel", { ns: "panels" })}
         id="network-device_device-type-selection"
         items={deviceTypeList}
-        label={t("panel.networkDevice.deviceTypeLabel")}
+        label={t("panel.networkDevice.deviceTypeLabel", { ns: "panels" })}
         helperText=""
         size="md"
         warn={false}
@@ -572,11 +572,13 @@ const NetworkDevice = (patchState, localStorageKey) => {
         invalidText={t("invalidTextLabel", { ns: "common" })}
         invalid={state && state.vlanId ? !state.vlanId.valid : false}
         labelText={getLabel(
-          t("panel.networkDevice.vlanIdTextLabel"),
+          t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" }),
           t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkDevice.vlanIdHelp")),
+          getContent(t("panel.networkDevice.vlanIdHelp", { ns: "panels" })),
         )}
-        placeholder={t("panel.networkDevice.vlanIdPlaceholder")}
+        placeholder={t("panel.networkDevice.vlanIdPlaceholder", {
+          ns: "panels",
+        })}
         value={state.vlanId ? state.vlanId.value : ""}
         onChange={(vlanId) => {
           const vlanIdValue =
@@ -610,11 +612,15 @@ const NetworkDevice = (patchState, localStorageKey) => {
               state && state.readChannelId ? !state.readChannelId.valid : false
             }
             labelText={getLabel(
-              t("panel.networkDevice.readChannelTextLabel"),
+              t("panel.networkDevice.readChannelTextLabel", { ns: "panels" }),
               t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.readChannelHelp")),
+              getContent(
+                t("panel.networkDevice.readChannelHelp", { ns: "panels" }),
+              ),
             )}
-            placeholder={t("panel.networkDevice.readChannelPlaceholder")}
+            placeholder={t("panel.networkDevice.readChannelPlaceholder", {
+              ns: "panels",
+            })}
             value={state.readChannelId ? state.readChannelId.value : ""}
             onChange={(readChannelId) => {
               const readChannelIdValue = readChannelId?.target?.value ?? "";
@@ -651,11 +657,15 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 : false
             }
             labelText={getLabel(
-              t("panel.networkDevice.writeChannelTextLabel"),
+              t("panel.networkDevice.writeChannelTextLabel", { ns: "panels" }),
               t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.writeChannelHelp")),
+              getContent(
+                t("panel.networkDevice.writeChannelHelp", { ns: "panels" }),
+              ),
             )}
-            placeholder={t("panel.networkDevice.writeChannelPlaceholder")}
+            placeholder={t("panel.networkDevice.writeChannelPlaceholder", {
+              ns: "panels",
+            })}
             value={state.writeChannelId ? state.writeChannelId.value : ""}
             onChange={(writeChannelId) => {
               const writeChannelIdValue = writeChannelId?.target?.value ?? "";
@@ -690,11 +700,15 @@ const NetworkDevice = (patchState, localStorageKey) => {
               state && state.dataChannelId ? !state.dataChannelId.valid : false
             }
             labelText={getLabel(
-              t("panel.networkDevice.dataChannelTextLabel"),
+              t("panel.networkDevice.dataChannelTextLabel", { ns: "panels" }),
               t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.dataChannelHelp")),
+              getContent(
+                t("panel.networkDevice.dataChannelHelp", { ns: "panels" }),
+              ),
             )}
-            placeholder={t("panel.networkDevice.dataChannelPlaceholder")}
+            placeholder={t("panel.networkDevice.dataChannelPlaceholder", {
+              ns: "panels",
+            })}
             value={state.dataChannelId ? state.dataChannelId.value : ""}
             onChange={(dataChannelId) => {
               const dataChannelIdValue = dataChannelId?.target?.value ?? "";

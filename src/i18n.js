@@ -19,7 +19,7 @@ const i18Init = () => {
       debug: true,
       fallbackLng: "en",
       preload: ["en", "de"],
-      ns: ["translation", "common", "help"],
+      ns: ["translation", "panels", "common", "help"],
       defaultNS: "translation",
       backend: {
         loadPath: "locales/{{lng}}/{{ns}}.json",

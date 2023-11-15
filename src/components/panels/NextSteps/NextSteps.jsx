@@ -74,68 +74,72 @@ const NextSteps = (
     );
   };
 
-  const networkAddressForListItem = networkAddress || "<host-IP-address>";
+  const networkAddressForListItem = networkAddress || "[host-IP-address]";
 
   const gridContentsMarkup = (
     <>
-      <div className="next-steps_heading">{t("panel.nextSteps.header")}</div>
+      <div className="next-steps_heading">
+        {t("panel.nextSteps.header", { ns: "panels" })}
+      </div>
       <div className="next-steps_para_bottom">
-        {t("panel.nextSteps.explanation1")}
+        {t("panel.nextSteps.explanation1", { ns: "panels" })}
       </div>
       <UnorderedList>
-        <ListItem>{t("panel.nextSteps.listItem1")}</ListItem>
+        <ListItem>{t("panel.nextSteps.listItem1", { ns: "panels" })}</ListItem>
         <UnorderedList>
           <ListItem>
-            <Trans i18nKey="panel.nextSteps.listItem2">
+            <Trans i18nKey="panel.nextSteps.listItem2" ns="panels">
               The{" "}
               <code className="next-steps__formatted-code">generic.ins</code>{" "}
               file
             </Trans>
           </ListItem>
           <ListItem>
-            <Trans i18nKey="panel.nextSteps.listItem3">
+            <Trans i18nKey="panel.nextSteps.listItem3" ns="panels">
               The <code className="next-steps__formatted-code">images</code>{" "}
               directory
             </Trans>
           </ListItem>
         </UnorderedList>
         <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem4">
+          <Trans i18nKey="panel.nextSteps.listItem4" ns="panels">
             Replace the file named{" "}
-            <code className="next-steps__formatted-code">genericdvd.prm</code>{" "}
+            <code className="next-steps__formatted-code">
+              {"genericdvd.prm"}
+            </code>{" "}
             with the parmfile contents downloaded from this application.
           </Trans>
         </ListItem>
-        <ListItem>{t("panel.nextSteps.listItem5")}</ListItem>
+        <ListItem>{t("panel.nextSteps.listItem5", { ns: "panels" })}</ListItem>
         <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem6">
+          <Trans i18nKey="panel.nextSteps.listItem6" ns="panels">
             Go to{" "}
             <code className="next-steps__formatted-code">
-              Systems Management
+              {"Systems Management"}
             </code>{" "}
             view for the mainframe containing the LPAR
           </Trans>
         </ListItem>
-        <ListItem>{t("panel.nextSteps.listItem7")}</ListItem>
+        <ListItem>{t("panel.nextSteps.listItem7", { ns: "panels" })}</ListItem>
         <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem8">
+          <Trans i18nKey="panel.nextSteps.listItem8" ns="panels">
             Select the task{" "}
             <code className="next-steps__formatted-code">
-              Recovery -&gt; Load from Removable Media or Server
+              {"Recovery -&gt; Load from Removable Media or Server"}
             </code>
           </Trans>
         </ListItem>
-        <ListItem>{t("panel.nextSteps.listItem9")}</ListItem>
-        <ListItem>{t("panel.nextSteps.listItem10")}</ListItem>
+        <ListItem>{t("panel.nextSteps.listItem9", { ns: "panels" })}</ListItem>
+        <ListItem>{t("panel.nextSteps.listItem10", { ns: "panels" })}</ListItem>
       </UnorderedList>
       {useVnc && (
         <>
           <div className="next-steps_para">
-            {t("panel.nextSteps.explanation2")}
+            {t("panel.nextSteps.explanation2", { ns: "panels" })}
           </div>
           <UnorderedList>
             <ListItem>
-              <Trans i18nKey="panel.nextSteps.listItem11">
+              <Trans i18nKey="panel.nextSteps.listItem11" ns="panels">
                 VNC host: {{ networkAddressForListItem }}
               </Trans>
               {!networkAddress &&
@@ -146,7 +150,7 @@ const NextSteps = (
                 )}
             </ListItem>
             <ListItem>
-              <Trans i18nKey="panel.nextSteps.listItem12">
+              <Trans i18nKey="panel.nextSteps.listItem12" ns="panels">
                 VNC password: {{ vncPassword }}
               </Trans>
             </ListItem>
@@ -156,11 +160,11 @@ const NextSteps = (
       {useSsh && (
         <>
           <div className="next-steps_para">
-            {t("panel.nextSteps.explanation2")}
+            {t("panel.nextSteps.explanation2", { ns: "panels" })}
           </div>
           <UnorderedList>
             <ListItem>
-              <Trans i18nKey="panel.nextSteps.listItem13">
+              <Trans i18nKey="panel.nextSteps.listItem13" ns="panels">
                 SSH host: installer@{{ networkAddressForListItem }}
               </Trans>
               {!networkAddress &&

@@ -69,12 +69,9 @@ const MiscParameters = (patchState, localStorageKey) => {
     });
   }, [state]);
 
-  const content = (
-    <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
-      eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
-    </p>
-  );
+  const getContent = (value) => {
+    return <p>{value}</p>;
+  };
 
   const gridContentsMarkup = (
     <>
@@ -104,8 +101,10 @@ const MiscParameters = (patchState, localStorageKey) => {
           allowCopy
           allowReset={state.miscParameterContentModified}
           label={{
-            text: t("panel.miscParameters.textLabel"),
-            content,
+            text: t("panel.miscParameters.textLabel", { ns: "panels" }),
+            content: getContent(
+              t("panel.miscParameters.help", { ns: "panels" }),
+            ),
           }}
         />
       </div>

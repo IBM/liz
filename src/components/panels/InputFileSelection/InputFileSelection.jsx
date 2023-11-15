@@ -169,7 +169,7 @@ const InputFileSelection = (
     <>
       <div>
         <div className="input-file-selection__subheading">
-          {t("panel.inputFileSelection.hostOS")}
+          {t("panel.inputFileSelection.hostOS", { ns: "panels" })}
         </div>
       </div>
     </>
@@ -177,7 +177,7 @@ const InputFileSelection = (
   const gridContentsMarkupRowThreeColumnOne = (
     <div>
       <div className="input-file-selection__contentRowIntro">
-        {t("panel.inputFileSelection.chooseFromeTemplate")}
+        {t("panel.inputFileSelection.chooseFromeTemplate", { ns: "panels" })}
       </div>
       <div className="input-file-selection__contentRowDropdowns">
         <Dropdown

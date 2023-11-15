@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Layer, Link } from "@carbon/react";
 // import { IsoFilled } from "@carbon/icons-react";
@@ -64,10 +64,10 @@ const Information = (
   const markup = (
     <Layer>
       <div className="information_heading">
-        {t("panel.information.requirementsHeader")}
+        {t("panel.information.requirementsHeader", { ns: "panels" })}
       </div>
       <div className="information_content">
-        {t("panel.information.requirementsExplanation")}
+        {t("panel.information.requirementsExplanation", { ns: "panels" })}
       </div>
       <div
         className="table-container"
@@ -84,7 +84,7 @@ const Information = (
             id="display-iformation__table-header-row__name"
             role="columnheader"
           >
-            {t("panel.information.table.nameOsLabel")}
+            {t("panel.information.table.nameOsLabel", { ns: "panels" })}
           </div>
           <div
             className="flex-row"
@@ -104,7 +104,7 @@ const Information = (
             id="display-iformation__table-header-row__version"
             role="columnheader"
           >
-            {t("panel.information.table.versionLabel")}
+            {t("panel.information.table.versionLabel", { ns: "panels" })}
           </div>
           <div
             className="flex-row"
@@ -124,7 +124,7 @@ const Information = (
             id="display-iformation__table-header-row__distribution"
             role="columnheader"
           >
-            {t("panel.information.table.memoryLabel")}
+            {t("panel.information.table.memoryLabel", { ns: "panels" })}
           </div>
           <div
             className="flex-row"
@@ -144,7 +144,7 @@ const Information = (
             id="display-iformation__table-header-row__distribution"
             role="columnheader"
           >
-            {t("panel.information.table.diskLabel")}
+            {t("panel.information.table.diskLabel", { ns: "panels" })}
           </div>
           <div
             className="flex-row"
@@ -164,7 +164,7 @@ const Information = (
             id="display-iformation__table-header-row__distribution"
             role="columnheader"
           >
-            {t("panel.information.table.machineLevelLabel")}
+            {t("panel.information.table.machineLevelLabel", { ns: "panels" })}
           </div>
           <div
             className="flex-row"
@@ -185,13 +185,15 @@ const Information = (
         */}
       </div>
       <div className="information_heading_alt">
-        {t("panel.information.informationHeader")}
+        {t("panel.information.informationHeader", { ns: "panels" })}
       </div>
       <div className="information_content">
-        {t("panel.information.informationExplanation")}
-        <Link href={docLink} target="_blank">
-          {distributionName}
-        </Link>
+        <Trans i18nKey="panel.information.informationExplanation" ns="panels">
+          Link to distribution-specific documentation:{" "}
+          <Link href={docLink} target="_blank">
+            {{ distributionName }}
+          </Link>
+        </Trans>
       </div>
     </Layer>
   );

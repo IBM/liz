@@ -92,9 +92,13 @@ const DeviceSettings = ({
             defaultToggled
             toggled={state.layer}
             labelText={getLabel(
-              t("panel.networkDevice.layerTwoToggleTextLabel"),
+              t("panel.networkDevice.layerTwoToggleTextLabel", {
+                ns: "panels",
+              }),
               t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.layerTwoToggleHelp")),
+              getContent(
+                t("panel.networkDevice.layerTwoToggleHelp", { ns: "panels" }),
+              ),
             )}
             labelA="0"
             labelB="1"
@@ -110,9 +114,13 @@ const DeviceSettings = ({
           <Toggle
             toggled={state.portNo}
             labelText={getLabel(
-              t("panel.networkDevice.portNumberToggleTextLabel"),
+              t("panel.networkDevice.portNumberToggleTextLabel", {
+                ns: "panels",
+              }),
               t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.portNumberToggleHelp")),
+              getContent(
+                t("panel.networkDevice.portNumberToggleHelp", { ns: "panels" }),
+              ),
             )}
             labelA="0"
             labelB="1"
@@ -152,13 +160,15 @@ const DeviceSettings = ({
             labelText={getLabel(
               roceLabelHasOptionalTag(
                 "userIdentifier",
-                t("panel.networkDevice.fidTextLabel"),
-                t("panel.networkDevice.fidTextLabelOptional"),
+                t("panel.networkDevice.fidTextLabel", { ns: "panels" }),
+                t("panel.networkDevice.fidTextLabelOptional", { ns: "panels" }),
               ),
               t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.fidHelp")),
+              getContent(t("panel.networkDevice.fidHelp", { ns: "panels" })),
             )}
-            placeholder={t("panel.networkDevice.fidPlaceholder")}
+            placeholder={t("panel.networkDevice.fidPlaceholder", {
+              ns: "panels",
+            })}
             value={state?.pciFunctionId?.value ?? ""}
             onChange={(pciFunctionId) => {
               const pciFunctionIdValue =
@@ -200,13 +210,15 @@ const DeviceSettings = ({
             labelText={getLabel(
               roceLabelHasOptionalTag(
                 "pciFunctionId",
-                t("panel.networkDevice.uidTextLabel"),
-                t("panel.networkDevice.uidTextLabelOptional"),
+                t("panel.networkDevice.uidTextLabel", { ns: "panels" }),
+                t("panel.networkDevice.uidTextLabelOptional", { ns: "panels" }),
               ),
               t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.uidHelp")),
+              getContent(t("panel.networkDevice.uidHelp", { ns: "panels" })),
             )}
-            placeholder={t("panel.networkDevice.uidPlaceholder")}
+            placeholder={t("panel.networkDevice.uidPlaceholder", {
+              ns: "panels",
+            })}
             value={state?.userIdentifier?.value ?? ""}
             onChange={(userIdentifier) => {
               const userIdentifierValue =

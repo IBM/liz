@@ -46,24 +46,28 @@ const Hint = (patchState, localStorageKey) => {
 
   const gridContentsMarkup = (
     <>
-      <div className="hint_heading">{t("panel.hint.header")}</div>
-      <div className="hint_intro">{t("panel.hint.explanation")}</div>
+      <div className="hint_heading">
+        {t("panel.hint.header", { ns: "panels" })}
+      </div>
+      <div className="hint_intro">
+        {t("panel.hint.explanation", { ns: "panels" })}
+      </div>
       <UnorderedList>
-        <ListItem>{t("panel.hint.listItem1")}</ListItem>
+        <ListItem>{t("panel.hint.listItem1", { ns: "panels" })}</ListItem>
         <UnorderedList>
-          <ListItem>{t("panel.hint.listItem2")}</ListItem>
-          <ListItem>{t("panel.hint.listItem3")}</ListItem>
-          <ListItem>{t("panel.hint.listItem4")}</ListItem>
+          <ListItem>{t("panel.hint.listItem2", { ns: "panels" })}</ListItem>
+          <ListItem>{t("panel.hint.listItem3", { ns: "panels" })}</ListItem>
+          <ListItem>{t("panel.hint.listItem4", { ns: "panels" })}</ListItem>
         </UnorderedList>
-        <ListItem>{t("panel.hint.listItem5")}</ListItem>
+        <ListItem>{t("panel.hint.listItem5", { ns: "panels" })}</ListItem>
         <UnorderedList>
-          <ListItem>{t("panel.hint.listItem6")}</ListItem>
-          <ListItem>{t("panel.hint.listItem7")}</ListItem>
-          <ListItem>{t("panel.hint.listItem8")}</ListItem>
-          <ListItem>{t("panel.hint.listItem9")}</ListItem>
-          <ListItem>{t("panel.hint.listItem10")}</ListItem>
+          <ListItem>{t("panel.hint.listItem6", { ns: "panels" })}</ListItem>
+          <ListItem>{t("panel.hint.listItem7", { ns: "panels" })}</ListItem>
+          <ListItem>{t("panel.hint.listItem8", { ns: "panels" })}</ListItem>
+          <ListItem>{t("panel.hint.listItem9", { ns: "panels" })}</ListItem>
+          <ListItem>{t("panel.hint.listItem10", { ns: "panels" })}</ListItem>
         </UnorderedList>
-        <ListItem>{t("panel.hint.listItem11")}</ListItem>
+        <ListItem>{t("panel.hint.listItem11", { ns: "panels" })}</ListItem>
       </UnorderedList>
     </>
   );
