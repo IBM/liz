@@ -3,5 +3,6 @@
     "@babel/preset-env",
     ["@babel/preset-react", { "runtime": "automatic" }],
     "babel-preset-vite"
-  ]
+  ],
+  "plugins": ["i18next-extract"]
 }

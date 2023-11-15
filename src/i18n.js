@@ -8,9 +8,18 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
+import Pseudo from "i18next-pseudo";
 
 const i18Init = () => {
   i18n
+    .use(
+      new Pseudo({
+        enabled: true,
+        languageToPseudo: "es-US",
+        letterMultiplier: 4,
+        repeatedLetters: ["B", "o", "a", "t"],
+      }),
+    )
     .use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next)
@@ -24,6 +33,7 @@ const i18Init = () => {
       backend: {
         loadPath: "locales/{{lng}}/{{ns}}.json",
       },
+      postProcess: ["pseudo"],
     });
 };
 
