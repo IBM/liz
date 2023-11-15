@@ -216,12 +216,9 @@ const InstallationParameters = (patchState, localStorageKey) => {
     return "";
   };
 
-  const content = (
-    <p>
-      Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
-      eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
-    </p>
-  );
+  const getContent = (value) => {
+    return <p>{value}</p>;
+  };
 
   const getLabel = (label, buttonLabel, content) => {
     return (
@@ -345,11 +342,18 @@ const InstallationParameters = (patchState, localStorageKey) => {
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
-          "Installation address",
-          "Show information",
-          content,
+          t("panel.installationParameter.installationAddressTextLabel", {
+            ns: "panels",
+          }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(t("panel.installationParameter.installationAddressHelp"), {
+            ns: "panels",
+          }),
         )}
-        placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
+        placeholder={t(
+          "panel.installationParameter.installationAddressPlaceholder",
+          { ns: "panels" },
+        )}
         className="installation-parameters_installation-address-input"
         defaultValue={
           state.installationAddress ? state.installationAddress.value : ""
@@ -378,11 +382,21 @@ const InstallationParameters = (patchState, localStorageKey) => {
         helperText=""
         id="computed-installation-address-input"
         labelText={getLabel(
-          "Installation address (computed)",
-          "Show information",
-          content,
+          t(
+            "panel.installationParameter.computedInstallationAddressTextLabel",
+            { ns: "panels" },
+          ),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.installationParameter.computedInstallationAddressHelp", {
+              ns: "panels",
+            }),
+          ),
         )}
-        placeholder="ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/"
+        placeholder={t(
+          "panel.installationParameter.computedInstallationAddressPlaceholder",
+          { ns: "panels" },
+        )}
         className="installation-parameters_installation-address-input"
         value={
           state.installationAddress ? state.installationAddress.computed : ""
@@ -399,8 +413,16 @@ const InstallationParameters = (patchState, localStorageKey) => {
         id="username-input"
         invalid={state && state.userName ? !state.userName.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel("Username (optional)", "Show information", content)}
-        placeholder="ex: johndoe"
+        labelText={getLabel(
+          t("panel.installationParameter.usernameTextLabel", { ns: "panels" }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.installationParameter.usernameHelp", { ns: "panels" }),
+          ),
+        )}
+        placeholder={t("panel.installationParameter.usernamePlaceholder", {
+          ns: "panels",
+        })}
         className="installation-parameters_username-input"
         defaultValue={state.userName ? state.userName.value : ""}
         value={state.userName ? state.userName.value : ""}
@@ -452,8 +474,16 @@ const InstallationParameters = (patchState, localStorageKey) => {
         id="password-input"
         invalid={state && state.password ? !state.password.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel("Password (optional)", "Show information", content)}
-        placeholder="ex: foobar"
+        labelText={getLabel(
+          t("panel.installationParameter.usernameTextLabel", { ns: "panels" }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.installationParameter.usernameHelp", { ns: "panels" }),
+          ),
+        )}
+        placeholder={t("panel.installationParameter.usernamePlaceholder", {
+          ns: "panels",
+        })}
         className="installation-parameters_password-input"
         defaultValue={state.password ? state.password.value : ""}
         value={state.password ? state.password.value : ""}
@@ -502,12 +532,14 @@ const InstallationParameters = (patchState, localStorageKey) => {
     <div className="installation-parameters_column-left">
       <Toggle
         labelText={getLabel(
-          "VNC for installation",
-          "Show information",
-          content,
+          t("panel.installationParameter.vncToggleTextLabel", { ns: "panels" }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.installationParameter.vncToggleHelp", { ns: "panels" }),
+          ),
         )}
-        labelA="Disable"
-        labelB="Enable"
+        labelA={t("toggle.disableLabel", { ns: "common" })}
+        labelB={t("toggle.enableLabel", { ns: "common" })}
         id="vnc-toggle"
         defaultToggled={useVncToggled}
         onToggle={() => {
@@ -524,8 +556,20 @@ const InstallationParameters = (patchState, localStorageKey) => {
           helperText=""
           id="vnc-password-input"
           invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel("VNC password", "Show information", content)}
-          placeholder="VNC password here"
+          labelText={getLabel(
+            t("panel.installationParameter.vncPasswordTextLabel", {
+              ns: "panels",
+            }),
+            t("showInformationLabel", { ns: "common" }),
+            getContent(
+              t("panel.installationParameter.vncPasswordHelp", {
+                ns: "panels",
+              }),
+            ),
+          )}
+          placeholder={t("panel.installationParameter.vncPasswordPlaceholder", {
+            ns: "panels",
+          })}
           defaultValue={state.vncPassword ? state.vncPassword : ""}
           value={state.vncPassword ? state.vncPassword : ""}
           onChange={(password) => {
@@ -547,12 +591,14 @@ const InstallationParameters = (patchState, localStorageKey) => {
     <div className="installation-parameters_column-right">
       <Toggle
         labelText={getLabel(
-          "SSH for installation",
-          "Show information",
-          content,
+          t("panel.installationParameter.sshToggleTextLabel", { ns: "panels" }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.installationParameter.sshToggleHelp", { ns: "panels" }),
+          ),
         )}
-        labelA="Disable"
-        labelB="Enable"
+        labelA={t("toggle.disableLabel", { ns: "common" })}
+        labelB={t("toggle.enableLabel", { ns: "common" })}
         id="ssh-toggle"
         defaultToggled={useSshToggled}
         onToggle={() => {

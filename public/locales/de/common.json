@@ -8,5 +8,7 @@
   "header.productName": "Installation assistant für Linux auf IBM Z",
   "header.button.help": "Hilfe",
   "invalidTextLabel": "Ein zulässiger Wert wird benötigt.",
-  "showInformationLabel": "Information anzeigen"
+  "showInformationLabel": "Information anzeigen",
+  "toggle.enableLabel": "Aktiviert",
+  "toggle.disableLabel": "Deaktiviert"
 }

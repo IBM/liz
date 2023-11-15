@@ -8,5 +8,7 @@
   "header.productName": "Installation assistant for Linux on IBM Z",
   "header.button.help": "Hilfe",
   "invalidTextLabel": "A valid value is required",
-  "showInformationLabel": "Show information"
+  "showInformationLabel": "Show information",
+  "toggle.enableLabel": "Enabled",
+  "toggle.disableLabel": "Disabled"
 }

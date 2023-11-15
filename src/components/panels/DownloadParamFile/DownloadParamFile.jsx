@@ -208,7 +208,9 @@ const DownloadParamFile = (
             text: t("panel.downloadParamFile.paramFileTextLabel", {
               ns: "panels",
             }),
-            content: getContent(t("panel.downloadParamFile.paramFileHelp")),
+            content: getContent(
+              t("panel.downloadParamFile.paramFileHelp", { ns: "panels" }),
+            ),
           }}
         />
       </div>
