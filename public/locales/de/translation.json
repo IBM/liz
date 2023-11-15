@@ -79,5 +79,10 @@
   "panel.nextSteps.listItem12": "VNC-Passwort: {{vncPassword}}",
   "panel.nextSteps.listItem13": "SSH-Host: installer@{{networkAddressForListItem}}",
   "header.button.profileSettings": "Profileinstellungen",
-  "rightNavigation.header": "Hilfe & Dokumentation"
+  "rightNavigation.header": "Hilfe & Dokumentation",
+  "dialog.about.headerLabel": "Über diese Anwendung",
+  "dialog.about.buildDateLabel": "Erstellungsdatum: <1>{{buildDate}}</1>",
+  "dialog.about.commitHashLabel": "Commit hash: <1>{{commitHash}}</1>",
+  "dialog.about.reportIssueLabel": "Problem melden",
+  "dialog.about.pruneSettingsLabel": "Einstellungen löschen"
 }
