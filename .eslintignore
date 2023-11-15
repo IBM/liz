@@ -11,4 +11,4 @@ jest.config.json
 **/*.scss
 **/*.png
 **/*.html
-src/locales/**/*.json
+public/locales/**/*.json

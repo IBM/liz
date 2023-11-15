@@ -18,7 +18,7 @@ jest.config.json
 **/*.html
 .husky/*
 .github/*
-src/locales/**/*.json
+public/locales/**/*.json
 .env
 .env.github
 .travis.yml
