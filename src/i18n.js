@@ -22,7 +22,7 @@ const i18Init = () => {
       ns: ["translation", "common", "help"],
       defaultNS: "translation",
       backend: {
-        loadPath: "/locales/{{lng}}/{{ns}}.json",
+        loadPath: "locales/{{lng}}/{{ns}}.json",
       },
     });
 };

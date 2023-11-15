@@ -426,14 +426,17 @@ const App = () => {
     return localStorageKeys;
   };
   const getInlineNotification = () => {
+    const headerLabel = t("legalNotice.headerLabel");
+    const contentLabel = t("legalNotice.contentLabel");
+
     const inlineNotification = JSON.parse(
       localStorage.getItem("com.ibm.systems.linux.z.inlineNotification"),
     );
     const defaultInlineNotification = {
       show: true,
       kind: "warning",
-      title: t("legalNotice.headerLabel"),
-      subtitle: t("legalNotice.contentLabel"),
+      title: headerLabel,
+      subtitle: contentLabel,
     };
 
     if (inlineNotification) {
