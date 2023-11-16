@@ -89,44 +89,30 @@ const NextSteps = (
         <UnorderedList>
           <ListItem>
             <Trans i18nKey="panel.nextSteps.listItem2" ns="panels">
-              The{" "}
-              <code className="next-steps__formatted-code">generic.ins</code>{" "}
-              file
+              <code className="next-steps__formatted-code"></code>
             </Trans>
           </ListItem>
           <ListItem>
             <Trans i18nKey="panel.nextSteps.listItem3" ns="panels">
-              The <code className="next-steps__formatted-code">images</code>{" "}
-              directory
+              <code className="next-steps__formatted-code"></code>
             </Trans>
           </ListItem>
         </UnorderedList>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem4" ns="panels">
-            Replace the file named{" "}
-            <code className="next-steps__formatted-code">
-              {"genericdvd.prm"}
-            </code>{" "}
-            with the parmfile contents downloaded from this application.
+            <code className="next-steps__formatted-code"></code>
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem5", { ns: "panels" })}</ListItem>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem6" ns="panels">
-            Go to{" "}
-            <code className="next-steps__formatted-code">
-              {"Systems Management"}
-            </code>{" "}
-            view for the mainframe containing the LPAR
+            <code className="next-steps__formatted-code"></code>
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem7", { ns: "panels" })}</ListItem>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem8" ns="panels">
-            Select the task{" "}
-            <code className="next-steps__formatted-code">
-              {"Recovery -&gt; Load from Removable Media or Server"}
-            </code>
+            <code className="next-steps__formatted-code"></code>
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem9", { ns: "panels" })}</ListItem>

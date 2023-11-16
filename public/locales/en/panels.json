@@ -125,7 +125,7 @@
   "panel.nextSteps.listItem5": "Log on to the IBM Z Hardware Management Console (HMC) that manages the LPAR.",
   "panel.nextSteps.listItem6": "Go to <1>Systems Management</1> view for the mainframe containing the LPAR.",
   "panel.nextSteps.listItem7": "Select the target LPAR.",
-  "panel.nextSteps.listItem8": "Select the task <1>Recovery -&gt; Load from Removable Media or Server</1>.",
+  "panel.nextSteps.listItem8": "Select the task <1>Recovery -> Load from Removable Media or Server</1>.",
   "panel.nextSteps.listItem9": "Enter the parameters for the FTP server.",
   "panel.nextSteps.listItem10": "Select OK.",
   "panel.nextSteps.listItem11": "VNC host: {{networkAddressForListItem}}",
