@@ -75,7 +75,7 @@ const About = ({ closeNotification, pruneSettings }) => {
               </Trans>
             </span>
             <span title={t("btnLabel.Copy", { ns: "common" })}>
-              <CopyToClipboard text="{{buildDate}}">
+              <CopyToClipboard text={buildDate}>
                 <Copy size="16" />
               </CopyToClipboard>
             </span>
@@ -87,7 +87,7 @@ const About = ({ closeNotification, pruneSettings }) => {
               </Trans>
             </span>
             <span title={t("btnLabel.Copy", { ns: "common" })}>
-              <CopyToClipboard text={{ commitHash }}>
+              <CopyToClipboard text={commitHash}>
                 <Copy size="16" />
               </CopyToClipboard>
             </span>
