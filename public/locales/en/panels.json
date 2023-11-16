@@ -9,7 +9,7 @@
   "panel.information.table.diskLabel": "Disk",
   "panel.information.table.machineLevelLabel": "Machine Level",
   "panel.information.informationHeader": "Information",
-  "panel.information.informationExplanation": "Link to distribution-specific documentation: <1>{{distributionName}}</1>",
+  "panel.information.informationExplanation": "Link to distribution-specific documentation:",
   "panel.hint.header": "Before you begin",
   "panel.hint.explanation": "You will need the following information to complete this dialog. The listed information is typically provided by hardware or network administrators of the system to be installed.",
   "panel.hint.listItem1": "Networking device parameters",

@@ -9,7 +9,7 @@
   "panel.information.table.diskLabel": "Festplattengrösse",
   "panel.information.table.machineLevelLabel": "Maschinen Level",
   "panel.information.informationHeader": "Information",
-  "panel.information.informationExplanation": "Link zur Dokumentation der Distribution: <1>{{distributionName}}</1>",
+  "panel.information.informationExplanation": "Link zur Dokumentation der Distribution:",
   "panel.hint.header": "Bevor Sie beginnen.",
   "panel.hint.explanation": "Sie benötigen die nachfolgenden Informationen um diesen Dialog abzuschliessen. Die aufgeführten Informationen werden für gewöhnlich von einem Hardware- oder Netzwerkadministrator bereitgestellt, die jeweils für das zu installierende System verantwortlich sind.",
   "panel.hint.listItem1": "Parameter der Netzwerkschnittstelle",

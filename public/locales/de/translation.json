@@ -29,7 +29,7 @@
   "rightNavigation.header": "Hilfe & Dokumentation",
   "dialog.about.headerLabel": "Über diese Anwendung",
   "dialog.about.buildDateLabel": "Erstellungsdatum: <1>{{buildDate}}</1>",
-  "dialog.about.commitHashLabel": "Commit hash: <1>{{commitHash}}</1>",
+  "dialog.about.commitHashLabel": "Commit Hash: <1>{{commitHash}}</1>",
   "dialog.about.reportIssueLabel": "Problem melden",
   "dialog.about.pruneSettingsLabel": "Einstellungen löschen"
 }

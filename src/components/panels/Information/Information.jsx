@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Layer, Link } from "@carbon/react";
 // import { IsoFilled } from "@carbon/icons-react";
@@ -188,12 +188,10 @@ const Information = (
         {t("panel.information.informationHeader", { ns: "panels" })}
       </div>
       <div className="information_content">
-        <Trans i18nKey="panel.information.informationExplanation" ns="panels">
-          Link to distribution-specific documentation:{" "}
-          <Link href={docLink} target="_blank">
-            {{ distributionName }}
-          </Link>
-        </Trans>
+        {t("panel.information.informationExplanation", { ns: "panels" })}{" "}
+        <Link href={docLink} target="_blank">
+          {distributionName}
+        </Link>
       </div>
     </Layer>
   );
