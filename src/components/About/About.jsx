@@ -15,7 +15,8 @@ const About = ({ closeNotification, pruneSettings }) => {
   const { t } = useTranslation();
 
   const buildDate = "BUILD_DATE";
-  const commitHash = "COMMIT_HASH_SHORT";
+  const commitHashShort = "COMMIT_HASH_SHORT";
+  const commitHashLong = "COMMIT_HASH_LONG";
 
   const useOutsideAlerter = (ref) => {
     useEffect(() => {
@@ -83,11 +84,11 @@ const About = ({ closeNotification, pruneSettings }) => {
           <div className="about-dialog__about-build-info__commit-hash">
             <span>
               <Trans i18nKey="dialog.about.commitHashLabel">
-                Commit hash: <code>{{ commitHash }}</code>
+                Commit hash: <code>{{ commitHashShort }}</code>
               </Trans>
             </span>
             <span title={t("btnLabel.Copy", { ns: "common" })}>
-              <CopyToClipboard text={commitHash}>
+              <CopyToClipboard text={commitHashLong}>
                 <Copy size="16" />
               </CopyToClipboard>
             </span>
