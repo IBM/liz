@@ -33,6 +33,9 @@ const i18Init = () => {
       backend: {
         loadPath: "locales/{{lng}}/{{ns}}.json",
       },
+      detection: {
+        order: ["querystring", "cookie", "navigator", "htmlTag"],
+      },
       postProcess: ["pseudo"],
     });
 };
