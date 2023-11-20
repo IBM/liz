@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import isValidHostname from "is-valid-hostname";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -303,19 +304,19 @@ const NetworkAddress = (patchState, localStorageKey) => {
     return hasValidLabels;
   };
 
-  const isDomainNameValid = (domainName) => {
-    // the domain name for hostName is optional,
+  const isHostnameValid = (hostName) => {
+    // the hostName is optional,
     // if it is a zero length string mark it as a valid value.
-    if (typeof domainName === "string" && domainName.length === 0) {
+    if (typeof hostName === "string" && hostName.length === 0) {
       return true;
     }
 
     return (
-      domainName &&
-      typeof domainName === "string" &&
-      domainName.length <= 253 &&
-      domainNameHasValidLabels(domainName) &&
-      /^[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,6}$/i.test(domainName)
+      hostName &&
+      typeof hostName === "string" &&
+      hostName.length <= 253 &&
+      domainNameHasValidLabels(hostName) &&
+      isValidHostname(hostName)
     );
   };
 
@@ -1078,8 +1079,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
             localHostName && localHostName.target && localHostName.target.value
               ? localHostName.target.value
               : "";
-          const localHostNameValueIsValid =
-            isDomainNameValid(localHostNameValue);
+          const localHostNameValueIsValid = isHostnameValid(localHostNameValue);
           updateHostName(localHostNameValue, localHostNameValueIsValid);
         }}
       />
