@@ -135,7 +135,12 @@ const NetworkAddress = (patchState, localStorageKey) => {
   };
 
   const updateAddressType = (addressType) => {
-    setState((prevState) => ({ ...prevState, addressType }));
+    setState((prevState) => ({
+      ...prevState,
+      addressType,
+      gatewayIpAddress: { value: "", valid: true },
+      nameserverIpAddress: { value: "", valid: true },
+    }));
   };
 
   const updateIpv4Address = (ipv4Address, valid) => {
@@ -364,7 +369,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
     }
     return (
       state.ipv6Cidr.valid &&
-      state.ipv4Address.valid &&
+      state.ipv6Address.valid &&
       state.gatewayIpAddress.valid &&
       state.nameserverIpAddress.valid
     );
