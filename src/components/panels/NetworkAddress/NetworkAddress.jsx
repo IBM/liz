@@ -67,10 +67,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
         value: "",
         valid: false,
       },
-      domainSearchPath: {
-        value: "",
-        valid: false,
-      },
     };
 
     if (initialState) {
@@ -216,21 +212,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
     }
   };
 
-  const updateDomainSearchPath = (domainSearchPath, valid) => {
-    if (state.addressType) {
-      setState((prevState) => ({
-        ...prevState,
-        domainSearchPath: { value: domainSearchPath, valid },
-      }));
-    } else {
-      setState((prevState) => ({
-        ...prevState,
-        domainSearchPath: { value: domainSearchPath, valid },
-        addressType: ADDRESS_TYPE_IPV4,
-      }));
-    }
-  };
-
   const isCidr = (addressType, cidr) => {
     const isInteger =
       typeof cidr === "string"
@@ -323,7 +304,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
   };
 
   const isDomainNameValid = (domainName) => {
-    // the domain name for hostName and domainSearchPath is optional,
+    // the domain name for hostName is optional,
     // if it is a zero length string mark it as a valid value.
     if (typeof domainName === "string" && domainName.length === 0) {
       return true;
@@ -418,21 +399,12 @@ const NetworkAddress = (patchState, localStorageKey) => {
     return true;
   };
 
-  const isDomainSearchPathValid = () => {
-    if (state.domainSearchPath) {
-      return state.domainSearchPath.valid;
-    }
-    // return true since domainSearchPath is optional
-    return true;
-  };
-
   const isValid = () => {
     return (
       isIpAddressValid() &&
       isGatewayIpAddressValid() &&
       isNameserverIpAddressValid() &&
-      isHostNameValid() &&
-      isDomainSearchPathValid()
+      isHostNameValid()
     );
   };
 
@@ -561,24 +533,12 @@ const NetworkAddress = (patchState, localStorageKey) => {
     return true;
   };
 
-  const isDomainSearchPathComplete = () => {
-    if (state.domainSearchPath) {
-      return (
-        typeof state.domainSearchPath === "object" &&
-        typeof state.domainSearchPath.value === "string"
-      );
-    }
-    // return true since domainSearchPath is optional
-    return true;
-  };
-
   const isComplete = () => {
     return (
       isIpDataComplete() &&
       isGatewayIpAddressComplete() &&
       isNameserverIpAddressComplete() &&
-      isHostNameComplete() &&
-      isDomainSearchPathComplete()
+      isHostNameComplete()
     );
   };
 
@@ -631,9 +591,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   ? state.nameserverIpAddress.value
                   : "",
                 hostName: state.hostName ? state.hostName.value : "",
-                domainSearchPath: state.domainSearchPath
-                  ? state.domainSearchPath.value
-                  : "",
                 complete: true,
                 invalid: false,
                 localStorageKey,
@@ -662,9 +619,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
                   ? state.nameserverIpAddress.value
                   : "",
                 hostName: state.hostName ? state.hostName.value : "",
-                domainSearchPath: state.domainSearchPath
-                  ? state.domainSearchPath.value
-                  : "",
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 localStorageKey,
@@ -689,7 +643,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 gatewayIpAddress: state?.gatewayIpAddress?.value ?? "",
                 nameserverIpAddress: state?.nameserverIpAddress?.value ?? "",
                 hostName: state?.hostName?.value ?? "",
-                domainSearchPath: state?.domainSearchPath?.value ?? "",
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 localStorageKey,
@@ -1128,55 +1081,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
           const localHostNameValueIsValid =
             isDomainNameValid(localHostNameValue);
           updateHostName(localHostNameValue, localHostNameValueIsValid);
-        }}
-      />
-      <TextInput
-        id="network-address_domain-search-path-input"
-        invalid={
-          state && state.domainSearchPath
-            ? !state.domainSearchPath.valid
-            : false
-        }
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.domainSearchPathTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.domainSearchPathHelp", { ns: "panels" }),
-          ),
-        )}
-        placeholder={t("panel.networkAddress.domainSearchPathPlaceholder", {
-          ns: "panels",
-        })}
-        defaultValue={
-          state.domainSearchPath ? state.domainSearchPath.value : ""
-        }
-        value={state.domainSearchPath ? state.domainSearchPath.value : ""}
-        onChange={(localDomainSearchPath) => {
-          const localDomainSearchPathValue =
-            localDomainSearchPath &&
-            localDomainSearchPath.target &&
-            localDomainSearchPath.target.value
-              ? localDomainSearchPath.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateDomainSearchPath(localDomainSearchPathValue, true);
-        }}
-        onBlur={(localDomainSearchPath) => {
-          const localDomainSearchPathValue =
-            localDomainSearchPath &&
-            localDomainSearchPath.target &&
-            localDomainSearchPath.target.value
-              ? localDomainSearchPath.target.value
-              : "";
-          const localDomainSearchPathValueIsValid = isDomainNameValid(
-            localDomainSearchPathValue,
-          );
-          updateDomainSearchPath(
-            localDomainSearchPathValue,
-            localDomainSearchPathValueIsValid,
-          );
         }}
       />
     </div>
