@@ -661,248 +661,239 @@ const NetworkAddress = (patchState, localStorageKey) => {
     [state],
   );
 
-  const getIpv4Markup = () => {
-    return (
-      <>
-        <TextInput
-          id="network-address_ipv4-input"
-          invalidText={t("invalidTextLabel", { ns: "common" })}
-          invalid={
-            state && state.ipv4Address ? !state.ipv4Address.valid : false
-          }
-          labelText={getLabel(
-            t("panel.networkAddress.networkAddressIPv4TextLabel", {
+  const gridContentsMarkupRowTwoColumnOneIPv4 = (
+    <div className="network-address_column-left">
+      <TextInput
+        id="network-address_ipv4-input"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
+        invalid={state && state.ipv4Address ? !state.ipv4Address.valid : false}
+        labelText={getLabel(
+          t("panel.networkAddress.networkAddressIPv4TextLabel", {
+            ns: "panels",
+          }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.networkAddressIPv4Help", {
               ns: "panels",
             }),
-            t("showInformationLabel", { ns: "common" }),
-            getContent(
-              t("panel.networkAddress.networkAddressIPv4Help", {
+          ),
+        )}
+        placeholder={t("panel.networkAddress.networkAddressIPv4Placeholder", {
+          ns: "panels",
+        })}
+        value={state.ipv4Address ? state.ipv4Address.value : ""}
+        onChange={(localAddress) => {
+          const localAddressValue =
+            localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateIpv4Address(localAddressValue, true);
+        }}
+        onBlur={(localAddress) => {
+          const localAddressValue =
+            localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+          const localAddressValueIsValid =
+            isIpv4NetworkAddressValid(localAddressValue);
+          updateIpv4Address(localAddressValue, localAddressValueIsValid);
+        }}
+      />
+      <TextInput
+        id="network-address_ipv4-prefix"
+        invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
+        invalidText={t("invalidTextLabel", { ns: "common" })}
+        labelText={getLabel(
+          state && state.ipv4Cidr && state.ipv4Cidr.computed
+            ? t("panel.networkAddress.networkPrefixIPv4TextLabelComputed", {
+                ns: "panels",
+              })
+            : t("panel.networkAddress.networkPrefixIPv4TextLabel", {
                 ns: "panels",
               }),
-            ),
-          )}
-          placeholder={t("panel.networkAddress.networkAddressIPv4Placeholder", {
-            ns: "panels",
-          })}
-          value={state.ipv4Address ? state.ipv4Address.value : ""}
-          onChange={(localAddress) => {
-            const localAddressValue =
-              localAddress && localAddress.target && localAddress.target.value
-                ? localAddress.target.value
-                : "";
-            // while editing we don't update the validity but set it to true
-            // cause we don't want to have the form validation logic kick in.
-            updateIpv4Address(localAddressValue, true);
-          }}
-          onBlur={(localAddress) => {
-            const localAddressValue =
-              localAddress && localAddress.target && localAddress.target.value
-                ? localAddress.target.value
-                : "";
-            const localAddressValueIsValid =
-              isIpv4NetworkAddressValid(localAddressValue);
-            updateIpv4Address(localAddressValue, localAddressValueIsValid);
-          }}
-        />
-        <TextInput
-          id="network-address_ipv4-prefix"
-          invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
-          invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel(
-            state && state.ipv4Cidr && state.ipv4Cidr.computed
-              ? t("panel.networkAddress.networkPrefixIPv4TextLabelComputed", {
-                  ns: "panels",
-                })
-              : t("panel.networkAddress.networkPrefixIPv4TextLabel", {
-                  ns: "panels",
-                }),
-            t("showInformationLabel", { ns: "common" }),
-            getContent(
-              t("panel.networkAddress.networkPrefixIPv4Help", { ns: "panels" }),
-            ),
-          )}
-          placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
-            ns: "panels",
-          })}
-          value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
-          onChange={(localCidr) => {
-            const localCidrValue =
-              localCidr && localCidr.target && localCidr.target.value
-                ? localCidr.target.value
-                : "";
-            // while editing we don't update the validity but set it to true
-            // cause we don't want to have the form validation logic kick in.
-            updateIpv4Cidr(localCidrValue, true, false);
-          }}
-          onBlur={(localCidr) => {
-            const localCidrValue =
-              localCidr && localCidr.target && localCidr.target.value
-                ? localCidr.target.value
-                : "";
-            const parsed = cidrToNetmask(localCidrValue);
-            const localCidrValueIsValid = isCidr(
-              ADDRESS_TYPE_IPV4,
-              localCidrValue,
-            );
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.networkPrefixIPv4Help", { ns: "panels" }),
+          ),
+        )}
+        placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
+          ns: "panels",
+        })}
+        value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
+        onChange={(localCidr) => {
+          const localCidrValue =
+            localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateIpv4Cidr(localCidrValue, true, false);
+        }}
+        onBlur={(localCidr) => {
+          const localCidrValue =
+            localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+          const parsed = cidrToNetmask(localCidrValue);
+          const localCidrValueIsValid = isCidr(
+            ADDRESS_TYPE_IPV4,
+            localCidrValue,
+          );
 
-            updateIpv4Cidr(localCidrValue, localCidrValueIsValid, false);
+          updateIpv4Cidr(localCidrValue, localCidrValueIsValid, false);
 
-            if (localCidrValueIsValid && parsed) {
-              updateNetmask(parsed, true, true);
-              updateBinary(netmaskToBinary(parsed));
-            }
-          }}
-        />
-        <TextInput
-          id="network-address_ipv4-netmask"
-          invalid={state && state.netmask ? !state.netmask.valid : false}
-          invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel(
-            state && state.netmask && state.netmask.computed
-              ? t("panel.networkAddress.netmaskIPv4TextLabelComputed", {
-                  ns: "panels",
-                })
-              : t("panel.networkAddress.netmaskIPv4TextLabel", {
-                  ns: "panels",
-                }),
-            t("showInformationLabel", { ns: "common" }),
-            getContent(
-              t("panel.networkAddress.netmaskIPv4Help", { ns: "panels" }),
-            ),
-          )}
-          placeholder={t("panel.networkAddress.netmaskIPv4Placeholder", {
-            ns: "panels",
-          })}
-          value={state.netmask ? state.netmask.value : ""}
-          onChange={(localNetmask) => {
-            const localNetmaskValue =
-              localNetmask && localNetmask.target && localNetmask.target.value
-                ? localNetmask.target.value
-                : "";
-            // while editing we don't update the validity but set it to true
-            // cause we don't want to have the form validation logic kick in.
-            updateNetmask(localNetmaskValue, true, false);
-          }}
-          onBlur={(localNetmask) => {
-            const localNetmaskValue =
-              localNetmask && localNetmask.target && localNetmask.target.value
-                ? localNetmask.target.value
-                : "";
-            const parsed = netmaskToCidr(localNetmaskValue);
-            const localNetmaskValueIsValid =
-              isIpv4NetworkAddressValid(localNetmaskValue);
-
-            updateNetmask(localNetmaskValue, localNetmaskValueIsValid, false);
-
-            if (localNetmaskValueIsValid && parsed) {
-              updateIpv4Cidr(parsed, true, true);
-              updateBinary(netmaskToBinary(localNetmaskValue));
-            }
-          }}
-        />
-        <TextInput
-          readOnly
-          id="network-address_ipv4-binary"
-          invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={t(
-            "panel.networkAddress.networkAddressBinaryIPv4TextLabel",
-            { ns: "panels" },
-          )}
-          placeholder={t(
-            "panel.networkAddress.networkAddressBinaryIPv4Placeholder",
-            { ns: "panels" },
-          )}
-          value={state.binary}
-        />
-      </>
-    );
-  };
-
-  const getIpv6Markup = () => {
-    return (
-      <>
-        <TextInput
-          id="network-address_ipv6-input"
-          invalid={
-            state && state.ipv6Address ? !state.ipv6Address.valid : false
+          if (localCidrValueIsValid && parsed) {
+            updateNetmask(parsed, true, true);
+            updateBinary(netmaskToBinary(parsed));
           }
-          invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel(
-            t("panel.networkAddress.networkAddressIPv6TextLabel", {
-              ns: "panels",
-            }),
-            t("showInformationLabel", { ns: "common" }),
-            getContent(
-              t("panel.networkAddress.networkAddressIPv6Help", {
+        }}
+      />
+      <TextInput
+        id="network-address_ipv4-netmask"
+        invalid={state && state.netmask ? !state.netmask.valid : false}
+        invalidText={t("invalidTextLabel", { ns: "common" })}
+        labelText={getLabel(
+          state && state.netmask && state.netmask.computed
+            ? t("panel.networkAddress.netmaskIPv4TextLabelComputed", {
+                ns: "panels",
+              })
+            : t("panel.networkAddress.netmaskIPv4TextLabel", {
                 ns: "panels",
               }),
-            ),
-          )}
-          placeholder={t("panel.networkAddress.networkAddressIPv6Placeholder", {
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.netmaskIPv4Help", { ns: "panels" }),
+          ),
+        )}
+        placeholder={t("panel.networkAddress.netmaskIPv4Placeholder", {
+          ns: "panels",
+        })}
+        value={state.netmask ? state.netmask.value : ""}
+        onChange={(localNetmask) => {
+          const localNetmaskValue =
+            localNetmask && localNetmask.target && localNetmask.target.value
+              ? localNetmask.target.value
+              : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateNetmask(localNetmaskValue, true, false);
+        }}
+        onBlur={(localNetmask) => {
+          const localNetmaskValue =
+            localNetmask && localNetmask.target && localNetmask.target.value
+              ? localNetmask.target.value
+              : "";
+          const parsed = netmaskToCidr(localNetmaskValue);
+          const localNetmaskValueIsValid =
+            isIpv4NetworkAddressValid(localNetmaskValue);
+
+          updateNetmask(localNetmaskValue, localNetmaskValueIsValid, false);
+
+          if (localNetmaskValueIsValid && parsed) {
+            updateIpv4Cidr(parsed, true, true);
+            updateBinary(netmaskToBinary(localNetmaskValue));
+          }
+        }}
+      />
+      <TextInput
+        readOnly
+        id="network-address_ipv4-binary"
+        invalidText={t("invalidTextLabel", { ns: "common" })}
+        labelText={t("panel.networkAddress.networkAddressBinaryIPv4TextLabel", {
+          ns: "panels",
+        })}
+        placeholder={t(
+          "panel.networkAddress.networkAddressBinaryIPv4Placeholder",
+          { ns: "panels" },
+        )}
+        value={state.binary}
+      />
+    </div>
+  );
+
+  const gridContentsMarkupRowTwoColumnOneIPv6 = (
+    <div className="network-address_column-left">
+      <TextInput
+        id="network-address_ipv6-input"
+        invalid={state && state.ipv6Address ? !state.ipv6Address.valid : false}
+        invalidText={t("invalidTextLabel", { ns: "common" })}
+        labelText={getLabel(
+          t("panel.networkAddress.networkAddressIPv6TextLabel", {
             ns: "panels",
-          })}
-          value={state.ipv6Address ? state.ipv6Address.value : ""}
-          onChange={(localAddress) => {
-            const localAddressValue =
-              localAddress && localAddress.target && localAddress.target.value
-                ? localAddress.target.value
-                : "";
-            // while editing we don't update the validity but set it to true
-            // cause we don't want to have the form validation logic kick in.
-            updateIpv6Address(localAddressValue, true);
-          }}
-          onBlur={(localAddress) => {
-            const localAddressValue =
-              localAddress && localAddress.target && localAddress.target.value
-                ? localAddress.target.value
-                : "";
-            const localAddressValueIsValid =
-              isIpv6NetworkAddressValid(localAddressValue);
-            updateIpv6Address(localAddressValue, localAddressValueIsValid);
-          }}
-        />
-        <TextInput
-          id="network-address_ipv6-prefix"
-          invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
-          invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel(
-            t("panel.networkAddress.networkPrefixIPv6TextLabel", {
+          }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.networkAddressIPv6Help", {
               ns: "panels",
             }),
-            t("showInformationLabel", { ns: "common" }),
-            getContent(
-              t("panel.networkAddress.networkPrefixIPv6Help", { ns: "panels" }),
-            ),
-          )}
-          placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
+          ),
+        )}
+        placeholder={t("panel.networkAddress.networkAddressIPv6Placeholder", {
+          ns: "panels",
+        })}
+        value={state.ipv6Address ? state.ipv6Address.value : ""}
+        onChange={(localAddress) => {
+          const localAddressValue =
+            localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateIpv6Address(localAddressValue, true);
+        }}
+        onBlur={(localAddress) => {
+          const localAddressValue =
+            localAddress && localAddress.target && localAddress.target.value
+              ? localAddress.target.value
+              : "";
+          const localAddressValueIsValid =
+            isIpv6NetworkAddressValid(localAddressValue);
+          updateIpv6Address(localAddressValue, localAddressValueIsValid);
+        }}
+      />
+      <TextInput
+        id="network-address_ipv6-prefix"
+        invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
+        invalidText={t("invalidTextLabel", { ns: "common" })}
+        labelText={getLabel(
+          t("panel.networkAddress.networkPrefixIPv6TextLabel", {
             ns: "panels",
-          })}
-          value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
-          onChange={(localCidr) => {
-            const localCidrValue =
-              localCidr && localCidr.target && localCidr.target.value
-                ? localCidr.target.value
-                : "";
-            // while editing we don't update the validity but set it to true
-            // cause we don't want to have the form validation logic kick in.
-            updateIpv6Cidr(localCidrValue, true);
-          }}
-          onBlur={(localCidr) => {
-            const localCidrValue =
-              localCidr && localCidr.target && localCidr.target.value
-                ? localCidr.target.value
-                : "";
-            const localCidrValueIsValid = isCidr(
-              ADDRESS_TYPE_IPV6,
-              localCidrValue,
-            );
+          }),
+          t("showInformationLabel", { ns: "common" }),
+          getContent(
+            t("panel.networkAddress.networkPrefixIPv6Help", { ns: "panels" }),
+          ),
+        )}
+        placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
+          ns: "panels",
+        })}
+        value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
+        onChange={(localCidr) => {
+          const localCidrValue =
+            localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+          // while editing we don't update the validity but set it to true
+          // cause we don't want to have the form validation logic kick in.
+          updateIpv6Cidr(localCidrValue, true);
+        }}
+        onBlur={(localCidr) => {
+          const localCidrValue =
+            localCidr && localCidr.target && localCidr.target.value
+              ? localCidr.target.value
+              : "";
+          const localCidrValueIsValid = isCidr(
+            ADDRESS_TYPE_IPV6,
+            localCidrValue,
+          );
 
-            updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
-          }}
-        />
-      </>
-    );
-  };
+          updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
+        }}
+      />
+    </div>
+  );
 
   const gridContentsMarkupRowOne = (
     <div className="network-address_column-left">
@@ -928,18 +919,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
           id="network-address_ipv6-radio"
         />
       </RadioButtonGroup>
-    </div>
-  );
-
-  const gridContentsMarkupRowTwoColumnOne = (
-    <div className="network-address_column-left">
-      {state.addressType &&
-        state.addressType === ADDRESS_TYPE_IPV4 &&
-        getIpv4Markup()}
-      {!state.addressType && getIpv4Markup()}
-      {state.addressType &&
-        state.addressType === "radio-ipv6" &&
-        getIpv6Markup()}
     </div>
   );
 
@@ -1079,6 +1058,17 @@ const NetworkAddress = (patchState, localStorageKey) => {
     </div>
   );
 
+  const getIPVersionSpecificMarkup = () => {
+    if (state.addressType && state.addressType === ADDRESS_TYPE_IPV4) {
+      return gridContentsMarkupRowTwoColumnOneIPv4;
+    } else if (state.addressType && state.addressType === ADDRESS_TYPE_IPV6) {
+      return gridContentsMarkupRowTwoColumnOneIPv6;
+    } else if (!state.addressType) {
+      return gridContentsMarkupRowTwoColumnOneIPv4;
+    }
+    return <></>;
+  };
+
   return (
     <Layer>
       <FlexGrid className="network-address__grid">
@@ -1086,7 +1076,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
           <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
         <Row>
-          <Column>{gridContentsMarkupRowTwoColumnOne}</Column>
+          <Column>{getIPVersionSpecificMarkup()}</Column>
           <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
         </Row>
       </FlexGrid>
