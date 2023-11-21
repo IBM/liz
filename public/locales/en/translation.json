@@ -28,7 +28,7 @@
   "rightNavigation.header": "Help & Documentation",
   "dialog.about.headerLabel": "About this app",
   "dialog.about.buildDateLabel": "Build date: <1>{{buildDate}}</1>",
-  "dialog.about.commitHashLabel": "Commit hash: <1>{{commitHash}}</1>",
+  "dialog.about.commitHashLabel": "Commit hash: <1>{{commitHashShort}}</1>",
   "dialog.about.reportIssueLabel": "Report an issue",
   "dialog.about.pruneSettingsLabel": "Prune Settings"
 }

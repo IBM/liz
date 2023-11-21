@@ -684,7 +684,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
           placeholder={t("panel.networkAddress.networkAddressIPv4Placeholder", {
             ns: "panels",
           })}
-          defaultValue={state.ipv4Address ? state.ipv4Address.value : ""}
           value={state.ipv4Address ? state.ipv4Address.value : ""}
           onChange={(localAddress) => {
             const localAddressValue =
@@ -725,7 +724,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
           placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
             ns: "panels",
           })}
-          defaultValue={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
           value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
           onChange={(localCidr) => {
             const localCidrValue =
@@ -775,7 +773,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
           placeholder={t("panel.networkAddress.netmaskIPv4Placeholder", {
             ns: "panels",
           })}
-          defaultValue={state.netmask ? state.netmask.value : ""}
           value={state.netmask ? state.netmask.value : ""}
           onChange={(localNetmask) => {
             const localNetmaskValue =
@@ -844,7 +841,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
           placeholder={t("panel.networkAddress.networkAddressIPv6Placeholder", {
             ns: "panels",
           })}
-          defaultValue={state.ipv6Address ? state.ipv6Address.value : ""}
           value={state.ipv6Address ? state.ipv6Address.value : ""}
           onChange={(localAddress) => {
             const localAddressValue =
@@ -881,7 +877,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
           placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
             ns: "panels",
           })}
-          defaultValue={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
           value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
           onChange={(localCidr) => {
             const localCidrValue =
@@ -970,9 +965,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
             ? PLACEHOLDER_GATEWAY_ADDRESS_IPV6
             : PLACEHOLDER_GATEWAY_ADDRESS_IPV4
         }
-        defaultValue={
-          state.gatewayIpAddress ? state.gatewayIpAddress.value : ""
-        }
         value={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
         onChange={(localGatewayIpAddress) => {
           const localGatewayIpAddressValue =
@@ -1024,9 +1016,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
             ? PLACEHOLDER_NAMESERVER_ADDRESS_IPV6
             : PLACEHOLDER_NAMESERVER_ADDRESS_IPV4
         }
-        defaultValue={
-          state.nameserverIpAddress ? state.nameserverIpAddress.value : ""
-        }
         value={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
         onChange={(localNameserverIpAddress) => {
           const localNameserverIpAddressValue =
@@ -1068,7 +1057,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
         placeholder={t("panel.networkAddress.hostnamePlaceholder", {
           ns: "panels",
         })}
-        defaultValue={state.hostName ? state.hostName.value : ""}
         value={state.hostName ? state.hostName.value : ""}
         onChange={(localHostName) => {
           const localHostNameValue =
