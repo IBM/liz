@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
+  NumberInput,
   RadioButtonGroup,
   RadioButton,
   ToggletipLabel,
@@ -38,12 +39,12 @@ const NetworkAddress = (patchState, localStorageKey) => {
         computed: false,
       },
       ipv4Cidr: {
-        value: "",
+        value: 1,
         valid: false,
         computed: false,
       },
       ipv6Cidr: {
-        value: "",
+        value: 1,
         valid: false,
       },
       binary: "",
@@ -581,13 +582,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
               networkAddress: {
                 addressType: state.addressType,
                 ipv4: {
-                  cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
+                  cidr: state.ipv4Cidr ? state.ipv4Cidr.value : 1,
                   binary: state.binary,
                   netmask: state.netmask ? state.netmask.value : "",
                   address: state.ipv4Address ? state.ipv4Address.value : "",
                 },
                 ipv6: {
-                  cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                  cidr: state.ipv6Cidr ? state.ipv6Cidr.value : 1,
                   address: state.ipv6Address ? state.ipv6Address.value : "",
                 },
                 gatewayIpAddress: state.gatewayIpAddress
@@ -609,13 +610,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
               networkAddress: {
                 addressType: state.addressType,
                 ipv4: {
-                  cidr: state.ipv4Cidr ? state.ipv4Cidr.value : "",
+                  cidr: state.ipv4Cidr ? state.ipv4Cidr.value : 1,
                   binary: state.binary,
                   netmask: state.netmask ? state.netmask.value : "",
                   address: state.ipv4Address ? state.ipv4Address.value : "",
                 },
                 ipv6: {
-                  cidr: state.ipv6Cidr ? state.ipv6Cidr.value : "",
+                  cidr: state.ipv6Cidr ? state.ipv6Cidr.value : 1,
                   address: state.ipv6Address ? state.ipv6Address.value : "",
                 },
                 gatewayIpAddress: state.gatewayIpAddress
@@ -637,13 +638,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
               networkAddress: {
                 addressType: state?.addressType ?? ADDRESS_TYPE_IPV4,
                 ipv4: {
-                  cidr: state?.ipv4Cidr?.value ?? "",
+                  cidr: state?.ipv4Cidr?.value ?? 1,
                   binary: state?.binary ?? "",
                   netmask: state?.netmask?.value ?? "",
                   address: state?.ipv4Address?.value ?? "",
                 },
                 ipv6: {
-                  cidr: state?.ipv6Cidr?.value ?? "",
+                  cidr: state?.ipv6Cidr?.value ?? 1,
                   address: state?.ipv6Address?.value ?? "",
                 },
                 gatewayIpAddress: state?.gatewayIpAddress?.value ?? "",
@@ -701,11 +702,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
           updateIpv4Address(localAddressValue, localAddressValueIsValid);
         }}
       />
-      <TextInput
+      <NumberInput
+        min={1}
+        max={32}
         id="network-address_ipv4-prefix"
         invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
+        label={getLabel(
           state && state.ipv4Cidr && state.ipv4Cidr.computed
             ? t("panel.networkAddress.networkPrefixIPv4TextLabelComputed", {
                 ns: "panels",
@@ -721,15 +724,21 @@ const NetworkAddress = (patchState, localStorageKey) => {
         placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
           ns: "panels",
         })}
-        value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
-        onChange={(localCidr) => {
-          const localCidrValue =
-            localCidr && localCidr.target && localCidr.target.value
-              ? localCidr.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateIpv4Cidr(localCidrValue, true, false);
+        value={state.ipv4Cidr ? state.ipv4Cidr.value : "1"}
+        onChange={(event, { value, direction }) => {
+          const localCidrValue = value || 1;
+          const parsed = cidrToNetmask(localCidrValue);
+          const localCidrValueIsValid = isCidr(
+            ADDRESS_TYPE_IPV4,
+            localCidrValue,
+          );
+
+          updateIpv4Cidr(localCidrValue, localCidrValueIsValid, false);
+
+          if (localCidrValueIsValid && parsed) {
+            updateNetmask(parsed, true, true);
+            updateBinary(netmaskToBinary(parsed));
+          }
         }}
         onBlur={(localCidr) => {
           const localCidrValue =
@@ -853,11 +862,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
           updateIpv6Address(localAddressValue, localAddressValueIsValid);
         }}
       />
-      <TextInput
+      <NumberInput
+        min={1}
+        max={128}
         id="network-address_ipv6-prefix"
         invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
+        label={getLabel(
           t("panel.networkAddress.networkPrefixIPv6TextLabel", {
             ns: "panels",
           }),
@@ -869,15 +880,15 @@ const NetworkAddress = (patchState, localStorageKey) => {
         placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
           ns: "panels",
         })}
-        value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
-        onChange={(localCidr) => {
-          const localCidrValue =
-            localCidr && localCidr.target && localCidr.target.value
-              ? localCidr.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateIpv6Cidr(localCidrValue, true);
+        value={state.ipv6Cidr ? state.ipv6Cidr.value : 1}
+        onChange={(event, { value, direction }) => {
+          const localCidrValue = value || 1;
+          const localCidrValueIsValid = isCidr(
+            ADDRESS_TYPE_IPV6,
+            localCidrValue,
+          );
+
+          updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
         }}
         onBlur={(localCidr) => {
           const localCidrValue =

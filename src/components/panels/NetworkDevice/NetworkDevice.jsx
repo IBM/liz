@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import {
   Layer,
   Dropdown,
+  NumberInput,
   TextInput,
   ToggletipLabel,
   Toggletip,
@@ -60,7 +61,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         valid: false,
       },
       vlanId: {
-        value: "",
+        value: 1,
         valid: false,
       },
     };
@@ -387,7 +388,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
       // zero length explicitely check for the length.
       return (
         typeof state.vlanId === "object" &&
-        typeof state.vlanId.value === "string"
+        typeof state.vlanId.value === "number"
       );
     }
 
@@ -566,12 +567,14 @@ const NetworkDevice = (patchState, localStorageKey) => {
         patchState={patchState}
         state={state}
       />
-      <TextInput
+      <NumberInput
+        min={1}
+        max={4094}
         helperText=""
         id="network-device_vlan-id-input"
         invalidText={t("invalidTextLabel", { ns: "common" })}
         invalid={state && state.vlanId ? !state.vlanId.valid : false}
-        labelText={getLabel(
+        label={getLabel(
           t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" }),
           t("showInformationLabel", { ns: "common" }),
           getContent(t("panel.networkDevice.vlanIdHelp", { ns: "panels" })),
@@ -579,12 +582,9 @@ const NetworkDevice = (patchState, localStorageKey) => {
         placeholder={t("panel.networkDevice.vlanIdPlaceholder", {
           ns: "panels",
         })}
-        value={state.vlanId ? state.vlanId.value : ""}
-        onChange={(vlanId) => {
-          const vlanIdValue =
-            vlanId && vlanId.target && vlanId.target.value
-              ? vlanId.target.value
-              : "";
+        value={state.vlanId ? state.vlanId.value : 1}
+        onChange={(event, { value, direction }) => {
+          const vlanIdValue = value;
           updateVlanId(vlanIdValue, true);
         }}
         onBlur={(vlanId) => {

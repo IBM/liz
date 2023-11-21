@@ -12,7 +12,7 @@ const ADDRESS_TYPE_IPV4 = "radio-ipv4";
 const getNetdevName = (vlanId = "", interfaceName = "") => {
   if (
     vlanId &&
-    typeof vlanId === "string" &&
+    typeof vlanId === "number" &&
     vlanId.length > 0 &&
     interfaceName &&
     typeof interfaceName === "string" &&
@@ -42,8 +42,8 @@ const stateToIpv4NetworkAddressParams = (state) => {
   const networkDeviceInstallationParameters = state?.steps?.networkDevice ?? {};
   const ipAddress = installationParameters?.ipv4?.address ?? "";
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
-  const prefixLength = installationParameters?.ipv4?.cidr ?? "";
-  const vlanId = networkDeviceInstallationParameters?.vlanId ?? "";
+  const prefixLength = installationParameters?.ipv4?.cidr ?? 1;
+  const vlanId = networkDeviceInstallationParameters?.vlanId ?? 1;
   const hostName = installationParameters?.hostName ?? "";
   const interfaceName =
     getInterfaceNameParamContents(networkDeviceInstallationParameters) || "";
@@ -57,8 +57,8 @@ const stateToIpv6NetworkAddressParams = (state) => {
   const networkDeviceInstallationParameters = state?.steps?.networkDevice ?? {};
   const ipAddress = installationParameters?.ipv6?.address ?? "";
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
-  const prefixLength = installationParameters?.ipv6?.cidr ?? "";
-  const vlanId = networkDeviceInstallationParameters?.vlanId ?? "";
+  const prefixLength = installationParameters?.ipv6?.cidr ?? 1;
+  const vlanId = networkDeviceInstallationParameters?.vlanId ?? 1;
   const hostName = installationParameters?.hostName ?? "";
   const interfaceName =
     getInterfaceNameParamContents(networkDeviceInstallationParameters) || "";
@@ -149,7 +149,8 @@ const stateToNetworkDeviceParams = (state) => {
       ? stateToOsaNetworkDeviceParams(installationParameters)
       : ``;
   const hasVlanId =
-    installationParameters.vlanId && installationParameters.vlanId.length > 0;
+    installationParameters.vlanId &&
+    typeof installationParameters.vlanId === "number";
   let paramFileContents = {
     contents: "",
     complete: false,

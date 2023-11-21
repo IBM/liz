@@ -251,13 +251,13 @@ const App = () => {
         networkAddress: {
           addressType: "",
           ipv4: {
-            cidr: "",
+            cidr: 1,
             binary: "",
             netmask: "",
             address: "",
           },
           ipv6: {
-            cidr: "",
+            cidr: 1,
             address: "",
           },
           gatewayIpAddress: "",
@@ -282,7 +282,7 @@ const App = () => {
             fid: "",
             uid: "",
           },
-          vlanId: "",
+          vlanId: 1,
           complete: false,
           disabled: true,
           invalid: false,
