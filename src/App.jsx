@@ -242,7 +242,7 @@ const App = () => {
           localStorageKey: "com.ibm.systems.linux.z.installationParameters",
         },
         miscParameters: {
-          params: "",
+          params: "ro ramdisk_size=40000 cio_ignore=all,!condev",
           complete: true,
           disabled: true,
           invalid: false,
