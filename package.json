@@ -65,7 +65,7 @@
     "@storybook/node-logger": "7.5.3",
     "@storybook/react": "7.5.3",
     "@testing-library/react": "14.1.2",
-    "@types/jest": "29.5.9",
+    "@types/jest": "29.5.10",
     "@types/react": "18.2.38",
     "@types/react-dom": "18.2.17",
     "@vitejs/plugin-react": "4.2.0",
