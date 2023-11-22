@@ -725,6 +725,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
           ns: "panels",
         })}
         value={state.ipv4Cidr ? state.ipv4Cidr.value : "1"}
+        translateWithId={(id) => t(id, { ns: "common" })}
         onChange={(event, { value, direction }) => {
           const localCidrValue = value || 1;
           const parsed = cidrToNetmask(localCidrValue);
@@ -881,6 +882,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
           ns: "panels",
         })}
         value={state.ipv6Cidr ? state.ipv6Cidr.value : 1}
+        translateWithId={(id) => t(id, { ns: "common" })}
         onChange={(event, { value, direction }) => {
           const localCidrValue = value || 1;
           const localCidrValueIsValid = isCidr(

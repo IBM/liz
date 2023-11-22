@@ -10,5 +10,7 @@
   "invalidTextLabel": "A valid value is required",
   "showInformationLabel": "Show information",
   "toggle.enableLabel": "Enabled",
-  "toggle.disableLabel": "Disabled"
+  "toggle.disableLabel": "Disabled",
+  "increment.number": "Increment number",
+  "decrement.number": "Decrement number"
 }

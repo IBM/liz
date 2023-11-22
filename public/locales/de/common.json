@@ -10,5 +10,7 @@
   "invalidTextLabel": "Ein zulässiger Wert wird benötigt.",
   "showInformationLabel": "Information anzeigen",
   "toggle.enableLabel": "Aktiviert",
-  "toggle.disableLabel": "Deaktiviert"
+  "toggle.disableLabel": "Deaktiviert",
+  "increment.number": "Wert erhöhen",
+  "decrement.number": "Wert vermindern"
 }

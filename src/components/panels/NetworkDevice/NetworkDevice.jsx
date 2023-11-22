@@ -583,6 +583,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
           ns: "panels",
         })}
         value={state.vlanId ? state.vlanId.value : 1}
+        translateWithId={(id) => t(id, { ns: "common" })}
         onChange={(event, { value, direction }) => {
           const vlanIdValue = value;
           updateVlanId(vlanIdValue, true);
