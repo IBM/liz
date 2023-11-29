@@ -1,0 +1,42 @@
+Background
+==========
+
+Currently the UI focuses on walking the user through the
+workflow of creating a param file. Although the intend of
+the application is not clearly communicated to the user.
+
+For instance it is not clear what value the app would
+provide and in which kind of broader context it is embedded.
+
+As a result the product title suggests that the app is
+about installing Linux on IBM Z where the app itself is
+just providing a guided tour to create the param file.
+
+We discussed the following
+==========================
+
+1.
+
+We would provide a home screen where the user would be able
+to start the param file creation app.
+
+The home screen could have the layout of a dashboard using
+tiles or similar UI components. The actual way of how the
+home screen is provided still needs to be researched.
+
+2.
+
+We discussed that the actual param file generation app
+would be provided as a so called tearsheet. The tearsheet
+would contain a multi step workflow to guide the user
+through the param file generation process.
+
+The tearsheet would be stacked atop of the home screen.
+Once closed the user would return to the home screen.
+
+3.
+
+The tearsheet component is part of the Carbon for IBM Products
+open source project available on GitHub.
+
+https://ibm-products.carbondesignsystem.com/?path=/story/overview-welcome--overview
