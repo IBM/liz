@@ -1,0 +1,24 @@
+Background
+==========
+
+Currently distribution specific presets are maintained using a
+separate panel. On this panel these presets are provided using
+a pre-populated text area. The user also would be able to add
+additional parameters manually by editing the text area contents.
+
+We discussed the following
+==========================
+
+1.
+
+The misc panel is not needed cause it adds additional clutter
+to the overall workflow.
+
+2.
+
+Instead the presets are automatically added to the download
+param file step. There the presets are added to the text area
+is it was the case on the misc panel.
+
+Additionally the user would still be able to manually add
+parameters as necessary.
