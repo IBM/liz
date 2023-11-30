@@ -29,7 +29,7 @@ const Information = (
     return defaultState;
   };
   // eslint-disable-next-line
-  const [state, setState] = useState(getInitialState);
+  const [state, setState] = useState(getInitialState());
   const distributionName =
     distribution && distribution.name ? distribution.name : "";
   const distributionVersion =

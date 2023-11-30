@@ -17,7 +17,8 @@
 
 .network-device_column-left {
   .cds--dropdown__wrapper,
-  .cds--form-item {
+  .cds--form-item,
+  .network-device_vlan-toggle {
     padding: 0 0 react.$spacing-07 0;
   }
 
@@ -37,4 +38,3 @@
     padding: 0 0 react.$spacing-07 0;
   }
 }
-

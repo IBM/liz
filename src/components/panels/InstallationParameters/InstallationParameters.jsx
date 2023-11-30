@@ -56,7 +56,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
     }
     return defaultState;
   };
-  const [state, setState] = useState(getInitialState);
+  const [state, setState] = useState(getInitialState());
 
   const updateUseSsh = (flag) => {
     setState((prevState) => ({ ...prevState, useSsh: flag }));

@@ -282,7 +282,10 @@ const App = () => {
             fid: "",
             uid: "",
           },
-          vlanId: 1,
+          vlan: {
+            id: 1,
+            enabled: false,
+          },
           complete: false,
           disabled: true,
           invalid: false,
@@ -317,7 +320,7 @@ const App = () => {
     return defaultState;
   };
   const [step, setStep] = useState(0);
-  const [state, setState] = useState(getInitialState);
+  const [state, setState] = useState(getInitialState());
   const patchState = (patch) => {
     const stateCopy = JSON.parse(JSON.stringify(state));
     const mergedSteps = Object.assign(stateCopy.steps, patch.steps);

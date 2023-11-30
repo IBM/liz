@@ -1,5 +1,5 @@
 language: node_js
-node_js: 18.16.0
+node_js: 20.10.0
 git:
   depth: false
 dist: focal

@@ -43,7 +43,7 @@ const stateToIpv4NetworkAddressParams = (state) => {
   const ipAddress = installationParameters?.ipv4?.address ?? "";
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
   const prefixLength = installationParameters?.ipv4?.cidr ?? 1;
-  const vlanId = networkDeviceInstallationParameters?.vlanId ?? 1;
+  const vlanId = networkDeviceInstallationParameters?.vlan?.id ?? 1;
   const hostName = installationParameters?.hostName ?? "";
   const interfaceName =
     getInterfaceNameParamContents(networkDeviceInstallationParameters) || "";
@@ -149,8 +149,10 @@ const stateToNetworkDeviceParams = (state) => {
       ? stateToOsaNetworkDeviceParams(installationParameters)
       : ``;
   const hasVlanId =
-    installationParameters.vlanId &&
-    typeof installationParameters.vlanId === "number";
+    installationParameters.vlan.enabled &&
+    typeof installationParameters.vlan === "object" &&
+    typeof installationParameters.vlan.id === "number" &&
+    installationParameters.vlan.id > 0;
   let paramFileContents = {
     contents: "",
     complete: false,
@@ -164,7 +166,7 @@ const stateToNetworkDeviceParams = (state) => {
     if (hasVlanId) {
       const vlanId = `vlan=${getVlanName(
         interfaceName,
-        installationParameters.vlanId,
+        installationParameters.vlan.id,
       )}:${interfaceName}`;
       const installationRepoLine = `${networkDeviceSettings}
 ${vlanId}

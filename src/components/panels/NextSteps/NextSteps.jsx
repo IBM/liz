@@ -41,7 +41,7 @@ const NextSteps = (
     return defaultState;
   };
   // eslint-disable-next-line
-  const [state, setState] = useState(getInitialState);
+  const [state, setState] = useState(getInitialState());
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(state));

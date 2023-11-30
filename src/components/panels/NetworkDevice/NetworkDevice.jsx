@@ -12,6 +12,7 @@ import {
   Dropdown,
   NumberInput,
   TextInput,
+  Toggle,
   ToggletipLabel,
   Toggletip,
   ToggletipButton,
@@ -31,10 +32,22 @@ import "./_network-device.scss";
 
 const NetworkDevice = (patchState, localStorageKey) => {
   const { t } = useTranslation();
+
+  const deviceTypeList = [
+    {
+      id: "network-device_osa-option",
+      label: "OSA",
+    },
+    {
+      id: "network-device_roce-option",
+      label: "RoCE",
+    },
+  ];
+
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
-      selectedDeviceType: {},
+      selectedDeviceType: deviceTypeList[0],
       readChannelId: {
         value: "",
         computed: "",
@@ -64,6 +77,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
         value: 1,
         valid: false,
       },
+      useVlan: false,
     };
 
     if (initialState) {
@@ -71,7 +85,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
     }
     return defaultState;
   };
-  const [state, setState] = useState(getInitialState);
+  const [state, setState] = useState(getInitialState());
 
   const DEVICE_TYPE_OSA = "network-device_osa-option";
   // const DEVICE_TYPE_ROCE = "network-device_roce-option";
@@ -85,6 +99,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
   const UPDATE_FUNCTION__PORT_NO = "portNo";
   const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
   const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
+
+  const useVlanToggled = state.useVlan;
 
   const updateFunction = (propertyName, propertyValue, propertyIsValid) => {
     if (propertyName === UPDATE_FUNCTION__SELECT_DEVICE_TYPE) {
@@ -108,6 +124,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
 
   const updateSelectedDeviceType = (selectedDeviceType) => {
     setState((prevState) => ({ ...prevState, selectedDeviceType }));
+  };
+
+  const updateUseVlan = (flag) => {
+    setState((prevState) => ({ ...prevState, useVlan: flag }));
   };
 
   const updateReadChannelId = (readChannelId, computedReadChannelId, valid) => {
@@ -287,17 +307,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
     return areDeviceSettingsValid();
   };
 
-  const deviceTypeList = [
-    {
-      id: "network-device_osa-option",
-      label: "OSA",
-    },
-    {
-      id: "network-device_roce-option",
-      label: "RoCE",
-    },
-  ];
-
   const getContent = (value) => {
     return <p>{value}</p>;
   };
@@ -388,7 +397,8 @@ const NetworkDevice = (patchState, localStorageKey) => {
       // zero length explicitely check for the length.
       return (
         typeof state.vlanId === "object" &&
-        typeof state.vlanId.value === "number"
+        (typeof state.vlanId.value === "number" ||
+          typeof state.vlanId.value === "string")
       );
     }
 
@@ -464,6 +474,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 uid: state.userIdentifier ? state.userIdentifier.value : "",
               },
               vlanId: state.vlanId ? state.vlanId.value : "",
+              vlan: {
+                id: state.vlanId ? +state.vlanId.value : 1,
+                enabled: state.useVlan,
+              },
               complete: true,
               invalid: false,
               localStorageKey,
@@ -496,6 +510,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 uid: state.userIdentifier ? state.userIdentifier.value : "",
               },
               vlanId: state.vlanId ? state.vlanId.value : "",
+              vlan: {
+                id: state.vlanId ? +state.vlanId.value : 1,
+                enabled: state.useVlan || false,
+              },
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
@@ -520,6 +538,10 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 uid: state?.userIdentifier?.value ?? "",
               },
               vlanId: state?.vlanId?.value ?? "",
+              vlan: {
+                id: state.vlanId ? +state.vlanId.value : 1,
+                enabled: state.useVlan || false,
+              },
               disabled: false,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
@@ -567,36 +589,58 @@ const NetworkDevice = (patchState, localStorageKey) => {
         patchState={patchState}
         state={state}
       />
-      <NumberInput
-        min={1}
-        max={4094}
-        helperText=""
-        id="network-device_vlan-id-input"
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        invalid={state && state.vlanId ? !state.vlanId.valid : false}
-        label={getLabel(
-          t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" }),
+      <Toggle
+        labelText={getLabel(
+          t("panel.networkDevice.vlanToggleTextLabel", { ns: "panels" }),
           t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkDevice.vlanIdHelp", { ns: "panels" })),
+          getContent(t("panel.networkDevice.vlanToggleHelp", { ns: "panels" })),
         )}
-        placeholder={t("panel.networkDevice.vlanIdPlaceholder", {
-          ns: "panels",
-        })}
-        value={state.vlanId ? state.vlanId.value : 1}
-        translateWithId={(id) => t(id, { ns: "common" })}
-        onChange={(event, { value, direction }) => {
-          const vlanIdValue = value;
-          updateVlanId(vlanIdValue, true);
-        }}
-        onBlur={(vlanId) => {
-          const vlanIdValue =
-            vlanId && vlanId.target && vlanId.target.value
-              ? vlanId.target.value
-              : "";
-          const vlanIdIsValid = isVlanIdValid(vlanIdValue);
-          updateVlanId(vlanIdValue, vlanIdIsValid);
+        labelA={t("toggle.disableLabel", { ns: "common" })}
+        labelB={t("toggle.enableLabel", { ns: "common" })}
+        id="network-device_vlan-toggle"
+        className="network-device_vlan-toggle"
+        defaultToggled={useVlanToggled}
+        onToggle={() => {
+          if (useVlanToggled) {
+            updateUseVlan(false);
+          } else {
+            updateUseVlan(true);
+          }
         }}
       />
+      {useVlanToggled && (
+        <NumberInput
+          allowEmpty
+          min={1}
+          max={4094}
+          helperText=""
+          id="network-device_vlan-id-input"
+          invalidText={t("invalidTextLabel", { ns: "common" })}
+          invalid={state && state.vlanId ? !state.vlanId.valid : false}
+          label={getLabel(
+            t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" }),
+            t("showInformationLabel", { ns: "common" }),
+            getContent(t("panel.networkDevice.vlanIdHelp", { ns: "panels" })),
+          )}
+          placeholder={t("panel.networkDevice.vlanIdPlaceholder", {
+            ns: "panels",
+          })}
+          value={state.vlanId ? state.vlanId.value : 1}
+          translateWithId={(id) => t(id, { ns: "common" })}
+          onChange={(event, { value, direction }) => {
+            const vlanIdValue = value;
+            updateVlanId(vlanIdValue, true);
+          }}
+          onBlur={(vlanId) => {
+            const vlanIdValue =
+              vlanId && vlanId.target && vlanId.target.value
+                ? vlanId.target.value
+                : "";
+            const vlanIdIsValid = isVlanIdValid(vlanIdValue);
+            updateVlanId(vlanIdValue, vlanIdIsValid);
+          }}
+        />
+      )}
     </div>
   );
 

@@ -45,7 +45,7 @@ const DownloadParamFile = (
     }
     return defaultState;
   };
-  const [state, setState] = useState(getInitialState);
+  const [state, setState] = useState(getInitialState());
 
   const updateCopied = () => {
     setState((prevState) => ({ ...prevState, paramFileContentCopied: true }));
