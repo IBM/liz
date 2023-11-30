@@ -39,12 +39,12 @@ const NetworkAddress = (patchState, localStorageKey) => {
         computed: false,
       },
       ipv4Cidr: {
-        value: 1,
+        value: "",
         valid: false,
         computed: false,
       },
       ipv6Cidr: {
-        value: 1,
+        value: "",
         valid: false,
       },
       binary: "",
@@ -703,6 +703,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         }}
       />
       <NumberInput
+        allowEmpty
         min={1}
         max={32}
         id="network-address_ipv4-prefix"
@@ -724,7 +725,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
           ns: "panels",
         })}
-        value={state.ipv4Cidr ? state.ipv4Cidr.value : "1"}
+        value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
         translateWithId={(id) => t(id, { ns: "common" })}
         onChange={(event, { value, direction }) => {
           const localCidrValue = value || 1;
@@ -864,6 +865,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         }}
       />
       <NumberInput
+        allowEmpty
         min={1}
         max={128}
         id="network-address_ipv6-prefix"
@@ -881,7 +883,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
           ns: "panels",
         })}
-        value={state.ipv6Cidr ? state.ipv6Cidr.value : 1}
+        value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
         translateWithId={(id) => t(id, { ns: "common" })}
         onChange={(event, { value, direction }) => {
           const localCidrValue = value || 1;
