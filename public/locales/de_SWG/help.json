@@ -1,0 +1,11 @@
+{
+  "helpPanelContents.downloadParamFile": "Hilfe für das Download Parameter File Panel.",
+  "helpPanelContents.hint": "Hilfe für das Hinweis Panel.",
+  "helpPanelContents.information": "Hilfe für das Informationspanel.",
+  "helpPanelContents.inputFileSelection": "Hilfe für das Input File Selection Panel.",
+  "helpPanelContents.installationParameters": "Hilfe für das Installationsparameter Panel.",
+  "helpPanelContents.miscParameters": "Hilfe für das Panel der sonstigen Parameter.",
+  "helpPanelContents.networkAddress": "Hilfe für das Netzwerkadressen Panel.",
+  "helpPanelContents.networkDevice": "Hilfe für das Netzwerkschnittstellen Panel.",
+  "helpPanelContents.nextSteps": "Hilfe für das Panel der nächsten Schritte."
+}

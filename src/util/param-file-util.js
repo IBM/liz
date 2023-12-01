@@ -58,7 +58,7 @@ const stateToIpv6NetworkAddressParams = (state) => {
   const ipAddress = installationParameters?.ipv6?.address ?? "";
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
   const prefixLength = installationParameters?.ipv6?.cidr ?? 1;
-  const vlanId = networkDeviceInstallationParameters?.vlanId ?? 1;
+  const vlanId = networkDeviceInstallationParameters?.vlan?.id ?? 1;
   const hostName = installationParameters?.hostName ?? "";
   const interfaceName =
     getInterfaceNameParamContents(networkDeviceInstallationParameters) || "";

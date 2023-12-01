@@ -13,20 +13,27 @@ import {
   NumberInput,
   TextInput,
   Toggle,
-  ToggletipLabel,
-  Toggletip,
-  ToggletipButton,
-  ToggletipContent,
   FlexGrid,
   Row,
   Column,
 } from "@carbon/react";
-import { Information } from "@carbon/react/icons";
+import { getLabel, getContent } from "../../../uiUtil/help-util";
 import {
   toChannelSegments,
   validateSegments,
   isShortFormat,
 } from "../../../util/network-device-util";
+import {
+  DEVICE_TYPE_OSA,
+  UPDATE_FUNCTION__SELECT_DEVICE_TYPE,
+  UPDATE_FUNCTION__READ_CHANNEL_ID,
+  UPDATE_FUNCTION__WRITE_CHANNEL_ID,
+  UPDATE_FUNCTION__DATA_CHANNEL_ID,
+  UPDATE_FUNCTION__LAYER,
+  UPDATE_FUNCTION__PORT_NO,
+  UPDATE_FUNCTION__PCI_FUNCTION_ID,
+  UPDATE_FUNCTION__USER_IDENTIFIER,
+} from "../../../util/constants";
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
@@ -86,19 +93,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
     return defaultState;
   };
   const [state, setState] = useState(getInitialState());
-
-  const DEVICE_TYPE_OSA = "network-device_osa-option";
-  // const DEVICE_TYPE_ROCE = "network-device_roce-option";
-
-  const UPDATE_FUNCTION__SELECT_DEVICE_TYPE = "selectedDeviceType";
-  const UPDATE_FUNCTION__READ_CHANNEL_ID = "readChannelId";
-  const UPDATE_FUNCTION__WRITE_CHANNEL_ID = "writeChannelId";
-  const UPDATE_FUNCTION__DATA_CHANNEL_ID = "dataChannelId";
-
-  const UPDATE_FUNCTION__LAYER = "layer";
-  const UPDATE_FUNCTION__PORT_NO = "portNo";
-  const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
-  const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
   const useVlanToggled = state.useVlan;
 
@@ -307,24 +301,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
     return areDeviceSettingsValid();
   };
 
-  const getContent = (value) => {
-    return <p>{value}</p>;
-  };
-
-  const getLabel = (label, buttonLabel, content) => {
-    return (
-      <>
-        <ToggletipLabel>{label}</ToggletipLabel>
-        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
-          <ToggletipButton label={buttonLabel}>
-            <Information />
-          </ToggletipButton>
-          <ToggletipContent>{content}</ToggletipContent>
-        </Toggletip>
-      </>
-    );
-  };
-
   const isReadChannelIdComplete = () => {
     return (
       typeof state.readChannelId === "object" &&
@@ -473,7 +449,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
                 uid: state.userIdentifier ? state.userIdentifier.value : "",
               },
-              vlanId: state.vlanId ? state.vlanId.value : "",
               vlan: {
                 id: state.vlanId ? +state.vlanId.value : 1,
                 enabled: state.useVlan,
@@ -509,7 +484,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
                 uid: state.userIdentifier ? state.userIdentifier.value : "",
               },
-              vlanId: state.vlanId ? state.vlanId.value : "",
               vlan: {
                 id: state.vlanId ? +state.vlanId.value : 1,
                 enabled: state.useVlan || false,
@@ -537,7 +511,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
                 fid: state?.pciFunctionId?.value ?? "",
                 uid: state?.userIdentifier?.value ?? "",
               },
-              vlanId: state?.vlanId?.value ?? "",
               vlan: {
                 id: state.vlanId ? +state.vlanId.value : 1,
                 enabled: state.useVlan || false,
@@ -650,7 +623,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
       state.selectedDeviceType.id === "network-device_osa-option" ? (
         <>
           <TextInput
-            helperText=""
+            helperText="Blah Blubber Hurz"
             id="network-device_read-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={

@@ -10,17 +10,13 @@ import PropTypes from "prop-types";
 import {
   Layer,
   Toggle,
-  ToggletipLabel,
-  Toggletip,
-  ToggletipButton,
-  ToggletipContent,
   TextInput,
   PasswordInput,
   FlexGrid,
   Row,
   Column,
 } from "@carbon/react";
-import { Information } from "@carbon/react/icons";
+import { getLabel, getContent } from "../../../uiUtil/help-util";
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
@@ -216,24 +212,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
     return "";
   };
 
-  const getContent = (value) => {
-    return <p>{value}</p>;
-  };
-
-  const getLabel = (label, buttonLabel, content) => {
-    return (
-      <>
-        <ToggletipLabel>{label}</ToggletipLabel>
-        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
-          <ToggletipButton label={buttonLabel}>
-            <Information />
-          </ToggletipButton>
-          <ToggletipContent>{content}</ToggletipContent>
-        </Toggletip>
-      </>
-    );
-  };
-
   const useSshToggled = state.useSsh;
   const useVncToggled = state.useVnc;
 
@@ -355,9 +333,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
           { ns: "panels" },
         )}
         className="installation-parameters_installation-address-input"
-        defaultValue={
-          state.installationAddress ? state.installationAddress.value : ""
-        }
         value={state.installationAddress ? state.installationAddress.value : ""}
         onChange={(url) => {
           const urlValue = url && url.target ? url.target.value : "";
@@ -424,7 +399,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
           ns: "panels",
         })}
         className="installation-parameters_username-input"
-        defaultValue={state.userName ? state.userName.value : ""}
         value={state.userName ? state.userName.value : ""}
         onChange={(userName) => {
           const userNameValue =
@@ -485,7 +459,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
           ns: "panels",
         })}
         className="installation-parameters_password-input"
-        defaultValue={state.password ? state.password.value : ""}
         value={state.password ? state.password.value : ""}
         onChange={(password) => {
           const passwordValue =
@@ -570,7 +543,6 @@ const InstallationParameters = (patchState, localStorageKey) => {
           placeholder={t("panel.installationParameter.vncPasswordPlaceholder", {
             ns: "panels",
           })}
-          defaultValue={state.vncPassword ? state.vncPassword : ""}
           value={state.vncPassword ? state.vncPassword : ""}
           onChange={(password) => {
             updateVncPassword(

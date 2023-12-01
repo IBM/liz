@@ -7,16 +7,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {
-  Button,
-  TextArea,
-  ToggletipLabel,
-  Toggletip,
-  ToggletipButton,
-  ToggletipContent,
-} from "@carbon/react";
-import { Information, Copy, Download, Reset } from "@carbon/react/icons";
+import { Button, TextArea } from "@carbon/react";
+import { Copy, Download, Reset } from "@carbon/react/icons";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { getLabel } from "../../uiUtil/help-util";
 import "./_param-file-text-area.scss";
 
 const ParamFileTextArea = ({
@@ -31,23 +25,6 @@ const ParamFileTextArea = ({
   label,
 }) => {
   const { t } = useTranslation();
-
-  const getLabel = (label, buttonLabel, content) => {
-    return (
-      <>
-        <ToggletipLabel>{label}</ToggletipLabel>
-        <Toggletip
-          className="param-file-text-area_info-icon"
-          align="right-bottom"
-        >
-          <ToggletipButton label={buttonLabel}>
-            <Information />
-          </ToggletipButton>
-          <ToggletipContent>{content}</ToggletipContent>
-        </Toggletip>
-      </>
-    );
-  };
 
   const buttonBarMarkup = (
     <div className="param-file-text-area_textarea-button-bar">

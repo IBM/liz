@@ -5,70 +5,97 @@
  */
 
 import React, { useState, useEffect } from "react";
-import isValidHostname from "is-valid-hostname";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
-  NumberInput,
   RadioButtonGroup,
   RadioButton,
-  ToggletipLabel,
-  Toggletip,
-  ToggletipButton,
-  ToggletipContent,
-  TextInput,
   FlexGrid,
   Row,
   Column,
 } from "@carbon/react";
-import { Information } from "@carbon/react/icons";
+import {
+  ADDRESS_TYPE_IPV4,
+  ADDRESS_TYPE_IPV6,
+  UPDATE_FUNCTION__UNKNOWN,
+  UPDATE_FUNCTION__IPV4_ADDRESS,
+  UPDATE_FUNCTION__IPV4_PREFIX,
+  UPDATE_FUNCTION__IPV4_NETMASK,
+  UPDATE_FUNCTION__IPV4_BINARY,
+  UPDATE_FUNCTION__IPV4_GATEWAY,
+  UPDATE_FUNCTION__IPV4_NAMESERVER,
+  UPDATE_FUNCTION__IPV4_HOSTNAME,
+  UPDATE_FUNCTION__IPV6_ADDRESS,
+  UPDATE_FUNCTION__IPV6_PREFIX,
+  UPDATE_FUNCTION__IPV6_GATEWAY,
+  UPDATE_FUNCTION__IPV6_NAMESERVER,
+  UPDATE_FUNCTION__IPV6_HOSTNAME,
+} from "../../../util/constants";
+import {
+  isIpv4NetworkAddressValid,
+  isIpv6NetworkAddressValid,
+} from "../../../util/network-address-util";
+import { IPv4Panel, IPv6Panel } from "./components";
 import "./_network-address.scss";
-
-const ADDRESS_TYPE_IPV4 = "radio-ipv4";
-const ADDRESS_TYPE_IPV6 = "radio-ipv6";
 
 const NetworkAddress = (patchState, localStorageKey) => {
   const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
-      netmask: {
-        value: "",
-        valid: false,
-        computed: false,
+      ipv4: {
+        netmask: {
+          value: "",
+          valid: false,
+          computed: false,
+        },
+        ipv4Cidr: {
+          value: "",
+          valid: false,
+          computed: false,
+        },
+        binary: "",
+        ipv4Address: {
+          value: "",
+          valid: false,
+        },
+        gatewayIpAddress: {
+          value: "",
+          valid: false,
+        },
+        nameserverIpAddress: {
+          value: "",
+          valid: false,
+        },
+        hostName: {
+          value: "",
+          valid: false,
+        },
       },
-      ipv4Cidr: {
-        value: "",
-        valid: false,
-        computed: false,
+      ipv6: {
+        ipv6Cidr: {
+          value: "",
+          valid: false,
+        },
+        ipv6Address: {
+          value: "",
+          valid: false,
+        },
+        gatewayIpAddress: {
+          value: "",
+          valid: false,
+        },
+        nameserverIpAddress: {
+          value: "",
+          valid: false,
+        },
+        hostName: {
+          value: "",
+          valid: false,
+        },
       },
-      ipv6Cidr: {
-        value: "",
-        valid: false,
-      },
-      binary: "",
       addressType: ADDRESS_TYPE_IPV4,
-      ipv4Address: {
-        value: "",
-        valid: false,
-      },
-      ipv6Address: {
-        value: "",
-        valid: false,
-      },
-      gatewayIpAddress: {
-        value: "",
-        valid: false,
-      },
-      nameserverIpAddress: {
-        value: "",
-        valid: false,
-      },
-      hostName: {
-        value: "",
-        valid: false,
-      },
     };
 
     if (initialState) {
@@ -78,16 +105,72 @@ const NetworkAddress = (patchState, localStorageKey) => {
   };
   const [state, setState] = useState(getInitialState());
 
+  const ipVersion =
+    state.addressType && state.addressType === ADDRESS_TYPE_IPV6
+      ? "ipv6"
+      : "ipv4";
+
+  const updateFunction = ({
+    propertyName = UPDATE_FUNCTION__UNKNOWN,
+    propertyValue = null,
+    propertyIsValid = false,
+    propertyIsComputed = false,
+  }) => {
+    if (propertyName === UPDATE_FUNCTION__IPV4_ADDRESS) {
+      updateIpv4Address(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV4_PREFIX) {
+      updateIpv4Cidr(propertyValue, propertyIsValid, propertyIsComputed);
+    } else if (propertyName === UPDATE_FUNCTION__IPV4_NETMASK) {
+      updateNetmask(propertyValue, propertyIsValid, propertyIsComputed);
+    } else if (propertyName === UPDATE_FUNCTION__IPV4_BINARY) {
+      updateBinary(propertyValue);
+    } else if (propertyName === UPDATE_FUNCTION__IPV4_GATEWAY) {
+      updateGatewayAddress(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV4_NAMESERVER) {
+      updateNameserverAddress(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV4_HOSTNAME) {
+      updateHostName(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV6_ADDRESS) {
+      updateIpv6Address(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV6_PREFIX) {
+      updateIpv6Cidr(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV6_GATEWAY) {
+      updateGatewayAddress(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV6_NAMESERVER) {
+      updateNameserverAddress(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV6_HOSTNAME) {
+      updateHostName(propertyValue, propertyIsValid);
+    } else if (UPDATE_FUNCTION__UNKNOWN) {
+      console.log("Unknown property name passed to update proxy function.");
+    }
+  };
+
   const updateNetmask = (netmask, valid, computed) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        netmask: { value: netmask, valid, computed },
+        [ipVersion]: {
+          ...prevState[ipVersion],
+          netmask: {
+            ...(prevState[ipVersion]?.netmask ?? null),
+            value: netmask,
+            valid,
+            computed,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        netmask: { value: netmask, valid, computed },
+        ipv4: {
+          ...prevState.ipv4,
+          netmask: {
+            ...(prevState?.ipv4?.netmask ?? null),
+            value: netmask,
+            valid,
+            computed,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
@@ -97,12 +180,28 @@ const NetworkAddress = (patchState, localStorageKey) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        ipv4Cidr: { value: ipv4Cidr, valid, computed },
+        [ipVersion]: {
+          ...prevState[ipVersion],
+          ipv4Cidr: {
+            ...(prevState[ipVersion]?.ipv4Cidr ?? null),
+            value: ipv4Cidr,
+            valid,
+            computed,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        ipv4Cidr: { value: ipv4Cidr, valid, computed },
+        ipv4: {
+          ...prevState.ipv4,
+          ipv4Cidr: {
+            ...(prevState?.ipv4?.ipv4Cidr ?? null),
+            value: ipv4Cidr,
+            valid,
+            computed,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
@@ -112,12 +211,26 @@ const NetworkAddress = (patchState, localStorageKey) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        ipv6Cidr: { value: ipv6Cidr, valid },
+        [ipVersion]: {
+          ...prevState[ipVersion],
+          ipv6Cidr: {
+            ...(prevState[ipVersion]?.ipv6Cidr ?? null),
+            value: ipv6Cidr,
+            valid,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        ipv6Cidr: { value: ipv6Cidr, valid },
+        ipv6: {
+          ...prevState.ipv6,
+          ipv6Cidr: {
+            ...(prevState?.ipv6?.ipv6Cidr ?? null),
+            value: ipv6Cidr,
+            valid,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
@@ -125,35 +238,58 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const updateBinary = (binary) => {
     if (state.addressType) {
-      setState((prevState) => ({ ...prevState, binary }));
+      setState((prevState) => ({
+        ...prevState,
+        [ipVersion]: {
+          ...prevState[ipVersion],
+          binary,
+        },
+      }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        binary,
+        ipv4: {
+          ...prevState.ipv4,
+          binary,
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
   };
 
   const updateAddressType = (addressType) => {
-    setState((prevState) => ({
-      ...prevState,
-      addressType,
-      gatewayIpAddress: { value: "", valid: true },
-      nameserverIpAddress: { value: "", valid: true },
-    }));
+    setState((prevState) => {
+      return {
+        ...prevState,
+        addressType,
+      };
+    });
   };
 
   const updateIpv4Address = (ipv4Address, valid) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        ipv4Address: { value: ipv4Address, valid },
+        ipv4: {
+          ...prevState.ipv4,
+          ipv4Address: {
+            ...(prevState?.ipv4?.ipv4Address ?? null),
+            value: ipv4Address,
+            valid,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        ipv4Address: { value: ipv4Address, valid },
+        ipv4: {
+          ...prevState.ipv4,
+          ipv4Address: {
+            ...(prevState?.ipv4?.ipv4Address ?? null),
+            value: ipv4Address,
+            valid,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
@@ -163,12 +299,26 @@ const NetworkAddress = (patchState, localStorageKey) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        ipv6Address: { value: ipv6Address, valid },
+        ipv6: {
+          ...prevState.ipv6,
+          ipv6Address: {
+            ...(prevState?.ipv6?.ipv6Address ?? null),
+            value: ipv6Address,
+            valid,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        ipv6Address: { value: ipv6Address, valid },
+        ipv6: {
+          ...prevState.ipv6,
+          ipv6Address: {
+            ...(prevState?.ipv6?.ipv6Address ?? null),
+            value: ipv6Address,
+            valid,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
@@ -178,12 +328,26 @@ const NetworkAddress = (patchState, localStorageKey) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        gatewayIpAddress: { value: gatewayIpAddress, valid },
+        [ipVersion]: {
+          ...prevState[ipVersion],
+          gatewayIpAddress: {
+            ...(prevState[ipVersion]?.gatewayIpAddress ?? null),
+            value: gatewayIpAddress,
+            valid,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        gatewayIpAddress: { value: gatewayIpAddress, valid },
+        ipv4: {
+          ...prevState.ipv4,
+          gatewayIpAddress: {
+            ...(prevState?.ipv4?.gatewayIpAddress ?? null),
+            value: gatewayIpAddress,
+            valid,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
@@ -193,12 +357,26 @@ const NetworkAddress = (patchState, localStorageKey) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        nameserverIpAddress: { value: nameserverIpAddress, valid },
+        [ipVersion]: {
+          ...prevState[ipVersion],
+          nameserverIpAddress: {
+            ...(prevState[ipVersion]?.nameserverIpAddress ?? null),
+            value: nameserverIpAddress,
+            valid,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        nameserverIpAddress: { value: nameserverIpAddress, valid },
+        ipv4: {
+          ...prevState.ipv4,
+          nameserverIpAddress: {
+            ...(prevState?.ipv4?.nameserverIpAddress ?? null),
+            value: nameserverIpAddress,
+            valid,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
@@ -208,171 +386,64 @@ const NetworkAddress = (patchState, localStorageKey) => {
     if (state.addressType) {
       setState((prevState) => ({
         ...prevState,
-        hostName: { value: hostName, valid },
+        [ipVersion]: {
+          ...prevState[ipVersion],
+          hostName: {
+            ...(prevState[ipVersion]?.hostName ?? null),
+            value: hostName,
+            valid,
+          },
+        },
       }));
     } else {
       setState((prevState) => ({
         ...prevState,
-        hostName: { value: hostName, valid },
+        ipv4: {
+          ...prevState.ipv4,
+          hostName: {
+            ...(prevState?.ipv4?.hostName ?? null),
+            value: hostName,
+            valid,
+          },
+        },
         addressType: ADDRESS_TYPE_IPV4,
       }));
     }
   };
 
-  const isCidr = (addressType, cidr) => {
-    const isInteger =
-      typeof cidr === "string"
-        ? Number.isInteger(parseInt(cidr))
-        : Number.isInteger(cidr);
-    if (addressType === ADDRESS_TYPE_IPV4 && isInteger) {
-      const decimal = Math.trunc(cidr);
-      return decimal <= 32;
-    } else if (addressType === ADDRESS_TYPE_IPV6 && isInteger) {
-      const decimal = Math.trunc(cidr);
-      return decimal <= 128;
-    }
-    return false;
-  };
-
-  const netmaskToCidr = (netmask) => {
-    let cidr = 0;
-
-    if (netmask) {
-      const maskNodes = netmask.match(/(\d+)/g);
-
-      for (const i in maskNodes) {
-        cidr += ((maskNodes[i] >>> 0).toString(2).match(/1/g) || []).length;
-      }
-    }
-    return cidr;
-  };
-
-  const cidrToNetmask = (cidr) => {
-    const isInteger =
-      typeof cidr === "string"
-        ? Number.isInteger(parseInt(cidr))
-        : Number.isInteger(cidr);
-    const mask = [];
-    let i;
-    let n;
-
-    if (isInteger && cidr) {
-      for (i = 0; i < 4; i++) {
-        n = Math.min(cidr, 8);
-        mask.push(256 - Math.pow(2, 8 - n));
-        cidr -= n;
-      }
-    }
-    return mask.join(".");
-  };
-
-  const pad = (value, width, padchar) => {
-    while (value.length < width) {
-      value += padchar;
-    }
-    return value;
-  };
-
-  const netmaskToBinary = (netmask) => {
-    let binary;
-
-    if (netmask) {
-      const parts = netmask.split(".");
-
-      const newParts = [];
-      parts.forEach((part) => {
-        const dec2bin = parseInt(part).toString(2);
-        newParts.push(pad(dec2bin, 8, "0"));
-      });
-
-      binary = newParts.join(".");
-    }
-    return binary;
-  };
-
-  const domainNameHasValidLabels = (domainName) => {
-    let hasValidLabels = false;
-
-    if (domainName && typeof domainName === "string" && domainName.length > 0) {
-      const labels = domainName.split(".");
-
-      for (let i = 0; i < labels.length; i++) {
-        if (labels[i].length <= 63) {
-          hasValidLabels = true;
-        } else {
-          hasValidLabels = false;
-          // we don't need to continue if there's one invalid label.
-          return;
-        }
-      }
-    }
-
-    return hasValidLabels;
-  };
-
-  const isHostnameValid = (hostName) => {
-    // the hostName is optional,
-    // if it is a zero length string mark it as a valid value.
-    if (typeof hostName === "string" && hostName.length === 0) {
-      return true;
-    }
-
-    return (
-      hostName &&
-      typeof hostName === "string" &&
-      hostName.length <= 253 &&
-      domainNameHasValidLabels(hostName) &&
-      isValidHostname(hostName)
-    );
-  };
-
-  const isIpv4NetworkAddressValid = (ipv4Address) => {
-    const match = ipv4Address.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
-    return (
-      match != null &&
-      match[1] <= 255 &&
-      match[2] <= 255 &&
-      match[3] <= 255 &&
-      match[4] <= 255
-    );
-  };
-
-  const isIpv6NetworkAddressValid = (ipv6Address) => {
-    const regexExp =
-      /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/gi;
-    return regexExp.test(ipv6Address);
-  };
+  const ipv4Namespace = state.ipv4;
+  const ipv6Namespace = state.ipv6;
 
   const isV4AddressValid = () => {
     if (
-      !state.ipv4Cidr ||
-      !state.gatewayIpAddress ||
-      !state.nameserverIpAddress
+      !ipv4Namespace.ipv4Cidr ||
+      !ipv4Namespace.gatewayIpAddress ||
+      !ipv4Namespace.nameserverIpAddress
     ) {
       return false;
     }
     return (
-      state.ipv4Cidr.valid &&
-      state.netmask.valid &&
-      state.ipv4Address.valid &&
-      state.gatewayIpAddress.valid &&
-      state.nameserverIpAddress.valid
+      ipv4Namespace.ipv4Cidr.valid &&
+      ipv4Namespace.netmask.valid &&
+      ipv4Namespace.ipv4Address.valid &&
+      ipv4Namespace.gatewayIpAddress.valid &&
+      ipv4Namespace.nameserverIpAddress.valid
     );
   };
 
   const isV6AddressValid = () => {
     if (
-      !state.ipv6Cidr ||
-      !state.gatewayIpAddress ||
-      !state.nameserverIpAddress
+      !ipv6Namespace.ipv6Cidr ||
+      !ipv6Namespace.gatewayIpAddress ||
+      !ipv6Namespace.nameserverIpAddress
     ) {
       return false;
     }
     return (
-      state.ipv6Cidr.valid &&
-      state.ipv6Address.valid &&
-      state.gatewayIpAddress.valid &&
-      state.nameserverIpAddress.valid
+      ipv6Namespace.ipv6Cidr.valid &&
+      ipv6Namespace.ipv6Address.valid &&
+      ipv6Namespace.gatewayIpAddress.valid &&
+      ipv6Namespace.nameserverIpAddress.valid
     );
   };
 
@@ -385,22 +456,22 @@ const NetworkAddress = (patchState, localStorageKey) => {
   const isGatewayIpAddressValid = () => {
     const gatewayIpAddressValueIsValid =
       state.addressType === ADDRESS_TYPE_IPV4
-        ? isIpv4NetworkAddressValid(state.gatewayIpAddress.value)
-        : isIpv6NetworkAddressValid(state.gatewayIpAddress.value);
+        ? isIpv4NetworkAddressValid(ipv4Namespace.gatewayIpAddress.value)
+        : isIpv6NetworkAddressValid(ipv6Namespace.gatewayIpAddress.value);
     return gatewayIpAddressValueIsValid;
   };
 
   const isNameserverIpAddressValid = () => {
     const nameserverIpAddressValueIsValid =
       state.addressType === ADDRESS_TYPE_IPV4
-        ? isIpv4NetworkAddressValid(state.nameserverIpAddress.value)
-        : isIpv6NetworkAddressValid(state.nameserverIpAddress.value);
+        ? isIpv4NetworkAddressValid(ipv4Namespace.nameserverIpAddress.value)
+        : isIpv6NetworkAddressValid(ipv6Namespace.nameserverIpAddress.value);
     return nameserverIpAddressValueIsValid;
   };
 
   const isHostNameValid = () => {
-    if (state.hostName) {
-      return state.hostName.valid;
+    if (state[ipVersion].hostName) {
+      return state[ipVersion].hostName.valid;
     }
     // return true since hostName is optional
     return true;
@@ -415,63 +486,31 @@ const NetworkAddress = (patchState, localStorageKey) => {
     );
   };
 
-  const getContent = (value) => {
-    return <p>{value}</p>;
-  };
-
-  const getLabel = (label, buttonLabel, content) => {
-    return (
-      <>
-        <ToggletipLabel>{label}</ToggletipLabel>
-        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
-          <ToggletipButton label={buttonLabel}>
-            <Information />
-          </ToggletipButton>
-          <ToggletipContent>{content}</ToggletipContent>
-        </Toggletip>
-      </>
-    );
-  };
-
-  const PLACEHOLDER_GATEWAY_ADDRESS_IPV4 = t(
-    "panel.networkAddress.gatewayAddressPlaceholderIPv4",
-    { ns: "panels" },
-  );
-  const PLACEHOLDER_GATEWAY_ADDRESS_IPV6 = t(
-    "panel.networkAddress.gatewayAddressPlaceholderIPv6",
-    { ns: "panels" },
-  );
-  const PLACEHOLDER_NAMESERVER_ADDRESS_IPV4 = t(
-    "panel.networkAddress.nameserverAddressPlaceholderIPv4",
-    { ns: "panels" },
-  );
-  const PLACEHOLDER_NAMESERVER_ADDRESS_IPV6 = t(
-    "panel.networkAddress.nameserverAddressPlaceholderIPv6",
-    { ns: "panels" },
-  );
-
   const isIpv4AddressComplete = () => {
     return (
-      typeof state.ipv4Address === "object" &&
-      typeof state.ipv4Address.value === "string" &&
-      state.ipv4Address.value.length > 0
+      ipv4Namespace &&
+      typeof ipv4Namespace.ipv4Address === "object" &&
+      typeof ipv4Namespace.ipv4Address.value === "string" &&
+      ipv4Namespace.ipv4Address.value.length > 0
     );
   };
 
   const isIpv4CidrComplete = () => {
     return (
-      typeof state.ipv4Cidr === "object" &&
-      (typeof state.ipv4Cidr.value === "number" ||
-        typeof state.ipv4Cidr.value === "string") &&
-      state.ipv4Cidr.value > 0
+      ipv4Namespace &&
+      typeof ipv4Namespace.ipv4Cidr === "object" &&
+      (typeof ipv4Namespace.ipv4Cidr.value === "number" ||
+        typeof ipv4Namespace.ipv4Cidr.value === "string") &&
+      ipv4Namespace.ipv4Cidr.value > 0
     );
   };
 
   const isIpv4NetmaskComplete = () => {
     return (
-      typeof state.netmask === "object" &&
-      typeof state.netmask.value === "string" &&
-      state.netmask.value.length > 0
+      ipv4Namespace &&
+      typeof ipv4Namespace.netmask === "object" &&
+      typeof ipv4Namespace.netmask.value === "string" &&
+      ipv4Namespace.netmask.value.length > 0
     );
   };
 
@@ -486,18 +525,20 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const isIpv6AddressComplete = () => {
     return (
-      typeof state.ipv6Address === "object" &&
-      typeof state.ipv6Address.value === "string" &&
-      state.ipv6Address.value.length > 0
+      ipv6Namespace &&
+      typeof ipv6Namespace.ipv6Address === "object" &&
+      typeof ipv6Namespace.ipv6Address.value === "string" &&
+      ipv6Namespace.ipv6Address.value.length > 0
     );
   };
 
   const isIpv6CidrComplete = () => {
     return (
-      typeof state.ipv6Cidr === "object" &&
-      (typeof state.ipv6Cidr.value === "number" ||
-        typeof state.ipv6Cidr.value === "string") &&
-      state.ipv6Cidr.value > 0
+      ipv6Namespace &&
+      typeof ipv6Namespace.ipv6Cidr === "object" &&
+      (typeof ipv6Namespace.ipv6Cidr.value === "number" ||
+        typeof ipv6Namespace.ipv6Cidr.value === "string") &&
+      ipv6Namespace.ipv6Cidr.value > 0
     );
   };
 
@@ -515,25 +556,25 @@ const NetworkAddress = (patchState, localStorageKey) => {
 
   const isGatewayIpAddressComplete = () => {
     return (
-      typeof state.gatewayIpAddress === "object" &&
-      typeof state.gatewayIpAddress.value === "string" &&
-      state.gatewayIpAddress.value.length > 0
+      typeof state[ipVersion].gatewayIpAddress === "object" &&
+      typeof state[ipVersion].gatewayIpAddress.value === "string" &&
+      state[ipVersion].gatewayIpAddress.value.length > 0
     );
   };
 
   const isNameserverIpAddressComplete = () => {
     return (
-      typeof state.nameserverIpAddress === "object" &&
-      typeof state.nameserverIpAddress.value === "string" &&
-      state.nameserverIpAddress.value.length > 0
+      typeof state[ipVersion].nameserverIpAddress === "object" &&
+      typeof state[ipVersion].nameserverIpAddress.value === "string" &&
+      state[ipVersion].nameserverIpAddress.value.length > 0
     );
   };
 
   const isHostNameComplete = () => {
-    if (state.hostName) {
+    if (state[ipVersion].hostName) {
       return (
-        typeof state.hostName === "object" &&
-        typeof state.hostName.value === "string"
+        typeof state[ipVersion].hostName === "object" &&
+        typeof state[ipVersion].hostName.value === "string"
       );
     }
     // return true since hostName is optional
@@ -582,22 +623,24 @@ const NetworkAddress = (patchState, localStorageKey) => {
               networkAddress: {
                 addressType: state.addressType,
                 ipv4: {
-                  cidr: state.ipv4Cidr ? state.ipv4Cidr.value : 1,
-                  binary: state.binary,
-                  netmask: state.netmask ? state.netmask.value : "",
-                  address: state.ipv4Address ? state.ipv4Address.value : "",
+                  cidr: +state?.ipv4?.ipv4Cidr?.value ?? 1,
+                  binary: state.ipv4.binary,
+                  netmask: state?.ipv4?.netmask?.value ?? "",
+                  address: state?.ipv4?.ipv4Address?.value ?? "",
                 },
                 ipv6: {
-                  cidr: state.ipv6Cidr ? state.ipv6Cidr.value : 1,
-                  address: state.ipv6Address ? state.ipv6Address.value : "",
+                  cidr: +state?.ipv6?.ipv6Cidr?.value ?? 1,
+                  address: state?.ipv6?.ipv6Address?.value ?? "",
                 },
-                gatewayIpAddress: state.gatewayIpAddress
-                  ? state.gatewayIpAddress.value
+                gatewayIpAddress: state[ipVersion].gatewayIpAddress
+                  ? state[ipVersion].gatewayIpAddress.value
                   : "",
-                nameserverIpAddress: state.nameserverIpAddress
-                  ? state.nameserverIpAddress.value
+                nameserverIpAddress: state[ipVersion].nameserverIpAddress
+                  ? state[ipVersion].nameserverIpAddress.value
                   : "",
-                hostName: state.hostName ? state.hostName.value : "",
+                hostName: state[ipVersion].hostName
+                  ? state[ipVersion].hostName.value
+                  : "",
                 complete: true,
                 invalid: false,
                 localStorageKey,
@@ -610,22 +653,20 @@ const NetworkAddress = (patchState, localStorageKey) => {
               networkAddress: {
                 addressType: state.addressType,
                 ipv4: {
-                  cidr: state.ipv4Cidr ? state.ipv4Cidr.value : 1,
-                  binary: state.binary,
-                  netmask: state.netmask ? state.netmask.value : "",
-                  address: state.ipv4Address ? state.ipv4Address.value : "",
+                  cidr: +state?.ipv4?.ipv4Cidr?.value ?? 1,
+                  binary: state.ipv4.binary,
+                  netmask: state?.ipv4?.netmask?.value ?? "",
+                  address: state?.ipv4?.ipv4Address?.value ?? "",
                 },
                 ipv6: {
-                  cidr: state.ipv6Cidr ? state.ipv6Cidr.value : 1,
-                  address: state.ipv6Address ? state.ipv6Address.value : "",
+                  cidr: +state?.ipv6?.ipv6Cidr?.value ?? 1,
+                  address: state?.ipv6?.ipv6Address?.value ?? "",
                 },
-                gatewayIpAddress: state.gatewayIpAddress
-                  ? state.gatewayIpAddress.value
-                  : "",
-                nameserverIpAddress: state.nameserverIpAddress
-                  ? state.nameserverIpAddress.value
-                  : "",
-                hostName: state.hostName ? state.hostName.value : "",
+                gatewayIpAddress:
+                  state[ipVersion]?.gatewayIpAddress?.value ?? "",
+                nameserverIpAddress:
+                  state[ipVersion]?.nameserverIpAddress?.value ?? "",
+                hostName: state[ipVersion]?.hostName?.value ?? "",
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 localStorageKey,
@@ -638,18 +679,20 @@ const NetworkAddress = (patchState, localStorageKey) => {
               networkAddress: {
                 addressType: state?.addressType ?? ADDRESS_TYPE_IPV4,
                 ipv4: {
-                  cidr: state?.ipv4Cidr?.value ?? 1,
-                  binary: state?.binary ?? "",
-                  netmask: state?.netmask?.value ?? "",
-                  address: state?.ipv4Address?.value ?? "",
+                  cidr: +state?.ipv4?.ipv4Cidr?.value ?? 1,
+                  binary: state?.ipv4?.binary ?? "",
+                  netmask: state?.ipv4?.netmask?.value ?? "",
+                  address: state?.ipv4?.ipv4Address?.value ?? "",
                 },
                 ipv6: {
-                  cidr: state?.ipv6Cidr?.value ?? 1,
-                  address: state?.ipv6Address?.value ?? "",
+                  cidr: +state?.ipv6?.ipv6Cidr?.value ?? 1,
+                  address: state?.ipv6?.ipv6Address?.value ?? "",
                 },
-                gatewayIpAddress: state?.gatewayIpAddress?.value ?? "",
-                nameserverIpAddress: state?.nameserverIpAddress?.value ?? "",
-                hostName: state?.hostName?.value ?? "",
+                gatewayIpAddress:
+                  state[ipVersion]?.gatewayIpAddress?.value ?? "",
+                nameserverIpAddress:
+                  state[ipVersion]?.nameserverIpAddress?.value ?? "",
+                hostName: state[ipVersion]?.hostName?.value ?? "",
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 localStorageKey,
@@ -660,254 +703,6 @@ const NetworkAddress = (patchState, localStorageKey) => {
       });
     },
     [state],
-  );
-
-  const gridContentsMarkupRowTwoColumnOneIPv4 = (
-    <div className="network-address_column-left">
-      <TextInput
-        id="network-address_ipv4-input"
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        invalid={state && state.ipv4Address ? !state.ipv4Address.valid : false}
-        labelText={getLabel(
-          t("panel.networkAddress.networkAddressIPv4TextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkAddressIPv4Help", {
-              ns: "panels",
-            }),
-          ),
-        )}
-        placeholder={t("panel.networkAddress.networkAddressIPv4Placeholder", {
-          ns: "panels",
-        })}
-        value={state.ipv4Address ? state.ipv4Address.value : ""}
-        onChange={(localAddress) => {
-          const localAddressValue =
-            localAddress && localAddress.target && localAddress.target.value
-              ? localAddress.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateIpv4Address(localAddressValue, true);
-        }}
-        onBlur={(localAddress) => {
-          const localAddressValue =
-            localAddress && localAddress.target && localAddress.target.value
-              ? localAddress.target.value
-              : "";
-          const localAddressValueIsValid =
-            isIpv4NetworkAddressValid(localAddressValue);
-          updateIpv4Address(localAddressValue, localAddressValueIsValid);
-        }}
-      />
-      <NumberInput
-        allowEmpty
-        min={1}
-        max={32}
-        id="network-address_ipv4-prefix"
-        invalid={state && state.ipv4Cidr ? !state.ipv4Cidr.valid : false}
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        label={getLabel(
-          state && state.ipv4Cidr && state.ipv4Cidr.computed
-            ? t("panel.networkAddress.networkPrefixIPv4TextLabelComputed", {
-                ns: "panels",
-              })
-            : t("panel.networkAddress.networkPrefixIPv4TextLabel", {
-                ns: "panels",
-              }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkPrefixIPv4Help", { ns: "panels" }),
-          ),
-        )}
-        placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
-          ns: "panels",
-        })}
-        value={state.ipv4Cidr ? state.ipv4Cidr.value : ""}
-        translateWithId={(id) => t(id, { ns: "common" })}
-        onChange={(event, { value, direction }) => {
-          const localCidrValue = value || 1;
-          const parsed = cidrToNetmask(localCidrValue);
-          const localCidrValueIsValid = isCidr(
-            ADDRESS_TYPE_IPV4,
-            localCidrValue,
-          );
-
-          updateIpv4Cidr(localCidrValue, localCidrValueIsValid, false);
-
-          if (localCidrValueIsValid && parsed) {
-            updateNetmask(parsed, true, true);
-            updateBinary(netmaskToBinary(parsed));
-          }
-        }}
-        onBlur={(localCidr) => {
-          const localCidrValue =
-            localCidr && localCidr.target && localCidr.target.value
-              ? localCidr.target.value
-              : "";
-          const parsed = cidrToNetmask(localCidrValue);
-          const localCidrValueIsValid = isCidr(
-            ADDRESS_TYPE_IPV4,
-            localCidrValue,
-          );
-
-          updateIpv4Cidr(localCidrValue, localCidrValueIsValid, false);
-
-          if (localCidrValueIsValid && parsed) {
-            updateNetmask(parsed, true, true);
-            updateBinary(netmaskToBinary(parsed));
-          }
-        }}
-      />
-      <TextInput
-        id="network-address_ipv4-netmask"
-        invalid={state && state.netmask ? !state.netmask.valid : false}
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          state && state.netmask && state.netmask.computed
-            ? t("panel.networkAddress.netmaskIPv4TextLabelComputed", {
-                ns: "panels",
-              })
-            : t("panel.networkAddress.netmaskIPv4TextLabel", {
-                ns: "panels",
-              }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.netmaskIPv4Help", { ns: "panels" }),
-          ),
-        )}
-        placeholder={t("panel.networkAddress.netmaskIPv4Placeholder", {
-          ns: "panels",
-        })}
-        value={state.netmask ? state.netmask.value : ""}
-        onChange={(localNetmask) => {
-          const localNetmaskValue =
-            localNetmask && localNetmask.target && localNetmask.target.value
-              ? localNetmask.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateNetmask(localNetmaskValue, true, false);
-        }}
-        onBlur={(localNetmask) => {
-          const localNetmaskValue =
-            localNetmask && localNetmask.target && localNetmask.target.value
-              ? localNetmask.target.value
-              : "";
-          const parsed = netmaskToCidr(localNetmaskValue);
-          const localNetmaskValueIsValid =
-            isIpv4NetworkAddressValid(localNetmaskValue);
-
-          updateNetmask(localNetmaskValue, localNetmaskValueIsValid, false);
-
-          if (localNetmaskValueIsValid && parsed) {
-            updateIpv4Cidr(parsed, true, true);
-            updateBinary(netmaskToBinary(localNetmaskValue));
-          }
-        }}
-      />
-      <TextInput
-        readOnly
-        id="network-address_ipv4-binary"
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={t("panel.networkAddress.networkAddressBinaryIPv4TextLabel", {
-          ns: "panels",
-        })}
-        placeholder={t(
-          "panel.networkAddress.networkAddressBinaryIPv4Placeholder",
-          { ns: "panels" },
-        )}
-        value={state.binary}
-      />
-    </div>
-  );
-
-  const gridContentsMarkupRowTwoColumnOneIPv6 = (
-    <div className="network-address_column-left">
-      <TextInput
-        id="network-address_ipv6-input"
-        invalid={state && state.ipv6Address ? !state.ipv6Address.valid : false}
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.networkAddressIPv6TextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkAddressIPv6Help", {
-              ns: "panels",
-            }),
-          ),
-        )}
-        placeholder={t("panel.networkAddress.networkAddressIPv6Placeholder", {
-          ns: "panels",
-        })}
-        value={state.ipv6Address ? state.ipv6Address.value : ""}
-        onChange={(localAddress) => {
-          const localAddressValue =
-            localAddress && localAddress.target && localAddress.target.value
-              ? localAddress.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateIpv6Address(localAddressValue, true);
-        }}
-        onBlur={(localAddress) => {
-          const localAddressValue =
-            localAddress && localAddress.target && localAddress.target.value
-              ? localAddress.target.value
-              : "";
-          const localAddressValueIsValid =
-            isIpv6NetworkAddressValid(localAddressValue);
-          updateIpv6Address(localAddressValue, localAddressValueIsValid);
-        }}
-      />
-      <NumberInput
-        allowEmpty
-        min={1}
-        max={128}
-        id="network-address_ipv6-prefix"
-        invalid={state && state.ipv6Cidr ? !state.ipv6Cidr.valid : false}
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        label={getLabel(
-          t("panel.networkAddress.networkPrefixIPv6TextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkPrefixIPv6Help", { ns: "panels" }),
-          ),
-        )}
-        placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
-          ns: "panels",
-        })}
-        value={state.ipv6Cidr ? state.ipv6Cidr.value : ""}
-        translateWithId={(id) => t(id, { ns: "common" })}
-        onChange={(event, { value, direction }) => {
-          const localCidrValue = value || 1;
-          const localCidrValueIsValid = isCidr(
-            ADDRESS_TYPE_IPV6,
-            localCidrValue,
-          );
-
-          updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
-        }}
-        onBlur={(localCidr) => {
-          const localCidrValue =
-            localCidr && localCidr.target && localCidr.target.value
-              ? localCidr.target.value
-              : "";
-          const localCidrValueIsValid = isCidr(
-            ADDRESS_TYPE_IPV6,
-            localCidrValue,
-          );
-
-          updateIpv6Cidr(localCidrValue, localCidrValueIsValid);
-        }}
-      />
-    </div>
   );
 
   const gridContentsMarkupRowOne = (
@@ -937,149 +732,13 @@ const NetworkAddress = (patchState, localStorageKey) => {
     </div>
   );
 
-  const gridContentsMarkupRowTwoColumnTwo = (
-    <div className="network-address_column-right">
-      <TextInput
-        id="network-address_gateway-input"
-        invalid={
-          state && state.gatewayIpAddress
-            ? !state.gatewayIpAddress.valid
-            : false
-        }
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.gatewayAddressTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.gatewayAddressHelp", { ns: "panels" }),
-          ),
-        )}
-        placeholder={
-          state.addressType === ADDRESS_TYPE_IPV6
-            ? PLACEHOLDER_GATEWAY_ADDRESS_IPV6
-            : PLACEHOLDER_GATEWAY_ADDRESS_IPV4
-        }
-        value={state.gatewayIpAddress ? state.gatewayIpAddress.value : ""}
-        onChange={(localGatewayIpAddress) => {
-          const localGatewayIpAddressValue =
-            localGatewayIpAddress &&
-            localGatewayIpAddress.target &&
-            localGatewayIpAddress.target.value
-              ? localGatewayIpAddress.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateGatewayAddress(localGatewayIpAddressValue, true);
-        }}
-        onBlur={(localGatewayIpAddress) => {
-          const localGatewayIpAddressValue =
-            localGatewayIpAddress &&
-            localGatewayIpAddress.target &&
-            localGatewayIpAddress.target.value
-              ? localGatewayIpAddress.target.value
-              : "";
-          const localGatewayIpAddressValueIsValid =
-            state.addressType === ADDRESS_TYPE_IPV4 || !state.addressType
-              ? isIpv4NetworkAddressValid(localGatewayIpAddressValue)
-              : isIpv6NetworkAddressValid(localGatewayIpAddressValue);
-          updateGatewayAddress(
-            localGatewayIpAddressValue,
-            localGatewayIpAddressValueIsValid,
-          );
-        }}
-      />
-      <TextInput
-        id="network-address_nameserver-input"
-        invalid={
-          state && state.nameserverIpAddress
-            ? !state.nameserverIpAddress.valid
-            : false
-        }
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.nameserverAddressTextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.nameserverAddressHelp", { ns: "panels" }),
-          ),
-        )}
-        placeholder={
-          state.addressType === ADDRESS_TYPE_IPV6
-            ? PLACEHOLDER_NAMESERVER_ADDRESS_IPV6
-            : PLACEHOLDER_NAMESERVER_ADDRESS_IPV4
-        }
-        value={state.nameserverIpAddress ? state.nameserverIpAddress.value : ""}
-        onChange={(localNameserverIpAddress) => {
-          const localNameserverIpAddressValue =
-            localNameserverIpAddress &&
-            localNameserverIpAddress.target &&
-            localNameserverIpAddress.target.value
-              ? localNameserverIpAddress.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateNameserverAddress(localNameserverIpAddressValue, true);
-        }}
-        onBlur={(localNameserverIpAddress) => {
-          const localNameserverIpAddressValue =
-            localNameserverIpAddress &&
-            localNameserverIpAddress.target &&
-            localNameserverIpAddress.target.value
-              ? localNameserverIpAddress.target.value
-              : "";
-          const localNameserverIpAddressValueIsValid =
-            state.addressType === ADDRESS_TYPE_IPV4 || !state.addressType
-              ? isIpv4NetworkAddressValid(localNameserverIpAddressValue)
-              : isIpv6NetworkAddressValid(localNameserverIpAddressValue);
-          updateNameserverAddress(
-            localNameserverIpAddressValue,
-            localNameserverIpAddressValueIsValid,
-          );
-        }}
-      />
-      <TextInput
-        id="network-address_hostname-input"
-        invalid={state && state.hostName ? !state.hostName.valid : false}
-        invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.hostnameTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkAddress.hostnameHelp", { ns: "panels" })),
-        )}
-        placeholder={t("panel.networkAddress.hostnamePlaceholder", {
-          ns: "panels",
-        })}
-        value={state.hostName ? state.hostName.value : ""}
-        onChange={(localHostName) => {
-          const localHostNameValue =
-            localHostName && localHostName.target && localHostName.target.value
-              ? localHostName.target.value
-              : "";
-          // while editing we don't update the validity but set it to true
-          // cause we don't want to have the form validation logic kick in.
-          updateHostName(localHostNameValue, true);
-        }}
-        onBlur={(localHostName) => {
-          const localHostNameValue =
-            localHostName && localHostName.target && localHostName.target.value
-              ? localHostName.target.value
-              : "";
-          const localHostNameValueIsValid = isHostnameValid(localHostNameValue);
-          updateHostName(localHostNameValue, localHostNameValueIsValid);
-        }}
-      />
-    </div>
-  );
-
   const getIPVersionSpecificMarkup = () => {
     if (state.addressType && state.addressType === ADDRESS_TYPE_IPV4) {
-      return gridContentsMarkupRowTwoColumnOneIPv4;
+      return <IPv4Panel updateFunction={updateFunction} state={state} />;
     } else if (state.addressType && state.addressType === ADDRESS_TYPE_IPV6) {
-      return gridContentsMarkupRowTwoColumnOneIPv6;
+      return <IPv6Panel updateFunction={updateFunction} state={state} />;
     } else if (!state.addressType) {
-      return gridContentsMarkupRowTwoColumnOneIPv4;
+      return <IPv4Panel updateFunction={updateFunction} state={state} />;
     }
     return <></>;
   };
@@ -1090,10 +749,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
         <Row>
           <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
-        <Row>
-          <Column>{getIPVersionSpecificMarkup()}</Column>
-          <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
-        </Row>
+        {getIPVersionSpecificMarkup()}
       </FlexGrid>
     </Layer>
   );

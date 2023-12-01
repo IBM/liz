@@ -7,17 +7,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {
-  TextInput,
-  Toggle,
-  ToggletipLabel,
-  Toggletip,
-  ToggletipButton,
-  ToggletipContent,
-  Grid,
-  Column,
-} from "@carbon/react";
-import { Information } from "@carbon/react/icons";
+import { TextInput, Toggle, Grid, Column } from "@carbon/react";
+import { getLabel, getContent } from "../../../../uiUtil/help-util";
 import { isHex } from "../../../../util/network-device-util";
 import "./_device-settings.scss";
 
@@ -64,24 +55,6 @@ const DeviceSettings = ({
       return true;
     }
     return false;
-  };
-
-  const getContent = (value) => {
-    return <p>{value}</p>;
-  };
-
-  const getLabel = (label, buttonLabel, content) => {
-    return (
-      <>
-        <ToggletipLabel>{label}</ToggletipLabel>
-        <Toggletip className="misc-parameters_info-icon" align="right-bottom">
-          <ToggletipButton label={buttonLabel}>
-            <Information />
-          </ToggletipButton>
-          <ToggletipContent>{content}</ToggletipContent>
-        </Toggletip>
-      </>
-    );
   };
 
   const osaMarkup = (

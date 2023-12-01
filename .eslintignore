@@ -8,6 +8,7 @@ README.adoc
 whitesource.config
 babel.config.json
 jest.config.json
+doc/**/*
 **/*.scss
 **/*.png
 **/*.html

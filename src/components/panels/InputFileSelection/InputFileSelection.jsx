@@ -52,7 +52,8 @@ const InputFileSelection = (
     initialState.origin = STATE_ORIGIN_STORAGE;
     return initialState;
   };
-  const [state, setState] = useState(getInitialState());
+
+  const [state, setState] = useState(getInitialState(true));
 
   const distributionList = [
     {

@@ -16,6 +16,7 @@ jest.config.json
 **/*.jsx
 **/*.snap
 **/*.html
+doc/**/*
 .husky/*
 .github/*
 public/locales/**/*.json
