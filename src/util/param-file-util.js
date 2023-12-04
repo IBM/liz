@@ -5,9 +5,9 @@
  */
 
 import { getInterfaceName, toChannelSegments } from "./network-device-util";
+import { ADDRESS_TYPE_IPV4 } from "./constants";
 
 const DEVICE_TYPE_OSA = "network-device_osa-option";
-const ADDRESS_TYPE_IPV4 = "radio-ipv4";
 
 const getNetdevName = (vlanId = "", interfaceName = "") => {
   if (
@@ -269,28 +269,6 @@ const stateToSshParams = (state) => {
   return paramFileContents;
 };
 
-const stateToMiscParams = (state) => {
-  const miscParameters = state?.steps?.miscParameters ?? {};
-  let paramFileContents = {
-    contents: "",
-    complete: false,
-  };
-
-  if (
-    miscParameters &&
-    miscParameters.params &&
-    miscParameters.params.length > 0
-  ) {
-    paramFileContents = {
-      contents: `${miscParameters.params}`,
-      complete: true,
-      invalid: false,
-    };
-  }
-
-  return paramFileContents;
-};
-
 const removeEmptyLines = (str) =>
   str
     .split(/\r?\n/)
@@ -320,25 +298,22 @@ const stateToParamFile = (state) => {
     stateToInstallationRepoParams(state);
   const stateToVncParamsResult = stateToVncParams(state);
   const stateToSshParamsResult = stateToSshParams(state);
-  const stateToMiscParamsResult = stateToMiscParams(state);
   const stateToNetworkDeviceParamsResult = stateToNetworkDeviceParams(state);
   const stateToNetworkAddressParamsResult = stateToNetworkAddressParams(state);
 
-  const data = removeEmptyLines(`${stateToNetworkDeviceParamsResult.contents}
+  const presets = state?.steps?.downloadParamFile?.presets ?? "";
+
+  const data = removeEmptyLines(`${presets}
+${stateToNetworkDeviceParamsResult.contents}
 ${stateToNetworkAddressParamsResult.contents}
 ${stateToInstallationRepoParamsResult.contents}
 ${stateToVncParamsResult.contents}
 ${stateToSshParamsResult.contents}
-${stateToMiscParamsResult.contents}
 `);
   const steps = {
     installationParameters: {
       complete: stateToInstallationRepoParamsResult.complete,
       invalid: stateToInstallationRepoParamsResult.invalid,
-    },
-    miscParameters: {
-      complete: stateToMiscParamsResult.complete,
-      invalid: stateToMiscParamsResult.invalid,
     },
     networkAddress: {
       complete: stateToNetworkAddressParamsResult.complete,

@@ -21,7 +21,7 @@ const getLabel = (label, buttonLabel, content) => {
   return (
     <>
       <ToggletipLabel>{label}</ToggletipLabel>
-      <Toggletip className="misc-parameters_info-icon" align="right-bottom">
+      <Toggletip className="ui-component_info-icon" align="right-bottom">
         <ToggletipButton label={buttonLabel}>
           <Information />
         </ToggletipButton>

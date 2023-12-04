@@ -106,8 +106,6 @@
   "panel.installationParameter.vncPasswordHelp": "",
   "panel.installationParameter.sshToggleTextLabel": "SSH for installation",
   "panel.installationParameter.sshToggleHelp": "",
-  "panel.miscParameters.textLabel": "Miscellaneous parameters",
-  "panel.miscParameters.help": "",
   "panel.downloadParamFile.stepsWithIncompleteData": "Steps with incomplete data",
   "panel.downloadParamFile.stepsWithInvalidData": "Steps with invalid data",
   "panel.downloadParamFile.incompletOrInvalidDataNotificationTitle": "Incomplete data.",

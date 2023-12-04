@@ -12,7 +12,6 @@ import {
   Information,
   InputFileSelection,
   InstallationParameters,
-  MiscParameters,
   NetworkAddress,
   NetworkDevice,
 } from "./components/panels";
@@ -27,7 +26,6 @@ export {
   Information,
   InputFileSelection,
   InstallationParameters,
-  MiscParameters,
   NetworkAddress,
   NetworkDevice,
 };

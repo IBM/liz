@@ -35,7 +35,7 @@ const ParamFileTextArea = ({
             title={t("btnLabel.Copy", { ns: "common" })}
           >
             <Button
-              size="32"
+              size="md"
               kind="ghost"
               renderIcon={Copy}
               iconDescription={t("btnLabel.Copy", { ns: "common" })}
@@ -51,7 +51,7 @@ const ParamFileTextArea = ({
           onClick={resetContents}
         >
           <Button
-            size="32"
+            size="md"
             kind="ghost"
             renderIcon={Reset}
             iconDescription={t("btnLabel.Reset", { ns: "common" })}
@@ -66,7 +66,7 @@ const ParamFileTextArea = ({
           onClick={downloadContents}
         >
           <Button
-            size="32"
+            size="md"
             kind="ghost"
             renderIcon={Download}
             iconDescription={t("btnLabel.Download", { ns: "common" })}

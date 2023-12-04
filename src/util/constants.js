@@ -36,6 +36,8 @@ const UPDATE_FUNCTION__PORT_NO = "portNo";
 const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
 const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
+const RHEL_PRESET = "ro ramdisk_size=40000 cio_ignore=all,!condev";
+
 export {
   ADDRESS_TYPE_IPV4,
   ADDRESS_TYPE_IPV6,
@@ -62,4 +64,5 @@ export {
   UPDATE_FUNCTION__PORT_NO,
   UPDATE_FUNCTION__PCI_FUNCTION_ID,
   UPDATE_FUNCTION__USER_IDENTIFIER,
+  RHEL_PRESET,
 };

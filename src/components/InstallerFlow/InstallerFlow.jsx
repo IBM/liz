@@ -109,16 +109,6 @@ const InstallerFlow = ({
           description={getDescriptionForStep("installationParameters")}
         />
         <ProgressStep
-          invalid={progressStepInvalid.miscParameters}
-          complete={progressStepComplete.miscParameters}
-          disabled={progressStepDisabled.miscParameters}
-          current={progressStep === 6}
-          label={t("leftNavigation.progressStep.miscParameters.label")}
-          secondaryLabel={t(
-            "leftNavigation.progressStep.miscParameters.secondaryLabel",
-          )}
-        />
-        <ProgressStep
           invalid={progressStepInvalid.downloadParamFile}
           complete={progressStepComplete.downloadParamFile}
           disabled={progressStepDisabled.downloadParamFile}
@@ -154,7 +144,6 @@ InstallerFlow.propTypes = {
     networkDevice: PropTypes.bool.isRequired,
     networkAddress: PropTypes.bool.isRequired,
     installationParameters: PropTypes.bool.isRequired,
-    miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
     nextSteps: PropTypes.bool.isRequired,
   }).isRequired,
@@ -165,7 +154,6 @@ InstallerFlow.propTypes = {
     networkDevice: PropTypes.bool.isRequired,
     networkAddress: PropTypes.bool.isRequired,
     installationParameters: PropTypes.bool.isRequired,
-    miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
     nextSteps: PropTypes.bool.isRequired,
   }).isRequired,
@@ -176,7 +164,6 @@ InstallerFlow.propTypes = {
     networkDevice: PropTypes.bool.isRequired,
     networkAddress: PropTypes.bool.isRequired,
     installationParameters: PropTypes.bool.isRequired,
-    miscParameters: PropTypes.bool.isRequired,
     downloadParamFile: PropTypes.bool.isRequired,
     nextSteps: PropTypes.bool.isRequired,
   }).isRequired,

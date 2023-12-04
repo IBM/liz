@@ -14,7 +14,6 @@ import {
   InputFileSelection,
   InstallationParameters,
   Hint,
-  MiscParameters,
   NetworkAddress,
   NetworkDevice,
   NextSteps,
@@ -25,13 +24,13 @@ import {
   InputFileSelection as InputFileSelectionContent,
   InstallationParameters as InstallationParametersContent,
   Hint as HintContent,
-  MiscParameters as MiscParametersContent,
   NetworkAddress as NetworkAddressContent,
   NetworkDevice as NetworkDeviceContent,
   NextSteps as NextStepsContent,
   DownloadParamFile as DownloadParamFileContent,
 } from "./components/help";
 import { stateToParamFile } from "./util/param-file-util";
+import { ADDRESS_TYPE_IPV4, RHEL_PRESET } from "./util/constants";
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
 
@@ -53,7 +52,6 @@ const getProgressStepState = (state, forProgressStepState) => {
       networkAddress: state.steps.networkAddress[forProgressStepState],
       installationParameters:
         state.steps.installationParameters[forProgressStepState],
-      miscParameters: state.steps.miscParameters[forProgressStepState],
       downloadParamFile: state.steps.downloadParamFile[forProgressStepState],
       nextSteps: state.steps.nextSteps[forProgressStepState],
     };
@@ -84,12 +82,9 @@ const renderHelpContent = (step) => {
       markup = InstallationParametersContent();
       break;
     case 6:
-      markup = MiscParametersContent();
-      break;
-    case 7:
       markup = DownloadParamFileContent();
       break;
-    case 8:
+    case 7:
       markup = NextStepsContent();
       break;
     default:
@@ -155,12 +150,6 @@ const renderPanel = (step, patchState, state) => {
       );
       break;
     case 6:
-      markup = MiscParameters(
-        patchState,
-        state.steps.miscParameters.localStorageKey,
-      );
-      break;
-    case 7:
       markup = DownloadParamFile(
         patchState,
         stateToParamFile,
@@ -168,11 +157,11 @@ const renderPanel = (step, patchState, state) => {
         state.steps.downloadParamFile.localStorageKey,
       );
       break;
-    case 8:
+    case 7:
       markup = NextSteps(
         state.steps.installationParameters.ssh.enabled,
         state.steps.installationParameters.vnc.enabled,
-        state.steps.networkAddress.addressType === "radio-ipv4"
+        state.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
           ? state.steps.networkAddress.ipv4.address
           : state.steps.networkAddress.ipv6.address,
         state.steps.installationParameters.vnc.password,
@@ -215,6 +204,7 @@ const App = () => {
           localStorageKey: "com.ibm.systems.linux.z.information",
         },
         downloadParamFile: {
+          presets: RHEL_PRESET,
           contents: "",
           complete: false,
           disabled: true,
@@ -240,13 +230,6 @@ const App = () => {
           disabled: true,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.installationParameters",
-        },
-        miscParameters: {
-          params: "ro ramdisk_size=40000 cio_ignore=all,!condev",
-          complete: true,
-          disabled: true,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.miscParameters",
         },
         networkAddress: {
           addressType: "",

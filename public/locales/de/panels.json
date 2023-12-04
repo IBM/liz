@@ -106,8 +106,6 @@
   "panel.installationParameter.vncPasswordHelp": "",
   "panel.installationParameter.sshToggleTextLabel": "SSH für Installation aktivieren",
   "panel.installationParameter.sshToggleHelp": "",
-  "panel.miscParameters.textLabel": "Sonstige Parameter",
-  "panel.miscParameters.help": "",
   "panel.downloadParamFile.stepsWithIncompleteData": "Schritte, die unvollständige Daten beinhalten",
   "panel.downloadParamFile.stepsWithInvalidData": "Schritte, die ungültige Daten beinhalten",
   "panel.downloadParamFile.incompletOrInvalidDataNotificationTitle": "Unvollständige Daten.",

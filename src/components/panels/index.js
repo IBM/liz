@@ -8,7 +8,6 @@ import Information from "./Information";
 import InputFileSelection from "./InputFileSelection";
 import InstallationParameters from "./InstallationParameters";
 import Hint from "./Hint";
-import MiscParameters from "./MiscParameters";
 import NetworkAddress from "./NetworkAddress";
 import NetworkDevice from "./NetworkDevice";
 import NextSteps from "./NextSteps";
@@ -19,9 +18,8 @@ export {
   InputFileSelection,
   InstallationParameters,
   Hint,
-  MiscParameters,
   NetworkAddress,
   NetworkDevice,
   NextSteps,
-  DownloadParamFile
+  DownloadParamFile,
 };

@@ -18,8 +18,6 @@
   "leftNavigation.progressStep.networkAddress.secondaryLabel": "Wenn die Installation abgeschlossen ist, können Sie diese verwalten.",
   "leftNavigation.progressStep.installationParameters.label": "Installationsparameter",
   "leftNavigation.progressStep.installationParameters.secondaryLabel": "",
-  "leftNavigation.progressStep.miscParameters.label": "Sonstige Parameter",
-  "leftNavigation.progressStep.miscParameters.secondaryLabel": "Optional.",
   "leftNavigation.progressStep.downloadParamFile.label": "Param File abspeichern",
   "leftNavigation.progressStep.downloadParamFile.secondaryLabel": "",
   "leftNavigation.progressStep.nextSteps.label": "Nächste Schritte",

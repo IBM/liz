@@ -18,8 +18,6 @@
   "leftNavigation.progressStep.networkAddress.secondaryLabel": "Enter network IP address information.",
   "leftNavigation.progressStep.installationParameters.label": "Installation source",
   "leftNavigation.progressStep.installationParameters.secondaryLabel": "Specify where the Linux installer can find required installation files.",
-  "leftNavigation.progressStep.miscParameters.label": "Miscellaneous parameters",
-  "leftNavigation.progressStep.miscParameters.secondaryLabel": "Optional.",
   "leftNavigation.progressStep.downloadParamFile.label": "Download parameter file",
   "leftNavigation.progressStep.downloadParamFile.secondaryLabel": "Download the resulting installation parameter file.",
   "leftNavigation.progressStep.nextSteps.label": "Next Steps",

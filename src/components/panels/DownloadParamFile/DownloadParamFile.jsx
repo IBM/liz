@@ -16,6 +16,7 @@ import {
   Column,
 } from "@carbon/react";
 import { ParamFileTextArea } from "../../ParamFileTextArea";
+import { RHEL_PRESET } from "../../../util/constants";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = (
@@ -279,6 +280,7 @@ const DownloadParamFile = (
           steps: {
             downloadParamFile: {
               contents: state.paramFileContent,
+              presets: RHEL_PRESET,
               complete: true,
               invalid: false,
               localStorageKey,
@@ -290,6 +292,7 @@ const DownloadParamFile = (
           steps: {
             downloadParamFile: {
               contents: state.paramFileContent,
+              presets: RHEL_PRESET,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
@@ -301,6 +304,7 @@ const DownloadParamFile = (
           steps: {
             downloadParamFile: {
               contents: state?.paramFileContent ?? "",
+              presets: RHEL_PRESET,
               disabled: false,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
