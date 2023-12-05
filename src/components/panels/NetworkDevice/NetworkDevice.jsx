@@ -623,7 +623,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
       state.selectedDeviceType.id === "network-device_osa-option" ? (
         <>
           <TextInput
-            helperText="Blah Blubber Hurz"
+            helperText=""
             id="network-device_read-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={
