@@ -28,7 +28,7 @@
   "panel.networkDevice.deviceTypeLabel": "Select a device type",
   "panel.networkDevice.vlanToggleTextLabel": "VLAN",
   "panel.networkDevice.vlanToggleHelp": "Activate VLAN support",
-  "panel.networkDevice.vlanIdTextLabel": "VLAN ID (optional)",
+  "panel.networkDevice.vlanIdTextLabel": "VLAN ID",
   "panel.networkDevice.vlanIdHelp": "Enter a VLAN ID between 1 and 4094, or leave empty for no VLAN ID.",
   "panel.networkDevice.vlanIdPlaceholder": "ex: 88",
   "panel.networkDevice.readChannelTextLabel": "Read channel",

@@ -121,7 +121,27 @@ const NetworkDevice = (patchState, localStorageKey) => {
   };
 
   const updateUseVlan = (flag) => {
-    setState((prevState) => ({ ...prevState, useVlan: flag }));
+    if (flag) {
+      setState((prevState) => ({
+        ...prevState,
+        useVlan: flag,
+        vlanId: {
+          ...prevState.vlanId,
+          value: prevState?.vlanId?.value ?? 1,
+          valid: true,
+        },
+      }));
+    } else {
+      setState((prevState) => ({
+        ...prevState,
+        useVlan: flag,
+        vlanId: {
+          ...prevState.vlanId,
+          value: prevState?.vlanId?.value || 1,
+          valid: true,
+        },
+      }));
+    }
   };
 
   const updateReadChannelId = (readChannelId, computedReadChannelId, valid) => {
@@ -221,6 +241,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
   };
 
   const isVlanIdValid = (vlanId) => {
+    // do not validate if vlan support is not toggled
+    if (!state.useVlan) {
+      return true;
+    }
+
     const isInteger =
       typeof vlanId === "string"
         ? Number.isInteger(parseInt(vlanId))
@@ -228,11 +253,6 @@ const NetworkDevice = (patchState, localStorageKey) => {
     if (isInteger) {
       const decimal = Math.trunc(vlanId);
       return decimal > 0 && decimal <= 4094;
-    }
-    // VLAN ID is optional, if it is a zero length string
-    // mark it as a valid value.
-    if (typeof vlanId === "string" && vlanId.length === 0) {
-      return true;
     }
     return false;
   };
@@ -368,6 +388,11 @@ const NetworkDevice = (patchState, localStorageKey) => {
   };
 
   const isVlanIdComplete = () => {
+    // do not validate if vlan support is not toggled
+    if (!state.useVlan) {
+      return true;
+    }
+
     if (state.vlanId) {
       // for string values other than those with
       // zero length explicitely check for the length.
@@ -378,9 +403,7 @@ const NetworkDevice = (patchState, localStorageKey) => {
       );
     }
 
-    // vlanId is optional and thus it could have
-    // a zero length.
-    return true;
+    return false;
   };
 
   const areDeviceSettingsComplete = () => {
