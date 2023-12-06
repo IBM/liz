@@ -66,6 +66,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
     setState((prevState) => ({
       ...prevState,
       installationAddress: {
+        ...prevState.installationAddress,
         value: address,
         computed: computedAddress,
         valid,
@@ -75,6 +76,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         address.length === 0 ||
         installationAddressContainsUidOrPwd(address),
       userName: {
+        ...prevState.userName,
         value: installationAddressContainsUidOrPwd(address)
           ? ""
           : prevState?.userName?.value ?? "",
@@ -83,6 +85,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
           : prevState?.userName?.valid ?? true,
       },
       password: {
+        ...prevState.password,
         value: installationAddressContainsUidOrPwd(address)
           ? ""
           : prevState?.password?.value ?? "",
@@ -96,14 +99,22 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const updateUserName = (userName, valid) => {
     setState((prevState) => ({
       ...prevState,
-      userName: { value: userName, valid },
+      userName: {
+        ...prevState.userName,
+        value: userName,
+        valid,
+      },
     }));
   };
 
   const updatePassword = (password, valid) => {
     setState((prevState) => ({
       ...prevState,
-      password: { value: password, valid },
+      password: {
+        ...prevState.password,
+        value: password,
+        valid,
+      },
     }));
   };
 
@@ -336,14 +347,14 @@ const InstallationParameters = (patchState, localStorageKey) => {
         value={state.installationAddress ? state.installationAddress.value : ""}
         onChange={(url) => {
           const urlValue = url && url.target ? url.target.value : "";
-          const computedUrlValue = computeInstallationAddress();
+          const computedUrlValue = computeInstallationAddress(urlValue);
           // while editing we don't update the validity but set it to true
           // cause we don't want to have the form validation logic kick in.
           updateInstallationAddress(urlValue, computedUrlValue, true);
         }}
         onBlur={(url) => {
           const urlValue = url && url.target ? url.target.value : "";
-          const computedUrlValue = computeInstallationAddress();
+          const computedUrlValue = computeInstallationAddress(urlValue);
           const urlValueIsValid = isInstallationAddressInputValid(urlValue);
           updateInstallationAddress(
             urlValue,
@@ -352,6 +363,11 @@ const InstallationParameters = (patchState, localStorageKey) => {
           );
         }}
       />
+    </>
+  );
+
+  const gridContentsMarkupComputedRow = (
+    <>
       <TextInput
         readOnly
         helperText=""
@@ -593,6 +609,9 @@ const InstallationParameters = (patchState, localStorageKey) => {
         <Row>
           <Column>{gridContentsMarkupRowTwoColumnOne}</Column>
           <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
+        </Row>
+        <Row>
+          <Column>{gridContentsMarkupComputedRow}</Column>
         </Row>
         <Row>
           <Column>{gridContentsMarkupRowThreeColumnOne}</Column>
