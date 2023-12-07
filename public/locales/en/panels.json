@@ -29,7 +29,7 @@
   "panel.networkDevice.vlanToggleTextLabel": "VLAN",
   "panel.networkDevice.vlanToggleHelp": "Activate VLAN support",
   "panel.networkDevice.vlanIdTextLabel": "VLAN ID",
-  "panel.networkDevice.vlanIdHelp": "Enter a VLAN ID between 1 and 4094, or leave empty for no VLAN ID.",
+  "panel.networkDevice.vlanIdHelp": "Enter a VLAN ID between 1 and 4094.",
   "panel.networkDevice.vlanIdPlaceholder": "ex: 88",
   "panel.networkDevice.readChannelTextLabel": "Read channel",
   "panel.networkDevice.readChannelHelp": "Device bus-ID of the OSA read channel in the format x.y.zzzz.",
