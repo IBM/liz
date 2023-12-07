@@ -128,7 +128,7 @@
   "panel.nextSteps.listItem8": "Wählen Sie die Aufgabe <1>Recovery -> Load from Removable Media or Server</1>.",
   "panel.nextSteps.listItem9": "Geben Sie die Parameter des FTP-Servers ein.",
   "panel.nextSteps.listItem10": "Wählen Sie OK aus.",
-  "panel.nextSteps.listItem11": "VNC-Host: {{networkAddressForListItem}}",
-  "panel.nextSteps.listItem12": "VNC-Passwort: {{vncPassword}}",
-  "panel.nextSteps.listItem13": "SSH-Host: installer@{{networkAddressForListItem}}"
+  "panel.nextSteps.listItem11": "VNC-Host: <1>{{networkAddressForListItem}}</1>",
+  "panel.nextSteps.listItem12": "VNC-Passwort: <1>{{vncPassword}}</1>",
+  "panel.nextSteps.listItem13": "SSH-Host: <1>installer@{{networkAddressForListItem}}</1>"
 }

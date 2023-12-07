@@ -123,14 +123,14 @@
   "panel.nextSteps.listItem3": "The <1>images</1> directory",
   "panel.nextSteps.listItem4": "Replace the file named <1>genericdvd.prm</1> with the parmfile contents downloaded from this application.",
   "panel.nextSteps.listItem5": "Log on to the IBM Z Hardware Management Console (HMC) that manages the LPAR.",
-  "panel.nextSteps.listItem6": "Go to <1>Systems Management</1> view for the mainframe containing the LPAR.",
+  "panel.nextSteps.listItem6": "Go to the <1>Systems Management</1> view for the mainframe containing the LPAR.",
   "panel.nextSteps.listItem7": "Select the target LPAR.",
   "panel.nextSteps.listItem8": "Select the task <1>Recovery -> Load from Removable Media or Server</1>.",
   "panel.nextSteps.listItem9": "Enter the parameters for the FTP server.",
   "panel.nextSteps.listItem10": "Select OK.",
-  "panel.nextSteps.listItem11": "VNC host: {{networkAddressForListItem}}",
-  "panel.nextSteps.listItem12": "VNC password: {{vncPassword}}",
-  "panel.nextSteps.listItem13": "SSH host: installer@{{networkAddressForListItem}}",
+  "panel.nextSteps.listItem11": "VNC host: <1>{{networkAddressForListItem}}</1>",
+  "panel.nextSteps.listItem12": "VNC password: <1>{{vncPassword}}</1>",
+  "panel.nextSteps.listItem13": "SSH host: <1>installer@{{networkAddressForListItem}}</1>",
   "panel.nextSteps.missingRemoteAccessNotificationSubtitle": "Niether VNC nor SSH has been configure to access the remote system.",
   "panel.nextSteps.missingRemoteAccessNotificationTitle": "Missing Remote Access"
 }

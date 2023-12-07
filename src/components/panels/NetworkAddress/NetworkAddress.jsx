@@ -624,7 +624,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 addressType: state.addressType,
                 ipv4: {
                   cidr: +state?.ipv4?.ipv4Cidr?.value ?? 1,
-                  binary: state.ipv4.binary,
+                  binary: state?.ipv4?.binary ?? "",
                   netmask: state?.ipv4?.netmask?.value ?? "",
                   address: state?.ipv4?.ipv4Address?.value ?? "",
                 },
@@ -654,7 +654,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 addressType: state.addressType,
                 ipv4: {
                   cidr: +state?.ipv4?.ipv4Cidr?.value ?? 1,
-                  binary: state.ipv4.binary,
+                  binary: state?.ipv4?.binary ?? "",
                   netmask: state?.ipv4?.netmask?.value ?? "",
                   address: state?.ipv4?.ipv4Address?.value ?? "",
                 },

@@ -64,7 +64,10 @@ const NextSteps = (
       <UnorderedList>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem11" ns="panels">
-            VNC host: {{ networkAddressForListItem }}
+            VNC host:{" "}
+            <code className="next-steps__formatted-code">
+              {{ networkAddressForListItem }}
+            </code>
           </Trans>
           {!networkAddress &&
             getLabel(
@@ -73,11 +76,16 @@ const NextSteps = (
               getContent("The network address was not yet provided."),
             )}
         </ListItem>
-        <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem12" ns="panels">
-            VNC password: {{ vncPassword }}
-          </Trans>
-        </ListItem>
+        {vncPassword && (
+          <ListItem>
+            <Trans i18nKey="panel.nextSteps.listItem12" ns="panels">
+              VNC password:{" "}
+              <code className="next-steps__formatted-code">
+                {{ vncPassword }}
+              </code>
+            </Trans>
+          </ListItem>
+        )}
       </UnorderedList>
     </>
   );
@@ -90,7 +98,10 @@ const NextSteps = (
       <UnorderedList>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem13" ns="panels">
-            SSH host: installer@{{ networkAddressForListItem }}
+            SSH host:{" "}
+            <code className="next-steps__formatted-code">
+              installer@{{ networkAddressForListItem }}
+            </code>
           </Trans>
           {!networkAddress &&
             getLabel(
@@ -131,30 +142,43 @@ const NextSteps = (
         <UnorderedList>
           <ListItem>
             <Trans i18nKey="panel.nextSteps.listItem2" ns="panels">
-              <code className="next-steps__formatted-code"></code>
+              The{" "}
+              <code className="next-steps__formatted-code">generic.ins</code>{" "}
+              File
             </Trans>
           </ListItem>
           <ListItem>
             <Trans i18nKey="panel.nextSteps.listItem3" ns="panels">
-              <code className="next-steps__formatted-code"></code>
+              The <code className="next-steps__formatted-code">images</code>{" "}
+              directory
             </Trans>
           </ListItem>
         </UnorderedList>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem4" ns="panels">
-            <code className="next-steps__formatted-code"></code>
+            Replace the file named{" "}
+            <code className="next-steps__formatted-code">genericdvd.prm</code>{" "}
+            with the parmfile contents downloaded from this application.
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem5", { ns: "panels" })}</ListItem>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem6" ns="panels">
-            <code className="next-steps__formatted-code"></code>
+            Go to the{" "}
+            <code className="next-steps__formatted-code">
+              Systems Management
+            </code>{" "}
+            view for the mainframe containing the LPAR.
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem7", { ns: "panels" })}</ListItem>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem8" ns="panels">
-            <code className="next-steps__formatted-code"></code>
+            Select the task{" "}
+            <code className="next-steps__formatted-code">
+              Recovery -&gt; Load from Removable Media or Server
+            </code>
+            .
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem9", { ns: "panels" })}</ListItem>

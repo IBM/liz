@@ -42,6 +42,8 @@
 
 .next-steps__formatted-code {
   @include react.type-style("code-02");
+
+  background: react.$background-selected;
 }
 
 .next-steps_missing-remote-access-banner {
