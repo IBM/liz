@@ -27,7 +27,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
     const defaultState = {
       useSsh: false,
-      useVnc: false,
+      useVnc: true,
       installationAddress: {
         value: "",
         computed: "",
@@ -224,7 +224,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
   };
 
   const useSshToggled = state.useSsh;
-  const useVncToggled = state.useVnc;
+  const useVncToggled = state?.useVnc ?? true;
 
   const isCompleteAndValid = (callback) => {
     let isComplete = false;
@@ -262,7 +262,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
               networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
-                enabled: state.useVnc,
+                enabled: state?.useVnc ?? true,
               },
               ssh: {
                 host: state.sshHost,
@@ -281,7 +281,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
               networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
-                enabled: state.useVnc,
+                enabled: state?.useVnc ?? true,
               },
               ssh: {
                 host: state.sshHost,
@@ -301,7 +301,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
                 state?.installationAddress?.computed ?? "",
               vnc: {
                 password: state?.vncPassword ?? "",
-                enabled: state?.useVnc ?? "",
+                enabled: state?.useVnc ?? true,
               },
               ssh: {
                 host: state?.sshHost ?? "",

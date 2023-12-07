@@ -43,3 +43,7 @@
 .next-steps__formatted-code {
   @include react.type-style("code-02");
 }
+
+.next-steps_missing-remote-access-banner {
+  margin: react.$spacing-05 0 0 0;
+}

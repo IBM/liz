@@ -130,5 +130,7 @@
   "panel.nextSteps.listItem10": "Select OK.",
   "panel.nextSteps.listItem11": "VNC host: {{networkAddressForListItem}}",
   "panel.nextSteps.listItem12": "VNC password: {{vncPassword}}",
-  "panel.nextSteps.listItem13": "SSH host: installer@{{networkAddressForListItem}}"
+  "panel.nextSteps.listItem13": "SSH host: installer@{{networkAddressForListItem}}",
+  "panel.nextSteps.missingRemoteAccessNotificationSubtitle": "Niether VNC nor SSH has been configure to access the remote system.",
+  "panel.nextSteps.missingRemoteAccessNotificationTitle": "Missing Remote Access"
 }

@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
+  InlineNotification,
   Layer,
   ListItem,
   UnorderedList,
@@ -53,6 +54,69 @@ const NextSteps = (
   }, []);
 
   const networkAddressForListItem = networkAddress || "[host-IP-address]";
+  const remoteAccessConfigIsMissing = !useSsh && !useVnc;
+
+  const vncInstructionsMarkup = (
+    <>
+      <div className="next-steps_para">
+        {t("panel.nextSteps.explanation2", { ns: "panels" })}
+      </div>
+      <UnorderedList>
+        <ListItem>
+          <Trans i18nKey="panel.nextSteps.listItem11" ns="panels">
+            VNC host: {{ networkAddressForListItem }}
+          </Trans>
+          {!networkAddress &&
+            getLabel(
+              "",
+              t("showInformationLabel", { ns: "common" }),
+              getContent("The network address was not yet provided."),
+            )}
+        </ListItem>
+        <ListItem>
+          <Trans i18nKey="panel.nextSteps.listItem12" ns="panels">
+            VNC password: {{ vncPassword }}
+          </Trans>
+        </ListItem>
+      </UnorderedList>
+    </>
+  );
+
+  const sshInstructionsMarkup = (
+    <>
+      <div className="next-steps_para">
+        {t("panel.nextSteps.explanation2", { ns: "panels" })}
+      </div>
+      <UnorderedList>
+        <ListItem>
+          <Trans i18nKey="panel.nextSteps.listItem13" ns="panels">
+            SSH host: installer@{{ networkAddressForListItem }}
+          </Trans>
+          {!networkAddress &&
+            getLabel(
+              "",
+              t("showInformationLabel", { ns: "common" }),
+              getContent("The network address was not yet provided."),
+            )}
+        </ListItem>
+      </UnorderedList>
+    </>
+  );
+
+  const missingRemoteAccessNotification = (
+    <InlineNotification
+      hideCloseButton
+      statusIconDescription="notification"
+      subtitle={t("panel.nextSteps.missingRemoteAccessNotificationSubtitle", {
+        ns: "panels",
+      })}
+      title={t("panel.nextSteps.missingRemoteAccessNotificationTitle", {
+        ns: "panels",
+      })}
+      kind="warning"
+      className="next-steps_missing-remote-access-banner"
+    />
+  );
 
   const gridContentsMarkup = (
     <>
@@ -96,51 +160,9 @@ const NextSteps = (
         <ListItem>{t("panel.nextSteps.listItem9", { ns: "panels" })}</ListItem>
         <ListItem>{t("panel.nextSteps.listItem10", { ns: "panels" })}</ListItem>
       </UnorderedList>
-      {useVnc && (
-        <>
-          <div className="next-steps_para">
-            {t("panel.nextSteps.explanation2", { ns: "panels" })}
-          </div>
-          <UnorderedList>
-            <ListItem>
-              <Trans i18nKey="panel.nextSteps.listItem11" ns="panels">
-                VNC host: {{ networkAddressForListItem }}
-              </Trans>
-              {!networkAddress &&
-                getLabel(
-                  "",
-                  t("showInformationLabel", { ns: "common" }),
-                  getContent("The network address was not yet provided."),
-                )}
-            </ListItem>
-            <ListItem>
-              <Trans i18nKey="panel.nextSteps.listItem12" ns="panels">
-                VNC password: {{ vncPassword }}
-              </Trans>
-            </ListItem>
-          </UnorderedList>
-        </>
-      )}
-      {useSsh && (
-        <>
-          <div className="next-steps_para">
-            {t("panel.nextSteps.explanation2", { ns: "panels" })}
-          </div>
-          <UnorderedList>
-            <ListItem>
-              <Trans i18nKey="panel.nextSteps.listItem13" ns="panels">
-                SSH host: installer@{{ networkAddressForListItem }}
-              </Trans>
-              {!networkAddress &&
-                getLabel(
-                  "",
-                  t("showInformationLabel", { ns: "common" }),
-                  getContent("The network address was not yet provided."),
-                )}
-            </ListItem>
-          </UnorderedList>
-        </>
-      )}
+      {useVnc && vncInstructionsMarkup}
+      {useSsh && sshInstructionsMarkup}
+      {remoteAccessConfigIsMissing && missingRemoteAccessNotification}
     </>
   );
   const markup = (

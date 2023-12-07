@@ -221,7 +221,7 @@ const App = () => {
           networkInstallationUrl: "",
           vnc: {
             password: "",
-            enabled: false,
+            enabled: true,
           },
           ssh: {
             enabled: false,
