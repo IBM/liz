@@ -64,7 +64,7 @@ const NextSteps = (
       <UnorderedList>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem11" ns="panels">
-            VNC host:{" "}
+            VNC host:&nbsp;
             <code className="next-steps__formatted-code">
               {{ networkAddressForListItem }}
             </code>
@@ -79,7 +79,7 @@ const NextSteps = (
         {vncPassword && (
           <ListItem>
             <Trans i18nKey="panel.nextSteps.listItem12" ns="panels">
-              VNC password:{" "}
+              VNC password:&nbsp;
               <code className="next-steps__formatted-code">
                 {{ vncPassword }}
               </code>
@@ -98,7 +98,7 @@ const NextSteps = (
       <UnorderedList>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem13" ns="panels">
-            SSH host:{" "}
+            SSH host:&nbsp;
             <code className="next-steps__formatted-code">
               installer@{{ networkAddressForListItem }}
             </code>
@@ -142,39 +142,40 @@ const NextSteps = (
         <UnorderedList>
           <ListItem>
             <Trans i18nKey="panel.nextSteps.listItem2" ns="panels">
-              The{" "}
-              <code className="next-steps__formatted-code">generic.ins</code>{" "}
-              File
+              The&nbsp;
+              <code className="next-steps__formatted-code">generic.ins</code>
+              &nbsp;File
             </Trans>
           </ListItem>
           <ListItem>
             <Trans i18nKey="panel.nextSteps.listItem3" ns="panels">
-              The <code className="next-steps__formatted-code">images</code>{" "}
-              directory
+              The&nbsp;
+              <code className="next-steps__formatted-code">images</code>
+              &nbsp;directory
             </Trans>
           </ListItem>
         </UnorderedList>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem4" ns="panels">
-            Replace the file named{" "}
-            <code className="next-steps__formatted-code">genericdvd.prm</code>{" "}
-            with the parmfile contents downloaded from this application.
+            Replace the file named&nbsp;
+            <code className="next-steps__formatted-code">genericdvd.prm</code>
+            &nbsp;with the parmfile contents downloaded from this application.
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem5", { ns: "panels" })}</ListItem>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem6" ns="panels">
-            Go to the{" "}
+            Go to the&nbsp;
             <code className="next-steps__formatted-code">
               Systems Management
-            </code>{" "}
-            view for the mainframe containing the LPAR.
+            </code>
+            &nbsp;view for the mainframe containing the LPAR.
           </Trans>
         </ListItem>
         <ListItem>{t("panel.nextSteps.listItem7", { ns: "panels" })}</ListItem>
         <ListItem>
           <Trans i18nKey="panel.nextSteps.listItem8" ns="panels">
-            Select the task{" "}
+            Select the task&nbsp;
             <code className="next-steps__formatted-code">
               Recovery -&gt; Load from Removable Media or Server
             </code>
