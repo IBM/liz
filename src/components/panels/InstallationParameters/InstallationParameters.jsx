@@ -189,8 +189,8 @@ const InstallationParameters = (patchState, localStorageKey) => {
   const installationAddressContainsUidOrPwd = (address) => {
     if (address && address.length > 0) {
       const installationAddressUrl = toUrl(address);
-      const username = installationAddressUrl.username;
-      const password = installationAddressUrl.password;
+      const username = installationAddressUrl?.username ?? "";
+      const password = installationAddressUrl?.password ?? "";
       if (
         (username && username.length > 0) ||
         (password && password.length > 0)
@@ -212,6 +212,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
         installationAddressUrl.username = userName;
       }
       if (
+        installationAddressUrl &&
         installationAddressUrl.password &&
         installationAddressUrl.password.length > 0
       ) {
@@ -219,10 +220,15 @@ const InstallationParameters = (patchState, localStorageKey) => {
           installationAddressUrl.password,
         );
       }
-      if (!installationAddressUrl.password && password && password.length > 0) {
+      if (
+        installationAddressUrl &&
+        !installationAddressUrl.password &&
+        password &&
+        password.length > 0
+      ) {
         installationAddressUrl.password = hexEncodePassword(password);
       }
-      return installationAddressUrl.toString();
+      return installationAddressUrl ? installationAddressUrl.toString() : "";
     }
     return "";
   };
@@ -469,13 +475,13 @@ const InstallationParameters = (patchState, localStorageKey) => {
         invalid={state && state.password ? !state.password.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
-          t("panel.installationParameter.usernameTextLabel", { ns: "panels" }),
+          t("panel.installationParameter.passwordTextLabel", { ns: "panels" }),
           t("showInformationLabel", { ns: "common" }),
           getContent(
-            t("panel.installationParameter.usernameHelp", { ns: "panels" }),
+            t("panel.installationParameter.passwordHelp", { ns: "panels" }),
           ),
         )}
-        placeholder={t("panel.installationParameter.usernamePlaceholder", {
+        placeholder={t("panel.installationParameter.passwordPlaceholder", {
           ns: "panels",
         })}
         className="installation-parameters_password-input"
