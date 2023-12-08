@@ -16,7 +16,9 @@ import {
   Row,
   Column,
 } from "@carbon/react";
+import isUrl from "is-url-superb";
 import { getLabel, getContent } from "../../../uiUtil/help-util";
+import { isHostnameValid } from "../../../util/network-address-util";
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
@@ -140,14 +142,28 @@ const InstallationParameters = (patchState, localStorageKey) => {
     return false;
   };
 
+  const toUrl = (url) => {
+    let urlObject = null;
+    try {
+      urlObject = new URL(url);
+    } catch (error) {
+      console.log("Error while attempting to construct an URL object.");
+    }
+    return urlObject;
+  };
+
   const isInstallationAddressInputValid = (url) => {
     let installationAddressInputIsValid = false;
 
-    const expression =
-      /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
-    const regex = new RegExp(expression);
+    const urlObject = toUrl(url);
 
-    if (url.match(regex)) {
+    if (
+      urlObject &&
+      urlObject.hostname &&
+      urlObject.href &&
+      isHostnameValid(urlObject.host) &&
+      isUrl(urlObject.href)
+    ) {
       const urlParts = url.split("://");
       if (SUPPORTED_PROTOCOLS.indexOf(urlParts[0]) >= 0) {
         installationAddressInputIsValid = true;
@@ -172,18 +188,14 @@ const InstallationParameters = (patchState, localStorageKey) => {
 
   const installationAddressContainsUidOrPwd = (address) => {
     if (address && address.length > 0) {
-      try {
-        const installationAddressUrl = new URL(address);
-        const username = installationAddressUrl.username;
-        const password = installationAddressUrl.password;
-        if (
-          (username && username.length > 0) ||
-          (password && password.length > 0)
-        ) {
-          return true;
-        }
-      } catch (error) {
-        console.log("Error while attempting to construct an URL object.");
+      const installationAddressUrl = toUrl(address);
+      const username = installationAddressUrl.username;
+      const password = installationAddressUrl.password;
+      if (
+        (username && username.length > 0) ||
+        (password && password.length > 0)
+      ) {
+        return true;
       }
     }
     return false;
@@ -195,30 +207,22 @@ const InstallationParameters = (patchState, localStorageKey) => {
     const password = pwd || (state?.password?.value ?? "");
 
     if (address && address.length > 0) {
-      try {
-        const installationAddressUrl = new URL(address);
-        if (userName && userName.length > 0) {
-          installationAddressUrl.username = userName;
-        }
-        if (
-          installationAddressUrl.password &&
-          installationAddressUrl.password.length > 0
-        ) {
-          installationAddressUrl.password = hexEncodePassword(
-            installationAddressUrl.password,
-          );
-        }
-        if (
-          !installationAddressUrl.password &&
-          password &&
-          password.length > 0
-        ) {
-          installationAddressUrl.password = hexEncodePassword(password);
-        }
-        return installationAddressUrl.toString();
-      } catch (error) {
-        console.log("Error while attempting to construct an URL object.");
+      const installationAddressUrl = toUrl(address);
+      if (userName && userName.length > 0) {
+        installationAddressUrl.username = userName;
       }
+      if (
+        installationAddressUrl.password &&
+        installationAddressUrl.password.length > 0
+      ) {
+        installationAddressUrl.password = hexEncodePassword(
+          installationAddressUrl.password,
+        );
+      }
+      if (!installationAddressUrl.password && password && password.length > 0) {
+        installationAddressUrl.password = hexEncodePassword(password);
+      }
+      return installationAddressUrl.toString();
     }
     return "";
   };
