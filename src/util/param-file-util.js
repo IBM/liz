@@ -13,12 +13,11 @@ const getNetdevName = (vlanId = "", interfaceName = "") => {
   if (
     vlanId &&
     typeof vlanId === "number" &&
-    vlanId.length > 0 &&
     interfaceName &&
     typeof interfaceName === "string" &&
     interfaceName.length > 0
   ) {
-    return getVlanName(interfaceName, vlanId);
+    return `${getVlanName(interfaceName, vlanId)}`;
   } else if (
     interfaceName &&
     typeof interfaceName === "string" &&
