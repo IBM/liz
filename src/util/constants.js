@@ -4,8 +4,8 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-const ADDRESS_TYPE_IPV4 = "radio-ipv4";
-const ADDRESS_TYPE_IPV6 = "radio-ipv6";
+const ADDRESS_TYPE_IPV4 = "ipv4";
+const ADDRESS_TYPE_IPV6 = "ipv6";
 
 const UPDATE_FUNCTION__UNKNOWN = "unknown";
 

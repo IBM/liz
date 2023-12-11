@@ -5,7 +5,39 @@
  */
 
 import isValidHostname from "is-valid-hostname";
+import { isIP, ipVersion } from "is-ip";
 import { ADDRESS_TYPE_IPV4, ADDRESS_TYPE_IPV6 } from "./constants";
+
+const toUrl = (url) => {
+  let urlObject = null;
+  try {
+    urlObject = new URL(url);
+
+    const hostnameHasBrackets =
+      urlObject && urlObject.hostname && urlObject.hostname.indexOf("[") >= 0;
+    const hostnameFromURLObject = hostnameHasBrackets
+      ? urlObject.hostname.substring(1, urlObject.hostname.length - 1)
+      : urlObject.hostname;
+    const hostnameIsIP = urlObject ? isIP(hostnameFromURLObject) : false;
+    const hostnameIPVersion = urlObject
+      ? ipVersion(hostnameFromURLObject)
+      : null;
+
+    if (hostnameIsIP) {
+      urlObject.isIP = true;
+    } else {
+      urlObject.isIP = false;
+    }
+    if (hostnameIsIP && hostnameIPVersion && hostnameIPVersion === 4) {
+      urlObject.ipVersion = ADDRESS_TYPE_IPV4;
+    } else if (hostnameIsIP && hostnameIPVersion && hostnameIPVersion === 6) {
+      urlObject.ipVersion = ADDRESS_TYPE_IPV6;
+    }
+  } catch (error) {
+    console.log("Error while attempting to construct an URL object.");
+  }
+  return urlObject;
+};
 
 const isCidr = (addressType, cidr) => {
   const isInteger =
@@ -132,6 +164,7 @@ const isIpv6NetworkAddressValid = (ipv6Address) => {
 };
 
 export {
+  toUrl,
   isCidr,
   netmaskToCidr,
   cidrToNetmask,

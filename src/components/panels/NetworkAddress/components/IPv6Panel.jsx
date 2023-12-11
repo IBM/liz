@@ -7,6 +7,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import { isIP } from "is-ip";
 import { Row, Column, NumberInput, TextInput } from "@carbon/react";
 import {
   ADDRESS_TYPE_IPV6,
@@ -298,7 +299,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
             localHostName && localHostName.target && localHostName.target.value
               ? localHostName.target.value
               : "";
-          const localHostNameValueIsValid = isHostnameValid(localHostNameValue);
+          const localHostNameValueIsValid =
+            isHostnameValid(localHostNameValue) && !isIP(localHostNameValue);
           updateFunction({
             propertyName: UPDATE_FUNCTION__IPV6_HOSTNAME,
             propertyValue: localHostNameValue,

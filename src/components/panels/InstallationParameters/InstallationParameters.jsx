@@ -18,7 +18,7 @@ import {
 } from "@carbon/react";
 import isUrl from "is-url-superb";
 import { getLabel, getContent } from "../../../uiUtil/help-util";
-import { isHostnameValid } from "../../../util/network-address-util";
+import { toUrl, isHostnameValid } from "../../../util/network-address-util";
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
@@ -142,35 +142,34 @@ const InstallationParameters = (patchState, localStorageKey) => {
     return false;
   };
 
-  const toUrl = (url) => {
-    let urlObject = null;
-    try {
-      urlObject = new URL(url);
-    } catch (error) {
-      console.log("Error while attempting to construct an URL object.");
+  const urlUsesSupportedProtocols = (url) => {
+    if (url && typeof url === "string") {
+      const urlParts = url.split("://");
+      if (SUPPORTED_PROTOCOLS.indexOf(urlParts[0]) >= 0) {
+        return true;
+      }
     }
-    return urlObject;
+    return false;
   };
 
   const isInstallationAddressInputValid = (url) => {
-    let installationAddressInputIsValid = false;
-
     const urlObject = toUrl(url);
+    const hostname = urlObject ? urlObject.hostname : "";
+    const href = urlObject ? urlObject.href : "";
 
-    if (
+    if (urlObject && urlObject.isIP && hostname && href) {
+      return urlUsesSupportedProtocols(url);
+    } else if (
       urlObject &&
-      urlObject.hostname &&
-      urlObject.href &&
+      hostname &&
+      href &&
       isHostnameValid(urlObject.host) &&
       isUrl(urlObject.href)
     ) {
-      const urlParts = url.split("://");
-      if (SUPPORTED_PROTOCOLS.indexOf(urlParts[0]) >= 0) {
-        installationAddressInputIsValid = true;
-      }
+      return urlUsesSupportedProtocols(url);
     }
 
-    return installationAddressInputIsValid;
+    return false;
   };
 
   const hexEncodePassword = (password) => {
