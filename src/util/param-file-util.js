@@ -42,7 +42,9 @@ const stateToIpv4NetworkAddressParams = (state) => {
   const ipAddress = installationParameters?.ipv4?.address ?? "";
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
   const prefixLength = installationParameters?.ipv4?.cidr ?? 1;
-  const vlanId = networkDeviceInstallationParameters?.vlan?.id ?? 1;
+  const vlanId = networkDeviceInstallationParameters.vlan.enabled
+    ? networkDeviceInstallationParameters?.vlan?.id ?? 1
+    : null;
   const hostName = installationParameters?.hostName ?? "";
   const interfaceName =
     getInterfaceNameParamContents(networkDeviceInstallationParameters) || "";
@@ -57,7 +59,9 @@ const stateToIpv6NetworkAddressParams = (state) => {
   const ipAddress = installationParameters?.ipv6?.address ?? "";
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
   const prefixLength = installationParameters?.ipv6?.cidr ?? 1;
-  const vlanId = networkDeviceInstallationParameters?.vlan?.id ?? 1;
+  const vlanId = networkDeviceInstallationParameters.vlan.enabled
+    ? networkDeviceInstallationParameters?.vlan?.id ?? 1
+    : null;
   const hostName = installationParameters?.hostName ?? "";
   const interfaceName =
     getInterfaceNameParamContents(networkDeviceInstallationParameters) || "";
