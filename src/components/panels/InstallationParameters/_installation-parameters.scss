@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2023
  */
- 
+
 @use "@carbon/react" with (
   $font-path: "@ibm/plex",
   $use-flexbox-grid: true
@@ -17,6 +17,10 @@
 
 .installation-parameters_installation-address-input {
   padding: 0 0 react.$spacing-07 0;
+}
+
+.installation-address_ip-version-missmatch-banner {
+  margin: 0 0 react.$spacing-07 0;
 }
 
 .installation-parameters_column-left {

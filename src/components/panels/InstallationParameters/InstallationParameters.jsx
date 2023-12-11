@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
+  InlineNotification,
   Layer,
   Toggle,
   TextInput,
@@ -23,7 +24,11 @@ import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
 
-const InstallationParameters = (patchState, localStorageKey) => {
+const InstallationParameters = (
+  patchState,
+  localStorageKey,
+  ipAddressVersion,
+) => {
   const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
@@ -327,6 +332,42 @@ const InstallationParameters = (patchState, localStorageKey) => {
     });
   }, [state]);
 
+  const ipAddressVersionMissmatchExists = () => {
+    const urlObject = toUrl(state?.installationAddress?.value ?? "");
+
+    if (
+      urlObject &&
+      urlObject.isIP &&
+      urlObject.ipVersion &&
+      urlObject.ipVersion !== ipAddressVersion
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const ipVersionMissmatchNotification = (
+    <InlineNotification
+      hideCloseButton
+      statusIconDescription="notification"
+      subtitle={t(
+        "panel.installationParameter.missingRemoteAccessNotificationSubtitle",
+        {
+          ns: "panels",
+        },
+      )}
+      title={t(
+        "panel.installationParameter.missingRemoteAccessNotificationTitle",
+        {
+          ns: "panels",
+        },
+      )}
+      kind="info"
+      className="installation-address_ip-version-missmatch-banner"
+    />
+  );
+
   const gridContentsMarkupRowOne = (
     <>
       <TextInput
@@ -372,6 +413,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
           );
         }}
       />
+      {ipAddressVersionMissmatchExists() && ipVersionMissmatchNotification}
     </>
   );
 

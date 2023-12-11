@@ -147,6 +147,7 @@ const renderPanel = (step, patchState, state) => {
       markup = InstallationParameters(
         patchState,
         state.steps.installationParameters.localStorageKey,
+        state?.steps?.networkAddress?.addressType ?? ADDRESS_TYPE_IPV4,
       );
       break;
     case 6:

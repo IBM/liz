@@ -90,6 +90,8 @@
   "panel.installationParameter.installationAddressTextLabel": "Installation address",
   "panel.installationParameter.installationAddressPlaceholder": "ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/",
   "panel.installationParameter.installationAddressHelp": "",
+  "panel.installationParameter.missingRemoteAccessNotificationSubtitle": "The IP version selected while configuring the network address does not correspond with the value for the hostname as used in the above URL.",
+  "panel.installationParameter.missingRemoteAccessNotificationTitle": "IP version missmatch",
   "panel.installationParameter.computedInstallationAddressTextLabel": "Installation address (computed)",
   "panel.installationParameter.computedInstallationAddressPlaceholder": "ex: ftp://user:password@ftpserver/iso/SLE-15-SP3-Full-s390x-GM-Media1/",
   "panel.installationParameter.computedInstallationAddressHelp": "",
