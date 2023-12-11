@@ -208,7 +208,7 @@ const InstallationParameters = (patchState, localStorageKey) => {
 
     if (address && address.length > 0) {
       const installationAddressUrl = toUrl(address);
-      if (userName && userName.length > 0) {
+      if (installationAddressUrl && userName && userName.length > 0) {
         installationAddressUrl.username = userName;
       }
       if (
