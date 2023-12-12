@@ -116,7 +116,14 @@ const validateSegments = (segments) => {
 const isHex = (value) => {
   const intValue = parseInt(value, 16);
   if (typeof value === "string" && value.startsWith("0x")) {
-    return `0x${intValue.toString(16)}` === value.toLowerCase(value);
+    const stringFromIntValue = intValue.toString(16);
+    const lengthWithoutPrefix = value.replace("0x", "").length;
+    const lengthDelta = lengthWithoutPrefix - stringFromIntValue.length;
+
+    return lengthDelta > 0
+      ? `0x${intValue.toString(16).padStart(lengthWithoutPrefix, "0")}` ===
+          value.toLowerCase(value)
+      : `0x${intValue.toString(16)}` === value.toLowerCase(value);
   } else if (
     typeof value === "string" &&
     value.startsWith("0") &&
