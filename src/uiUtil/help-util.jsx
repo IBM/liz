@@ -12,6 +12,7 @@ import {
   ToggletipContent,
 } from "@carbon/react";
 import { Information } from "@carbon/react/icons";
+import "./_help-util.scss";
 
 const getContent = (value) => {
   return <p>{value}</p>;
@@ -21,7 +22,7 @@ const getLabel = (label, buttonLabel, content) => {
   return (
     <>
       <ToggletipLabel>{label}</ToggletipLabel>
-      <Toggletip className="ui-component_info-icon" align="right-bottom">
+      <Toggletip className="ui-component__info-icon" align="right-bottom">
         <ToggletipButton label={buttonLabel}>
           <Information />
         </ToggletipButton>
