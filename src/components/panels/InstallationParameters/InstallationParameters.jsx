@@ -385,9 +385,11 @@ const InstallationParameters = (
             ns: "panels",
           }),
           t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.installationParameter.installationAddressHelp"), {
-            ns: "panels",
-          }),
+          getContent(
+            t("panel.installationParameter.installationAddressHelp", {
+              ns: "panels",
+            }),
+          ),
         )}
         placeholder={t(
           "panel.installationParameter.installationAddressPlaceholder",
