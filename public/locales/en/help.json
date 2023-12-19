@@ -1,6 +1,6 @@
 {
   "helpPanelContents.downloadParamFile": "Help contents for download param file panel.",
-  "helpPanelContents.hint": "Help contents for hint panel.",
+  "helpPanelContents.hint": "The installation assistant dialog asks for information relating to the target system and installation parameters of the Linux distribution to be installed. Be sure to obtain this data before continuing.",
   "helpPanelContents.information": "Review the minimum hardware requirements for the selected Linux distribution before continuing with the installation.\n\nIf the target system does not meet all of these requirements, the installation may fail.",
   "helpPanelContents.inputFileSelection": "Select the Linux distribution type and version that you want to install. This choice will affect the format of the resulting installer parameter file.\n\nNote that installer parameter file formats differ between distribution types, and may change with newer versions of the same type. In case the exact version is not available for selection, choose the same distribution type and closest version that is lower than the one to be installed.",
   "helpPanelContents.installationParameters": "Help contents for installation parameters panel.",
