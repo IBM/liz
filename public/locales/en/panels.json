@@ -103,12 +103,12 @@
   "panel.installationParameter.passwordHelp": "Password for accessing network installation source",
   "panel.installationParameter.passwordAddressHelp": "Lorem ipsum dolor sit amet",
   "panel.installationParameter.vncToggleTextLabel": "Installer access via VNC",
-  "panel.installationParameter.vncToggleHelp": "Enable to provide access to graphical installer UI",
+  "panel.installationParameter.vncToggleHelp": "Activate VNC remote access to graphical installer UI",
   "panel.installationParameter.vncPasswordTextLabel": "VNC password (optional)",
   "panel.installationParameter.vncPasswordPlaceholder": "VNC password here",
   "panel.installationParameter.vncPasswordHelp": "Specify a password for VNC access",
   "panel.installationParameter.sshToggleTextLabel": "Installer access via SSH",
-  "panel.installationParameter.sshToggleHelp": "Enable to provide access to text-based installer UI",
+  "panel.installationParameter.sshToggleHelp": "Activate SSH remote access to text-based installer UI",
   "panel.downloadParamFile.stepsWithIncompleteData": "Steps with incomplete data",
   "panel.downloadParamFile.stepsWithInvalidData": "Steps with invalid data",
   "panel.downloadParamFile.incompletOrInvalidDataNotificationTitle": "Incomplete or invalid data.",
@@ -134,6 +134,6 @@
   "panel.nextSteps.listItem11": "VNC host: <1>{{networkAddressForListItem}}</1>",
   "panel.nextSteps.listItem12": "VNC password: <1>{{vncPassword}}</1>",
   "panel.nextSteps.listItem13": "SSH host: <1>installer@{{networkAddressForListItem}}</1>",
-  "panel.nextSteps.missingRemoteAccessNotificationSubtitle": "Niether VNC nor SSH has been configure to access the remote system.",
-  "panel.nextSteps.missingRemoteAccessNotificationTitle": "Missing Remote Access"
+  "panel.nextSteps.missingRemoteAccessNotificationSubtitle": "Neither VNC nor SSH remote access has been configured. The installation system cannot be manually controlled.",
+  "panel.nextSteps.missingRemoteAccessNotificationTitle": "Missing remote access"
 }
