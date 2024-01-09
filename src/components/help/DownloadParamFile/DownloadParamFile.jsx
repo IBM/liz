@@ -5,15 +5,13 @@
  */
 
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="help-panel__download-param-file__content">
-      {t("helpPanelContents.downloadParamFile", { ns: "help" })}
+      <Trans i18nKey="helpPanelContents.downloadParamFile" ns="help" />
     </div>
   );
 };

@@ -5,15 +5,13 @@
  */
 
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_network-address.scss";
 
 const NetworkAddress = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="help-panel__network-address__content">
-      {t("helpPanelContents.networkAddress", { ns: "help" })}
+      <Trans i18nKey="helpPanelContents.networkAddress" ns="help" />
     </div>
   );
 };

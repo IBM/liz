@@ -5,15 +5,13 @@
  */
 
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="help-panel__input-file-selection__content">
-      {t("helpPanelContents.inputFileSelection", { ns: "help" })}
+      <Trans i18nKey="helpPanelContents.inputFileSelection" ns="help" />
     </div>
   );
 };

@@ -35,20 +35,7 @@ const HelpContent = ({ expanded, updateExpanded, helpContent }) => {
       </div>
       <FlexGrid className="help-content__grid">
         <Row className="help-content__grid__row">
-          <Column className="help-content__grid__column">
-            {helpContent}
-            <div className="help-content__dummy-content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Tincidunt dui ut ornare lectus. Elit ullamcorper dignissim cras
-              tincidunt. Nunc faucibus a pellentesque sit. Nulla pharetra diam
-              sit amet nisl suscipit adipiscing. Semper feugiat nibh sed
-              pulvinar proin gravida. Sed felis eget velit aliquet sagittis id
-              consectetur purus. Quam pellentesque nec nam aliquam sem et tortor
-              consequat id. Pellentesque habitant morbi tristique senectus et
-              netus. Vulputate mi sit amet mauris commodo quis imperdiet massa.
-            </div>
-          </Column>
+          <Column className="help-content__grid__column">{helpContent}</Column>
         </Row>
       </FlexGrid>
     </Layer>

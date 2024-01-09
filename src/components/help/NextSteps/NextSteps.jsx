@@ -5,15 +5,13 @@
  */
 
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_next-steps.scss";
 
 const NextSteps = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="help-panel__next-steps__content">
-      {t("helpPanelContents.nextSteps", { ns: "help" })}
+      <Trans i18nKey="helpPanelContents.nextSteps" ns="help" />
     </div>
   );
 };

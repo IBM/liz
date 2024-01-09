@@ -5,15 +5,13 @@
  */
 
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_network-device.scss";
 
 const NetworkDevice = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="help-panel__network-device__content">
-      {t("helpPanelContents.networkDevice", { ns: "help" })}
+      <Trans i18nKey="helpPanelContents.networkDevice" ns="help" />
     </div>
   );
 };
