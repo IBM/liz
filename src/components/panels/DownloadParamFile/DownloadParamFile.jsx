@@ -212,11 +212,11 @@ const DownloadParamFile = (
               i18nKey="panel.downloadParamFile.modifiedDataNotificationLinkText"
               ns="panels"
             >
-              You may{" "}
+              You may&nbsp;
               <Link href="#" onClick={resetParamFileTextAreaData}>
                 reset
-              </Link>{" "}
-              the generated data to its original state.
+              </Link>
+              &nbsp; the generated data to its original state.
             </Trans>
           </span>
         </>
