@@ -158,6 +158,13 @@ const DownloadParamFile = (
     );
   };
 
+  const stateHasValidParamFileContents = () => {
+    if (typeof state.paramFileContent === "string") {
+      return true;
+    }
+    return false;
+  };
+
   const notificationMarkup = (
     <InlineNotification
       hideCloseButton
@@ -180,7 +187,7 @@ const DownloadParamFile = (
         <ParamFileTextArea
           id="download-param-file_textarea"
           contents={
-            state.paramFileContent
+            stateHasValidParamFileContents()
               ? state.paramFileContent
               : paramFileContent.data
           }
