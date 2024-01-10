@@ -22,8 +22,8 @@ import "./_next-steps.scss";
 const NextSteps = (
   useSsh,
   useVnc,
-  networkAddress = "<host-IP-address>",
-  vncPassword = "<vncpassword>",
+  networkAddress,
+  vncPassword,
   patchState,
   localStorageKey,
 ) => {
