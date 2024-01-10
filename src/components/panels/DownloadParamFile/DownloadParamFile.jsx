@@ -5,15 +5,17 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
   InlineNotification,
+  ActionableNotification,
   Tag,
   FlexGrid,
   Row,
   Column,
+  Link,
 } from "@carbon/react";
 import { ParamFileTextArea } from "../../ParamFileTextArea";
 import { RHEL_PRESET } from "../../../util/constants";
@@ -172,6 +174,13 @@ const DownloadParamFile = (
     return false;
   };
 
+  const resetParamFileTextAreaData = () => {
+    const localParamFileContentValue = stateToParamFile(globalState);
+
+    updateParamFileContent(localParamFileContentValue.data);
+    updateModified(false);
+  };
+
   const notificationMarkup = (
     <InlineNotification
       hideCloseButton
@@ -188,6 +197,32 @@ const DownloadParamFile = (
       className="download-param-file__incomplete-data-banner"
     />
   );
+  const modifiedDataMessageMarkup = (
+    <>
+      <span className="download-param-file_modified-data-message-text">
+        {t("panel.downloadParamFile.modifiedDataNotificationSubtitle", {
+          ns: "panels",
+        })}
+      </span>
+      {state.paramFileContentModified && (
+        <>
+          <span>&nbsp;</span>
+          <span className="download-param-file_modified-data-message-link-text">
+            <Trans
+              i18nKey="panel.downloadParamFile.modifiedDataNotificationLinkText"
+              ns="panels"
+            >
+              You may{" "}
+              <Link href="#" onClick={resetParamFileTextAreaData}>
+                reset
+              </Link>{" "}
+              the generated data to its original state.
+            </Trans>
+          </span>
+        </>
+      )}
+    </>
+  );
   const gridContentsMarkup = (
     <>
       <div className="download-param-file_textarea-container">
@@ -199,12 +234,7 @@ const DownloadParamFile = (
               : paramFileContent.data
           }
           copyContents={updateCopied}
-          resetContents={() => {
-            const localParamFileContentValue = stateToParamFile(globalState);
-
-            updateParamFileContent(localParamFileContentValue.data);
-            updateModified(false);
-          }}
+          resetContents={resetParamFileTextAreaData}
           downloadContents={saveParamFileContent}
           onChange={(localParamFileContent) => {
             const localParamFileContentValue =
@@ -230,13 +260,11 @@ const DownloadParamFile = (
         />
       </div>
       {state.paramFileContentModified && (
-        <InlineNotification
+        <ActionableNotification
+          inline
           hideCloseButton
           statusIconDescription="notification"
-          subtitle={t(
-            "panel.downloadParamFile.modifiedDataNotificationSubtitle",
-            { ns: "panels" },
-          )}
+          subtitle={modifiedDataMessageMarkup}
           title={t("panel.downloadParamFile.modifiedDataNotificationTitle", {
             ns: "panels",
           })}
