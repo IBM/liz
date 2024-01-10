@@ -73,9 +73,16 @@ const DownloadParamFile = (
   };
 
   const saveParamFileContent = () => {
-    const textFileAsBlob = new Blob([paramFileContent.data], {
-      type: "text/plain",
-    });
+    const textFileAsBlob = new Blob(
+      [
+        stateHasValidParamFileContents()
+          ? state.paramFileContent
+          : paramFileContent.data,
+      ],
+      {
+        type: "text/plain",
+      },
+    );
     const fileNameToSaveAs = "parmfile.txt";
 
     const downloadLink = document.createElement("a");
