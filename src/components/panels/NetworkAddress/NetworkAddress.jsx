@@ -39,7 +39,7 @@ import {
 import { IPv4Panel, IPv6Panel } from "./components";
 import "./_network-address.scss";
 
-const NetworkAddress = (patchState, localStorageKey) => {
+const NetworkAddress = (patchState, localStorageKey, label) => {
   const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));
@@ -644,6 +644,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 complete: true,
                 invalid: false,
                 localStorageKey,
+                label,
               },
             },
           });
@@ -670,6 +671,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 localStorageKey,
+                label,
               },
             },
           });
@@ -696,6 +698,7 @@ const NetworkAddress = (patchState, localStorageKey) => {
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 localStorageKey,
+                label,
               },
             },
           });

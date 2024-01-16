@@ -21,6 +21,7 @@ const InputFileSelection = (
   systemRequirements,
   docLink,
   localStorageKey,
+  label,
   useStateFromLocalStorage,
   canWriteToLocalStorage,
 ) => {
@@ -137,6 +138,7 @@ const InputFileSelection = (
               disabled: false,
               invalid: false,
               localStorageKey,
+              label,
             },
           },
         });

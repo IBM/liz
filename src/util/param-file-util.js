@@ -76,6 +76,7 @@ const stateToNetworkAddressParams = (state) => {
     contents: "",
     complete: false,
     invalid: false,
+    label: "",
   };
 
   // => ip=...
@@ -95,6 +96,7 @@ ${nameserver}
       contents: `${installationRepoLine}`,
       complete: installationParameters.complete,
       invalid: installationParameters.invalid,
+      label: installationParameters.label,
     };
   }
 
@@ -159,6 +161,7 @@ const stateToNetworkDeviceParams = (state) => {
   let paramFileContents = {
     contents: "",
     complete: false,
+    label: "",
   };
 
   // => rd.znet...
@@ -178,6 +181,7 @@ ${vlanId}
         contents: `${installationRepoLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
+        label: installationParameters.label,
       };
     } else {
       const installationRepoLine = `${networkDeviceSettings}`;
@@ -185,6 +189,7 @@ ${vlanId}
         contents: `${installationRepoLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
+        label: installationParameters.label,
       };
     }
   }
@@ -199,6 +204,7 @@ const stateToInstallationRepoParams = (state) => {
   let paramFileContents = {
     contents: "",
     complete: false,
+    label: "",
   };
 
   // => inst.repo=...
@@ -207,6 +213,7 @@ const stateToInstallationRepoParams = (state) => {
     contents: `${installationRepoLine}`,
     complete: installationParameters.complete,
     invalid: installationParameters.invalid,
+    label: installationParameters.label,
   };
 
   return paramFileContents;
@@ -217,6 +224,7 @@ const stateToVncParams = (state) => {
   let paramFileContents = {
     contents: "",
     complete: false,
+    label: "",
   };
 
   // => inst.vnc inst.vncpassword=...
@@ -234,6 +242,7 @@ const stateToVncParams = (state) => {
         contents: `${vncServerLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
+        label: installationParameters.label,
       };
     } else {
       const vncServerLine = `inst.vnc`;
@@ -241,6 +250,7 @@ const stateToVncParams = (state) => {
         contents: `${vncServerLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
+        label: installationParameters.label,
       };
     }
   }
@@ -253,6 +263,7 @@ const stateToSshParams = (state) => {
   let paramFileContents = {
     contents: "",
     complete: false,
+    label: "",
   };
 
   // => inst.sshd
@@ -266,6 +277,7 @@ const stateToSshParams = (state) => {
       contents: `${sshServerLine}`,
       complete: installationParameters.complete,
       invalid: installationParameters.invalid,
+      label: installationParameters.label,
     };
   }
 
@@ -317,14 +329,17 @@ ${stateToSshParamsResult.contents}
     installationParameters: {
       complete: stateToInstallationRepoParamsResult.complete,
       invalid: stateToInstallationRepoParamsResult.invalid,
+      label: stateToInstallationRepoParamsResult.label,
     },
     networkAddress: {
       complete: stateToNetworkAddressParamsResult.complete,
       invalid: stateToNetworkAddressParamsResult.invalid,
+      label: stateToNetworkAddressParamsResult.label,
     },
     networkDevice: {
       complete: stateToNetworkDeviceParamsResult.complete,
       invalid: stateToNetworkDeviceParamsResult.invalid,
+      label: stateToNetworkDeviceParamsResult.label,
     },
   };
   const metadata = {

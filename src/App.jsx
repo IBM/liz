@@ -108,6 +108,7 @@ const renderPanel = (step, patchState, state) => {
         },
         state.steps.inputFileSelection.docLink,
         state.steps.inputFileSelection.localStorageKey,
+        state.steps.inputFileSelection.label,
         state.steps.useStateFromLocalStorage,
         state.steps.useExistingSettingsModalOpened,
       );
@@ -126,27 +127,35 @@ const renderPanel = (step, patchState, state) => {
         },
         state.steps.inputFileSelection.docLink,
         state.steps.information.localStorageKey,
+        state.steps.information.label,
       );
       break;
     case 2:
-      markup = Hint(patchState, state.steps.hint.localStorageKey);
+      markup = Hint(
+        patchState,
+        state.steps.hint.localStorageKey,
+        state.steps.hint.label,
+      );
       break;
     case 3:
       markup = NetworkDevice(
         patchState,
         state.steps.networkDevice.localStorageKey,
+        state.steps.networkDevice.label,
       );
       break;
     case 4:
       markup = NetworkAddress(
         patchState,
         state.steps.networkAddress.localStorageKey,
+        state.steps.networkAddress.label,
       );
       break;
     case 5:
       markup = InstallationParameters(
         patchState,
         state.steps.installationParameters.localStorageKey,
+        state.steps.installationParameters.label,
         state?.steps?.networkAddress?.addressType ?? ADDRESS_TYPE_IPV4,
       );
       break;
@@ -156,6 +165,7 @@ const renderPanel = (step, patchState, state) => {
         stateToParamFile,
         state,
         state.steps.downloadParamFile.localStorageKey,
+        state.steps.downloadParamFile.label,
       );
       break;
     case 7:
@@ -168,6 +178,7 @@ const renderPanel = (step, patchState, state) => {
         state.steps.installationParameters.vnc.password,
         patchState,
         state.steps.nextSteps.localStorageKey,
+        state.steps.nextSteps.label,
       );
       break;
     default:
@@ -197,12 +208,14 @@ const App = () => {
           disabled: false,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.inputFileSelection",
+          label: t("leftNavigation.progressStep.inputFileSelection.label"),
         },
         information: {
           complete: false,
           disabled: true,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.information",
+          label: t("leftNavigation.progressStep.information.label"),
         },
         downloadParamFile: {
           presets: RHEL_PRESET,
@@ -211,12 +224,14 @@ const App = () => {
           disabled: true,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.downloadParamFile",
+          label: t("leftNavigation.progressStep.downloadParamFile.label"),
         },
         hint: {
           complete: false,
           disabled: true,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.hint",
+          label: t("leftNavigation.progressStep.hint.label"),
         },
         installationParameters: {
           networkInstallationUrl: "",
@@ -231,6 +246,7 @@ const App = () => {
           disabled: true,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.installationParameters",
+          label: t("leftNavigation.progressStep.installationParameters.label"),
         },
         networkAddress: {
           addressType: "",
@@ -252,6 +268,7 @@ const App = () => {
           disabled: true,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.networkAddress",
+          label: t("leftNavigation.progressStep.networkAddress.label"),
         },
         networkDevice: {
           deviceType: "",
@@ -274,12 +291,14 @@ const App = () => {
           disabled: true,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.networkDevice",
+          label: t("leftNavigation.progressStep.networkDevice.label"),
         },
         nextSteps: {
           disabled: true,
           complete: false,
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.nextSteps",
+          label: t("leftNavigation.progressStep.nextSteps.label"),
         },
       },
       showNotification: false,

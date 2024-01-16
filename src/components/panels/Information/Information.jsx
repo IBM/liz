@@ -17,6 +17,7 @@ const Information = (
   systemRequirements,
   docLink,
   localStorageKey,
+  label,
 ) => {
   const { t } = useTranslation();
   const getInitialState = () => {

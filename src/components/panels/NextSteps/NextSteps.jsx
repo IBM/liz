@@ -26,6 +26,7 @@ const NextSteps = (
   vncPassword,
   patchState,
   localStorageKey,
+  label,
 ) => {
   const { t } = useTranslation();
   const getInitialState = () => {

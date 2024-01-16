@@ -27,6 +27,7 @@ const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
 const InstallationParameters = (
   patchState,
   localStorageKey,
+  label,
   ipAddressVersion,
 ) => {
   const { t } = useTranslation();
@@ -283,6 +284,7 @@ const InstallationParameters = (
                 enabled: state.useSsh,
               },
               localStorageKey,
+              label,
               complete: true,
               invalid: false,
             },
@@ -302,6 +304,7 @@ const InstallationParameters = (
                 enabled: state.useSsh,
               },
               localStorageKey,
+              label,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
             },
@@ -322,6 +325,7 @@ const InstallationParameters = (
                 enabled: state?.useSsh ?? "",
               },
               localStorageKey,
+              label,
               disabled: false,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,

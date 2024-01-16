@@ -26,6 +26,7 @@ const DownloadParamFile = (
   stateToParamFile,
   globalState,
   localStorageKey,
+  label,
 ) => {
   const { t } = useTranslation();
   const paramFileContent = stateToParamFile(globalState);
@@ -120,9 +121,9 @@ const DownloadParamFile = (
             <Tag
               className="download-param-file_incomplete-data-tag"
               type="gray"
-              title={property}
+              title={steps[property].label}
             >
-              {property}
+              {steps[property].label}
             </Tag>,
           );
         }
@@ -135,10 +136,10 @@ const DownloadParamFile = (
             <Tag
               className="download-param-file_invalid-data-tag"
               type="gray"
-              title={property}
+              title={steps[property].label}
               id={`tag__${property}`}
             >
-              {property}
+              {steps[property].label}
             </Tag>,
           );
         }
@@ -326,6 +327,7 @@ const DownloadParamFile = (
               complete: true,
               invalid: false,
               localStorageKey,
+              label,
             },
           },
         });
@@ -338,6 +340,7 @@ const DownloadParamFile = (
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
+              label,
             },
           },
         });
@@ -351,6 +354,7 @@ const DownloadParamFile = (
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
+              label,
             },
           },
         });
