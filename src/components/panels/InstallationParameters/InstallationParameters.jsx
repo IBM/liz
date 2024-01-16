@@ -28,6 +28,7 @@ const InstallationParameters = (
   patchState,
   localStorageKey,
   label,
+  index,
   ipAddressVersion,
 ) => {
   const { t } = useTranslation();
@@ -285,6 +286,7 @@ const InstallationParameters = (
               },
               localStorageKey,
               label,
+              index,
               complete: true,
               invalid: false,
             },
@@ -305,6 +307,7 @@ const InstallationParameters = (
               },
               localStorageKey,
               label,
+              index,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
             },

@@ -17,7 +17,7 @@ import {
 } from "@carbon/react";
 import "./_hint.scss";
 
-const Hint = (patchState, localStorageKey, label) => {
+const Hint = (patchState, localStorageKey, label, index) => {
   const { t } = useTranslation();
   const getInitialState = () => {
     const initialState = JSON.parse(localStorage.getItem(localStorageKey));

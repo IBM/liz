@@ -37,7 +37,7 @@ import {
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
-const NetworkDevice = (patchState, localStorageKey, label) => {
+const NetworkDevice = (patchState, localStorageKey, label, index) => {
   const { t } = useTranslation();
 
   const deviceTypeList = [
@@ -480,6 +480,7 @@ const NetworkDevice = (patchState, localStorageKey, label) => {
               invalid: false,
               localStorageKey,
               label,
+              index,
             },
           },
         });
@@ -516,6 +517,7 @@ const NetworkDevice = (patchState, localStorageKey, label) => {
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
               label,
+              index,
             },
           },
         });
@@ -545,6 +547,7 @@ const NetworkDevice = (patchState, localStorageKey, label) => {
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
               label,
+              index,
             },
           },
         });

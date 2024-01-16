@@ -22,11 +22,13 @@ import { RHEL_PRESET } from "../../../util/constants";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = (
+  setStep,
   patchState,
   stateToParamFile,
   globalState,
   localStorageKey,
   label,
+  index,
 ) => {
   const { t } = useTranslation();
   const paramFileContent = stateToParamFile(globalState);
@@ -119,8 +121,11 @@ const DownloadParamFile = (
         if (steps[property].complete === false) {
           incompleteListMarkup.push(
             <Tag
+              onClick={() => {
+                setStep(steps[property].index);
+              }}
               className="download-param-file_incomplete-data-tag"
-              type="gray"
+              type="cyan"
               title={steps[property].label}
             >
               {steps[property].label}
@@ -134,8 +139,11 @@ const DownloadParamFile = (
         if (steps[property].invalid === true) {
           invalidListMarkup.push(
             <Tag
+              onClick={() => {
+                setStep(steps[property].index);
+              }}
               className="download-param-file_invalid-data-tag"
-              type="gray"
+              type="cyan"
               title={steps[property].label}
               id={`tag__${property}`}
             >
@@ -328,6 +336,7 @@ const DownloadParamFile = (
               invalid: false,
               localStorageKey,
               label,
+              index,
             },
           },
         });
@@ -341,6 +350,7 @@ const DownloadParamFile = (
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
               label,
+              index,
             },
           },
         });
@@ -355,6 +365,7 @@ const DownloadParamFile = (
               invalid: !isCompleteAndValid.isValid,
               localStorageKey,
               label,
+              index,
             },
           },
         });
@@ -368,6 +379,7 @@ const DownloadParamFile = (
 };
 
 DownloadParamFile.propTypes = {
+  setStep: PropTypes.func.isRequired,
   patchState: PropTypes.func.isRequired,
   stateToParamFile: PropTypes.func.isRequired,
   globalState: PropTypes.func.isRequired,

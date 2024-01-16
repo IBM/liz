@@ -18,6 +18,7 @@ const Information = (
   docLink,
   localStorageKey,
   label,
+  index,
 ) => {
   const { t } = useTranslation();
   const getInitialState = () => {

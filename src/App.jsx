@@ -94,7 +94,7 @@ const renderHelpContent = (step) => {
   return markup;
 };
 
-const renderPanel = (step, patchState, state) => {
+const renderPanel = (step, setStep, patchState, state) => {
   let markup;
 
   switch (step) {
@@ -109,6 +109,7 @@ const renderPanel = (step, patchState, state) => {
         state.steps.inputFileSelection.docLink,
         state.steps.inputFileSelection.localStorageKey,
         state.steps.inputFileSelection.label,
+        state.steps.inputFileSelection.index,
         state.steps.useStateFromLocalStorage,
         state.steps.useExistingSettingsModalOpened,
       );
@@ -128,6 +129,7 @@ const renderPanel = (step, patchState, state) => {
         state.steps.inputFileSelection.docLink,
         state.steps.information.localStorageKey,
         state.steps.information.label,
+        state.steps.information.index,
       );
       break;
     case 2:
@@ -135,6 +137,7 @@ const renderPanel = (step, patchState, state) => {
         patchState,
         state.steps.hint.localStorageKey,
         state.steps.hint.label,
+        state.steps.hint.index,
       );
       break;
     case 3:
@@ -142,6 +145,7 @@ const renderPanel = (step, patchState, state) => {
         patchState,
         state.steps.networkDevice.localStorageKey,
         state.steps.networkDevice.label,
+        state.steps.networkDevice.index,
       );
       break;
     case 4:
@@ -149,6 +153,7 @@ const renderPanel = (step, patchState, state) => {
         patchState,
         state.steps.networkAddress.localStorageKey,
         state.steps.networkAddress.label,
+        state.steps.networkAddress.index,
       );
       break;
     case 5:
@@ -156,16 +161,19 @@ const renderPanel = (step, patchState, state) => {
         patchState,
         state.steps.installationParameters.localStorageKey,
         state.steps.installationParameters.label,
+        state.steps.installationParameters.index,
         state?.steps?.networkAddress?.addressType ?? ADDRESS_TYPE_IPV4,
       );
       break;
     case 6:
       markup = DownloadParamFile(
+        setStep,
         patchState,
         stateToParamFile,
         state,
         state.steps.downloadParamFile.localStorageKey,
         state.steps.downloadParamFile.label,
+        state.steps.downloadParamFile.index,
       );
       break;
     case 7:
@@ -179,6 +187,7 @@ const renderPanel = (step, patchState, state) => {
         patchState,
         state.steps.nextSteps.localStorageKey,
         state.steps.nextSteps.label,
+        state.steps.nextSteps.index,
       );
       break;
     default:
@@ -209,6 +218,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.inputFileSelection",
           label: t("leftNavigation.progressStep.inputFileSelection.label"),
+          index: 0,
         },
         information: {
           complete: false,
@@ -216,6 +226,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.information",
           label: t("leftNavigation.progressStep.information.label"),
+          index: 1,
         },
         downloadParamFile: {
           presets: RHEL_PRESET,
@@ -225,6 +236,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.downloadParamFile",
           label: t("leftNavigation.progressStep.downloadParamFile.label"),
+          index: 6,
         },
         hint: {
           complete: false,
@@ -232,6 +244,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.hint",
           label: t("leftNavigation.progressStep.hint.label"),
+          index: 2,
         },
         installationParameters: {
           networkInstallationUrl: "",
@@ -247,6 +260,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.installationParameters",
           label: t("leftNavigation.progressStep.installationParameters.label"),
+          index: 5,
         },
         networkAddress: {
           addressType: "",
@@ -269,6 +283,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.networkAddress",
           label: t("leftNavigation.progressStep.networkAddress.label"),
+          index: 4,
         },
         networkDevice: {
           deviceType: "",
@@ -292,6 +307,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.networkDevice",
           label: t("leftNavigation.progressStep.networkDevice.label"),
+          index: 3,
         },
         nextSteps: {
           disabled: true,
@@ -299,6 +315,7 @@ const App = () => {
           invalid: false,
           localStorageKey: "com.ibm.systems.linux.z.nextSteps",
           label: t("leftNavigation.progressStep.nextSteps.label"),
+          index: 7,
         },
       },
       showNotification: false,
@@ -382,7 +399,7 @@ const App = () => {
     }
   };
   const helpContentMarkup = renderHelpContent(step);
-  const panelMarkup = renderPanel(step, patchState, state);
+  const panelMarkup = renderPanel(step, setStep, patchState, state);
   const showHelpPanel = (flag) => {
     updateIsHelpPanelExpanded(flag);
   };

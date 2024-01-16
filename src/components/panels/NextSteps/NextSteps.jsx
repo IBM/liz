@@ -27,6 +27,7 @@ const NextSteps = (
   patchState,
   localStorageKey,
   label,
+  index,
 ) => {
   const { t } = useTranslation();
   const getInitialState = () => {
