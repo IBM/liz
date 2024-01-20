@@ -32,8 +32,8 @@
   "dependencies": {
     "@carbon/colors": "11.20.1",
     "@carbon/layout": "11.20.1",
+    "@carbon/styles": "1.48.0",
     "@carbon/react": "1.48.0",
-    "@carbon/styles": "1.47.0",
     "@carbon/themes": "11.29.0",
     "@carbon/type": "11.25.1",
     "i18next": "23.7.16",
