@@ -36,7 +36,7 @@
     "@carbon/react": "1.48.1",
     "@carbon/themes": "11.29.1",
     "@carbon/type": "11.25.1",
-    "i18next": "23.7.18",
+    "i18next": "23.7.19",
     "i18next-browser-languagedetector": "7.2.0",
     "i18next-http-backend": "2.4.2",
     "i18next-pseudo": "2.2.1",
