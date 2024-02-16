@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -20,115 +20,93 @@ import {
 import isUrl from "is-url-superb";
 import { getLabel, getContent } from "../../../uiUtil/help-util";
 import { toUrl, isHostnameValid } from "../../../util/network-address-util";
+import {
+  ACTION_UPDATE_INSTALLATION_PARAM_USE_SSH,
+  ACTION_UPDATE_INSTALLATION_PARAM_USE_VNC,
+  ACTION_UPDATE_INSTALLATION_PARAM_ADDRESS,
+  ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
+  ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
+  ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
+  ACTION_UPDATE_APP_STEPS,
+  ACTION_UPDATE_APP_IS_DIRTY,
+  ACTION_UPDATE_APP_IS_DISABLED,
+  LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
+  STATE_ORIGIN_USER,
+  STATE_ORIGIN_STORAGE,
+} from "../../../util/constants";
+import { ApplicationContext } from "../../../App";
+import { updateIsDisabled } from "../../../util/panel-utils";
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
 
-const InstallationParameters = (
-  patchState,
-  localStorageKey,
-  label,
-  index,
-  ipAddressVersion,
-) => {
+const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
   const { t } = useTranslation();
-  const getInitialState = () => {
-    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
-    const defaultState = {
-      useSsh: false,
-      useVnc: true,
-      installationAddress: {
-        value: "",
-        computed: "",
-        valid: false,
-      },
-      userName: {
-        value: "",
-        valid: false,
-      },
-      password: {
-        value: "",
-        valid: false,
-      },
-      userAndPwdAreDisabled: true,
-      vncHost: "",
-      vncPassword: "",
-      sshHost: "",
-    };
-
-    if (initialState) {
-      return initialState;
-    }
-    return defaultState;
-  };
-  const [state, setState] = useState(getInitialState());
+  const { state: globalState, dispatch: globalDispatch } =
+    React.useContext(ApplicationContext);
 
   const updateUseSsh = (flag) => {
-    setState((prevState) => ({ ...prevState, useSsh: flag }));
+    dispatch({
+      type: ACTION_UPDATE_INSTALLATION_PARAM_USE_SSH,
+      nextUseSsh: flag,
+    });
   };
 
   const updateUseVnc = (flag) => {
-    setState((prevState) => ({ ...prevState, useVnc: flag }));
+    dispatch({
+      type: ACTION_UPDATE_INSTALLATION_PARAM_USE_VNC,
+      nextUseVnc: flag,
+    });
   };
 
   const updateInstallationAddress = (address, computedAddress, valid) => {
-    setState((prevState) => ({
-      ...prevState,
-      installationAddress: {
-        ...prevState.installationAddress,
+    dispatch({
+      type: ACTION_UPDATE_INSTALLATION_PARAM_ADDRESS,
+      nextInstallationAddress: {
         value: address,
         computed: computedAddress,
         valid,
       },
-      userAndPwdAreDisabled:
+      nextUserAndPwdAreDisabled:
         !address ||
         address.length === 0 ||
         installationAddressContainsUidOrPwd(address),
-      userName: {
-        ...prevState.userName,
-        value: installationAddressContainsUidOrPwd(address)
-          ? ""
-          : prevState?.userName?.value ?? "",
-        valid: installationAddressContainsUidOrPwd(address)
-          ? true
-          : prevState?.userName?.valid ?? true,
+      nextUserName: {
+        value: "",
+        valid: true,
       },
-      password: {
-        ...prevState.password,
-        value: installationAddressContainsUidOrPwd(address)
-          ? ""
-          : prevState?.password?.value ?? "",
-        valid: installationAddressContainsUidOrPwd(address)
-          ? true
-          : prevState?.password?.valid ?? true,
+      nextPassword: {
+        value: "",
+        valid: true,
       },
-    }));
+    });
   };
 
   const updateUserName = (userName, valid) => {
-    setState((prevState) => ({
-      ...prevState,
-      userName: {
-        ...prevState.userName,
+    dispatch({
+      type: ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
+      nextUserName: {
         value: userName,
         valid,
       },
-    }));
+    });
   };
 
   const updatePassword = (password, valid) => {
-    setState((prevState) => ({
-      ...prevState,
-      password: {
-        ...prevState.password,
+    dispatch({
+      type: ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
+      nextPassword: {
         value: password,
         valid,
       },
-    }));
+    });
   };
 
   const updateVncPassword = (password) => {
-    setState((prevState) => ({ ...prevState, vncPassword: password }));
+    dispatch({
+      type: ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
+      nextVncPassword: password,
+    });
   };
 
   const isUserNameInputValid = (userName) => {
@@ -268,79 +246,100 @@ const InstallationParameters = (
   };
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state));
+    let mergedSteps = {};
 
     isCompleteAndValid((error, isCompleteAndValid) => {
       if (!error) {
-        patchState({
+        mergedSteps = {
+          ...globalState,
           steps: {
+            ...globalState.steps,
             installationParameters: {
+              ...globalState.steps.installationParameters,
               networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
                 enabled: state?.useVnc ?? true,
               },
               ssh: {
-                host: state.sshHost,
                 enabled: state.useSsh,
               },
-              localStorageKey,
-              label,
-              index,
               complete: true,
               invalid: false,
+              origin: STATE_ORIGIN_USER,
             },
           },
-        });
+        };
       } else if (isCompleteAndValid.isComplete) {
-        patchState({
+        mergedSteps = {
+          ...globalState,
           steps: {
+            ...globalState.steps,
             installationParameters: {
+              ...globalState.steps.installationParameters,
               networkInstallationUrl: state.installationAddress.computed,
               vnc: {
                 password: state.vncPassword,
                 enabled: state?.useVnc ?? true,
               },
               ssh: {
-                host: state.sshHost,
                 enabled: state.useSsh,
               },
-              localStorageKey,
-              label,
-              index,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
+              origin: STATE_ORIGIN_USER,
             },
           },
-        });
+        };
       } else {
-        patchState({
+        mergedSteps = {
+          ...globalState,
           steps: {
+            ...globalState.steps,
             installationParameters: {
-              networkInstallationUrl:
-                state?.installationAddress?.computed ?? "",
+              ...globalState.steps.installationParameters,
+              networkInstallationUrl: state.installationAddress?.computed ?? "",
               vnc: {
                 password: state?.vncPassword ?? "",
                 enabled: state?.useVnc ?? true,
               },
               ssh: {
-                host: state?.sshHost ?? "",
                 enabled: state?.useSsh ?? "",
               },
-              localStorageKey,
-              label,
               disabled: false,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
+              origin: STATE_ORIGIN_USER,
             },
           },
-        });
+        };
       }
+
+      globalDispatch({
+        type: ACTION_UPDATE_APP_STEPS,
+        nextSteps: mergedSteps.steps,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DIRTY,
+        nextIsDirty: true,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DISABLED,
+        nextSteps: updateIsDisabled(mergedSteps.steps),
+      });
     });
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
+      JSON.stringify({
+        ...state,
+        origin: STATE_ORIGIN_STORAGE,
+      }),
+    );
   }, [state]);
 
   const ipAddressVersionMissmatchExists = () => {
-    const urlObject = toUrl(state?.installationAddress?.value ?? "");
+    const urlObject = toUrl(state.installationAddress?.value ?? "");
 
     if (
       urlObject &&
@@ -382,9 +381,7 @@ const InstallationParameters = (
         type="url"
         id="installation-address-input"
         invalid={
-          state && state.installationAddress
-            ? !state.installationAddress.valid
-            : false
+          state.installationAddress ? !state.installationAddress.valid : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={getLabel(
@@ -683,8 +680,27 @@ const InstallationParameters = (
 };
 
 InstallationParameters.propTypes = {
-  patchState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired,
+  state: PropTypes.shape({
+    useSsh: PropTypes.bool.isRequired,
+    useVnc: PropTypes.bool.isRequired,
+    userName: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      valid: PropTypes.bool.isRequired,
+    }),
+    password: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      valid: PropTypes.bool.isRequired,
+    }),
+    userAndPwdAreDisabled: PropTypes.bool.isRequired,
+    vncPassword: PropTypes.string.isRequired,
+    installationAddress: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      computed: PropTypes.string.isRequired,
+      valid: PropTypes.bool.isRequired,
+    }),
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
+  ipAddressVersion: PropTypes.string.isRequired,
 };
 
 export default InstallationParameters;

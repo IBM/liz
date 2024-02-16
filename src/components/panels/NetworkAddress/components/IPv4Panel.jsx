@@ -129,7 +129,7 @@ const IPv4Panel = ({ updateFunction, state }) => {
           ns: "panels",
         })}
         value={
-          state.ipv4 && state.ipv4.ipv4Cidr ? state.ipv4.ipv4Cidr.value : ""
+          state.ipv4 && state.ipv4.ipv4Cidr ? state.ipv4.ipv4Cidr.value : 1
         }
         translateWithId={(id) => t(id, { ns: "common" })}
         onChange={(event, { value, direction }) => {

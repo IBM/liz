@@ -12,12 +12,7 @@ import { getLabel, getContent } from "../../../../uiUtil/help-util";
 import { isHex } from "../../../../util/network-device-util";
 import "./_device-settings.scss";
 
-const DeviceSettings = ({
-  deviceSettingsId,
-  patchState,
-  updateFunction,
-  state,
-}) => {
+const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
   const UPDATE_FUNCTION__LAYER = "layer";
   const UPDATE_FUNCTION__PORT_NO = "portNo";
   const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
@@ -108,10 +103,10 @@ const DeviceSettings = ({
   );
 
   const roceLabelHasOptionalTag = (forLabel, label, optionalLabel) => {
-    const hasValue = state[forLabel]?.value?.length > 0 ?? false;
+    const hasValue = state[forLabel]?.value?.length > 0;
     const allValuesArePresent =
-      (state?.pciFunctionId?.value?.length > 0 ?? false) &&
-      (state?.userIdentifier?.value?.length > 0 ?? false);
+      state?.pciFunctionId?.value?.length > 0 &&
+      state?.userIdentifier?.value?.length > 0;
 
     if (hasValue && !allValuesArePresent) {
       return optionalLabel;
@@ -237,7 +232,6 @@ const DeviceSettings = ({
 
 DeviceSettings.propTypes = {
   deviceSettingsId: PropTypes.string.isRequired,
-  patchState: PropTypes.func.isRequired,
   updateFunction: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
 };

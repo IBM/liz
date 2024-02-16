@@ -97,7 +97,6 @@ ${nameserver}
       contents: `${installationRepoLine}`,
       complete: installationParameters.complete,
       invalid: installationParameters.invalid,
-      label: installationParameters.label,
       index: installationParameters.index,
     };
   }
@@ -184,7 +183,6 @@ ${vlanId}
         contents: `${installationRepoLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
-        label: installationParameters.label,
         index: installationParameters.index,
       };
     } else {
@@ -193,7 +191,6 @@ ${vlanId}
         contents: `${installationRepoLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
-        label: installationParameters.label,
         index: installationParameters.index,
       };
     }
@@ -209,7 +206,6 @@ const stateToInstallationRepoParams = (state) => {
   let paramFileContents = {
     contents: "",
     complete: false,
-    label: "",
     index: 0,
   };
 
@@ -219,7 +215,6 @@ const stateToInstallationRepoParams = (state) => {
     contents: `${installationRepoLine}`,
     complete: installationParameters.complete,
     invalid: installationParameters.invalid,
-    label: installationParameters.label,
     index: installationParameters.index,
   };
 
@@ -231,7 +226,6 @@ const stateToVncParams = (state) => {
   let paramFileContents = {
     contents: "",
     complete: false,
-    label: "",
     index: 0,
   };
 
@@ -250,7 +244,6 @@ const stateToVncParams = (state) => {
         contents: `${vncServerLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
-        label: installationParameters.label,
         index: installationParameters.index,
       };
     } else {
@@ -259,7 +252,6 @@ const stateToVncParams = (state) => {
         contents: `${vncServerLine}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
-        label: installationParameters.label,
         index: installationParameters.index,
       };
     }
@@ -273,7 +265,6 @@ const stateToSshParams = (state) => {
   let paramFileContents = {
     contents: "",
     complete: false,
-    label: "",
     index: 0,
   };
 
@@ -288,7 +279,6 @@ const stateToSshParams = (state) => {
       contents: `${sshServerLine}`,
       complete: installationParameters.complete,
       invalid: installationParameters.invalid,
-      label: installationParameters.label,
       index: installationParameters.index,
     };
   }
@@ -341,19 +331,16 @@ ${stateToSshParamsResult.contents}
     installationParameters: {
       complete: stateToInstallationRepoParamsResult.complete,
       invalid: stateToInstallationRepoParamsResult.invalid,
-      label: stateToInstallationRepoParamsResult.label,
       index: stateToInstallationRepoParamsResult.index,
     },
     networkAddress: {
       complete: stateToNetworkAddressParamsResult.complete,
       invalid: stateToNetworkAddressParamsResult.invalid,
-      label: stateToNetworkAddressParamsResult.label,
       index: stateToNetworkAddressParamsResult.index,
     },
     networkDevice: {
       complete: stateToNetworkDeviceParamsResult.complete,
       invalid: stateToNetworkDeviceParamsResult.invalid,
-      label: stateToNetworkDeviceParamsResult.label,
       index: stateToNetworkDeviceParamsResult.index,
     },
   };

@@ -4,64 +4,84 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Layer, Link } from "@carbon/react";
-// import { IsoFilled } from "@carbon/icons-react";
+import {
+  DISTRIBUTION_LIST,
+  VERSION_LIST,
+  ACTION_UPDATE_APP_STEPS,
+  ACTION_UPDATE_APP_IS_DIRTY,
+  ACTION_UPDATE_APP_IS_DISABLED,
+  LOCAL_STORAGE_KEY_APP_INFORMATION,
+  STATE_ORIGIN_USER,
+  STATE_ORIGIN_STORAGE,
+} from "../../../util/constants";
+import { ApplicationContext } from "../../../App";
+import { updateIsDisabled } from "../../../util/panel-utils";
 import "./_information.scss";
 
-const Information = (
-  patchState,
+const Information = ({
+  state,
+  dispatch,
   distribution,
   systemRequirements,
   docLink,
-  localStorageKey,
-  label,
-  index,
-) => {
+}) => {
   const { t } = useTranslation();
-  const getInitialState = () => {
-    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
-    const defaultState = {};
+  const { state: globalState, dispatch: globalDispatch } =
+    React.useContext(ApplicationContext);
 
-    if (initialState) {
-      return initialState;
-    }
-    return defaultState;
-  };
-  // eslint-disable-next-line
-  const [state, setState] = useState(getInitialState());
-  const distributionName =
-    distribution && distribution.name ? distribution.name : "";
-  const distributionVersion =
-    distribution && distribution.version ? distribution.version : "";
-  const memorySize =
-    systemRequirements && systemRequirements.memory
-      ? systemRequirements.memory
-      : 0;
-  const diskSize =
-    systemRequirements && systemRequirements.disk ? systemRequirements.disk : 0;
-  const machineLevel =
-    systemRequirements && systemRequirements.level
-      ? systemRequirements.level
-      : "";
+  const distributionName = distribution.name
+    ? DISTRIBUTION_LIST.find((x) => x.id === distribution.name).label
+    : "";
+  const distributionVersion = distribution.version
+    ? VERSION_LIST.find((x) => x.id === distribution.version).label
+    : "";
+  const memorySize = systemRequirements.memory ? systemRequirements.memory : 0;
+  const diskSize = systemRequirements.disk ? systemRequirements.disk : 0;
+  const machineLevel = systemRequirements.level ? systemRequirements.level : "";
 
   const DEFAULT_MEMORY_SIZE_UNIT = "GiB";
   const DEFAULT_DISK_SIZE_UNIT = "GiB";
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state));
-    patchState({
+    const mergedSteps = {
+      ...globalState,
       steps: {
+        ...globalState.steps,
         information: {
+          ...globalState.steps.information,
           complete: true,
           disabled: true,
           invalid: false,
+          origin: STATE_ORIGIN_USER,
         },
       },
+    };
+
+    globalDispatch({
+      type: ACTION_UPDATE_APP_STEPS,
+      nextSteps: mergedSteps.steps,
     });
-  }, []);
+    globalDispatch({
+      type: ACTION_UPDATE_APP_IS_DIRTY,
+      nextIsDirty: true,
+    });
+    globalDispatch({
+      type: ACTION_UPDATE_APP_IS_DISABLED,
+      nextSteps: updateIsDisabled(mergedSteps.steps),
+    });
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_APP_INFORMATION,
+      JSON.stringify({
+        ...state,
+        origin: STATE_ORIGIN_STORAGE,
+      }),
+    );
+  }, [state]);
 
   const markup = (
     <Layer>
@@ -202,7 +222,9 @@ const Information = (
 };
 
 Information.propTypes = {
-  patchState: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  docLink: PropTypes.string.isRequired,
   distribution: PropTypes.shape({
     name: PropTypes.string.isRequired,
     version: PropTypes.string.isRequired,
@@ -212,8 +234,6 @@ Information.propTypes = {
     memory: PropTypes.number.isRequired,
     level: PropTypes.string.isRequired,
   }).isRequired,
-  docLink: PropTypes.string.isRequired,
-  localStorageKey: PropTypes.string.isRequired,
 };
 
 export default Information;

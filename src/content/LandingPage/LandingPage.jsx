@@ -8,10 +8,30 @@ import React from "react";
 import { InlineNotification, Grid, Column } from "@carbon/react";
 import PropTypes from "prop-types";
 import About from "../../components/About";
+import {
+  Information,
+  InputFileSelection,
+  InstallationParameters,
+  Hint,
+  NetworkAddress,
+  NetworkDevice,
+  NextSteps,
+  DownloadParamFile,
+} from "../../components/panels";
+import {
+  PANEL_DOWNLOAD_PARAM_FILE,
+  PANEL_HINT,
+  PANEL_INFORMATION,
+  PANEL_INPUT_FILE_SELECTION,
+  PANEL_INSTALLATION_PARAMETERS,
+  PANEL_NETWORK_ADDRESS,
+  PANEL_NETWORK_DEVICE,
+  PANEL_NEXT_STEPS,
+} from "../../util/constants";
 import "./_landing-page.scss";
 
 const LandingPage = ({
-  panelMarkup,
+  panelConfig,
   showNotification,
   inlineNotification,
   closeNotification,
@@ -37,6 +57,75 @@ const LandingPage = ({
       "com.ibm.systems.linux.z.inlineNotification",
       JSON.stringify(localInlineNotification),
     );
+  };
+  const getPanel = (panel) => {
+    switch (panel) {
+      case PANEL_DOWNLOAD_PARAM_FILE:
+        return (
+          <DownloadParamFile
+            state={panelConfig.state}
+            dispatch={panelConfig.dispatch}
+            setStep={panelConfig.params.setStep}
+            stateToParamFile={panelConfig.params.stateToParamFile}
+          />
+        );
+      case PANEL_HINT:
+        return (
+          <Hint state={panelConfig.state} dispatch={panelConfig.dispatch} />
+        );
+      case PANEL_INFORMATION:
+        return (
+          <Information
+            state={panelConfig.state}
+            dispatch={panelConfig.dispatch}
+            distribution={panelConfig.params.distribution}
+            systemRequirements={panelConfig.params.systemRequirements}
+            docLink={panelConfig.params.docLink}
+          />
+        );
+      case PANEL_INPUT_FILE_SELECTION:
+        return (
+          <InputFileSelection
+            state={panelConfig.state}
+            dispatch={panelConfig.dispatch}
+          />
+        );
+      case PANEL_INSTALLATION_PARAMETERS:
+        return (
+          <InstallationParameters
+            state={panelConfig.state}
+            dispatch={panelConfig.dispatch}
+            ipAddressVersion={panelConfig.params.ipAddressVersion}
+          />
+        );
+      case PANEL_NETWORK_ADDRESS:
+        return (
+          <NetworkAddress
+            state={panelConfig.state}
+            dispatch={panelConfig.dispatch}
+          />
+        );
+      case PANEL_NETWORK_DEVICE:
+        return (
+          <NetworkDevice
+            state={panelConfig.state}
+            dispatch={panelConfig.dispatch}
+          />
+        );
+      case PANEL_NEXT_STEPS:
+        return (
+          <NextSteps
+            state={panelConfig.state}
+            dispatch={panelConfig.dispatch}
+            useVnc={panelConfig.params.useVnc}
+            useSsh={panelConfig.params.useSsh}
+            networkAddress={panelConfig.params.networkAddress}
+            vncPassword={panelConfig.params.vncPassword}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -66,7 +155,7 @@ const LandingPage = ({
           lg={12}
           className="landing-page__grey-column-background"
         >
-          {panelMarkup}
+          {getPanel(panelConfig.panel)}
         </Column>
       </Grid>
     </>
@@ -74,7 +163,12 @@ const LandingPage = ({
 };
 
 LandingPage.propTypes = {
-  panelMarkup: PropTypes.object.isRequired,
+  panelConfig: PropTypes.shape({
+    panel: PropTypes.string.isRequired,
+    state: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object,
+  }).isRequired,
   showNotification: PropTypes.bool.isRequired,
   inlineNotification: PropTypes.shape({
     show: PropTypes.bool.isRequired,

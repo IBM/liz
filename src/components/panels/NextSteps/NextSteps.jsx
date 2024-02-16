@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -16,44 +16,67 @@ import {
   Row,
   Column,
 } from "@carbon/react";
+import {
+  ACTION_UPDATE_APP_STEPS,
+  ACTION_UPDATE_APP_IS_DIRTY,
+  ACTION_UPDATE_APP_IS_DISABLED,
+  LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
+  STATE_ORIGIN_USER,
+  STATE_ORIGIN_STORAGE,
+} from "../../../util/constants";
+import { ApplicationContext } from "../../../App";
+import { updateIsDisabled } from "../../../util/panel-utils";
 import { getLabel, getContent } from "../../../uiUtil/help-util";
 import "./_next-steps.scss";
 
-const NextSteps = (
-  useSsh,
+const NextSteps = ({
+  state,
+  dispatch,
   useVnc,
+  useSsh,
   networkAddress,
   vncPassword,
-  patchState,
-  localStorageKey,
-  label,
-  index,
-) => {
+}) => {
   const { t } = useTranslation();
-  const getInitialState = () => {
-    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
-    const defaultState = {};
-
-    if (initialState) {
-      return initialState;
-    }
-    return defaultState;
-  };
-  // eslint-disable-next-line
-  const [state, setState] = useState(getInitialState());
+  const { state: globalState, dispatch: globalDispatch } =
+    React.useContext(ApplicationContext);
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state));
-    patchState({
+    const mergedSteps = {
+      ...globalState,
       steps: {
+        ...globalState.steps,
         nextSteps: {
+          ...globalState.steps.nextSteps,
           complete: true,
           disabled: true,
           invalid: false,
+          origin: STATE_ORIGIN_USER,
         },
       },
+    };
+
+    globalDispatch({
+      type: ACTION_UPDATE_APP_STEPS,
+      nextSteps: mergedSteps.steps,
     });
-  }, []);
+    globalDispatch({
+      type: ACTION_UPDATE_APP_IS_DIRTY,
+      nextIsDirty: true,
+    });
+    globalDispatch({
+      type: ACTION_UPDATE_APP_IS_DISABLED,
+      nextSteps: updateIsDisabled(mergedSteps.steps),
+    });
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
+      JSON.stringify({
+        ...state,
+        origin: STATE_ORIGIN_STORAGE,
+      }),
+    );
+  }, [state]);
 
   const networkAddressForListItem = networkAddress || "[host-IP-address]";
   const remoteAccessConfigIsMissing = !useSsh && !useVnc;
@@ -208,10 +231,10 @@ const NextSteps = (
 NextSteps.propTypes = {
   useVnc: PropTypes.bool.isRequired,
   useSsh: PropTypes.bool.isRequired,
-  patchState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired,
   networkAddress: PropTypes.string,
   vncPassword: PropTypes.string,
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default NextSteps;

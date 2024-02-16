@@ -4,33 +4,53 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useState } from "react";
+import React, { useReducer, createContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Content } from "@carbon/react";
 import { Routes, Route } from "react-router-dom";
 import InstallerHeader from "./components/InstallerHeader";
-import {
-  Information,
-  InputFileSelection,
-  InstallationParameters,
-  Hint,
-  NetworkAddress,
-  NetworkDevice,
-  NextSteps,
-  DownloadParamFile,
-} from "./components/panels";
-import {
-  Information as InformationContent,
-  InputFileSelection as InputFileSelectionContent,
-  InstallationParameters as InstallationParametersContent,
-  Hint as HintContent,
-  NetworkAddress as NetworkAddressContent,
-  NetworkDevice as NetworkDeviceContent,
-  NextSteps as NextStepsContent,
-  DownloadParamFile as DownloadParamFileContent,
-} from "./components/help";
 import { stateToParamFile } from "./util/param-file-util";
-import { ADDRESS_TYPE_IPV4, RHEL_PRESET } from "./util/constants";
+
+import reducer from "./reducers/AppReducer";
+import downloadParamFileReducer from "./reducers/DownloadParamFileReducer";
+import hintReducer from "./reducers/HintReducer";
+import informationReducer from "./reducers/InformationReducer";
+import inputFileSelectionReducer from "./reducers/InputFileSelectionReducer";
+import installationParameterReducer from "./reducers/InstallationParameterReducer";
+import networkAddressReducer from "./reducers/NetworkAddressReducer";
+import networkDeviceReducer from "./reducers/NetworkDeviceReducer";
+import nextStepsReducer from "./reducers/NextStepsReducer";
+
+import createInitialState from "./states/AppState";
+import { createInitialState as createInitialDownloadParamFileState } from "./states/DownloadParamFileState";
+import { createInitialState as createInitialHintState } from "./states/HintState";
+import { createInitialState as createInitialInformationState } from "./states/InformationState";
+import { createInitialState as createInitialInputFileSelectionState } from "./states/InputFileSelectionState";
+import { createInitialState as createInitialInstallationParameterState } from "./states/InstallationParameterState";
+import { createInitialState as createInitialNetworkAddressState } from "./states/NetworkAddressState";
+import { createInitialState as createInitialNetworkDeviceState } from "./states/NetworkDeviceState";
+import { createInitialState as createInitialNetxtStepsState } from "./states/NextStepsState";
+
+import {
+  ADDRESS_TYPE_IPV4,
+  ACTION_UPDATE_APP_STATE,
+  ACTION_UPDATE_APP_STEP,
+  ACTION_UPDATE_APP_SHOW_NOTIFICATION,
+  ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
+  ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
+  ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL,
+  ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED,
+  ACTION_RESET_TO_INITIAL_STATE,
+  PANEL_DOWNLOAD_PARAM_FILE,
+  PANEL_HINT,
+  PANEL_INFORMATION,
+  PANEL_INPUT_FILE_SELECTION,
+  PANEL_INSTALLATION_PARAMETERS,
+  PANEL_NETWORK_ADDRESS,
+  PANEL_NETWORK_DEVICE,
+  PANEL_NEXT_STEPS,
+  PANEL_UNKNOWN,
+} from "./util/constants";
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
 
@@ -59,347 +79,284 @@ const getProgressStepState = (state, forProgressStepState) => {
   return {};
 };
 
-const renderHelpContent = (step) => {
-  let markup;
-
-  switch (step) {
-    case 0:
-      markup = InputFileSelectionContent();
-      break;
-    case 1:
-      markup = InformationContent();
-      break;
-    case 2:
-      markup = HintContent();
-      break;
-    case 3:
-      markup = NetworkDeviceContent();
-      break;
-    case 4:
-      markup = NetworkAddressContent();
-      break;
-    case 5:
-      markup = InstallationParametersContent();
-      break;
-    case 6:
-      markup = DownloadParamFileContent();
-      break;
-    case 7:
-      markup = NextStepsContent();
-      break;
-    default:
-      markup = <div>Help content not yet implemented.</div>;
-  }
-
-  return markup;
-};
-
-const renderPanel = (step, setStep, patchState, state) => {
-  let markup;
-
-  switch (step) {
-    case 0:
-      markup = InputFileSelection(
-        patchState,
-        {
-          disk: state.steps.inputFileSelection.diskSize,
-          memory: state.steps.inputFileSelection.memorySize,
-          level: state.steps.inputFileSelection.machineLevel,
-        },
-        state.steps.inputFileSelection.docLink,
-        state.steps.inputFileSelection.localStorageKey,
-        state.steps.inputFileSelection.label,
-        state.steps.inputFileSelection.index,
-        state.steps.useStateFromLocalStorage,
-        state.steps.useExistingSettingsModalOpened,
-      );
-      break;
-    case 1:
-      markup = Information(
-        patchState,
-        {
-          name: state.steps.inputFileSelection.distributionName,
-          version: state.steps.inputFileSelection.distributionVersion,
-        },
-        {
-          disk: state.steps.inputFileSelection.diskSize,
-          memory: state.steps.inputFileSelection.memorySize,
-          level: state.steps.inputFileSelection.machineLevel,
-        },
-        state.steps.inputFileSelection.docLink,
-        state.steps.information.localStorageKey,
-        state.steps.information.label,
-        state.steps.information.index,
-      );
-      break;
-    case 2:
-      markup = Hint(
-        patchState,
-        state.steps.hint.localStorageKey,
-        state.steps.hint.label,
-        state.steps.hint.index,
-      );
-      break;
-    case 3:
-      markup = NetworkDevice(
-        patchState,
-        state.steps.networkDevice.localStorageKey,
-        state.steps.networkDevice.label,
-        state.steps.networkDevice.index,
-      );
-      break;
-    case 4:
-      markup = NetworkAddress(
-        patchState,
-        state.steps.networkAddress.localStorageKey,
-        state.steps.networkAddress.label,
-        state.steps.networkAddress.index,
-      );
-      break;
-    case 5:
-      markup = InstallationParameters(
-        patchState,
-        state.steps.installationParameters.localStorageKey,
-        state.steps.installationParameters.label,
-        state.steps.installationParameters.index,
-        state?.steps?.networkAddress?.addressType ?? ADDRESS_TYPE_IPV4,
-      );
-      break;
-    case 6:
-      markup = DownloadParamFile(
-        setStep,
-        patchState,
-        stateToParamFile,
-        state,
-        state.steps.downloadParamFile.localStorageKey,
-        state.steps.downloadParamFile.label,
-        state.steps.downloadParamFile.index,
-      );
-      break;
-    case 7:
-      markup = NextSteps(
-        state.steps.installationParameters.ssh.enabled,
-        state.steps.installationParameters.vnc.enabled,
-        state.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
-          ? state.steps.networkAddress.ipv4.address
-          : state.steps.networkAddress.ipv6.address,
-        state.steps.installationParameters.vnc.password,
-        patchState,
-        state.steps.nextSteps.localStorageKey,
-        state.steps.nextSteps.label,
-        state.steps.nextSteps.index,
-      );
-      break;
-    default:
-      markup = <div>Panel not yet implemented.</div>;
-  }
-
-  return markup;
-};
+const ApplicationContext = createContext({
+  state: null,
+  dispatch: null,
+});
 
 const App = () => {
   const { t } = useTranslation();
-  const getInitialState = (useStateFromLocalStorage) => {
-    const initialState = JSON.parse(
-      localStorage.getItem("com.ibm.systems.linux.z.app"),
+
+  const [state, dispatch] = useReducer(reducer, createInitialState());
+  const [downloadParamFileState, downloadParamFileDispatch] = useReducer(
+    downloadParamFileReducer,
+    createInitialDownloadParamFileState(),
+  );
+  const [hintState, hintDispatch] = useReducer(
+    hintReducer,
+    createInitialHintState(),
+  );
+  const [informationState, informationDispatch] = useReducer(
+    informationReducer,
+    createInitialInformationState(),
+  );
+  const [inputFileSelectionState, inputFileSelectionDispatch] = useReducer(
+    inputFileSelectionReducer,
+    createInitialInputFileSelectionState(),
+  );
+  const [installationParameterState, installationParameterDispatch] =
+    useReducer(
+      installationParameterReducer,
+      createInitialInstallationParameterState(),
     );
-    const defaultState = {
-      steps: {
-        inputFileSelection: {
-          distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
-          distributionVersion: "9.0",
-          memorySize: 3,
-          diskSize: 10,
-          machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
-          docLink:
-            "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
-          complete: false,
-          disabled: false,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.inputFileSelection",
-          label: t("leftNavigation.progressStep.inputFileSelection.label"),
-          index: 0,
-        },
-        information: {
-          complete: false,
-          disabled: true,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.information",
-          label: t("leftNavigation.progressStep.information.label"),
-          index: 1,
-        },
-        downloadParamFile: {
-          presets: RHEL_PRESET,
-          contents: "",
-          complete: false,
-          disabled: true,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.downloadParamFile",
-          label: t("leftNavigation.progressStep.downloadParamFile.label"),
-          index: 6,
-        },
-        hint: {
-          complete: false,
-          disabled: true,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.hint",
-          label: t("leftNavigation.progressStep.hint.label"),
-          index: 2,
-        },
-        installationParameters: {
-          networkInstallationUrl: "",
-          vnc: {
-            password: "",
-            enabled: true,
-          },
-          ssh: {
-            enabled: false,
-          },
-          complete: false,
-          disabled: true,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.installationParameters",
-          label: t("leftNavigation.progressStep.installationParameters.label"),
-          index: 5,
-        },
-        networkAddress: {
-          addressType: "",
-          ipv4: {
-            cidr: 1,
-            binary: "",
-            netmask: "",
-            address: "",
-          },
-          ipv6: {
-            cidr: 1,
-            address: "",
-          },
-          gatewayIpAddress: "",
-          nameserverIpAddress: "",
-          hostName: "",
-          domainSearchPath: "",
-          complete: false,
-          disabled: true,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.networkAddress",
-          label: t("leftNavigation.progressStep.networkAddress.label"),
-          index: 4,
-        },
-        networkDevice: {
-          deviceType: "",
-          osa: {
-            readChannel: "",
-            writeChannel: "",
-            dataChannel: "",
-            portNumber: 0,
-            layer: 0,
-          },
-          roce: {
-            fid: "",
-            uid: "",
-          },
-          vlan: {
-            id: 1,
-            enabled: false,
-          },
-          complete: false,
-          disabled: true,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.networkDevice",
-          label: t("leftNavigation.progressStep.networkDevice.label"),
-          index: 3,
-        },
-        nextSteps: {
-          disabled: true,
-          complete: false,
-          invalid: false,
-          localStorageKey: "com.ibm.systems.linux.z.nextSteps",
-          label: t("leftNavigation.progressStep.nextSteps.label"),
-          index: 7,
-        },
-      },
-      showNotification: false,
-      isDirty: false,
-      isHelpPanelExpanded: true,
-      showConfirmationModal: false,
-      showUseExistingSettingsModal: false,
-      useExistingSettingsModalOpened: true,
-      useStateFromLocalStorage: false,
-    };
+  const [networkAddressState, networkAddressDispatch] = useReducer(
+    networkAddressReducer,
+    createInitialNetworkAddressState(),
+  );
+  const [networkDeviceState, networkDeviceDispatch] = useReducer(
+    networkDeviceReducer,
+    createInitialNetworkDeviceState(),
+  );
+  const [nextStepsState, nextStepsDispatch] = useReducer(
+    nextStepsReducer,
+    createInitialNetxtStepsState(),
+  );
 
-    if (initialState && useStateFromLocalStorage) {
-      initialState.isDirty = false;
-      initialState.showConfirmationModal = false;
-      initialState.showUseExistingSettingsModal = true;
-      initialState.useStateFromLocalStorage = true;
-      return initialState;
-    } else if (initialState && !useStateFromLocalStorage) {
-      defaultState.showUseExistingSettingsModal = true;
-      return defaultState;
+  const resetToInitialState = () => {
+    downloadParamFileDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialDownloadParamFileState(),
+    });
+    hintDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialHintState(),
+    });
+    informationDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialInformationState(),
+    });
+    inputFileSelectionDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialInputFileSelectionState(),
+    });
+    installationParameterDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialInstallationParameterState(),
+    });
+    networkAddressDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialNetworkAddressState(),
+    });
+    networkDeviceDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialNetworkDeviceState(),
+    });
+    nextStepsDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialNetxtStepsState(),
+    });
+  };
+
+  const getHelpPanelConfig = ({ step }) => {
+    let config;
+
+    switch (step) {
+      case 0:
+        config = {
+          forPanel: PANEL_INPUT_FILE_SELECTION,
+        };
+        break;
+      case 1:
+        config = {
+          forPanel: PANEL_INFORMATION,
+        };
+        break;
+      case 2:
+        config = {
+          forPanel: PANEL_HINT,
+        };
+        break;
+      case 3:
+        config = {
+          forPanel: PANEL_NETWORK_DEVICE,
+        };
+        break;
+      case 4:
+        config = {
+          forPanel: PANEL_NETWORK_ADDRESS,
+        };
+        break;
+      case 5:
+        config = {
+          forPanel: PANEL_INSTALLATION_PARAMETERS,
+        };
+        break;
+      case 6:
+        config = {
+          forPanel: PANEL_DOWNLOAD_PARAM_FILE,
+        };
+        break;
+      case 7:
+        config = {
+          forPanel: PANEL_NEXT_STEPS,
+        };
+        break;
+      default:
+        config = <div>Help content not yet implemented.</div>;
     }
-    return defaultState;
-  };
-  const [step, setStep] = useState(0);
-  const [state, setState] = useState(getInitialState());
-  const patchState = (patch) => {
-    const stateCopy = JSON.parse(JSON.stringify(state));
-    const mergedSteps = Object.assign(stateCopy.steps, patch.steps);
 
-    stateCopy.steps = mergedSteps;
-    setState((prevState) => Object.assign(prevState, stateCopy));
-    updateIsDirty(true);
-    updateIsDisabled(stateCopy);
-    localStorage.setItem("com.ibm.systems.linux.z.app", JSON.stringify(state));
-    console.log(state);
+    return config;
   };
+
+  const getPanelConfig = ({ step, setStep }) => {
+    let config;
+
+    switch (step) {
+      case 0:
+        config = {
+          panel: PANEL_INPUT_FILE_SELECTION,
+          state: inputFileSelectionState,
+          dispatch: inputFileSelectionDispatch,
+        };
+        break;
+      case 1:
+        config = {
+          panel: PANEL_INFORMATION,
+          dispatch: informationDispatch,
+          state: informationState,
+          params: {
+            systemRequirements: {
+              disk: state.steps.inputFileSelection.diskSize,
+              memory: state.steps.inputFileSelection.memorySize,
+              level: state.steps.inputFileSelection.machineLevel,
+            },
+            distribution: {
+              name: state.steps.inputFileSelection.distributionName,
+              version: state.steps.inputFileSelection.distributionVersion,
+            },
+            docLink: state.steps.inputFileSelection.docLink,
+          },
+        };
+        break;
+      case 2:
+        config = {
+          panel: PANEL_HINT,
+          dispatch: hintDispatch,
+          state: hintState,
+        };
+        break;
+      case 3:
+        config = {
+          panel: PANEL_NETWORK_DEVICE,
+          dispatch: networkDeviceDispatch,
+          state: networkDeviceState,
+        };
+        break;
+      case 4:
+        config = {
+          panel: PANEL_NETWORK_ADDRESS,
+          dispatch: networkAddressDispatch,
+          state: networkAddressState,
+        };
+        break;
+      case 5:
+        config = {
+          panel: PANEL_INSTALLATION_PARAMETERS,
+          state: installationParameterState,
+          params: {
+            ipAddressVersion:
+              state?.steps?.networkAddress?.addressType ?? ADDRESS_TYPE_IPV4,
+          },
+          dispatch: installationParameterDispatch,
+        };
+        break;
+      case 6:
+        config = {
+          panel: PANEL_DOWNLOAD_PARAM_FILE,
+          params: {
+            setStep,
+            stateToParamFile,
+          },
+          dispatch: downloadParamFileDispatch,
+          state: downloadParamFileState,
+        };
+        break;
+      case 7:
+        config = {
+          panel: PANEL_NEXT_STEPS,
+          state: nextStepsState,
+          params: {
+            useSsh: state.steps.installationParameters.ssh.enabled,
+            useVnc: state.steps.installationParameters.vnc.enabled,
+            networkAddress:
+              state.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
+                ? state.steps.networkAddress.ipv4.address
+                : state.steps.networkAddress.ipv6.address,
+            vncPassword: state.steps.installationParameters.vnc.password,
+          },
+          dispatch: nextStepsDispatch,
+        };
+        break;
+      default:
+        config = {
+          panel: PANEL_UNKNOWN,
+          dispatch: null,
+          state: null,
+        };
+    }
+
+    return config;
+  };
+
   const updateShowNotification = (showNotification) => {
-    setState((prevState) => ({ ...prevState, showNotification }));
+    dispatch({
+      type: ACTION_UPDATE_APP_SHOW_NOTIFICATION,
+      nextShowNotification: showNotification,
+    });
   };
   const updateIsHelpPanelExpanded = (isHelpPanelExpanded) => {
-    setState((prevState) => ({ ...prevState, isHelpPanelExpanded }));
+    dispatch({
+      type: ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
+      nextIsHelpPanelExpanded: isHelpPanelExpanded,
+    });
   };
   const updateShowConfirmationModal = (showConfirmationModal) => {
-    setState((prevState) => ({ ...prevState, showConfirmationModal }));
+    dispatch({
+      type: ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
+      nextShowConfirmationModal: showConfirmationModal,
+    });
   };
   const updateShowUseExistingSettingsModal = (showUseExistingSettingsModal) => {
-    setState((prevState) => ({ ...prevState, showUseExistingSettingsModal }));
+    dispatch({
+      type: ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL,
+      nextShowUseExistingSettingsModal: showUseExistingSettingsModal,
+    });
   };
   const updateUseExistingSettingsModalOpened = (
     useExistingSettingsModalOpened,
   ) => {
-    setState((prevState) => ({ ...prevState, useExistingSettingsModalOpened }));
+    dispatch({
+      type: ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED,
+      nextUseExistingSettingsModalOpened: useExistingSettingsModalOpened,
+    });
   };
-  const updateIsDirty = (isDirty) => {
-    setState((prevState) => ({ ...prevState, isDirty }));
+  const updateStep = (step) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_STEP,
+      nextStep: step,
+    });
   };
-  const setNavigationalStepsActivity = (flag = false, localState) => {
-    const stateCopy = JSON.parse(JSON.stringify(localState));
-    const keys = Object.keys(stateCopy.steps);
-
-    let i;
-    for (i = 0; i < keys.length; i++) {
-      const stateKey = keys[i];
-
-      if (stateKey !== "inputFileSelection") {
-        stateCopy.steps[stateKey].disabled = flag;
-      }
-      setState((prevState) => ({ ...prevState, ...stateCopy }));
-    }
+  const updateState = (state) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_STATE,
+      nextState: state,
+    });
   };
-  const updateIsDisabled = (localState) => {
-    const hasInputFileSelection =
-      localState && localState.steps && localState.steps.inputFileSelection;
-    const isComplete =
-      hasInputFileSelection && localState.steps.inputFileSelection.complete;
-
-    if (hasInputFileSelection && !isComplete) {
-      setNavigationalStepsActivity(true, localState);
-    } else if (hasInputFileSelection && isComplete) {
-      setNavigationalStepsActivity(false, localState);
-    }
-  };
-  const helpContentMarkup = renderHelpContent(step);
-  const panelMarkup = renderPanel(step, setStep, patchState, state);
+  const helpPanelConfig = getHelpPanelConfig({ step: state.step });
+  const panelConfig = getPanelConfig({
+    step: state.step,
+    setStep: updateStep,
+  });
   const showHelpPanel = (flag) => {
     updateIsHelpPanelExpanded(flag);
   };
@@ -487,12 +444,12 @@ const App = () => {
         showNotification={state.showNotification}
         onShowNotification={showNotification}
         onShowHelpPanel={showHelpPanel}
-        onProgress={setStep}
-        progressStep={step}
+        onProgress={updateStep}
+        progressStep={state.step}
         progressStepComplete={progressStepComplete}
         progressStepInvalid={progressStepInvalid}
         progressStepDisabled={progressStepDisabled}
-        helpContent={helpContentMarkup}
+        helpPanelConfig={helpPanelConfig}
       />
       <Modal
         open={state.showConfirmationModal}
@@ -510,7 +467,7 @@ const App = () => {
         primaryButtonText={t("btnLabel.Yes", { ns: "common" })}
         secondaryButtonText={t("btnLabel.No", { ns: "common" })}
         onRequestSubmit={() => {
-          patchState(getInitialState(true));
+          updateState(createInitialState(true));
           updateShowUseExistingSettingsModal(false);
           updateUseExistingSettingsModalOpened(true);
         }}
@@ -521,6 +478,7 @@ const App = () => {
             localStorage.removeItem(localStorageKeys[i]);
           }
           localStorage.removeItem("com.ibm.systems.linux.z.app");
+          resetToInitialState();
           updateShowUseExistingSettingsModal(false);
           updateUseExistingSettingsModalOpened(true);
         }}
@@ -535,13 +493,15 @@ const App = () => {
             exact={true}
             path={import.meta.env.VITE_URL_PATH_PREFIX}
             element={
-              <LandingPage
-                panelMarkup={panelMarkup}
-                inlineNotification={getInlineNotification()}
-                showNotification={state.showNotification}
-                closeNotification={closeNotification}
-                localStorageKeys={getLocalStorageKeys()}
-              />
+              <ApplicationContext.Provider value={{ state, dispatch }}>
+                <LandingPage
+                  panelConfig={panelConfig}
+                  inlineNotification={getInlineNotification()}
+                  showNotification={state.showNotification || false}
+                  closeNotification={closeNotification}
+                  localStorageKeys={getLocalStorageKeys()}
+                />
+              </ApplicationContext.Provider>
             }
           />
         </Routes>
@@ -551,3 +511,4 @@ const App = () => {
 };
 
 export default App;
+export { ApplicationContext };

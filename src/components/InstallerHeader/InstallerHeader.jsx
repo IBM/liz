@@ -32,7 +32,7 @@ const InstallerHeader = ({
   progressStepComplete,
   progressStepInvalid,
   progressStepDisabled,
-  helpContent,
+  helpPanelConfig,
 }) => {
   const { t } = useTranslation();
 
@@ -100,7 +100,7 @@ const InstallerHeader = ({
               <HelpContent
                 expanded={state.expanded}
                 updateExpanded={updateExpanded}
-                helpContent={helpContent}
+                helpPanelConfig={helpPanelConfig}
               />
             </HeaderPanel>
           </Header>
@@ -145,7 +145,9 @@ InstallerHeader.propTypes = {
     downloadParamFile: PropTypes.bool.isRequired,
     nextSteps: PropTypes.bool.isRequired,
   }).isRequired,
-  helpContent: PropTypes.node.isRequired,
+  helpPanelConfig: PropTypes.shape({
+    forPanel: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default InstallerHeader;

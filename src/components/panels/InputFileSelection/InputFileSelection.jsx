@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -14,82 +14,47 @@ import {
   Column,
   Layer,
 } from "@carbon/react";
+import {
+  ACTION_UPDATE_DISTRIBUTION_NAME,
+  ACTION_UPDATE_DISTRIBUTION_VERSION,
+  ACTION_UPDATE_APP_STEPS,
+  ACTION_UPDATE_APP_IS_DIRTY,
+  ACTION_UPDATE_APP_IS_DISABLED,
+  STATE_ORIGIN_USER,
+  STATE_ORIGIN_STORAGE,
+  DISTRIBUTION_LIST,
+  VERSION_LIST,
+  LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
+} from "../../../util/constants";
+import { ApplicationContext } from "../../../App";
+import { updateIsDisabled } from "../../../util/panel-utils";
 import "./_input-file-selection.scss";
 
-const InputFileSelection = (
-  patchState,
-  systemRequirements,
-  docLink,
-  localStorageKey,
-  label,
-  index,
-  useStateFromLocalStorage,
-  canWriteToLocalStorage,
-) => {
+const InputFileSelection = ({ state, dispatch }) => {
   const { t } = useTranslation();
-
-  const STATE_ORIGIN_USER = "user";
-  const STATE_ORIGIN_DEFAULT = "default";
-  const STATE_ORIGIN_STORAGE = "storage";
-
-  const getInitialState = (useDefault) => {
-    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
-    const defaultState = {
-      selectedDistributionName: {},
-      selectedDistributionVersion: {},
-      origin: STATE_ORIGIN_DEFAULT,
-    };
-
-    if (useDefault) {
-      return defaultState;
-    } else if (
-      initialState &&
-      !useStateFromLocalStorage &&
-      canWriteToLocalStorage
-    ) {
-      return defaultState;
-    } else if (!initialState) {
-      return defaultState;
-    }
-    initialState.origin = STATE_ORIGIN_STORAGE;
-    return initialState;
-  };
-
-  const [state, setState] = useState(getInitialState(true));
-
-  const distributionList = [
-    {
-      id: "rhel",
-      label: "Red Hat Enterprise Linux 9 (RHEL 9)",
-    },
-  ];
-  const versionList = [
-    {
-      id: "version-9.x",
-      label: "9.x",
-    },
-  ];
+  const { state: globalState, dispatch: globalDispatch } =
+    React.useContext(ApplicationContext);
 
   const updateSelectedDistributionName = (
     selectedDistributionName,
     callback,
   ) => {
-    setState((prevState) => ({
-      ...prevState,
-      selectedDistributionName,
-      origin: STATE_ORIGIN_USER,
-    }));
+    dispatch({
+      type: ACTION_UPDATE_DISTRIBUTION_NAME,
+      nextOrigin: STATE_ORIGIN_USER,
+      nextSelectedDistributionName: selectedDistributionName,
+    });
   };
 
   const updateSelectedDistributionVersion = (
     selectedDistributionVersion,
     callback,
   ) => {
-    setState((prevState) => ({
-      ...prevState,
-      selectedDistributionVersion,
-      origin: STATE_ORIGIN_USER,
-    }));
+    dispatch({
+      type: ACTION_UPDATE_DISTRIBUTION_VERSION,
+      nextOrigin: STATE_ORIGIN_USER,
+      nextSelectedDistributionVersion: selectedDistributionVersion,
+    });
   };
 
   const isComplete = (callback) => {
@@ -108,61 +73,55 @@ const InputFileSelection = (
 
   useEffect(() => {
     isComplete((error, isComplete) => {
+      let mergedSteps = {};
+
       if (!error) {
-        patchState({
+        mergedSteps = {
+          ...globalState,
           steps: {
+            ...globalState.steps,
             inputFileSelection: {
+              ...globalState.steps.inputFileSelection,
               distributionName:
                 state.selectedDistributionName &&
-                state.selectedDistributionName.label
-                  ? state.selectedDistributionName.label
+                state.selectedDistributionName.id
+                  ? state.selectedDistributionName.id
                   : "",
               distributionVersion:
                 state.selectedDistributionVersion &&
-                state.selectedDistributionVersion.label
-                  ? state.selectedDistributionVersion.label
+                state.selectedDistributionVersion.id
+                  ? state.selectedDistributionVersion.id
                   : "",
-              memorySize:
-                systemRequirements && systemRequirements.memory
-                  ? systemRequirements.memory
-                  : 0,
-              diskSize:
-                systemRequirements && systemRequirements.disk
-                  ? systemRequirements.disk
-                  : 0,
-              machineLevel:
-                systemRequirements && systemRequirements.level
-                  ? systemRequirements.level
-                  : "",
-              docLink,
               complete: isComplete,
               disabled: false,
               invalid: false,
-              localStorageKey,
-              label,
-              index,
+              origin: STATE_ORIGIN_USER,
             },
           },
+        };
+
+        globalDispatch({
+          type: ACTION_UPDATE_APP_STEPS,
+          nextSteps: mergedSteps.steps,
+        });
+        globalDispatch({
+          type: ACTION_UPDATE_APP_IS_DIRTY,
+          nextIsDirty: true,
+        });
+        globalDispatch({
+          type: ACTION_UPDATE_APP_IS_DISABLED,
+          nextSteps: updateIsDisabled(mergedSteps.steps),
         });
       }
     });
 
-    const initialState = getInitialState(true);
-    const stateOriginsFromStorage =
-      state && state.origin === STATE_ORIGIN_STORAGE;
-
-    if (
-      canWriteToLocalStorage &&
-      !useStateFromLocalStorage &&
-      stateOriginsFromStorage
-    ) {
-      return localStorage.setItem(
-        localStorageKey,
-        JSON.stringify(initialState),
-      );
-    } else if (canWriteToLocalStorage) {
-      return localStorage.setItem(localStorageKey, JSON.stringify(state));
-    }
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
+      JSON.stringify({
+        ...state,
+        origin: STATE_ORIGIN_STORAGE,
+      }),
+    );
   }, [state]);
 
   const gridContentsMarkupRowOne = (
@@ -188,7 +147,7 @@ const InputFileSelection = (
         <Dropdown
           aria-label="Select a distribution"
           id="distribution-selection"
-          items={distributionList}
+          items={DISTRIBUTION_LIST}
           titleText=""
           label="Dropdown menu options"
           size="md"
@@ -203,7 +162,7 @@ const InputFileSelection = (
         <Dropdown
           aria-label="Select a version"
           id="version-selection"
-          items={versionList}
+          items={VERSION_LIST}
           titleText=""
           label="Select a version"
           size="md"
@@ -261,16 +220,12 @@ const InputFileSelection = (
 };
 
 InputFileSelection.propTypes = {
-  patchState: PropTypes.func.isRequired,
-  systemRequirements: PropTypes.shape({
-    disk: PropTypes.number.isRequired,
-    memory: PropTypes.number.isRequired,
-    level: PropTypes.string.isRequired,
+  state: PropTypes.shape({
+    selectedDistributionName: PropTypes.object.isRequired,
+    selectedDistributionVersion: PropTypes.object.isRequired,
+    origin: PropTypes.string.isRequired,
   }).isRequired,
-  docLink: PropTypes.string.isRequired,
-  localStorageKey: PropTypes.string.isRequired,
-  useStateFromLocalStorage: PropTypes.bool.isRequired,
-  canWriteToLocalStorage: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default InputFileSelection;

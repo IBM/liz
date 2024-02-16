@@ -279,7 +279,7 @@ const IPv6Panel = ({ updateFunction, state }) => {
           ns: "panels",
         })}
         value={
-          state.ipv6 && state.ipv6.hostName ? state.ipv6.hostName.value : ""
+          state.ipv6 && state.ipv6.hostName ? state.ipv6.hostName.value : 1
         }
         onChange={(localHostName) => {
           const localHostNameValue =

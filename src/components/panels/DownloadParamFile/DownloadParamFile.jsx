@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -18,58 +18,67 @@ import {
   Link,
 } from "@carbon/react";
 import { ParamFileTextArea } from "../../ParamFileTextArea";
-import { RHEL_PRESET } from "../../../util/constants";
+import {
+  ACTION_UPDATE_PARAM_FILE_COPIED,
+  ACTION_UPDATE_PARAM_FILE_MODIFIED,
+  ACTION_UPDATE_PARAM_FILE_CONTENT,
+  ACTION_UPDATE_APP_STEPS,
+  ACTION_UPDATE_APP_IS_DIRTY,
+  ACTION_UPDATE_APP_IS_DISABLED,
+  LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
+  RHEL_PRESET,
+  STATE_ORIGIN_USER,
+  STATE_ORIGIN_STORAGE,
+} from "../../../util/constants";
+import { ApplicationContext } from "../../../App";
+import { updateIsDisabled } from "../../../util/panel-utils";
 import "./_download-param-file.scss";
 
-const DownloadParamFile = (
-  setStep,
-  patchState,
-  stateToParamFile,
-  globalState,
-  localStorageKey,
-  label,
-  index,
-) => {
+const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
   const { t } = useTranslation();
-  const paramFileContent = stateToParamFile(globalState);
-  const getInitialState = () => {
-    const localParamFileContent =
-      paramFileContent &&
-      paramFileContent.data &&
-      typeof paramFileContent.data === "string"
-        ? paramFileContent.data
-        : stateToParamFile(globalState).data;
-    const initialState = JSON.parse(localStorage.getItem(localStorageKey));
-    const defaultState = {
-      paramFileContentCopied: false,
-      paramFileContentModified: false,
-      paramFileContent: localParamFileContent,
-    };
+  const { state: globalState, dispatch: globalDispatch } =
+    React.useContext(ApplicationContext);
 
-    if (initialState) {
-      return initialState;
-    }
-    return defaultState;
+  const stepLabels = {
+    0: t("leftNavigation.progressStep.inputFileSelection.label"),
+    1: t("leftNavigation.progressStep.information.label"),
+    2: t("leftNavigation.progressStep.hint.label"),
+    3: t("leftNavigation.progressStep.networkDevice.label"),
+    4: t("leftNavigation.progressStep.networkAddress.label"),
+    5: t("leftNavigation.progressStep.installationParameters.label"),
+    6: t("leftNavigation.progressStep.downloadParamFile.label"),
+    7: t("leftNavigation.progressStep.nextSteps.label"),
   };
-  const [state, setState] = useState(getInitialState());
+
+  const paramFileContent = stateToParamFile(globalState);
 
   const updateCopied = () => {
-    setState((prevState) => ({ ...prevState, paramFileContentCopied: true }));
+    dispatch({
+      type: ACTION_UPDATE_PARAM_FILE_COPIED,
+      nextParamFileContentCopied: true,
+    });
+
     const timer = setTimeout(() => {
-      setState((prevState) => ({
-        ...prevState,
-        paramFileContentCopied: false,
-      }));
+      dispatch({
+        type: ACTION_UPDATE_PARAM_FILE_COPIED,
+        nextParamFileContentCopied: false,
+      });
     }, 2000);
     return () => clearTimeout(timer);
   };
 
   const updateModified = (paramFileContentModified) => {
-    setState((prevState) => ({ ...prevState, paramFileContentModified }));
+    dispatch({
+      type: ACTION_UPDATE_PARAM_FILE_MODIFIED,
+      nextParamFileContentModified: paramFileContentModified,
+    });
   };
 
   const updateParamFileContent = (paramFileContent) => {
-    setState((prevState) => ({ ...prevState, paramFileContent }));
+    dispatch({
+      type: ACTION_UPDATE_PARAM_FILE_CONTENT,
+      nextParamFileContent: paramFileContent,
+    });
   };
 
   const destroyClickedElement = (event) => {
@@ -119,6 +128,8 @@ const DownloadParamFile = (
     if (paramFileContent.metadata.hasIncompleteData) {
       for (const property in steps) {
         if (steps[property].complete === false) {
+          const label = stepLabels[steps[property].index];
+
           incompleteListMarkup.push(
             <Tag
               onClick={() => {
@@ -126,9 +137,11 @@ const DownloadParamFile = (
               }}
               className="download-param-file_incomplete-data-tag"
               type="cyan"
-              title={steps[property].label}
+              title={label}
+              id={`tag__${property}`}
+              key={`tag__${property}`}
             >
-              {steps[property].label}
+              {label}
             </Tag>,
           );
         }
@@ -137,6 +150,8 @@ const DownloadParamFile = (
     if (paramFileContent.metadata.hasInvalidData) {
       for (const property in steps) {
         if (steps[property].invalid === true) {
+          const label = stepLabels[steps[property].index];
+
           invalidListMarkup.push(
             <Tag
               onClick={() => {
@@ -144,10 +159,11 @@ const DownloadParamFile = (
               }}
               className="download-param-file_invalid-data-tag"
               type="cyan"
-              title={steps[property].label}
+              title={label}
               id={`tag__${property}`}
+              key={`tag__${property}`}
             >
-              {steps[property].label}
+              {label}
             </Tag>,
           );
         }
@@ -177,7 +193,10 @@ const DownloadParamFile = (
   };
 
   const stateHasValidParamFileContents = () => {
-    if (typeof state.paramFileContent === "string") {
+    if (
+      typeof state.paramFileContent === "string" &&
+      state.paramFileContentModified
+    ) {
       return true;
     }
     return false;
@@ -312,10 +331,22 @@ const DownloadParamFile = (
     ) {
       isComplete = true;
       isValid = !paramFileContent.hasIncompleteData;
-    }
 
-    if (isComplete && isValid) {
-      return callback(null, { isComplete, isValid });
+      if (isComplete && isValid) {
+        return callback(null, { isComplete, isValid });
+      }
+    }
+    if (
+      typeof paramFileContent.data === "string" &&
+      paramFileContent.data.length > 0 &&
+      !state.paramFileContentModified
+    ) {
+      isComplete = true;
+      isValid = !paramFileContent.hasIncompleteData;
+
+      if (isComplete && isValid) {
+        return callback(null, { isComplete, isValid });
+      }
     }
 
     return callback(new Error("Form data is incomplete or invalid"), {
@@ -326,53 +357,77 @@ const DownloadParamFile = (
 
   useEffect(() => {
     isCompleteAndValid((error, isCompleteAndValid) => {
+      let mergedSteps = {};
+
       if (!error) {
-        patchState({
+        mergedSteps = {
+          ...globalState,
           steps: {
+            ...globalState.steps,
             downloadParamFile: {
+              ...globalState.steps.downloadParamFile,
               contents: state.paramFileContent,
               presets: RHEL_PRESET,
               complete: true,
               invalid: false,
-              localStorageKey,
-              label,
-              index,
+              origin: STATE_ORIGIN_USER,
             },
           },
-        });
+        };
       } else if (isCompleteAndValid.isComplete) {
-        patchState({
+        mergedSteps = {
+          ...globalState,
           steps: {
+            ...globalState.steps,
             downloadParamFile: {
+              ...globalState.steps.downloadParamFile,
               contents: state.paramFileContent,
               presets: RHEL_PRESET,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
-              localStorageKey,
-              label,
-              index,
+              origin: STATE_ORIGIN_USER,
             },
           },
-        });
+        };
       } else {
-        patchState({
+        mergedSteps = {
+          ...globalState,
           steps: {
+            ...globalState.steps,
             downloadParamFile: {
+              ...globalState.steps.downloadParamFile,
               contents: state?.paramFileContent ?? "",
               presets: RHEL_PRESET,
               disabled: false,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
-              localStorageKey,
-              label,
-              index,
+              origin: STATE_ORIGIN_USER,
             },
           },
-        });
+        };
       }
+
+      globalDispatch({
+        type: ACTION_UPDATE_APP_STEPS,
+        nextSteps: mergedSteps.steps,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DIRTY,
+        nextIsDirty: true,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DISABLED,
+        nextSteps: updateIsDisabled(mergedSteps.steps),
+      });
     });
 
-    localStorage.setItem(localStorageKey, JSON.stringify(state));
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
+      JSON.stringify({
+        ...state,
+        origin: STATE_ORIGIN_STORAGE,
+      }),
+    );
   }, [state]);
 
   return markup;
@@ -380,10 +435,9 @@ const DownloadParamFile = (
 
 DownloadParamFile.propTypes = {
   setStep: PropTypes.func.isRequired,
-  patchState: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   stateToParamFile: PropTypes.func.isRequired,
-  globalState: PropTypes.func.isRequired,
-  localStorageKey: PropTypes.string.isRequired,
+  state: PropTypes.object.isRequired,
 };
 
 export default DownloadParamFile;

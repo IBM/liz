@@ -13,6 +13,7 @@ jest.config.json
 .prettierrc.json
 **/*.png
 **/*.js
+**/*.mjs
 **/*.jsx
 **/*.snap
 **/*.html

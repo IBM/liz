@@ -6,6 +6,11 @@
   },
   "extends": ["plugin:react/recommended", "standard", "prettier"],
   "overrides": [],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
