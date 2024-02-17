@@ -538,7 +538,7 @@ const App = () => {
         open={state.showConfirmationModal}
       >
         <ModalHeader
-          label={t("modalLabel.localStorageHasBeenPrunedConfirmation")}
+          label={t("modalLabel.manageSettings")}
           title={t("modalHeading.localStorageHasBeenPrunedConfirmation")}
         />
         <ModalBody>
@@ -558,7 +558,7 @@ const App = () => {
         preventCloseOnClickOutside
         open={state.showUseExistingSettingsModal}
         modalHeading={t("modalHeading.useExistingSettingsPrompt")}
-        modalLabel={t("modalLabel.useExistingSettingsPrompt")}
+        modalLabel={t("modalLabel.manageSettings")}
         primaryButtonText={t("btnLabel.Yes", { ns: "common" })}
         secondaryButtonText={t("btnLabel.No", { ns: "common" })}
         onRequestSubmit={() => {
@@ -581,7 +581,9 @@ const App = () => {
           updateShowUseExistingSettingsModal(false);
           updateUseExistingSettingsModalOpened(true);
         }}
-      />
+      >
+        <p>{t("modalBody.useExistingSettingsPrompt")}</p>
+      </Modal>
       <Modal
         preventCloseOnClickOutside
         open={state.showDiscardModifiedParamFileContentsModal}
@@ -603,7 +605,9 @@ const App = () => {
           updateShowDiscardModifiedParamFileContentsModal(false);
           updateCanRenderStep(true);
         }}
-      />
+      >
+        <p>{t("modalBody.discardParamFileModificationsPrompt")}</p>
+      </Modal>
     </>
   );
 
