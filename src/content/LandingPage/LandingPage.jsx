@@ -27,6 +27,8 @@ import {
   PANEL_NETWORK_ADDRESS,
   PANEL_NETWORK_DEVICE,
   PANEL_NEXT_STEPS,
+  LOCAL_STORAGE_KEY_APP,
+  LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
 } from "../../util/constants";
 import "./_landing-page.scss";
 
@@ -42,8 +44,8 @@ const LandingPage = ({
     for (i = 0; i < localStorageKeys.length; i++) {
       localStorage.removeItem(localStorageKeys[i]);
     }
-    localStorage.removeItem("com.ibm.systems.linux.z.app");
-    localStorage.removeItem("com.ibm.systems.linux.z.inlineNotification");
+    localStorage.removeItem(LOCAL_STORAGE_KEY_APP);
+    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION);
     closeNotification(true);
   };
   const showInlineNotification = inlineNotification
@@ -54,7 +56,7 @@ const LandingPage = ({
     localInlineNotification.show = false;
 
     localStorage.setItem(
-      "com.ibm.systems.linux.z.inlineNotification",
+      LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
       JSON.stringify(localInlineNotification),
     );
   };

@@ -64,6 +64,8 @@ import {
   PANEL_NETWORK_DEVICE,
   PANEL_NEXT_STEPS,
   PANEL_UNKNOWN,
+  LOCAL_STORAGE_KEY_APP,
+  LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
 } from "./util/constants";
 import LandingPage from "./content/LandingPage";
 import "./App.scss";
@@ -501,7 +503,7 @@ const App = () => {
     const contentLabel = t("legalNotice.contentLabel");
 
     const inlineNotification = JSON.parse(
-      localStorage.getItem("com.ibm.systems.linux.z.inlineNotification"),
+      localStorage.getItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION),
     );
     const defaultInlineNotification = {
       show: true,
@@ -514,7 +516,7 @@ const App = () => {
       return inlineNotification;
     }
     localStorage.setItem(
-      "com.ibm.systems.linux.z.inlineNotification",
+      LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
       JSON.stringify(defaultInlineNotification),
     );
     return defaultInlineNotification;
@@ -570,7 +572,7 @@ const App = () => {
           for (i = 0; i < localStorageKeys.length; i++) {
             localStorage.removeItem(localStorageKeys[i]);
           }
-          localStorage.removeItem("com.ibm.systems.linux.z.app");
+          localStorage.removeItem(LOCAL_STORAGE_KEY_APP);
           resetToInitialState();
           updateShowUseExistingSettingsModal(false);
           updateUseExistingSettingsModalOpened(true);
