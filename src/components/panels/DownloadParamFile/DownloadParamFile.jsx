@@ -26,7 +26,6 @@ import {
   ACTION_UPDATE_APP_IS_DIRTY,
   ACTION_UPDATE_APP_IS_DISABLED,
   LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
-  RHEL_PRESET,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
 } from "../../../util/constants";
@@ -330,7 +329,7 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
       state.paramFileContent.length > 0
     ) {
       isComplete = true;
-      isValid = !paramFileContent.hasIncompleteData;
+      isValid = !paramFileContent.metadata.hasIncompleteData;
 
       if (isComplete && isValid) {
         return callback(null, { isComplete, isValid });
@@ -342,7 +341,7 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
       !state.paramFileContentModified
     ) {
       isComplete = true;
-      isValid = !paramFileContent.hasIncompleteData;
+      isValid = !paramFileContent.metadata.hasIncompleteData;
 
       if (isComplete && isValid) {
         return callback(null, { isComplete, isValid });
@@ -367,7 +366,7 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
             downloadParamFile: {
               ...globalState.steps.downloadParamFile,
               contents: state.paramFileContent,
-              presets: RHEL_PRESET,
+              modified: state.paramFileContentModified,
               complete: true,
               invalid: false,
               origin: STATE_ORIGIN_USER,
@@ -382,7 +381,7 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
             downloadParamFile: {
               ...globalState.steps.downloadParamFile,
               contents: state.paramFileContent,
-              presets: RHEL_PRESET,
+              modified: state.paramFileContentModified,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,
               origin: STATE_ORIGIN_USER,
@@ -397,7 +396,7 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
             downloadParamFile: {
               ...globalState.steps.downloadParamFile,
               contents: state?.paramFileContent ?? "",
-              presets: RHEL_PRESET,
+              modified: state.paramFileContentModified,
               disabled: false,
               complete: isCompleteAndValid.isComplete,
               invalid: !isCompleteAndValid.isValid,

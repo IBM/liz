@@ -8,13 +8,18 @@ import {
   ACTION_UPDATE_APP_STATE,
   ACTION_UPDATE_APP_STEP,
   ACTION_UPDATE_APP_STEPS,
+  ACTION_UPDATE_APP_NEXT_STEP,
+  ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
+  ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
   ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL,
+  ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
   ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED,
   ACTION_UPDATE_APP_IS_DIRTY,
   ACTION_UPDATE_APP_IS_DISABLED,
+  ACTION_UPDATE_APP_CAN_RENDER_STEP,
   LOCAL_STORAGE_KEY_APP,
   STATE_ORIGIN_STORAGE,
 } from "../util/constants";
@@ -43,10 +48,50 @@ const reducer = (state, action) => {
       };
       persistToLocalStorage(updatedState);
       return updatedState;
+    case ACTION_UPDATE_APP_NEXT_STEP:
+      updatedState = {
+        ...state,
+        nextStep: action.nextNextStep,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_PARAM_FILE_CONTENT:
+      updatedState = {
+        ...state,
+        steps: {
+          ...state.steps,
+          downloadParamFile: {
+            ...state.steps.downloadParamFile,
+            contents: action.nextParamFileContent,
+          },
+        },
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_PARAM_FILE_MODIFIED:
+      updatedState = {
+        ...state,
+        steps: {
+          ...state.steps,
+          downloadParamFile: {
+            ...state.steps.downloadParamFile,
+            modified: action.nextParamFileContentModified,
+          },
+        },
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
     case ACTION_UPDATE_APP_SHOW_NOTIFICATION:
       updatedState = {
         ...state,
         showNotification: action.nextShowNotification,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_CAN_RENDER_STEP:
+      updatedState = {
+        ...state,
+        canRenderStep: action.nextCanRenderStep,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
@@ -68,6 +113,14 @@ const reducer = (state, action) => {
       updatedState = {
         ...state,
         showUseExistingSettingsModal: action.nextShowUseExistingSettingsModal,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL:
+      updatedState = {
+        ...state,
+        showDiscardModifiedParamFileContentsModal:
+          action.nextShowDiscardModifiedParamFileContentsModal,
       };
       persistToLocalStorage(updatedState);
       return updatedState;

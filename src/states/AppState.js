@@ -24,6 +24,7 @@ const createInitialState = (useStateFromLocalStorage = false) => {
   const initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_APP));
   const defaultState = {
     step: 0,
+    nextStep: 0,
     steps: {
       inputFileSelection: {
         distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
@@ -49,6 +50,7 @@ const createInitialState = (useStateFromLocalStorage = false) => {
       downloadParamFile: {
         presets: RHEL_PRESET,
         contents: "",
+        modified: false,
         complete: false,
         disabled: true,
         invalid: false,
@@ -132,9 +134,11 @@ const createInitialState = (useStateFromLocalStorage = false) => {
     },
     showNotification: false,
     isDirty: false,
+    canRenderStep: true,
     isHelpPanelExpanded: true,
     showConfirmationModal: false,
     showUseExistingSettingsModal: false,
+    showDiscardModifiedParamFileContentsModal: false,
     useExistingSettingsModalOpened: true,
     useStateFromLocalStorage: false,
     origin: STATE_ORIGIN_DEFAULT,

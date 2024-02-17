@@ -6,7 +6,14 @@
 
 import React, { useReducer, createContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, Content } from "@carbon/react";
+import {
+  Modal,
+  Content,
+  ComposedModal,
+  ModalFooter,
+  ModalBody,
+  ModalHeader,
+} from "@carbon/react";
 import { Routes, Route } from "react-router-dom";
 import InstallerHeader from "./components/InstallerHeader";
 import { stateToParamFile } from "./util/param-file-util";
@@ -35,12 +42,19 @@ import {
   ADDRESS_TYPE_IPV4,
   ACTION_UPDATE_APP_STATE,
   ACTION_UPDATE_APP_STEP,
+  ACTION_UPDATE_APP_NEXT_STEP,
+  ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
+  ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
   ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL,
+  ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
   ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED,
+  ACTION_UPDATE_APP_CAN_RENDER_STEP,
   ACTION_RESET_TO_INITIAL_STATE,
+  ACTION_UPDATE_PARAM_FILE_CONTENT,
+  ACTION_UPDATE_PARAM_FILE_MODIFIED,
   PANEL_DOWNLOAD_PARAM_FILE,
   PANEL_HINT,
   PANEL_INFORMATION,
@@ -340,11 +354,88 @@ const App = () => {
       nextUseExistingSettingsModalOpened: useExistingSettingsModalOpened,
     });
   };
-  const updateStep = (step) => {
+  const updateShowDiscardModifiedParamFileContentsModal = (
+    showDiscardModifiedParamFileContentsModal,
+  ) => {
     dispatch({
-      type: ACTION_UPDATE_APP_STEP,
-      nextStep: step,
+      type: ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
+      nextShowDiscardModifiedParamFileContentsModal:
+        showDiscardModifiedParamFileContentsModal,
     });
+  };
+  const updateCanRenderStep = (canRenderStep) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_CAN_RENDER_STEP,
+      nextCanRenderStep: canRenderStep,
+    });
+  };
+  const updateNextStep = (nextStep) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_NEXT_STEP,
+      nextNextStep: nextStep,
+    });
+  };
+  const updateStep = (step, paramFileHasBeenModified, canRenderStep) => {
+    const paramsOriginateFromFrunction =
+      typeof paramFileHasBeenModified === "boolean" &&
+      typeof canRenderStep === "boolean";
+
+    const paramFileHasBeenModifiedFromState =
+      state?.steps.downloadParamFile?.modified ?? false;
+    const canRenderStepFromState = state?.canRenderStep ?? false;
+    const currentStep = state?.step;
+
+    if (step >= currentStep) {
+      dispatch({
+        type: ACTION_UPDATE_APP_STEP,
+        nextStep: step,
+      });
+    } else if (paramsOriginateFromFrunction && paramFileHasBeenModified) {
+      updateShowDiscardModifiedParamFileContentsModal(true);
+      updateNextStep(step);
+    } else if (paramsOriginateFromFrunction && canRenderStep) {
+      dispatch({
+        type: ACTION_UPDATE_APP_STEP,
+        nextStep: step,
+      });
+    } else if (
+      !paramsOriginateFromFrunction &&
+      paramFileHasBeenModifiedFromState
+    ) {
+      updateShowDiscardModifiedParamFileContentsModal(true);
+      updateNextStep(step);
+    } else if (!paramsOriginateFromFrunction && canRenderStepFromState) {
+      dispatch({
+        type: ACTION_UPDATE_APP_STEP,
+        nextStep: step,
+      });
+    }
+  };
+  const updateParamFileContent = (paramFileContent) => {
+    downloadParamFileDispatch({
+      type: ACTION_UPDATE_PARAM_FILE_CONTENT,
+      nextParamFileContent: paramFileContent,
+    });
+    dispatch({
+      type: ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
+      nextParamFileContent: paramFileContent,
+    });
+  };
+  const updateModified = (updateModified) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
+      paramFileContentModified: updateModified,
+    });
+    downloadParamFileDispatch({
+      type: ACTION_UPDATE_PARAM_FILE_MODIFIED,
+      paramFileContentModified: updateModified,
+    });
+  };
+  const resetParamFileTextAreaData = () => {
+    const localParamFileContentValue = stateToParamFile(state);
+
+    updateParamFileContent(localParamFileContentValue.data);
+    updateModified(false);
   };
   const updateState = (state) => {
     dispatch({
@@ -438,27 +529,29 @@ const App = () => {
     }
   });
 
-  return (
+  const modalMarkup = (
     <>
-      <InstallerHeader
-        showNotification={state.showNotification}
-        onShowNotification={showNotification}
-        onShowHelpPanel={showHelpPanel}
-        onProgress={updateStep}
-        progressStep={state.step}
-        progressStepComplete={progressStepComplete}
-        progressStepInvalid={progressStepInvalid}
-        progressStepDisabled={progressStepDisabled}
-        helpPanelConfig={helpPanelConfig}
-      />
-      <Modal
+      <ComposedModal
+        preventCloseOnClickOutside
         open={state.showConfirmationModal}
-        passiveModal
-        onRequestClose={() => {
-          updateShowConfirmationModal(false);
-        }}
-        modalHeading={t("modalHeading.localStorageHasBeenPrunedConfirmation")}
-      ></Modal>
+      >
+        <ModalHeader
+          label={t("modalLabel.localStorageHasBeenPrunedConfirmation")}
+          title={t("modalHeading.localStorageHasBeenPrunedConfirmation")}
+        />
+        <ModalBody>
+          <p>{t("modalBody.localStorageHasBeenPrunedConfirmation")}</p>
+        </ModalBody>
+        <ModalFooter
+          onRequestClose={() => {
+            updateShowConfirmationModal(false);
+          }}
+          onRequestSubmit={() => {
+            updateShowConfirmationModal(false);
+          }}
+          primaryButtonText={t("btnLabel.OK", { ns: "common" })}
+        />
+      </ComposedModal>
       <Modal
         preventCloseOnClickOutside
         open={state.showUseExistingSettingsModal}
@@ -487,6 +580,45 @@ const App = () => {
           updateUseExistingSettingsModalOpened(true);
         }}
       />
+      <Modal
+        preventCloseOnClickOutside
+        open={state.showDiscardModifiedParamFileContentsModal}
+        modalHeading={t("modalHeading.discardParamFileModificationsPrompt")}
+        modalLabel={t("modalLabel.discardParamFileModificationsPrompt")}
+        primaryButtonText={t("btnLabel.Yes", { ns: "common" })}
+        secondaryButtonText={t("btnLabel.No", { ns: "common" })}
+        onRequestSubmit={() => {
+          updateShowDiscardModifiedParamFileContentsModal(false);
+          resetParamFileTextAreaData();
+          updateCanRenderStep(true);
+          updateStep(state.nextStep, false, true);
+        }}
+        onSecondarySubmit={() => {
+          updateShowDiscardModifiedParamFileContentsModal(false);
+          updateCanRenderStep(false);
+        }}
+        onRequestClose={() => {
+          updateShowDiscardModifiedParamFileContentsModal(false);
+          updateCanRenderStep(true);
+        }}
+      />
+    </>
+  );
+
+  return (
+    <>
+      <InstallerHeader
+        showNotification={state.showNotification}
+        onShowNotification={showNotification}
+        onShowHelpPanel={showHelpPanel}
+        onProgress={updateStep}
+        progressStep={state.step}
+        progressStepComplete={progressStepComplete}
+        progressStepInvalid={progressStepInvalid}
+        progressStepDisabled={progressStepDisabled}
+        helpPanelConfig={helpPanelConfig}
+      />
+      {modalMarkup}
       <Content className={contentClassName}>
         <Routes>
           <Route

@@ -1,6 +1,7 @@
 {
   "btnLabel.Yes": "Yes",
   "btnLabel.No": "No",
+  "btnLabel.OK": "OK",
   "btnLabel.Close": "Close",
   "btnLabel.Copy": "Copy to clipboard",
   "btnLabel.Download": "Download parameter file",
