@@ -16,13 +16,13 @@ const reducer = (state, action) => {
       return action.nextInitialState;
     case ACTION_UPDATE_DISTRIBUTION_NAME:
       return {
+        ...state,
         selectedDistributionName: action.nextSelectedDistributionName,
-        selectedDistributionVersion: state.selectedDistributionVersion,
         origin: action.nextOrigin,
       };
     case ACTION_UPDATE_DISTRIBUTION_VERSION:
       return {
-        selectedDistributionName: state.selectedDistributionName,
+        ...state,
         selectedDistributionVersion: action.nextSelectedDistributionVersion,
         origin: action.nextOrigin,
       };

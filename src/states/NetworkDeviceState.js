@@ -8,6 +8,9 @@ import {
   DEVICE_TYPE_LIST,
   LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
   STATE_ORIGIN_DEFAULT,
+  DEFAULT_COMPUTED_STRING_OBJECT,
+  DEFAULT_NUMBER_OBJECT,
+  DEFAULT_STRING_OBJECT,
 } from "../util/constants";
 
 const createInitialState = () => {
@@ -16,35 +19,14 @@ const createInitialState = () => {
   );
   const defaultState = {
     selectedDeviceType: DEVICE_TYPE_LIST[0],
-    readChannelId: {
-      value: "",
-      computed: "",
-      valid: true,
-    },
-    writeChannelId: {
-      value: "",
-      computed: "",
-      valid: true,
-    },
-    dataChannelId: {
-      value: "",
-      computed: "",
-      valid: true,
-    },
+    readChannelId: DEFAULT_COMPUTED_STRING_OBJECT,
+    writeChannelId: DEFAULT_COMPUTED_STRING_OBJECT,
+    dataChannelId: DEFAULT_COMPUTED_STRING_OBJECT,
     layer: true,
     portNo: false,
-    pciFunctionId: {
-      value: "",
-      valid: true,
-    },
-    userIdentifier: {
-      value: "",
-      valid: true,
-    },
-    vlanId: {
-      value: 1,
-      valid: true,
-    },
+    pciFunctionId: DEFAULT_STRING_OBJECT,
+    userIdentifier: DEFAULT_STRING_OBJECT,
+    vlanId: DEFAULT_NUMBER_OBJECT,
     useVlan: false,
     origin: STATE_ORIGIN_DEFAULT,
   };

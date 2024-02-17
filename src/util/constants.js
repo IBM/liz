@@ -150,10 +150,36 @@ const VERSION_LIST = [
   },
 ];
 
+const DEFAULT_STRING_OBJECT = {
+  value: "",
+  valid: true,
+};
+
+const DEFAULT_NUMBER_OBJECT = {
+  value: 1,
+  valid: true,
+};
+
+const DEFAULT_COMPUTED_STRING_OBJECT = {
+  value: "",
+  valid: true,
+  computed: false,
+};
+
+const DEFAULT_COMPUTED_NUMBER_OBJECT = {
+  value: 1,
+  valid: true,
+  computed: false,
+};
+
 const DEFAULT_DISTRIBUTION_ID = "rhel";
 const DEFAULT_VERSION_ID = "version-9.x";
 
 export {
+  DEFAULT_COMPUTED_NUMBER_OBJECT,
+  DEFAULT_COMPUTED_STRING_OBJECT,
+  DEFAULT_NUMBER_OBJECT,
+  DEFAULT_STRING_OBJECT,
   PANEL_DOWNLOAD_PARAM_FILE,
   PANEL_HINT,
   PANEL_INFORMATION,

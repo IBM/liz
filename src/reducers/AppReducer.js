@@ -38,115 +38,59 @@ const reducer = (state, action) => {
       return action.nextState;
     case ACTION_UPDATE_APP_STEP:
       updatedState = {
+        ...state,
         step: action.nextStep,
-        steps: state.steps,
-        showNotification: action.nextShowNotification,
-        isDirty: state.isDirty,
-        isHelpPanelExpanded: state.isHelpPanelExpanded,
-        showConfirmationModal: state.showConfirmationModal,
-        showUseExistingSettingsModal: state.showUseExistingSettingsModal,
-        useExistingSettingsModalOpened: state.useExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_SHOW_NOTIFICATION:
       updatedState = {
-        step: state.step,
-        steps: state.steps,
+        ...state,
         showNotification: action.nextShowNotification,
-        isDirty: state.isDirty,
-        isHelpPanelExpanded: state.isHelpPanelExpanded,
-        showConfirmationModal: state.showConfirmationModal,
-        showUseExistingSettingsModal: state.showUseExistingSettingsModal,
-        useExistingSettingsModalOpened: state.useExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_HELP_PANEL_EXPANDED:
       updatedState = {
-        step: state.step,
-        steps: state.steps,
-        showNotification: state.showNotification,
-        isDirty: state.isDirty,
+        ...state,
         isHelpPanelExpanded: action.nextIsHelpPanelExpanded,
-        showConfirmationModal: state.showConfirmationModal,
-        showUseExistingSettingsModal: state.showUseExistingSettingsModal,
-        useExistingSettingsModalOpened: state.useExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL:
       updatedState = {
-        step: state.step,
-        steps: state.steps,
-        showNotification: state.showNotification,
-        isDirty: state.isDirty,
-        isHelpPanelExpanded: state.isHelpPanelExpanded,
+        ...state,
         showConfirmationModal: action.nextShowConfirmationModal,
-        showUseExistingSettingsModal: state.showUseExistingSettingsModal,
-        useExistingSettingsModalOpened: state.useExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL:
       updatedState = {
-        step: state.step,
-        steps: state.steps,
-        showNotification: state.showNotification,
-        isDirty: state.isDirty,
-        isHelpPanelExpanded: state.isHelpPanelExpanded,
-        showConfirmationModal: state.showConfirmationModal,
+        ...state,
         showUseExistingSettingsModal: action.nextShowUseExistingSettingsModal,
-        useExistingSettingsModalOpened: state.useExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED:
       updatedState = {
-        step: state.step,
-        steps: state.steps,
-        showNotification: state.showNotification,
-        isDirty: state.isDirty,
-        isHelpPanelExpanded: state.isHelpPanelExpanded,
-        showConfirmationModal: state.showConfirmationModal,
-        showUseExistingSettingsModal: state.showUseExistingSettingsModal,
+        ...state,
         useExistingSettingsModalOpened:
           action.nextUseExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_IS_DIRTY:
       updatedState = {
-        step: state.step,
-        steps: state.steps,
-        showNotification: state.showNotification,
+        ...state,
         isDirty: action.nextIsDirty,
-        isHelpPanelExpanded: state.isHelpPanelExpanded,
-        showConfirmationModal: state.showConfirmationModal,
-        showUseExistingSettingsModal: state.showUseExistingSettingsModal,
-        useExistingSettingsModalOpened: state.useExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_STEPS:
     case ACTION_UPDATE_APP_IS_DISABLED:
       updatedState = {
-        step: state.step,
+        ...state,
         steps: action.nextSteps,
-        showNotification: state.showNotification,
-        isDirty: state.isDirty,
-        isHelpPanelExpanded: state.isHelpPanelExpanded,
-        showConfirmationModal: state.showConfirmationModal,
-        showUseExistingSettingsModal: state.showUseExistingSettingsModal,
-        useExistingSettingsModalOpened: state.useExistingSettingsModalOpened,
-        useStateFromLocalStorage: state.useStateFromLocalStorage,
       };
       persistToLocalStorage(updatedState);
       console.log(updatedState);

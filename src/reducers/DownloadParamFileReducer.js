@@ -17,20 +17,17 @@ const reducer = (state, action) => {
       return action.nextInitialState;
     case ACTION_UPDATE_PARAM_FILE_COPIED:
       return {
+        ...state,
         paramFileContentCopied: action.nextParamFileContentCopied,
-        paramFileContentModified: state.paramFileContentModified,
-        paramFileContent: state.paramFileContent,
       };
     case ACTION_UPDATE_PARAM_FILE_MODIFIED:
       return {
-        paramFileContentCopied: state.nextParamFileContentCopied,
+        ...state,
         paramFileContentModified: action.nextParamFileContentModified,
-        paramFileContent: state.paramFileContent,
       };
     case ACTION_UPDATE_PARAM_FILE_CONTENT:
       return {
-        paramFileContentCopied: state.nextParamFileContentCopied,
-        paramFileContentModified: state.paramFileContentModified,
+        ...state,
         paramFileContent: action.nextParamFileContent,
       };
   }

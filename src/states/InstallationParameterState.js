@@ -7,6 +7,8 @@
 import {
   LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   STATE_ORIGIN_DEFAULT,
+  DEFAULT_COMPUTED_STRING_OBJECT,
+  DEFAULT_STRING_OBJECT,
 } from "../util/constants";
 
 const createInitialState = () => {
@@ -16,19 +18,9 @@ const createInitialState = () => {
   const defaultState = {
     useSsh: false,
     useVnc: true,
-    installationAddress: {
-      value: "",
-      computed: "",
-      valid: true,
-    },
-    userName: {
-      value: "",
-      valid: true,
-    },
-    password: {
-      value: "",
-      valid: true,
-    },
+    installationAddress: DEFAULT_COMPUTED_STRING_OBJECT,
+    userName: DEFAULT_STRING_OBJECT,
+    password: DEFAULT_STRING_OBJECT,
     userAndPwdAreDisabled: true,
     vncPassword: "",
     origin: STATE_ORIGIN_DEFAULT,
