@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import PropTypes from "prop-types";
 import { Layer, Link } from "@carbon/react";
 import {
@@ -89,53 +89,17 @@ const Information = ({
         {t("panel.information.requirementsHeader", { ns: "panels" })}
       </div>
       <div className="information_content">
-        {t("panel.information.requirementsExplanation", { ns: "panels" })}
+        <Trans i18nKey="panel.information.requirementsExplanation" ns="panels">
+          These are the minimum system requirements for installing the target
+          Linux distribution &quot;{{ distributionName }}&quot; with version
+          &quot;{{ distributionVersion }}&quot;.
+        </Trans>
       </div>
       <div
         className="table-container"
         role="table"
         aria-label="Display Information"
       >
-        <div
-          className="flex-table row"
-          id="display-iformation__table-header-row"
-          role="rowgroup"
-        >
-          <div
-            className="flex-row"
-            id="display-iformation__table-header-row__name"
-            role="columnheader"
-          >
-            {t("panel.information.table.nameOsLabel", { ns: "panels" })}
-          </div>
-          <div
-            className="flex-row"
-            id="display-iformation__table-content-row__name"
-            role="cell"
-          >
-            {distributionName}
-          </div>
-        </div>
-        <div
-          className="flex-table row"
-          id="display-iformation__table-header-row"
-          role="rowgroup"
-        >
-          <div
-            className="flex-row"
-            id="display-iformation__table-header-row__version"
-            role="columnheader"
-          >
-            {t("panel.information.table.versionLabel", { ns: "panels" })}
-          </div>
-          <div
-            className="flex-row"
-            id="display-iformation__table-content-row__version"
-            role="cell"
-          >
-            {distributionVersion}
-          </div>
-        </div>
         <div
           className="flex-table row"
           id="display-iformation__table-header-row"
