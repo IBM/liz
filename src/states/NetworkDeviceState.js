@@ -5,7 +5,7 @@
  */
 
 import {
-  DEVICE_TYPE_LIST,
+  DEVICE_TYPE_OSA,
   LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
   STATE_ORIGIN_DEFAULT,
   DEFAULT_COMPUTED_STRING_OBJECT,
@@ -18,7 +18,7 @@ const createInitialState = () => {
     localStorage.getItem(LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE),
   );
   const defaultState = {
-    selectedDeviceType: DEVICE_TYPE_LIST[0],
+    selectedDeviceType: DEVICE_TYPE_OSA,
     readChannelId: DEFAULT_COMPUTED_STRING_OBJECT,
     writeChannelId: DEFAULT_COMPUTED_STRING_OBJECT,
     dataChannelId: DEFAULT_COMPUTED_STRING_OBJECT,

@@ -9,13 +9,14 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
   Layer,
-  Dropdown,
   NumberInput,
   TextInput,
   Toggle,
   FlexGrid,
   Row,
   Column,
+  RadioButtonGroup,
+  RadioButton,
 } from "@carbon/react";
 import { getLabel, getContent } from "../../../uiUtil/help-util";
 import {
@@ -24,8 +25,8 @@ import {
   isShortFormat,
 } from "../../../util/network-device-util";
 import {
-  DEVICE_TYPE_LIST,
   DEVICE_TYPE_OSA,
+  DEVICE_TYPE_ROCE,
   UPDATE_FUNCTION__SELECT_DEVICE_TYPE,
   UPDATE_FUNCTION__READ_CHANNEL_ID,
   UPDATE_FUNCTION__WRITE_CHANNEL_ID,
@@ -276,11 +277,8 @@ const NetworkDevice = ({ state, dispatch }) => {
   };
 
   const areDeviceSettingsValid = () => {
-    if (
-      typeof state.selectedDeviceType === "object" &&
-      state.selectedDeviceType.id
-    ) {
-      return state.selectedDeviceType.id === DEVICE_TYPE_OSA
+    if (typeof state.selectedDeviceType === "string") {
+      return state.selectedDeviceType === DEVICE_TYPE_OSA
         ? areOsaDeviceSettingValid()
         : areRoCeDeviceSettingsValid();
     }
@@ -381,11 +379,8 @@ const NetworkDevice = ({ state, dispatch }) => {
   };
 
   const areDeviceSettingsComplete = () => {
-    if (
-      typeof state.selectedDeviceType === "object" &&
-      state.selectedDeviceType.id
-    ) {
-      return state.selectedDeviceType.id === DEVICE_TYPE_OSA
+    if (typeof state.selectedDeviceType === "string") {
+      return state.selectedDeviceType === DEVICE_TYPE_OSA
         ? areOsaDeviceSettingComplete()
         : areRoCeDeviceSettingComplete();
     }
@@ -430,7 +425,7 @@ const NetworkDevice = ({ state, dispatch }) => {
             networkDevice: {
               ...globalState.steps.networkDevice,
               deviceType: state.selectedDeviceType
-                ? state.selectedDeviceType.id
+                ? state.selectedDeviceType
                 : "",
               osa: {
                 readChannel: state.readChannelId
@@ -468,7 +463,7 @@ const NetworkDevice = ({ state, dispatch }) => {
             networkDevice: {
               ...globalState.steps.networkDevice,
               deviceType: state.selectedDeviceType
-                ? state.selectedDeviceType.id
+                ? state.selectedDeviceType
                 : "",
               osa: {
                 readChannel: state.readChannelId
@@ -505,7 +500,7 @@ const NetworkDevice = ({ state, dispatch }) => {
             ...globalState.steps,
             networkDevice: {
               ...globalState.steps.networkDevice,
-              deviceType: state?.selectedDeviceType?.id ?? "",
+              deviceType: state?.selectedDeviceType ?? "",
               osa: {
                 readChannel: state?.readChannelId?.value ?? "",
                 writeChannel: state?.writeChannelId?.value ?? "",
@@ -556,34 +551,37 @@ const NetworkDevice = ({ state, dispatch }) => {
 
   const gridContentsMarkupRowOne = (
     <div className="network-device_column-left">
-      <Dropdown
+      <RadioButtonGroup
         className="network-device_device-type-dropdown"
-        titleText={getLabel(
+        legendText={getLabel(
           t("panel.networkDevice.deviceTypeTextLabel", { ns: "panels" }),
           t("showInformationLabel", { ns: "common" }),
           getContent(t("panel.networkDevice.deviceTypeHelp", { ns: "panels" })),
         )}
-        aria-label={t("panel.networkDevice.deviceTypeLabel", { ns: "panels" })}
-        id="network-device_device-type-selection"
-        items={DEVICE_TYPE_LIST}
-        label={t("panel.networkDevice.deviceTypeLabel", { ns: "panels" })}
-        helperText=""
-        size="md"
-        warn={false}
-        invalid={false}
-        disabled={false}
-        onChange={({ selectedItem }) => {
+        name="network-device_interface-list-group"
+        defaultSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
+        onChange={(selectedItem) => {
           updateSelectedDeviceType(selectedItem);
         }}
-        selectedItem={selectedDeviceType}
-      />
+      >
+        <RadioButton
+          labelText="OSA"
+          value={DEVICE_TYPE_OSA}
+          id="network-device_osa-radio"
+        />
+        <RadioButton
+          labelText="RoCE"
+          value={DEVICE_TYPE_ROCE}
+          id="network-device_roce-radio"
+        />
+      </RadioButtonGroup>
     </div>
   );
 
   const gridContentsMarkupRowTwoColumnOne = (
     <div className="network-device_column-left">
       <DeviceSettings
-        deviceSettingsId={selectedDeviceType ? selectedDeviceType.id : ""}
+        deviceSettingsId={selectedDeviceType}
         updateFunction={updateFunction}
         state={state}
       />
@@ -645,7 +643,7 @@ const NetworkDevice = ({ state, dispatch }) => {
   const gridContentsMarkupRowTwoColumnTwo = (
     <div className="network-device_column-right">
       {state.selectedDeviceType &&
-      state.selectedDeviceType.id === "network-device_osa-option" ? (
+      state.selectedDeviceType === DEVICE_TYPE_OSA ? (
         <>
           <TextInput
             helperText=""
@@ -793,7 +791,7 @@ const NetworkDevice = ({ state, dispatch }) => {
 NetworkDevice.propTypes = {
   dispatch: PropTypes.func.isRequired,
   state: PropTypes.shape({
-    selectedDeviceType: PropTypes.object.isRequired,
+    selectedDeviceType: PropTypes.string.isRequired,
     readChannelId: PropTypes.object.isRequired,
     writeChannelId: PropTypes.object.isRequired,
     dataChannelId: PropTypes.object.isRequired,

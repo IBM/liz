@@ -16,7 +16,7 @@ import {
   LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
   RHEL_PRESET,
   ADDRESS_TYPE_IPV4,
-  DEVICE_TYPE_LIST,
+  DEVICE_TYPE_OSA,
   STATE_ORIGIN_DEFAULT,
 } from "../util/constants";
 
@@ -102,7 +102,7 @@ const createInitialState = (useStateFromLocalStorage = false) => {
         index: 4,
       },
       networkDevice: {
-        deviceType: DEVICE_TYPE_LIST[0].id,
+        deviceType: DEVICE_TYPE_OSA,
         osa: {
           readChannel: "",
           writeChannel: "",
