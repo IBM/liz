@@ -15,6 +15,8 @@ import {
   LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
   LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
   RHEL_PRESET,
+  RHEL_V9_DISTRIBUTION_LABEL,
+  RHEL_V9_VERSION_LABEL,
   ADDRESS_TYPE_IPV4,
   DEVICE_TYPE_OSA,
   STATE_ORIGIN_DEFAULT,
@@ -27,8 +29,8 @@ const createInitialState = (useStateFromLocalStorage = false) => {
     nextStep: 0,
     steps: {
       inputFileSelection: {
-        distributionName: "Red Hat Enterprise Linux 9 (RHEL 9)",
-        distributionVersion: "9.0",
+        distributionName: RHEL_V9_DISTRIBUTION_LABEL,
+        distributionVersion: RHEL_V9_VERSION_LABEL,
         memorySize: 3,
         diskSize: 10,
         machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",

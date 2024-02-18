@@ -145,16 +145,21 @@ const DEVICE_TYPE_LIST = [
   },
 ];
 
+const RHEL_V9_DISTRIBUTION_ID = "rhel";
+const RHEL_V9_DISTRIBUTION_LABEL = "Red Hat Enterprise Linux 9";
+const RHEL_V9_VERSION_ID = "version-9.x";
+const RHEL_V9_VERSION_LABEL = "9.x";
+
 const DISTRIBUTION_LIST = [
   {
-    id: "rhel",
-    label: "Red Hat Enterprise Linux 9 (RHEL 9)",
+    id: RHEL_V9_DISTRIBUTION_ID,
+    label: RHEL_V9_DISTRIBUTION_LABEL,
   },
 ];
 const VERSION_LIST = [
   {
-    id: "version-9.x",
-    label: "9.x",
+    id: RHEL_V9_VERSION_ID,
+    label: RHEL_V9_VERSION_LABEL,
   },
 ];
 
@@ -292,4 +297,8 @@ export {
   DEVICE_TYPE_LIST,
   DISTRIBUTION_LIST,
   VERSION_LIST,
+  RHEL_V9_DISTRIBUTION_ID,
+  RHEL_V9_DISTRIBUTION_LABEL,
+  RHEL_V9_VERSION_ID,
+  RHEL_V9_VERSION_LABEL,
 };

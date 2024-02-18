@@ -1,6 +1,9 @@
 {
-  "panel.inputFileSelection.chooseFromeTemplate": "Choose the Linux distribution to install:",
-  "panel.inputFileSelection.hostOS": "Linux distribution selection",
+  "panel.inputFileSelection.chooseDistributionFromeTemplate": "Select the Linux distribution to install:",
+  "panel.inputFileSelection.chooseVersionFromeTemplate": "Select the version to install:",
+  "panel.inputFileSelection.chooseDistributionFromeTemplatShort": "Select a distribution",
+  "panel.inputFileSelection.chooseVersionFromeTemplateShort": "Select a versio",
+  "panel.inputFileSelection.hostOS": "Select the Linux distribution",
   "panel.information.requirementsHeader": "System requirements",
   "panel.information.requirementsExplanation": "These are the minimum system requirements for installing the target Linux distribution:",
   "panel.information.table.nameOsLabel": "Linux distribution",

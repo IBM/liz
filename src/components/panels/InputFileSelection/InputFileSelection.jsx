@@ -140,16 +140,22 @@ const InputFileSelection = ({ state, dispatch }) => {
   );
   const gridContentsMarkupRowThreeColumnOne = (
     <div>
-      <div className="input-file-selection__contentRowIntro">
-        {t("panel.inputFileSelection.chooseFromeTemplate", { ns: "panels" })}
-      </div>
       <div className="input-file-selection__contentRowDropdowns">
         <Dropdown
-          aria-label="Select a distribution"
+          aria-label={t(
+            "panel.inputFileSelection.chooseDistributionFromeTemplateShort",
+            { ns: "panels" },
+          )}
           id="distribution-selection"
           items={DISTRIBUTION_LIST}
-          titleText=""
-          label="Dropdown menu options"
+          titleText={t(
+            "panel.inputFileSelection.chooseDistributionFromeTemplate",
+            { ns: "panels" },
+          )}
+          label={t(
+            "panel.inputFileSelection.chooseDistributionFromeTemplateShort",
+            { ns: "panels" },
+          )}
           size="md"
           warn={false}
           invalid={false}
@@ -160,11 +166,18 @@ const InputFileSelection = ({ state, dispatch }) => {
           selectedItem={state.selectedDistributionName}
         />
         <Dropdown
-          aria-label="Select a version"
+          aria-label={t(
+            "panel.inputFileSelection.chooseVersionFromeTemplateShort",
+            { ns: "panels" },
+          )}
           id="version-selection"
           items={VERSION_LIST}
-          titleText=""
-          label="Select a version"
+          titleText={t("panel.inputFileSelection.chooseVersionFromeTemplate", {
+            ns: "panels",
+          })}
+          label={t("panel.inputFileSelection.chooseVersionFromeTemplateShort", {
+            ns: "panels",
+          })}
           size="md"
           warn={false}
           invalid={false}
