@@ -93,6 +93,10 @@ const Hint = ({ state, dispatch }) => {
           <ListItem>{t("panel.hint.listItem10", { ns: "panels" })}</ListItem>
         </UnorderedList>
         <ListItem>{t("panel.hint.listItem11", { ns: "panels" })}</ListItem>
+        <UnorderedList>
+          <ListItem>{t("panel.hint.listItem12", { ns: "panels" })}</ListItem>
+          <ListItem>{t("panel.hint.listItem13", { ns: "panels" })}</ListItem>
+        </UnorderedList>
       </UnorderedList>
     </>
   );
