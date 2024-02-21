@@ -27,7 +27,6 @@ import {
   netmaskToCidr,
   isHostnameValid,
 } from "../../../../util/network-address-util";
-import { getLabel, getContent } from "../../../../uiUtil/help-util";
 import "./_ip-panels.scss";
 
 const IPv4Panel = ({ updateFunction, state }) => {
@@ -52,17 +51,12 @@ const IPv4Panel = ({ updateFunction, state }) => {
             ? !state.ipv4.ipv4Address.valid
             : false
         }
-        labelText={getLabel(
-          t("panel.networkAddress.networkAddressIPv4TextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkAddressIPv4Help", {
-              ns: "panels",
-            }),
-          ),
-        )}
+        labelText={t("panel.networkAddress.networkAddressIPv4TextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.networkAddressIPv4Help", {
+          ns: "panels",
+        })}
         placeholder={t("panel.networkAddress.networkAddressIPv4Placeholder", {
           ns: "panels",
         })}
@@ -109,22 +103,21 @@ const IPv4Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        label={getLabel(
+        label={
           state &&
-            state.ipv4 &&
-            state.ipv4.ipv4Cidr &&
-            state.ipv4.ipv4Cidr.computed
+          state.ipv4 &&
+          state.ipv4.ipv4Cidr &&
+          state.ipv4.ipv4Cidr.computed
             ? t("panel.networkAddress.networkPrefixIPv4TextLabelComputed", {
                 ns: "panels",
               })
             : t("panel.networkAddress.networkPrefixIPv4TextLabel", {
                 ns: "panels",
-              }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkPrefixIPv4Help", { ns: "panels" }),
-          ),
-        )}
+              })
+        }
+        helperText={t("panel.networkAddress.networkPrefixIPv4Help", {
+          ns: "panels",
+        })}
         placeholder={t("panel.networkAddress.networkPrefixIPv4Placeholder", {
           ns: "panels",
         })}
@@ -200,22 +193,19 @@ const IPv4Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
+        labelText={
           state &&
-            state.ipv4 &&
-            state.ipv4.netmask &&
-            state.ipv4.netmask.computed
+          state.ipv4 &&
+          state.ipv4.netmask &&
+          state.ipv4.netmask.computed
             ? t("panel.networkAddress.netmaskIPv4TextLabelComputed", {
                 ns: "panels",
               })
             : t("panel.networkAddress.netmaskIPv4TextLabel", {
                 ns: "panels",
-              }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.netmaskIPv4Help", { ns: "panels" }),
-          ),
-        )}
+              })
+        }
+        helperText={t("panel.networkAddress.netmaskIPv4Help", { ns: "panels" })}
         placeholder={t("panel.networkAddress.netmaskIPv4Placeholder", {
           ns: "panels",
         })}
@@ -290,13 +280,12 @@ const IPv4Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.gatewayAddressTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.gatewayAddressHelp", { ns: "panels" }),
-          ),
-        )}
+        labelText={t("panel.networkAddress.gatewayAddressTextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.gatewayAddressHelp", {
+          ns: "panels",
+        })}
         placeholder={PLACEHOLDER_GATEWAY_ADDRESS_IPV4}
         value={
           state.ipv4 && state.ipv4.gatewayIpAddress
@@ -343,15 +332,12 @@ const IPv4Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.nameserverAddressTextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.nameserverAddressHelp", { ns: "panels" }),
-          ),
-        )}
+        labelText={t("panel.networkAddress.nameserverAddressTextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.nameserverAddressHelp", {
+          ns: "panels",
+        })}
         placeholder={PLACEHOLDER_NAMESERVER_ADDRESS_IPV4}
         value={
           state.ipv4 && state.ipv4.nameserverIpAddress
@@ -397,11 +383,10 @@ const IPv4Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.hostnameTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkAddress.hostnameHelp", { ns: "panels" })),
-        )}
+        labelText={t("panel.networkAddress.hostnameTextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.hostnameHelp", { ns: "panels" })}
         placeholder={t("panel.networkAddress.hostnamePlaceholder", {
           ns: "panels",
         })}

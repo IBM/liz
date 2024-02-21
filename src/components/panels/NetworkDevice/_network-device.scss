@@ -15,6 +15,12 @@
   }
 }
 
+.cds--form__helper-text {
+  p {
+    @include react.type-style("label-01");
+  }
+}
+
 .network-device_column-left {
   .cds--dropdown__wrapper,
   .cds--form-item,
@@ -22,7 +28,7 @@
     padding: 0 0 react.$spacing-07 0;
   }
 
-  .network-device_device-type-dropdown {
+  .network-device_device-type-radiobutton-group {
     width: 50%;
   }
 

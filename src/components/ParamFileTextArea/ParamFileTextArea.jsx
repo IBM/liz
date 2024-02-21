@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import { Button, TextArea } from "@carbon/react";
 import { Copy, Download, Reset } from "@carbon/react/icons";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { getLabel } from "../../uiUtil/help-util";
 import "./_param-file-text-area.scss";
 
 const ParamFileTextArea = ({
@@ -85,11 +84,8 @@ const ParamFileTextArea = ({
   const textAreaMarkup = (
     <TextArea
       enableCounter
-      labelText={getLabel(
-        label.text,
-        t("showInformationLabel", { ns: "common" }),
-        label.content,
-      )}
+      labelText={label.text}
+      helperText={label.content}
       className={textAreaClasses}
       rows={10}
       value={contents}

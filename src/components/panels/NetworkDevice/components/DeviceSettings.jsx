@@ -125,15 +125,12 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
             invalid={
               state && state.pciFunctionId ? !state.pciFunctionId.valid : false
             }
-            labelText={getLabel(
-              roceLabelHasOptionalTag(
-                "userIdentifier",
-                t("panel.networkDevice.fidTextLabel", { ns: "panels" }),
-                t("panel.networkDevice.fidTextLabelOptional", { ns: "panels" }),
-              ),
-              t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.fidHelp", { ns: "panels" })),
+            labelText={roceLabelHasOptionalTag(
+              "userIdentifier",
+              t("panel.networkDevice.fidTextLabel", { ns: "panels" }),
+              t("panel.networkDevice.fidTextLabelOptional", { ns: "panels" }),
             )}
+            helperText={t("panel.networkDevice.fidHelp", { ns: "panels" })}
             placeholder={t("panel.networkDevice.fidPlaceholder", {
               ns: "panels",
             })}
@@ -175,15 +172,12 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
                 ? !state.userIdentifier.valid
                 : false
             }
-            labelText={getLabel(
-              roceLabelHasOptionalTag(
-                "pciFunctionId",
-                t("panel.networkDevice.uidTextLabel", { ns: "panels" }),
-                t("panel.networkDevice.uidTextLabelOptional", { ns: "panels" }),
-              ),
-              t("showInformationLabel", { ns: "common" }),
-              getContent(t("panel.networkDevice.uidHelp", { ns: "panels" })),
+            labelText={roceLabelHasOptionalTag(
+              "pciFunctionId",
+              t("panel.networkDevice.uidTextLabel", { ns: "panels" }),
+              t("panel.networkDevice.uidTextLabelOptional", { ns: "panels" }),
             )}
+            helperText={t("panel.networkDevice.uidHelp", { ns: "panels" })}
             placeholder={t("panel.networkDevice.uidPlaceholder", {
               ns: "panels",
             })}

@@ -22,7 +22,6 @@ import {
   isCidr,
   isHostnameValid,
 } from "../../../../util/network-address-util";
-import { getLabel, getContent } from "../../../../uiUtil/help-util";
 import "./_ip-panels.scss";
 
 const IPv6Panel = ({ updateFunction, state }) => {
@@ -47,17 +46,12 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.networkAddressIPv6TextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkAddressIPv6Help", {
-              ns: "panels",
-            }),
-          ),
-        )}
+        labelText={t("panel.networkAddress.networkAddressIPv6TextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.networkAddressIPv6Help", {
+          ns: "panels",
+        })}
         placeholder={t("panel.networkAddress.networkAddressIPv6Placeholder", {
           ns: "panels",
         })}
@@ -104,15 +98,12 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        label={getLabel(
-          t("panel.networkAddress.networkPrefixIPv6TextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.networkPrefixIPv6Help", { ns: "panels" }),
-          ),
-        )}
+        label={t("panel.networkAddress.networkPrefixIPv6TextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.networkPrefixIPv6Help", {
+          ns: "panels",
+        })}
         placeholder={t("panel.networkAddress.networkPrefixIPv6Placeholder", {
           ns: "panels",
         })}
@@ -163,13 +154,12 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.gatewayAddressTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.gatewayAddressHelp", { ns: "panels" }),
-          ),
-        )}
+        labelText={t("panel.networkAddress.gatewayAddressTextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.gatewayAddressHelp", {
+          ns: "panels",
+        })}
         placeholder={PLACEHOLDER_GATEWAY_ADDRESS_IPV6}
         value={
           state.ipv6 && state.ipv6.gatewayIpAddress
@@ -216,15 +206,12 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.nameserverAddressTextLabel", {
-            ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.networkAddress.nameserverAddressHelp", { ns: "panels" }),
-          ),
-        )}
+        labelText={t("panel.networkAddress.nameserverAddressTextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.nameserverAddressHelp", {
+          ns: "panels",
+        })}
         placeholder={PLACEHOLDER_NAMESERVER_ADDRESS_IPV6}
         value={
           state.ipv6 && state.ipv6.nameserverIpAddress
@@ -270,11 +257,10 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.networkAddress.hostnameTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkAddress.hostnameHelp", { ns: "panels" })),
-        )}
+        labelText={t("panel.networkAddress.hostnameTextLabel", {
+          ns: "panels",
+        })}
+        helperText={t("panel.networkAddress.hostnameHelp", { ns: "panels" })}
         placeholder={t("panel.networkAddress.hostnamePlaceholder", {
           ns: "panels",
         })}

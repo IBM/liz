@@ -552,11 +552,12 @@ const NetworkDevice = ({ state, dispatch }) => {
   const gridContentsMarkupRowOne = (
     <div className="network-device_column-left">
       <RadioButtonGroup
-        className="network-device_device-type-dropdown"
-        legendText={getLabel(
-          t("panel.networkDevice.deviceTypeTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkDevice.deviceTypeHelp", { ns: "panels" })),
+        className="network-device_device-type-radiobutton-group"
+        legendText={t("panel.networkDevice.deviceTypeTextLabel", {
+          ns: "panels",
+        })}
+        helperText={getContent(
+          t("panel.networkDevice.deviceTypeHelp", { ns: "panels" }),
         )}
         name="network-device_interface-list-group"
         defaultSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
@@ -609,14 +610,12 @@ const NetworkDevice = ({ state, dispatch }) => {
           allowEmpty
           min={1}
           max={4094}
-          helperText=""
           id="network-device_vlan-id-input"
           invalidText={t("invalidTextLabel", { ns: "common" })}
           invalid={!vlanIdIsValid}
-          label={getLabel(
-            t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" }),
-            t("showInformationLabel", { ns: "common" }),
-            getContent(t("panel.networkDevice.vlanIdHelp", { ns: "panels" })),
+          label={t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" })}
+          helperText={getContent(
+            t("panel.networkDevice.vlanIdHelp", { ns: "panels" }),
           )}
           placeholder={t("panel.networkDevice.vlanIdPlaceholder", {
             ns: "panels",
@@ -646,17 +645,15 @@ const NetworkDevice = ({ state, dispatch }) => {
       state.selectedDeviceType === DEVICE_TYPE_OSA ? (
         <>
           <TextInput
-            helperText=""
+            helperText={t("panel.networkDevice.readChannelHelp", {
+              ns: "panels",
+            })}
             id="network-device_read-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={!readChannelIdIsValid}
-            labelText={getLabel(
-              t("panel.networkDevice.readChannelTextLabel", { ns: "panels" }),
-              t("showInformationLabel", { ns: "common" }),
-              getContent(
-                t("panel.networkDevice.readChannelHelp", { ns: "panels" }),
-              ),
-            )}
+            labelText={t("panel.networkDevice.readChannelTextLabel", {
+              ns: "panels",
+            })}
             placeholder={t("panel.networkDevice.readChannelPlaceholder", {
               ns: "panels",
             })}
@@ -687,17 +684,15 @@ const NetworkDevice = ({ state, dispatch }) => {
             }}
           />
           <TextInput
-            helperText=""
+            helperText={t("panel.networkDevice.writeChannelHelp", {
+              ns: "panels",
+            })}
             id="network-device_write-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={!writeChannelIdIsValid}
-            labelText={getLabel(
-              t("panel.networkDevice.writeChannelTextLabel", { ns: "panels" }),
-              t("showInformationLabel", { ns: "common" }),
-              getContent(
-                t("panel.networkDevice.writeChannelHelp", { ns: "panels" }),
-              ),
-            )}
+            labelText={t("panel.networkDevice.writeChannelTextLabel", {
+              ns: "panels",
+            })}
             placeholder={t("panel.networkDevice.writeChannelPlaceholder", {
               ns: "panels",
             })}
@@ -728,17 +723,15 @@ const NetworkDevice = ({ state, dispatch }) => {
             }}
           />
           <TextInput
-            helperText=""
+            helperText={t("panel.networkDevice.dataChannelHelp", {
+              ns: "panels",
+            })}
             id="network-device_data-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={!dataChannelIdIsValid}
-            labelText={getLabel(
-              t("panel.networkDevice.dataChannelTextLabel", { ns: "panels" }),
-              t("showInformationLabel", { ns: "common" }),
-              getContent(
-                t("panel.networkDevice.dataChannelHelp", { ns: "panels" }),
-              ),
-            )}
+            labelText={t("panel.networkDevice.dataChannelTextLabel", {
+              ns: "panels",
+            })}
             placeholder={t("panel.networkDevice.dataChannelPlaceholder", {
               ns: "panels",
             })}

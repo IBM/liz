@@ -377,24 +377,21 @@ const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
   const gridContentsMarkupRowOne = (
     <>
       <TextInput
-        helperText=""
         type="url"
         id="installation-address-input"
         invalid={
           state.installationAddress ? !state.installationAddress.valid : false
         }
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.installationParameter.installationAddressTextLabel", {
+        labelText={t(
+          "panel.installationParameter.installationAddressTextLabel",
+          {
             ns: "panels",
-          }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.installationParameter.installationAddressHelp", {
-              ns: "panels",
-            }),
-          ),
+          },
         )}
+        helperText={t("panel.installationParameter.installationAddressHelp", {
+          ns: "panels",
+        })}
         placeholder={t(
           "panel.installationParameter.installationAddressPlaceholder",
           { ns: "panels" },
@@ -427,19 +424,16 @@ const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
     <>
       <TextInput
         readOnly
-        helperText=""
+        helperText={t(
+          "panel.installationParameter.computedInstallationAddressHelp",
+          {
+            ns: "panels",
+          },
+        )}
         id="computed-installation-address-input"
-        labelText={getLabel(
-          t(
-            "panel.installationParameter.computedInstallationAddressTextLabel",
-            { ns: "panels" },
-          ),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.installationParameter.computedInstallationAddressHelp", {
-              ns: "panels",
-            }),
-          ),
+        labelText={t(
+          "panel.installationParameter.computedInstallationAddressTextLabel",
+          { ns: "panels" },
         )}
         placeholder={t(
           "panel.installationParameter.computedInstallationAddressPlaceholder",
@@ -457,17 +451,15 @@ const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
     <div className="installation-parameters_column-left">
       <TextInput
         disabled={state?.userAndPwdAreDisabled ?? true}
-        helperText=""
+        helperText={t("panel.installationParameter.usernameHelp", {
+          ns: "panels",
+        })}
         id="username-input"
         invalid={state && state.userName ? !state.userName.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.installationParameter.usernameTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.installationParameter.usernameHelp", { ns: "panels" }),
-          ),
-        )}
+        labelText={t("panel.installationParameter.usernameTextLabel", {
+          ns: "panels",
+        })}
         placeholder={t("panel.installationParameter.usernamePlaceholder", {
           ns: "panels",
         })}
@@ -517,17 +509,15 @@ const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
       <PasswordInput
         disabled={state?.userAndPwdAreDisabled ?? true}
         autoComplete="true"
-        helperText=""
+        helperText={t("panel.installationParameter.passwordHelp", {
+          ns: "panels",
+        })}
         id="password-input"
         invalid={state && state.password ? !state.password.valid : false}
         invalidText={t("invalidTextLabel", { ns: "common" })}
-        labelText={getLabel(
-          t("panel.installationParameter.passwordTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.installationParameter.passwordHelp", { ns: "panels" }),
-          ),
-        )}
+        labelText={t("panel.installationParameter.passwordTextLabel", {
+          ns: "panels",
+        })}
         placeholder={t("panel.installationParameter.passwordPlaceholder", {
           ns: "panels",
         })}
@@ -599,20 +589,14 @@ const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
       {useVncToggled && (
         <PasswordInput
           autoComplete="true"
-          helperText=""
+          helperText={t("panel.installationParameter.vncPasswordHelp", {
+            ns: "panels",
+          })}
           id="vnc-password-input"
           invalidText={t("invalidTextLabel", { ns: "common" })}
-          labelText={getLabel(
-            t("panel.installationParameter.vncPasswordTextLabel", {
-              ns: "panels",
-            }),
-            t("showInformationLabel", { ns: "common" }),
-            getContent(
-              t("panel.installationParameter.vncPasswordHelp", {
-                ns: "panels",
-              }),
-            ),
-          )}
+          labelText={t("panel.installationParameter.vncPasswordTextLabel", {
+            ns: "panels",
+          })}
           placeholder={t("panel.installationParameter.vncPasswordPlaceholder", {
             ns: "panels",
           })}

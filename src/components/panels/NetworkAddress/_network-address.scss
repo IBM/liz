@@ -9,6 +9,12 @@
   $use-flexbox-grid: true
 );
 
+.cds--form__helper-text {
+  p {
+    @include react.type-style("label-01");
+  }
+}
+
 .network-address__grid {
   &.cds--grid {
     padding: 0;
