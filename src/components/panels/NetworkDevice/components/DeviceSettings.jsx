@@ -7,17 +7,27 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { TextInput, Toggle, Grid, Column } from "@carbon/react";
-import { getLabel, getContent } from "../../../../uiUtil/help-util";
+import {
+  TextInput,
+  Toggle,
+  Grid,
+  Column,
+  RadioButtonGroup,
+  RadioButton,
+} from "@carbon/react";
+import {
+  PORT_NUMBER_ZERO,
+  PORT_NUMBER_ONE,
+  UPDATE_FUNCTION__LAYER,
+  UPDATE_FUNCTION__USE_MULTIPORT,
+  UPDATE_FUNCTION__PORT_NO,
+  UPDATE_FUNCTION__PCI_FUNCTION_ID,
+  UPDATE_FUNCTION__USER_IDENTIFIER,
+} from "../../../../util/constants";
 import { isHex } from "../../../../util/network-device-util";
 import "./_device-settings.scss";
 
 const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
-  const UPDATE_FUNCTION__LAYER = "layer";
-  const UPDATE_FUNCTION__PORT_NO = "portNo";
-  const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
-  const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
-
   const { t } = useTranslation();
 
   const isPciFunctionIdValid = (pciFunctionIdValue) => {
@@ -52,54 +62,90 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
     return false;
   };
 
+  const getDefaultSelected = () => {
+    if (+state.portNo === 0) {
+      return PORT_NUMBER_ZERO;
+    } else if (+state.portNo === 1) {
+      return PORT_NUMBER_ONE;
+    }
+
+    return PORT_NUMBER_ZERO;
+  };
+
   const osaMarkup = (
-    <Grid className="device-settings_grid" condensed>
-      <Column sm={4} md={5} max={6}>
-        <div className="device-settings_grid-column-left">
-          <Toggle
-            defaultToggled
-            toggled={state.layer}
-            labelText={getLabel(
-              t("panel.networkDevice.layerTwoToggleTextLabel", {
+    <>
+      <Grid className="device-settings_grid" condensed>
+        <Column sm={4} md={5} max={6}>
+          <div className="device-settings_grid-column-left">
+            <Toggle
+              defaultToggled
+              toggled={state.layer}
+              labelText={t("panel.networkDevice.layerTwoToggleTextLabel", {
                 ns: "panels",
-              }),
-              t("showInformationLabel", { ns: "common" }),
-              getContent(
-                t("panel.networkDevice.layerTwoToggleHelp", { ns: "panels" }),
-              ),
-            )}
-            labelA="0"
-            labelB="1"
-            id="layer2-toggle"
-            onToggle={(toggleState) => {
-              updateFunction(UPDATE_FUNCTION__LAYER, toggleState);
-            }}
-          />
-        </div>
-      </Column>
-      <Column sm={4} md={5} max={6}>
-        <div className="device-settings_grid-column-right">
-          <Toggle
-            toggled={state.portNo}
-            labelText={getLabel(
-              t("panel.networkDevice.portNumberToggleTextLabel", {
+              })}
+              labelA={t("panel.networkDevice.layerTwoToggleTextLabelA", {
                 ns: "panels",
-              }),
-              t("showInformationLabel", { ns: "common" }),
-              getContent(
-                t("panel.networkDevice.portNumberToggleHelp", { ns: "panels" }),
-              ),
-            )}
-            labelA="0"
-            labelB="1"
-            id="portno-toggle"
-            onToggle={(toggleState) => {
-              updateFunction(UPDATE_FUNCTION__PORT_NO, toggleState);
-            }}
-          />
-        </div>
-      </Column>
-    </Grid>
+              })}
+              labelB={t("panel.networkDevice.layerTwoToggleTextLabelB", {
+                ns: "panels",
+              })}
+              id="layer2-toggle"
+              onToggle={(toggleState) => {
+                updateFunction(UPDATE_FUNCTION__LAYER, toggleState);
+              }}
+            />
+          </div>
+        </Column>
+        <Column sm={4} md={5} max={6}>
+          <div className="device-settings_grid-column-right">
+            <Toggle
+              toggled={state.useMultiPort}
+              labelText={t("panel.networkDevice.multiPortToggleTextLabel", {
+                ns: "panels",
+              })}
+              labelA={t("btnLabel.No", { ns: "common" })}
+              labelB={t("btnLabel.Yes", { ns: "common" })}
+              id="portno-toggle"
+              onToggle={(toggleState) => {
+                updateFunction(UPDATE_FUNCTION__USE_MULTIPORT, toggleState);
+              }}
+            />
+          </div>
+        </Column>
+      </Grid>
+      {state.useMultiPort && (
+        <Grid className="device-settings_grid" condensed>
+          <Column sm={8} md={10} max={12}>
+            <RadioButtonGroup
+              className="network-device_port-number-radiobutton-group"
+              legendText={t("panel.networkDevice.portNumberToggleTextLabel", {
+                ns: "panels",
+              })}
+              helperText={t("panel.networkDevice.portNumberToggleHelp", {
+                ns: "panels",
+              })}
+              name="network-device_port-number-group"
+              defaultSelected={getDefaultSelected()}
+              onChange={(selectedItem) => {
+                const portOneToggled = selectedItem === PORT_NUMBER_ONE;
+                updateFunction(UPDATE_FUNCTION__PORT_NO, portOneToggled);
+              }}
+            >
+              <RadioButton
+                labelText="Port 0"
+                value={PORT_NUMBER_ZERO}
+                id="network-device_portno-zero-radio"
+              />
+              <RadioButton
+                labelText="Port 1"
+                value={PORT_NUMBER_ONE}
+                id="network-device_portno-one-radio"
+              />
+            </RadioButtonGroup>
+          </Column>
+        </Grid>
+      )}
+    </>
   );
 
   const roceLabelHasOptionalTag = (forLabel, label, optionalLabel) => {

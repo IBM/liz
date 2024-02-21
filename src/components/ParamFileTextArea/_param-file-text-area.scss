@@ -29,6 +29,10 @@
   &.param-file-text-area_textarea__modified > div > textarea {
     border: react.$spacing-01 solid react.$red-60;
   }
+
+  .cds--form__helper-text {
+    margin: react.$spacing-02 0 react.$spacing-04 0;
+  }
 }
 
 .param-file-text-area_textarea-button-bar {

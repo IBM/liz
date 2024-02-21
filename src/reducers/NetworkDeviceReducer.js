@@ -11,6 +11,7 @@ import {
   ACTION_UPDATE_NETWORK_DEVICE_WRITE_CHANNEL_ID,
   ACTION_UPDATE_NETWORK_DEVICE_DATA_CHANNEL_ID,
   ACTION_UPDATE_NETWORK_DEVICE_LAYER,
+  ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT,
   ACTION_UPDATE_NETWORK_DEVICE_PORT_NO,
   ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID,
   ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER,
@@ -24,133 +25,58 @@ const reducer = (state, action) => {
       return action.nextInitialState;
     case ACTION_UPDATE_NETWORK_DEVICE_TYPE:
       return {
+        ...state,
         selectedDeviceType: action.nextSelectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_USE_VLAN:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
+        ...state,
         useVlan: action.nextUseVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_READ_CHANNEL_ID:
       return {
-        selectedDeviceType: state.selectedDeviceType,
+        ...state,
         readChannelId: action.nextReadChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_WRITE_CHANNEL_ID:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
+        ...state,
         writeChannelId: action.nextWriteChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_DATA_CHANNEL_ID:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
+        ...state,
         dataChannelId: action.nextDataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_LAYER:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
+        ...state,
         layer: action.nextLayer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
+      };
+    case ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT:
+      return {
+        ...state,
+        useMultiPort: action.nextUseMultiPort,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_PORT_NO:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
+        ...state,
         portNo: action.nextPortNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
+        ...state,
         pciFunctionId: action.nextPciFunctionId,
-        userIdentifier: state.userIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
+        ...state,
         userIdentifier: action.nextUserIdentifier,
-        vlanId: state.vlanId,
-        useVlan: state.useVlan,
       };
     case ACTION_UPDATE_NETWORK_DEVICE_VLAN_ID:
       return {
-        selectedDeviceType: state.selectedDeviceType,
-        readChannelId: state.readChannelId,
-        writeChannelId: state.writeChannelId,
-        dataChannelId: state.dataChannelId,
-        layer: state.layer,
-        portNo: state.portNo,
-        pciFunctionId: state.pciFunctionId,
-        userIdentifier: state.userIdentifier,
+        ...state,
         vlanId: action.nextVlanId,
-        useVlan: state.useVlan,
       };
   }
 

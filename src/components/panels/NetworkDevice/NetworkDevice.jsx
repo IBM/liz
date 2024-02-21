@@ -18,7 +18,6 @@ import {
   RadioButtonGroup,
   RadioButton,
 } from "@carbon/react";
-import { getLabel, getContent } from "../../../uiUtil/help-util";
 import {
   toChannelSegments,
   validateSegments,
@@ -32,6 +31,7 @@ import {
   UPDATE_FUNCTION__WRITE_CHANNEL_ID,
   UPDATE_FUNCTION__DATA_CHANNEL_ID,
   UPDATE_FUNCTION__LAYER,
+  UPDATE_FUNCTION__USE_MULTIPORT,
   UPDATE_FUNCTION__PORT_NO,
   UPDATE_FUNCTION__PCI_FUNCTION_ID,
   UPDATE_FUNCTION__USER_IDENTIFIER,
@@ -41,6 +41,7 @@ import {
   ACTION_UPDATE_NETWORK_DEVICE_WRITE_CHANNEL_ID,
   ACTION_UPDATE_NETWORK_DEVICE_DATA_CHANNEL_ID,
   ACTION_UPDATE_NETWORK_DEVICE_LAYER,
+  ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT,
   ACTION_UPDATE_NETWORK_DEVICE_PORT_NO,
   ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID,
   ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER,
@@ -84,6 +85,8 @@ const NetworkDevice = ({ state, dispatch }) => {
       updateDataChannelId(propertyValue, propertyIsValid);
     } else if (propertyName === UPDATE_FUNCTION__LAYER) {
       updateLayer(propertyValue);
+    } else if (propertyName === UPDATE_FUNCTION__USE_MULTIPORT) {
+      updateUseMultiPort(propertyValue);
     } else if (propertyName === UPDATE_FUNCTION__PORT_NO) {
       updatePortNo(propertyValue);
     } else if (propertyName === UPDATE_FUNCTION__PCI_FUNCTION_ID) {
@@ -148,6 +151,13 @@ const NetworkDevice = ({ state, dispatch }) => {
     dispatch({
       type: ACTION_UPDATE_NETWORK_DEVICE_LAYER,
       nextLayer: layer,
+    });
+  };
+
+  const updateUseMultiPort = (useMultiPort) => {
+    dispatch({
+      type: ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT,
+      nextUseMultiPort: useMultiPort,
     });
   };
 
@@ -232,6 +242,13 @@ const NetworkDevice = ({ state, dispatch }) => {
     return false;
   };
 
+  const isUseMultiPortValid = () => {
+    if (state.useMultiPort && typeof state.useMultiPort === "boolean") {
+      return true;
+    }
+    return false;
+  };
+
   const isPortNumberValid = () => {
     if (
       state.portNo &&
@@ -264,6 +281,7 @@ const NetworkDevice = ({ state, dispatch }) => {
   const areOsaDeviceSettingValid = () => {
     return (
       areChannelIdsValid() &&
+      (isUseMultiPortValid() || true) &&
       (isPortNumberValid() || true) &&
       (isLayerValid() || true)
     );
@@ -325,6 +343,10 @@ const NetworkDevice = ({ state, dispatch }) => {
     );
   };
 
+  const isUseMultiPortComplete = () => {
+    return isUseMultiPortValid() || true;
+  };
+
   const isPortNumberComplete = () => {
     return isPortNumberValid() || true;
   };
@@ -335,7 +357,10 @@ const NetworkDevice = ({ state, dispatch }) => {
 
   const areOsaDeviceSettingComplete = () => {
     return (
-      areChannelIdsComplete() && isPortNumberComplete() && isLayerComplete()
+      areChannelIdsComplete() &&
+      isUseMultiPortComplete() &&
+      isPortNumberComplete() &&
+      isLayerComplete()
     );
   };
 
@@ -413,6 +438,14 @@ const NetworkDevice = ({ state, dispatch }) => {
     });
   };
 
+  const getPortNumber = ({ useMultiport, portNumber }) => {
+    if (useMultiport && portNumber) {
+      return 1;
+    }
+
+    return 0;
+  };
+
   useEffect(() => {
     let mergedSteps = {};
 
@@ -439,7 +472,13 @@ const NetworkDevice = ({ state, dispatch }) => {
                   : "",
                 layer: typeof state.layer === "boolean" ? +state.layer : 1,
                 portNumber:
-                  typeof state.portNo === "boolean" ? +state.portNo : 0,
+                  typeof state.useMultiPort === "boolean" &&
+                  typeof state.portNo === "boolean"
+                    ? getPortNumber({
+                        useMultiport: state.useMultiPort,
+                        portNumber: state.portNo,
+                      })
+                    : 0,
               },
               roce: {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
@@ -477,7 +516,13 @@ const NetworkDevice = ({ state, dispatch }) => {
                   : "",
                 layer: typeof state.layer === "boolean" ? +state.layer : 1,
                 portNumber:
-                  typeof state.portNo === "boolean" ? +state.portNo : 0,
+                  typeof state.useMultiPort === "boolean" &&
+                  typeof state.portNo === "boolean"
+                    ? getPortNumber({
+                        useMultiport: state.useMultiPort,
+                        portNumber: state.portNo,
+                      })
+                    : 0,
               },
               roce: {
                 fid: state.pciFunctionId ? state.pciFunctionId.value : "",
@@ -507,7 +552,13 @@ const NetworkDevice = ({ state, dispatch }) => {
                 dataChannel: state?.dataChannelId?.value ?? "",
                 layer: typeof state.layer === "boolean" ? +state.layer : 1,
                 portNumber:
-                  typeof state.portNo === "boolean" ? +state.portNo : 0,
+                  typeof state.useMultiPort === "boolean" &&
+                  typeof state.portNo === "boolean"
+                    ? getPortNumber({
+                        useMultiport: state.useMultiPort,
+                        portNumber: state.portNo,
+                      })
+                    : 0,
               },
               roce: {
                 fid: state?.pciFunctionId?.value ?? "",
@@ -556,10 +607,8 @@ const NetworkDevice = ({ state, dispatch }) => {
         legendText={t("panel.networkDevice.deviceTypeTextLabel", {
           ns: "panels",
         })}
-        helperText={getContent(
-          t("panel.networkDevice.deviceTypeHelp", { ns: "panels" }),
-        )}
-        name="network-device_interface-list-group"
+        helperText={t("panel.networkDevice.deviceTypeHelp", { ns: "panels" })}
+        name="network-device_device-type-group"
         defaultSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
         onChange={(selectedItem) => {
           updateSelectedDeviceType(selectedItem);
@@ -587,13 +636,11 @@ const NetworkDevice = ({ state, dispatch }) => {
         state={state}
       />
       <Toggle
-        labelText={getLabel(
-          t("panel.networkDevice.vlanToggleTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(t("panel.networkDevice.vlanToggleHelp", { ns: "panels" })),
-        )}
-        labelA={t("toggle.disableLabel", { ns: "common" })}
-        labelB={t("toggle.enableLabel", { ns: "common" })}
+        labelText={t("panel.networkDevice.vlanToggleTextLabel", {
+          ns: "panels",
+        })}
+        labelA={t("btnLabel.No", { ns: "common" })}
+        labelB={t("btnLabel.Yes", { ns: "common" })}
         id="network-device_vlan-toggle"
         className="network-device_vlan-toggle"
         defaultToggled={useVlanToggled}
@@ -614,9 +661,7 @@ const NetworkDevice = ({ state, dispatch }) => {
           invalidText={t("invalidTextLabel", { ns: "common" })}
           invalid={!vlanIdIsValid}
           label={t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" })}
-          helperText={getContent(
-            t("panel.networkDevice.vlanIdHelp", { ns: "panels" }),
-          )}
+          helperText={t("panel.networkDevice.vlanIdHelp", { ns: "panels" })}
           placeholder={t("panel.networkDevice.vlanIdPlaceholder", {
             ns: "panels",
           })}
@@ -789,6 +834,7 @@ NetworkDevice.propTypes = {
     writeChannelId: PropTypes.object.isRequired,
     dataChannelId: PropTypes.object.isRequired,
     layer: PropTypes.bool.isRequired,
+    useMultiPort: PropTypes.bool.isRequired,
     portNo: PropTypes.bool.isRequired,
     pciFunctionId: PropTypes.object.isRequired,
     userIdentifier: PropTypes.object.isRequired,

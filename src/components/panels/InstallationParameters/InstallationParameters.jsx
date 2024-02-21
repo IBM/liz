@@ -18,7 +18,6 @@ import {
   Column,
 } from "@carbon/react";
 import isUrl from "is-url-superb";
-import { getLabel, getContent } from "../../../uiUtil/help-util";
 import { toUrl, isHostnameValid } from "../../../util/network-address-util";
 import {
   ACTION_UPDATE_INSTALLATION_PARAM_USE_SSH,
@@ -567,15 +566,11 @@ const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
   const gridContentsMarkupRowThreeColumnOne = (
     <div className="installation-parameters_column-left">
       <Toggle
-        labelText={getLabel(
-          t("panel.installationParameter.vncToggleTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.installationParameter.vncToggleHelp", { ns: "panels" }),
-          ),
-        )}
-        labelA={t("toggle.disableLabel", { ns: "common" })}
-        labelB={t("toggle.enableLabel", { ns: "common" })}
+        labelText={t("panel.installationParameter.vncToggleTextLabel", {
+          ns: "panels",
+        })}
+        labelA={t("btnLabel.No", { ns: "common" })}
+        labelB={t("btnLabel.Yes", { ns: "common" })}
         id="vnc-toggle"
         defaultToggled={useVncToggled}
         onToggle={() => {
@@ -619,15 +614,11 @@ const InstallationParameters = ({ state, dispatch, ipAddressVersion }) => {
   const gridContentsMarkupRowThreeColumnTwo = (
     <div className="installation-parameters_column-right">
       <Toggle
-        labelText={getLabel(
-          t("panel.installationParameter.sshToggleTextLabel", { ns: "panels" }),
-          t("showInformationLabel", { ns: "common" }),
-          getContent(
-            t("panel.installationParameter.sshToggleHelp", { ns: "panels" }),
-          ),
-        )}
-        labelA={t("toggle.disableLabel", { ns: "common" })}
-        labelB={t("toggle.enableLabel", { ns: "common" })}
+        labelText={t("panel.installationParameter.sshToggleTextLabel", {
+          ns: "panels",
+        })}
+        labelA={t("btnLabel.No", { ns: "common" })}
+        labelB={t("btnLabel.Yes", { ns: "common" })}
         id="ssh-toggle"
         defaultToggled={useSshToggled}
         onToggle={() => {

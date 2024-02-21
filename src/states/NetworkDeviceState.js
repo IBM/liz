@@ -24,6 +24,7 @@ const createInitialState = () => {
     dataChannelId: DEFAULT_COMPUTED_STRING_OBJECT,
     layer: true,
     portNo: false,
+    useMultiPort: false,
     pciFunctionId: DEFAULT_STRING_OBJECT,
     userIdentifier: DEFAULT_STRING_OBJECT,
     vlanId: DEFAULT_NUMBER_OBJECT,
