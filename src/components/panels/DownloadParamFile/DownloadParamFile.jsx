@@ -271,7 +271,11 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
                 ? localParamFileContent.target.value
                 : "";
             updateParamFileContent(localParamFileContentValue);
-            updateModified(true);
+            if (localParamFileContentValue === paramFileContent.data) {
+              updateModified(false);
+            } else {
+              updateModified(true);
+            }
           }}
           allowCopy
           allowReset={state.paramFileContentModified}
