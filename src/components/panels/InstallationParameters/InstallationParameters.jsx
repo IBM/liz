@@ -670,7 +670,7 @@ InstallationParameters.propTypes = {
     vncPassword: PropTypes.string.isRequired,
     installationAddress: PropTypes.shape({
       value: PropTypes.string.isRequired,
-      computed: PropTypes.bool.isRequired,
+      computed: PropTypes.string.isRequired,
       valid: PropTypes.bool.isRequired,
     }),
   }).isRequired,

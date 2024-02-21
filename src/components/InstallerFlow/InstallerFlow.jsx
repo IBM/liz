@@ -112,7 +112,7 @@ const InstallerFlow = ({
           invalid={progressStepInvalid.downloadParamFile}
           complete={progressStepComplete.downloadParamFile}
           disabled={progressStepDisabled.downloadParamFile}
-          current={progressStep === 7}
+          current={progressStep === 6}
           label={t("leftNavigation.progressStep.downloadParamFile.label")}
           secondaryLabel={t(
             "leftNavigation.progressStep.downloadParamFile.secondaryLabel",
@@ -123,7 +123,7 @@ const InstallerFlow = ({
           invalid={progressStepInvalid.nextSteps}
           complete={progressStepComplete.nextSteps}
           disabled={progressStepDisabled.nextSteps}
-          current={progressStep === 8}
+          current={progressStep === 7}
           label={t("leftNavigation.progressStep.nextSteps.label")}
           secondaryLabel={t(
             "leftNavigation.progressStep.nextSteps.secondaryLabel",
