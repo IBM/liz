@@ -14,7 +14,7 @@
   "panel.information.informationHeader": "Additional information",
   "panel.information.informationExplanation": "See the following link for additional information about the selected Linux distribution:",
   "panel.hint.header": "Required information",
-  "panel.hint.explanation": "You need the following information to complete this dialog. This information is typically provided by hardware or network administrators of the system to be installed.",
+  "panel.hint.explanation": "You need the following information to complete this dialog.",
   "panel.hint.listItem1": "Network device",
   "panel.hint.listItem2": "OSA device number, layer 2 setting and port number, or",
   "panel.hint.listItem3": "PCI device FID or UID, and the partition PCI UID uniqueness setting",
