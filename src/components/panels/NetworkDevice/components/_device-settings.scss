@@ -9,12 +9,12 @@
 );
 
 .device-settings_grid {
-  &.cds--css-grid {
-    padding: 0;
+  &.cds--grid {
+    padding-inline: react.$spacing-05;
   }
 
-  .cds--css-grid-column {
-    margin: 0;
+  .cds--col {
+    padding: 0;
   }
 }
 

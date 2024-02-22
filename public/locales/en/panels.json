@@ -1,6 +1,6 @@
 {
-  "panel.inputFileSelection.chooseDistributionFromeTemplate": "Select the Linux distribution to install",
-  "panel.inputFileSelection.chooseVersionFromeTemplate": "Select the version to install",
+  "panel.inputFileSelection.chooseDistributionFromeTemplate": "Linux distribution",
+  "panel.inputFileSelection.chooseVersionFromeTemplate": "Linux version",
   "panel.inputFileSelection.chooseDistributionFromeTemplatShort": "Select a distribution",
   "panel.inputFileSelection.chooseVersionFromeTemplateShort": "Select a versio",
   "panel.inputFileSelection.hostOS": "Select the Linux distribution",
