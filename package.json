@@ -38,7 +38,7 @@
     "@carbon/type": "11.25.1",
     "i18next": "23.9.0",
     "i18next-browser-languagedetector": "7.2.0",
-    "i18next-http-backend": "2.4.3",
+    "i18next-http-backend": "2.5.0",
     "i18next-pseudo": "2.2.1",
     "is-ip": "^5.0.1",
     "is-url-superb": "6.1.0",
