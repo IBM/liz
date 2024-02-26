@@ -8,7 +8,6 @@ import {
   LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
   ADDRESS_TYPE_IPV4,
   STATE_ORIGIN_DEFAULT,
-  DEFAULT_COMPUTED_STRING_OBJECT,
   DEFAULT_STRING_OBJECT,
 } from "../util/constants";
 
@@ -18,13 +17,17 @@ const createInitialState = () => {
   );
   const defaultState = {
     ipv4: {
-      netmask: DEFAULT_COMPUTED_STRING_OBJECT,
+      netmask: {
+        value: "255.255.255.0",
+        valid: true,
+        computed: false,
+      },
       ipv4Cidr: {
         value: 24,
         valid: true,
         computed: false,
       },
-      binary: "",
+      binary: "11111111.11111111.11111111.00000000",
       ipv4Address: DEFAULT_STRING_OBJECT,
       gatewayIpAddress: DEFAULT_STRING_OBJECT,
       nameserverIpAddress: DEFAULT_STRING_OBJECT,
