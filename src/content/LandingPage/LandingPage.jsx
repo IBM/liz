@@ -152,9 +152,9 @@ const LandingPage = ({
       )}
       <Grid className="landing-page__grid">
         <Column
-          sm={6}
-          md={8}
-          lg={12}
+          sm={10}
+          md={12}
+          lg={16}
           className="landing-page__grey-column-background"
         >
           {getPanel(panelConfig.panel)}
