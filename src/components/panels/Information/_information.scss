@@ -11,12 +11,12 @@
 
 .table-container {
   display: block;
-  width: 100%;
+  width: 75%;
 }
 
 .flex-table {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 30%);
+  grid-template-columns: 1fr 2fr;
   grid-template-rows: 100% auto;
   transition: 0.5s;
 

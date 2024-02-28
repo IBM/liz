@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { InlineNotification, Grid, Column } from "@carbon/react";
+import { InlineNotification, FlexGrid, Row, Column } from "@carbon/react";
 import PropTypes from "prop-types";
 import About from "../../components/About";
 import {
@@ -150,16 +150,13 @@ const LandingPage = ({
           className="landing-page__legal-banner"
         />
       )}
-      <Grid className="landing-page__grid">
-        <Column
-          sm={10}
-          md={12}
-          lg={16}
-          className="landing-page__grey-column-background"
-        >
-          {getPanel(panelConfig.panel)}
-        </Column>
-      </Grid>
+      <FlexGrid className="landing-page__grid">
+        <Row>
+          <Column className="landing-page__grey-column-background">
+            {getPanel(panelConfig.panel)}
+          </Column>
+        </Row>
+      </FlexGrid>
     </>
   );
 };
