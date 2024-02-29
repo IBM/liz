@@ -19,12 +19,15 @@ const InstallerFlow = ({
 }) => {
   const { t } = useTranslation();
 
-  const descriptionForInvalidStep =
-    "The data provided for this step is invalid.";
-  const descriptionForCompleteStep =
-    "The data required by this step is complete.";
-  const descriptionForIncompleteStep =
-    "The data required by this step is incomplete.";
+  const descriptionForInvalidStep = t(
+    "leftNavigation.descriptionForInvalidStep",
+  );
+  const descriptionForCompleteStep = t(
+    "leftNavigation.descriptionForCompleteStep",
+  );
+  const descriptionForIncompleteStep = t(
+    "leftNavigation.descriptionForIncompleteStep",
+  );
 
   const getDescriptionForStep = (forStep) => {
     if (progressStepInvalid[forStep]) {
