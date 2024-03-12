@@ -14,7 +14,7 @@ import "./index.scss";
 i18Init();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
+  <BrowserRouter basename={import.meta.env.VITE_URL_PATH_PREFIX}>
     <App />
   </BrowserRouter>,
 );

@@ -967,7 +967,7 @@ const App = () => {
           <Routes>
             <Route
               exact={true}
-              path={import.meta.env.VITE_URL_PATH_PREFIX}
+              path="/"
               element={
                 <ApplicationContext.Provider
                   value={{ state, dispatch, downloadParamFileDispatch }}
@@ -982,7 +982,7 @@ const App = () => {
             />
             <Route
               exact={true}
-              path={`${import.meta.env.VITE_URL_PATH_PREFIX}edit/`}
+              path={`/edit/`}
               element={
                 <ApplicationContext.Provider
                   value={{ state, dispatch, downloadParamFileDispatch }}
