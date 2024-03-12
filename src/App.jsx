@@ -668,12 +668,6 @@ const App = () => {
     ? "app__full-height"
     : "app__full-height__collapsed";
 
-  window.addEventListener("beforeunload", (event) => {
-    if (state.isDirty) {
-      event.returnValue = t("browserPrompt.reloadWarning");
-    }
-  });
-
   const systemRequirementInformation = (
     <>
       <div className="hint_intro">

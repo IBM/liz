@@ -100,7 +100,9 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
   const getPrimaryButtonTextForParamFileCard = () => {
     let text = "";
 
-    hasParamFile() ? (text = "Edit parmfile") : (text = "Compose parmfile");
+    hasParamFile()
+      ? (text = t("btnLabel.EditParmfile", { ns: "common" }))
+      : (text = t("btnLabel.ComposeParmfile", { ns: "common" }));
 
     return text;
   };
@@ -108,7 +110,9 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
   const getSecondaryButtonTextForParamFileCard = () => {
     let text = "";
 
-    hasParamFile() ? (text = "Download parmfile") : (text = "");
+    hasParamFile()
+      ? (text = t("btnLabel.Download", { ns: "common" }))
+      : (text = "");
 
     return text;
   };
@@ -117,8 +121,8 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
     let title = "";
 
     hasParamFile()
-      ? (title = "Edit existing Linux on IBM Z parameter file")
-      : (title = "Compose a new Linux on IBM Z parameter file");
+      ? (title = t("editPage.pageHeader.subtitle.modify"))
+      : (title = t("editPage.pageHeader.subtitle.new"));
 
     return title;
   };
@@ -256,7 +260,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
               onPrimaryButtonClick={() => {
                 updateShowNextStepsInformationModal(true);
               }}
-              title="Review next installation steps"
+              title={t("modalHeading.showNextStepsInformation")}
               className="landing-page__express-card"
             >
               <p>{t("landingPage.expressiveCard.nextSteps.para")}</p>

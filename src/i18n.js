@@ -31,7 +31,7 @@ const i18Init = () => {
       ns: ["translation", "panels", "common", "help"],
       defaultNS: "translation",
       backend: {
-        loadPath: "/locales/{{lng}}/{{ns}}.json",
+        loadPath: `${import.meta.env.VITE_URL_PATH_PREFIX}locales/{{lng}}/{{ns}}.json`,
       },
       detection: {
         order: ["querystring", "cookie", "navigator", "htmlTag"],
