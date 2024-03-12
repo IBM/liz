@@ -8,6 +8,8 @@
   $font-path: "@ibm/plex"
 );
 
+@use "@carbon/ibm-products/scss";
+
 @import "./overrides";
 
 .landing-page__illo {
@@ -50,6 +52,11 @@
 .landing-page__grey-column-background {
   background: react.$layer-01;
   margin-right: 0;
+}
+
+.landing-page__express-card {
+  background: react.$background;
+  margin: 0 react.$spacing-13 react.$spacing-06 react.$spacing-13;
 }
 
 .landing-page__legal-banner {

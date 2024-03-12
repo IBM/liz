@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -29,54 +29,53 @@ import { updateIsDisabled } from "../../../util/panel-utils";
 import { getLabel, getContent } from "../../../uiUtil/help-util";
 import "./_next-steps.scss";
 
-const NextSteps = ({
-  state,
-  dispatch,
-  useVnc,
-  useSsh,
-  networkAddress,
-  vncPassword,
-}) => {
-  const { t } = useTranslation();
+const NextSteps = forwardRef(function NextSteps(props, ref) {
   const { state: globalState, dispatch: globalDispatch } =
     React.useContext(ApplicationContext);
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    const mergedSteps = {
-      ...globalState,
-      steps: {
-        ...globalState.steps,
-        nextSteps: {
-          ...globalState.steps.nextSteps,
-          complete: true,
-          disabled: true,
-          invalid: false,
-          origin: STATE_ORIGIN_USER,
+  const { state, useVnc, useSsh, networkAddress, vncPassword } = props;
+  const publicRef = {
+    persistState: () => {
+      const mergedSteps = {
+        ...globalState,
+        steps: {
+          ...globalState.steps,
+          nextSteps: {
+            ...globalState.steps.nextSteps,
+            complete: true,
+            disabled: true,
+            invalid: false,
+            origin: STATE_ORIGIN_USER,
+          },
         },
-      },
-    };
+      };
 
-    globalDispatch({
-      type: ACTION_UPDATE_APP_STEPS,
-      nextSteps: mergedSteps.steps,
-    });
-    globalDispatch({
-      type: ACTION_UPDATE_APP_IS_DIRTY,
-      nextIsDirty: true,
-    });
-    globalDispatch({
-      type: ACTION_UPDATE_APP_IS_DISABLED,
-      nextSteps: updateIsDisabled(mergedSteps.steps),
-    });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_STEPS,
+        nextSteps: mergedSteps.steps,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DIRTY,
+        nextIsDirty: true,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DISABLED,
+        nextSteps: updateIsDisabled(mergedSteps.steps),
+      });
 
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
-      JSON.stringify({
-        ...state,
-        origin: STATE_ORIGIN_STORAGE,
-      }),
-    );
-  }, [state]);
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
+        JSON.stringify({
+          ...state,
+          origin: STATE_ORIGIN_STORAGE,
+        }),
+      );
+    },
+  };
+
+  useEffect(publicRef.persistState, [state]);
+  useImperativeHandle(ref, () => publicRef);
 
   const networkAddressForListItem = networkAddress || "[host-IP-address]";
   const remoteAccessConfigIsMissing = !useSsh && !useVnc;
@@ -226,7 +225,7 @@ const NextSteps = ({
   );
 
   return markup;
-};
+});
 
 NextSteps.propTypes = {
   useVnc: PropTypes.bool.isRequired,

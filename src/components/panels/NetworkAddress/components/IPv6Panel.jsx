@@ -24,7 +24,7 @@ import {
 } from "../../../../util/network-address-util";
 import "./_ip-panels.scss";
 
-const IPv6Panel = ({ updateFunction, state }) => {
+const IPv6Panel = ({ updateFunction, state, readOnly }) => {
   const { t } = useTranslation();
 
   const PLACEHOLDER_GATEWAY_ADDRESS_IPV6 = t(
@@ -39,6 +39,7 @@ const IPv6Panel = ({ updateFunction, state }) => {
   const gridContentsMarkupRowTwoColumnOneIPv6 = (
     <div className="network-address_column-left">
       <TextInput
+        readOnly={readOnly}
         id="network-address_ipv6-input"
         invalid={
           state && state.ipv6 && state.ipv6.ipv6Address
@@ -61,6 +62,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : ""
         }
         onChange={(localAddress) => {
+          if (readOnly) return;
+
           const localAddressValue =
             localAddress && localAddress.target && localAddress.target.value
               ? localAddress.target.value
@@ -74,6 +77,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
           });
         }}
         onBlur={(localAddress) => {
+          if (readOnly) return;
+
           const localAddressValue =
             localAddress && localAddress.target && localAddress.target.value
               ? localAddress.target.value
@@ -91,6 +96,7 @@ const IPv6Panel = ({ updateFunction, state }) => {
         allowEmpty
         min={1}
         max={128}
+        readOnly={readOnly}
         id="network-address_ipv6-prefix"
         invalid={
           state && state.ipv6 && state.ipv6.ipv6Cidr
@@ -112,6 +118,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
         }
         translateWithId={(id) => t(id, { ns: "common" })}
         onChange={(event, { value, direction }) => {
+          if (readOnly) return;
+
           const localCidrValue = value || 1;
           const localCidrValueIsValid = isCidr(
             ADDRESS_TYPE_IPV6,
@@ -125,6 +133,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
           });
         }}
         onBlur={(localCidr) => {
+          if (readOnly) return;
+
           const localCidrValue =
             localCidr && localCidr.target && localCidr.target.value
               ? localCidr.target.value
@@ -147,6 +157,7 @@ const IPv6Panel = ({ updateFunction, state }) => {
   const gridContentsMarkupRowTwoColumnTwo = (
     <div className="network-address_column-right">
       <TextInput
+        readOnly={readOnly}
         id="network-address_gateway-input"
         invalid={
           state && state.ipv6 && state.ipv6.gatewayIpAddress
@@ -167,6 +178,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : ""
         }
         onChange={(localGatewayIpAddress) => {
+          if (readOnly) return;
+
           const localGatewayIpAddressValue =
             localGatewayIpAddress &&
             localGatewayIpAddress.target &&
@@ -182,6 +195,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
           });
         }}
         onBlur={(localGatewayIpAddress) => {
+          if (readOnly) return;
+
           const localGatewayIpAddressValue =
             localGatewayIpAddress &&
             localGatewayIpAddress.target &&
@@ -199,6 +214,7 @@ const IPv6Panel = ({ updateFunction, state }) => {
         }}
       />
       <TextInput
+        readOnly={readOnly}
         id="network-address_nameserver-input"
         invalid={
           state && state.ipv6 && state.ipv6.nameserverIpAddress
@@ -219,6 +235,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
             : ""
         }
         onChange={(localNameserverIpAddress) => {
+          if (readOnly) return;
+
           const localNameserverIpAddressValue =
             localNameserverIpAddress &&
             localNameserverIpAddress.target &&
@@ -234,6 +252,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
           });
         }}
         onBlur={(localNameserverIpAddress) => {
+          if (readOnly) return;
+
           const localNameserverIpAddressValue =
             localNameserverIpAddress &&
             localNameserverIpAddress.target &&
@@ -250,6 +270,7 @@ const IPv6Panel = ({ updateFunction, state }) => {
         }}
       />
       <TextInput
+        readOnly={readOnly}
         id="network-address_hostname-input"
         invalid={
           state && state.ipv6 && state.ipv6.hostName
@@ -268,6 +289,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
           state.ipv6 && state.ipv6.hostName ? state.ipv6.hostName.value : 1
         }
         onChange={(localHostName) => {
+          if (readOnly) return;
+
           const localHostNameValue =
             localHostName && localHostName.target && localHostName.target.value
               ? localHostName.target.value
@@ -281,6 +304,8 @@ const IPv6Panel = ({ updateFunction, state }) => {
           });
         }}
         onBlur={(localHostName) => {
+          if (readOnly) return;
+
           const localHostNameValue =
             localHostName && localHostName.target && localHostName.target.value
               ? localHostName.target.value
@@ -308,6 +333,7 @@ const IPv6Panel = ({ updateFunction, state }) => {
 IPv6Panel.propTypes = {
   updateFunction: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
+  readOnly: PropTypes.bool.isRequired,
 };
 
 export default IPv6Panel;

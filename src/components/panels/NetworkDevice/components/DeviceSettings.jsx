@@ -28,7 +28,12 @@ import {
 import { isHex } from "../../../../util/network-device-util";
 import "./_device-settings.scss";
 
-const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
+const DeviceSettings = ({
+  deviceSettingsId,
+  updateFunction,
+  state,
+  readOnly,
+}) => {
   const { t } = useTranslation();
 
   const isPciFunctionIdValid = (pciFunctionIdValue) => {
@@ -80,6 +85,7 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
           <Column>
             <div className="device-settings_grid-column-left">
               <Toggle
+                readOnly={readOnly}
                 defaultToggled
                 toggled={state.layer}
                 labelText={t("panel.networkDevice.layerTwoToggleTextLabel", {
@@ -93,6 +99,8 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
                 })}
                 id="layer2-toggle"
                 onToggle={(toggleState) => {
+                  if (readOnly) return;
+
                   updateFunction(UPDATE_FUNCTION__LAYER, toggleState);
                 }}
               />
@@ -101,6 +109,7 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
           <Column>
             <div className="device-settings_grid-column-right">
               <Toggle
+                readOnly={readOnly}
                 toggled={state.useMultiPort}
                 labelText={t("panel.networkDevice.multiPortToggleTextLabel", {
                   ns: "panels",
@@ -109,6 +118,8 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
                 labelB={t("btnLabel.Yes", { ns: "common" })}
                 id="portno-toggle"
                 onToggle={(toggleState) => {
+                  if (readOnly) return;
+
                   updateFunction(UPDATE_FUNCTION__USE_MULTIPORT, toggleState);
                 }}
               />
@@ -121,6 +132,7 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
           <Row>
             <Column>
               <RadioButtonGroup
+                readOnly={readOnly}
                 className="network-device_port-number-radiobutton-group"
                 legendText={t("panel.networkDevice.portNumberToggleTextLabel", {
                   ns: "panels",
@@ -131,6 +143,8 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
                 name="network-device_port-number-group"
                 defaultSelected={getDefaultSelected()}
                 onChange={(selectedItem) => {
+                  if (readOnly) return;
+
                   const portOneToggled = selectedItem === PORT_NUMBER_ONE;
                   updateFunction(UPDATE_FUNCTION__PORT_NO, portOneToggled);
                 }}
@@ -172,6 +186,7 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
         <Column>
           <div className="device-settings_grid-column-single">
             <TextInput
+              readOnly={readOnly}
               id="pci-function-input"
               invalidText={t("invalidTextLabel", { ns: "common" })}
               invalid={
@@ -190,6 +205,8 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
               })}
               value={state?.pciFunctionId?.value ?? ""}
               onChange={(pciFunctionId) => {
+                if (readOnly) return;
+
                 const pciFunctionIdValue =
                   pciFunctionId &&
                   pciFunctionId.target &&
@@ -203,6 +220,8 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
                 );
               }}
               onBlur={(pciFunctionId) => {
+                if (readOnly) return;
+
                 const pciFunctionIdValue =
                   pciFunctionId &&
                   pciFunctionId.target &&
@@ -219,6 +238,7 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
               }}
             />
             <TextInput
+              readOnly={readOnly}
               id="user-identifier-input"
               invalidText={t("invalidTextLabel", { ns: "common" })}
               invalid={
@@ -237,6 +257,8 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
               })}
               value={state?.userIdentifier?.value ?? ""}
               onChange={(userIdentifier) => {
+                if (readOnly) return;
+
                 const userIdentifierValue =
                   userIdentifier &&
                   userIdentifier.target &&
@@ -250,6 +272,8 @@ const DeviceSettings = ({ deviceSettingsId, updateFunction, state }) => {
                 );
               }}
               onBlur={(userIdentifier) => {
+                if (readOnly) return;
+
                 const userIdentifierValue =
                   userIdentifier &&
                   userIdentifier.target &&
@@ -283,6 +307,7 @@ DeviceSettings.propTypes = {
   deviceSettingsId: PropTypes.string.isRequired,
   updateFunction: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
+  readOnly: PropTypes.bool.isRequired,
 };
 
 export default DeviceSettings;

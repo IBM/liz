@@ -15,9 +15,13 @@
   }
 }
 
-.installation-parameters__grid {
-  &.cds--grid {
-    padding: 0;
+.installation-parameters__layer {
+  padding: 0 react.$spacing-08 0 react.$spacing-08;
+
+  .installation-parameters__grid {
+    &.cds--grid {
+      padding: 0;
+    }
   }
 }
 

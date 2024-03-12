@@ -9,9 +9,13 @@
   $use-flexbox-grid: true
 );
 
-.download-param-file_grid {
-  &.cds--grid {
-    padding: 0;
+.download-param-file_layer {
+  padding: 0 react.$spacing-08 0 react.$spacing-08;
+
+  .download-param-file_grid {
+    &.cds--grid {
+      padding: 0;
+    }
   }
 }
 

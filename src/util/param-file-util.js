@@ -5,7 +5,11 @@
  */
 
 import { getInterfaceName, toChannelSegments } from "./network-device-util";
-import { ADDRESS_TYPE_IPV4 } from "./constants";
+import { ADDRESS_TYPE_IPV4, DEFAULT_PARAM_FILE_NAME } from "./constants";
+import {
+  getLocalStorageContentsForSummaryStep,
+  getLocalStorageContentsForDownloadParamFileStep,
+} from "./local-storage-util";
 
 const DEVICE_TYPE_OSA = "network-device_osa-option";
 
@@ -356,4 +360,58 @@ ${stateToSshParamsResult.contents}
   };
 };
 
-export { stateToParamFile };
+const destroyClickedElement = (event) => {
+  // remove the link from the DOM
+  document.body.removeChild(event.target);
+};
+
+const saveParamFileContent = (content, name = DEFAULT_PARAM_FILE_NAME) => {
+  const textFileAsBlob = new Blob([content], {
+    type: "text/plain",
+  });
+
+  const downloadLink = document.createElement("a");
+  downloadLink.download = name;
+  downloadLink.innerHTML = "Download File";
+  if (window.webkitURL != null) {
+    // Chrome allows the link to be clicked without actually adding it to the DOM.
+    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+  } else {
+    // Firefox requires the link to be added to the DOM before it can be clicked.
+    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+  }
+
+  downloadLink.click();
+};
+
+const getParamFileName = () => {
+  const summary = getLocalStorageContentsForSummaryStep();
+  const paramFileName = summary?.downloadParmfileName ?? "";
+
+  return paramFileName;
+};
+
+const getParamFileContents = () => {
+  const downloadParamFile = getLocalStorageContentsForDownloadParamFileStep();
+  const paramFileContents = downloadParamFile?.paramFileContent ?? "";
+
+  return paramFileContents;
+};
+
+const hasParamFile = () => {
+  const paramFileContents = getParamFileContents();
+  const hasParamFile = paramFileContents.length > 0;
+
+  return hasParamFile;
+};
+
+export {
+  stateToParamFile,
+  saveParamFileContent,
+  getParamFileName,
+  getParamFileContents,
+  hasParamFile,
+};

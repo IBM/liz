@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -27,47 +27,53 @@ import { ApplicationContext } from "../../../App";
 import { updateIsDisabled } from "../../../util/panel-utils";
 import "./_hint.scss";
 
-const Hint = ({ state, dispatch }) => {
-  const { t } = useTranslation();
+const Hint = forwardRef(function Hint(props, ref) {
   const { state: globalState, dispatch: globalDispatch } =
     React.useContext(ApplicationContext);
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    const mergedSteps = {
-      ...globalState,
-      steps: {
-        ...globalState.steps,
-        hint: {
-          ...globalState.steps.hint,
-          complete: true,
-          disabled: true,
-          invalid: false,
-          origin: STATE_ORIGIN_USER,
+  const { state } = props;
+  const publicRef = {
+    persistState: () => {
+      const mergedSteps = {
+        ...globalState,
+        steps: {
+          ...globalState.steps,
+          hint: {
+            ...globalState.steps.hint,
+            complete: true,
+            disabled: true,
+            invalid: false,
+            origin: STATE_ORIGIN_USER,
+          },
         },
-      },
-    };
+      };
 
-    globalDispatch({
-      type: ACTION_UPDATE_APP_STEPS,
-      nextSteps: mergedSteps.steps,
-    });
-    globalDispatch({
-      type: ACTION_UPDATE_APP_IS_DIRTY,
-      nextIsDirty: true,
-    });
-    globalDispatch({
-      type: ACTION_UPDATE_APP_IS_DISABLED,
-      nextSteps: updateIsDisabled(mergedSteps.steps),
-    });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_STEPS,
+        nextSteps: mergedSteps.steps,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DIRTY,
+        nextIsDirty: true,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DISABLED,
+        nextSteps: updateIsDisabled(mergedSteps.steps),
+      });
 
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY_APP_HINT,
-      JSON.stringify({
-        ...state,
-        origin: STATE_ORIGIN_STORAGE,
-      }),
-    );
-  }, [state]);
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_APP_HINT,
+        JSON.stringify({
+          ...state,
+          origin: STATE_ORIGIN_STORAGE,
+        }),
+      );
+    },
+  };
+
+  useEffect(publicRef.persistState, [state]);
+  useImperativeHandle(ref, () => publicRef);
 
   const gridContentsMarkup = (
     <>
@@ -111,7 +117,7 @@ const Hint = ({ state, dispatch }) => {
   );
 
   return markup;
-};
+});
 
 Hint.propTypes = {
   state: PropTypes.object.isRequired,

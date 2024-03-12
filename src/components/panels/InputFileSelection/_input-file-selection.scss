@@ -48,13 +48,17 @@
   }
 }
 
-.input-file-selection__grid {
-  &.cds--grid {
-    padding: 0;
-  }
+.input-file-selection__layer {
+  padding: 0 react.$spacing-08 0 react.$spacing-08;
 
-  .cds--dropdown__wrapper,
-  .cds--form-item {
-    padding: 0 0 react.$spacing-07 0;
+  .input-file-selection__grid {
+    &.cds--grid {
+      padding: 0;
+    }
+
+    .cds--dropdown__wrapper,
+    .cds--form-item {
+      padding: 0 0 react.$spacing-07 0;
+    }
   }
 }

@@ -7,10 +7,6 @@
 import {
   LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
   STATE_ORIGIN_DEFAULT,
-  DEFAULT_DISTRIBUTION_ID,
-  DEFAULT_VERSION_ID,
-  DISTRIBUTION_LIST,
-  VERSION_LIST,
 } from "../util/constants";
 
 const createInitialState = () => {
@@ -18,12 +14,8 @@ const createInitialState = () => {
     localStorage.getItem(LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION),
   );
   const defaultState = {
-    selectedDistributionName: DISTRIBUTION_LIST.find(
-      (x) => x.id === DEFAULT_DISTRIBUTION_ID,
-    ),
-    selectedDistributionVersion: VERSION_LIST.find(
-      (x) => x.id === DEFAULT_VERSION_ID,
-    ),
+    selectedDistributionName: {},
+    selectedDistributionVersion: {},
     origin: STATE_ORIGIN_DEFAULT,
   };
 

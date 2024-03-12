@@ -9,6 +9,10 @@
   $use-flexbox-grid: true
 );
 
+.information__layer {
+  padding: 0 react.$spacing-08 0 react.$spacing-08;
+}
+
 .table-container {
   display: block;
   width: 75%;

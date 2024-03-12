@@ -3,15 +3,19 @@
  *
  * (C) Copyright IBM Corp. 2023
  */
- @use "@carbon/react" with (
+@use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
+
+.app__layer {
+  height: 100%;
+}
 
 .app__full-height {
   height: 100%;
 
   &.cds--content {
-    padding: calc(react.$spacing-09 - react.$spacing-01) calc(3 * react.$spacing-13) 0 calc(react.$spacing-10 * 5);
+    padding: 0 calc(3 * react.$spacing-13) 0 0;
   }
 }
 
@@ -19,6 +23,6 @@
   height: 100%;
 
   &.cds--content {
-    padding: calc(react.$spacing-09 - react.$spacing-01) 0 0 calc(react.$spacing-10 * 5);
+    padding: calc(react.$spacing-09 - react.$spacing-01) 0 0 0;
   }
 }

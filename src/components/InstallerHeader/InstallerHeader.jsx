@@ -10,17 +10,13 @@ import {
   Header,
   HeaderContainer,
   HeaderName,
-  HeaderMenuButton,
   HeaderGlobalBar,
   HeaderGlobalAction,
   HeaderPanel,
-  Layer,
   SkipToContent,
-  SideNav,
 } from "@carbon/react";
 import { Help, LinuxAlt } from "@carbon/icons-react";
 import PropTypes from "prop-types";
-import InstallerFlow from "../InstallerFlow";
 import HelpContent from "./components/HelpContent";
 import "./_installer-header.scss";
 
@@ -46,67 +42,47 @@ const InstallerHeader = ({
   };
 
   return (
-    <Layer>
-      <HeaderContainer
-        render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-          <Header aria-label={t("header.productName", { ns: "common" })}>
-            <SkipToContent />
-            <HeaderMenuButton
-              aria-label="Open menu"
-              onClick={onClickSideNavExpand}
-              isActive={isSideNavExpanded}
-            />
-            <HeaderName href="#" prefix="">
-              {t("header.productName", { ns: "common" })}
-            </HeaderName>
-            <HeaderGlobalBar>
-              <HeaderGlobalAction
-                aria-label={t("header.button.help", { ns: "common" })}
-                onClick={() => {
-                  return state.expanded
-                    ? updateExpanded(false)
-                    : updateExpanded(true);
-                }}
-              >
-                <Help size="24" />
-              </HeaderGlobalAction>
-              <HeaderGlobalAction
-                aria-label={t("header.button.profileSettings")}
-                onClick={() => {
-                  return onShowNotification();
-                }}
-              >
-                <LinuxAlt size="24" />
-              </HeaderGlobalAction>
-            </HeaderGlobalBar>
-            <SideNav
-              aria-label="Side navigation"
-              expanded={true}
-              className="installer-header__sidenav-component"
-            >
-              <InstallerFlow
-                onProgress={onProgress}
-                progressStep={progressStep}
-                progressStepComplete={progressStepComplete}
-                progressStepInvalid={progressStepInvalid}
-                progressStepDisabled={progressStepDisabled}
-              />
-            </SideNav>
-            <HeaderPanel
-              expanded={state.expanded}
+    <HeaderContainer
+      render={({ isSideNavExpanded, onClickSideNavExpand }) => (
+        <Header aria-label={t("header.productName", { ns: "common" })}>
+          <SkipToContent />
+          <HeaderName href="#" prefix="">
+            {t("header.productName", { ns: "common" })}
+          </HeaderName>
+          <HeaderGlobalBar>
+            <HeaderGlobalAction
               aria-label={t("header.button.help", { ns: "common" })}
-              className="installer-header__panel-component"
+              onClick={() => {
+                return state.expanded
+                  ? updateExpanded(false)
+                  : updateExpanded(true);
+              }}
             >
-              <HelpContent
-                expanded={state.expanded}
-                updateExpanded={updateExpanded}
-                helpPanelConfig={helpPanelConfig}
-              />
-            </HeaderPanel>
-          </Header>
-        )}
-      />
-    </Layer>
+              <Help size="24" />
+            </HeaderGlobalAction>
+            <HeaderGlobalAction
+              aria-label={t("header.button.profileSettings")}
+              onClick={() => {
+                return onShowNotification();
+              }}
+            >
+              <LinuxAlt size="24" />
+            </HeaderGlobalAction>
+          </HeaderGlobalBar>
+          <HeaderPanel
+            expanded={state.expanded}
+            aria-label={t("header.button.help", { ns: "common" })}
+            className="installer-header__panel-component"
+          >
+            <HelpContent
+              expanded={state.expanded}
+              updateExpanded={updateExpanded}
+              helpPanelConfig={helpPanelConfig}
+            />
+          </HeaderPanel>
+        </Header>
+      )}
+    />
   );
 };
 

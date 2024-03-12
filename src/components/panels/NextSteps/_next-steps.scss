@@ -15,6 +15,12 @@
   }
 }
 
+.next-steps__accordion {
+  &.cds--accordion {
+    padding: react.$spacing-05 0 0 0;
+  }
+}
+
 .next-steps_heading {
   @include react.type-style("heading-01");
   @include react.font-weight("semibold");

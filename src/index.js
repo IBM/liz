@@ -1,7 +1,7 @@
 /*
  * liz - Installation assistant for Linux on IBM Z
  *
- * (C) Copyright IBM Corp. 2023
+ * (C) Copyright IBM Corp. 2023, 2024
  */
 
 import InstallerFlow from "./components/InstallerFlow";
@@ -17,12 +17,14 @@ import {
 } from "./components/panels";
 
 import LandingPage from "./content/LandingPage";
+import EditPage from "./content/EditPage";
 
 export {
   InstallerFlow,
   InstallerHeader,
   InstallerStepTile,
   LandingPage,
+  EditPage,
   Information,
   InputFileSelection,
   InstallationParameters,

@@ -4,10 +4,10 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import PropTypes from "prop-types";
-import { Layer, Link } from "@carbon/react";
+import { Layer, Link, ActionableNotification } from "@carbon/react";
 import {
   DISTRIBUTION_LIST,
   VERSION_LIST,
@@ -20,19 +20,62 @@ import {
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
 import { updateIsDisabled } from "../../../util/panel-utils";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
 import "./_information.scss";
 
-const Information = ({
-  state,
-  dispatch,
-  distribution,
-  systemRequirements,
-  docLink,
-}) => {
+const Information = forwardRef(function Information(props, ref) {
+  const {
+    state: globalState,
+    dispatch: globalDispatch,
+    downloadParamFileDispatch,
+  } = React.useContext(ApplicationContext);
   const { t } = useTranslation();
-  const { state: globalState, dispatch: globalDispatch } =
-    React.useContext(ApplicationContext);
 
+  const { state, distribution, systemRequirements, docLink } = props;
+  const publicRef = {
+    persistState: () => {
+      const mergedSteps = {
+        ...globalState,
+        steps: {
+          ...globalState.steps,
+          information: {
+            ...globalState.steps.information,
+            complete: true,
+            disabled: true,
+            invalid: false,
+            origin: STATE_ORIGIN_USER,
+          },
+        },
+      };
+
+      globalDispatch({
+        type: ACTION_UPDATE_APP_STEPS,
+        nextSteps: mergedSteps.steps,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DIRTY,
+        nextIsDirty: true,
+      });
+      globalDispatch({
+        type: ACTION_UPDATE_APP_IS_DISABLED,
+        nextSteps: updateIsDisabled(mergedSteps.steps),
+      });
+
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_APP_INFORMATION,
+        JSON.stringify({
+          ...state,
+          origin: STATE_ORIGIN_STORAGE,
+        }),
+      );
+    },
+  };
+
+  useEffect(publicRef.persistState, [state]);
+  useImperativeHandle(ref, () => publicRef);
+
+  const paramFileHasBeenModifiedFromState =
+    globalState?.steps.downloadParamFile?.modified ?? false;
   const distributionName = distribution.name
     ? DISTRIBUTION_LIST.find((x) => x.id === distribution.name).label
     : "";
@@ -46,48 +89,34 @@ const Information = ({
   const DEFAULT_MEMORY_SIZE_UNIT = "GiB";
   const DEFAULT_DISK_SIZE_UNIT = "GiB";
 
-  useEffect(() => {
-    const mergedSteps = {
-      ...globalState,
-      steps: {
-        ...globalState.steps,
-        information: {
-          ...globalState.steps.information,
-          complete: true,
-          disabled: true,
-          invalid: false,
-          origin: STATE_ORIGIN_USER,
-        },
-      },
-    };
-
-    globalDispatch({
-      type: ACTION_UPDATE_APP_STEPS,
-      nextSteps: mergedSteps.steps,
-    });
-    globalDispatch({
-      type: ACTION_UPDATE_APP_IS_DIRTY,
-      nextIsDirty: true,
-    });
-    globalDispatch({
-      type: ACTION_UPDATE_APP_IS_DISABLED,
-      nextSteps: updateIsDisabled(mergedSteps.steps),
-    });
-
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY_APP_INFORMATION,
-      JSON.stringify({
-        ...state,
-        origin: STATE_ORIGIN_STORAGE,
-      }),
-    );
-  }, [state]);
+  const parmfileHasBeenModifiedNotificationMarkup = (
+    <ActionableNotification
+      hideCloseButton
+      inline
+      lowContrast
+      className="intro_parmfile-purge-banner"
+      actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
+      aria-label="closes notification"
+      kind="info"
+      onActionButtonClick={() => {
+        resetParamFileTextAreaData(
+          globalState,
+          globalDispatch,
+          downloadParamFileDispatch,
+        );
+      }}
+      onClose={function noRefCheck() {}}
+      onCloseButtonClick={function noRefCheck() {}}
+      statusIconDescription="notification"
+      subtitle={t("panel.parmFileHasBeenModifiedNotificationSubtitle", {
+        ns: "common",
+      })}
+      title={t("modalHeading.discardParamFileModificationsPrompt")}
+    />
+  );
 
   const markup = (
-    <Layer>
-      <div className="information_heading">
-        {t("panel.information.requirementsHeader", { ns: "panels" })}
-      </div>
+    <Layer className="information__layer">
       <div className="information_content">
         <Trans i18nKey="panel.information.requirementsExplanation" ns="panels">
           These are the minimum system requirements for installing the target
@@ -179,11 +208,13 @@ const Information = ({
           {distributionName}
         </Link>
       </div>
+      {paramFileHasBeenModifiedFromState &&
+        parmfileHasBeenModifiedNotificationMarkup}
     </Layer>
   );
 
   return markup;
-};
+});
 
 Information.propTypes = {
   state: PropTypes.object.isRequired,

@@ -15,12 +15,12 @@
   }
 }
 
-.network-address__grid {
-  &.cds--grid {
-    padding: 0;
-  }
-}
+.network-address__layer {
+  padding: 0 react.$spacing-08 0 react.$spacing-08;
 
-.network-address_hostip-range {
-  /* empty block */
+  .network-address__grid {
+    &.cds--grid {
+      padding: 0;
+    }
+  }
 }

@@ -4,50 +4,77 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { InlineNotification, FlexGrid, Row, Column } from "@carbon/react";
+import { ExpressiveCard, PageHeader } from "@carbon/ibm-products";
+import {
+  ResultDraft,
+  SettingsEdit,
+  NextOutline,
+  DocumentDownload,
+  Edit,
+  TaskView,
+} from "@carbon/icons-react";
 import PropTypes from "prop-types";
 import About from "../../components/About";
 import {
-  Information,
-  InputFileSelection,
-  InstallationParameters,
-  Hint,
-  NetworkAddress,
-  NetworkDevice,
-  NextSteps,
-  DownloadParamFile,
-} from "../../components/panels";
-import {
-  PANEL_DOWNLOAD_PARAM_FILE,
-  PANEL_HINT,
-  PANEL_INFORMATION,
-  PANEL_INPUT_FILE_SELECTION,
-  PANEL_INSTALLATION_PARAMETERS,
-  PANEL_NETWORK_ADDRESS,
-  PANEL_NETWORK_DEVICE,
-  PANEL_NEXT_STEPS,
-  LOCAL_STORAGE_KEY_APP,
+  ACTION_UPDATE_APP_STEP,
+  ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
+  ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
+  ACTION_UPDATE_APP_IS_EDITING,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
+  DEFAULT_PARAM_FILE_NAME,
 } from "../../util/constants";
+import {
+  saveParamFileContent,
+  getParamFileContents,
+  getParamFileName,
+  hasParamFile,
+} from "../../util/param-file-util";
+import { getInlineNotification } from "../../uiUtil/panel-utils";
+import {
+  pruneSettings,
+  getLocalStorageKeys,
+} from "../../util/local-storage-util";
+import { ApplicationContext } from "../../App";
 import "./_landing-page.scss";
 
-const LandingPage = ({
-  panelConfig,
-  showNotification,
-  inlineNotification,
-  closeNotification,
-  localStorageKeys,
-}) => {
-  const pruneSettings = () => {
-    let i;
-    for (i = 0; i < localStorageKeys.length; i++) {
-      localStorage.removeItem(localStorageKeys[i]);
-    }
-    localStorage.removeItem(LOCAL_STORAGE_KEY_APP);
-    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION);
+const LandingPage = ({ closeNotification, resetToInitialState }) => {
+  const { t } = useTranslation();
+  const { state: globalState, dispatch: globalDispatch } =
+    React.useContext(ApplicationContext);
+
+  const showNotification = globalState.showNotification || false;
+  const localStorageKeys = getLocalStorageKeys(globalState);
+
+  const updateShowSystemRequirementInformationModal = (
+    showSystemRequirementInformationModal,
+  ) => {
+    globalDispatch({
+      type: ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
+      nextShowSystemRequirementInformationModal:
+        showSystemRequirementInformationModal,
+    });
+  };
+  const updateShowNextStepsInformationModal = (
+    showNextStepsInformationModal,
+  ) => {
+    globalDispatch({
+      type: ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
+      nextShowNextStepsInformationModal: showNextStepsInformationModal,
+    });
+  };
+
+  const localPruneSettings = () => {
+    pruneSettings(localStorageKeys);
+    resetToInitialState();
     closeNotification(true);
   };
+  const inlineNotification = getInlineNotification(
+    t("legalNotice.headerLabel"),
+    t("legalNotice.contentLabel"),
+  );
   const showInlineNotification = inlineNotification
     ? inlineNotification.show
     : false;
@@ -60,82 +87,55 @@ const LandingPage = ({
       JSON.stringify(localInlineNotification),
     );
   };
-  const getPanel = (panel) => {
-    switch (panel) {
-      case PANEL_DOWNLOAD_PARAM_FILE:
-        return (
-          <DownloadParamFile
-            state={panelConfig.state}
-            dispatch={panelConfig.dispatch}
-            setStep={panelConfig.params.setStep}
-            stateToParamFile={panelConfig.params.stateToParamFile}
-          />
-        );
-      case PANEL_HINT:
-        return (
-          <Hint state={panelConfig.state} dispatch={panelConfig.dispatch} />
-        );
-      case PANEL_INFORMATION:
-        return (
-          <Information
-            state={panelConfig.state}
-            dispatch={panelConfig.dispatch}
-            distribution={panelConfig.params.distribution}
-            systemRequirements={panelConfig.params.systemRequirements}
-            docLink={panelConfig.params.docLink}
-          />
-        );
-      case PANEL_INPUT_FILE_SELECTION:
-        return (
-          <InputFileSelection
-            state={panelConfig.state}
-            dispatch={panelConfig.dispatch}
-          />
-        );
-      case PANEL_INSTALLATION_PARAMETERS:
-        return (
-          <InstallationParameters
-            state={panelConfig.state}
-            dispatch={panelConfig.dispatch}
-            ipAddressVersion={panelConfig.params.ipAddressVersion}
-          />
-        );
-      case PANEL_NETWORK_ADDRESS:
-        return (
-          <NetworkAddress
-            state={panelConfig.state}
-            dispatch={panelConfig.dispatch}
-          />
-        );
-      case PANEL_NETWORK_DEVICE:
-        return (
-          <NetworkDevice
-            state={panelConfig.state}
-            dispatch={panelConfig.dispatch}
-          />
-        );
-      case PANEL_NEXT_STEPS:
-        return (
-          <NextSteps
-            state={panelConfig.state}
-            dispatch={panelConfig.dispatch}
-            useVnc={panelConfig.params.useVnc}
-            useSsh={panelConfig.params.useSsh}
-            networkAddress={panelConfig.params.networkAddress}
-            vncPassword={panelConfig.params.vncPassword}
-          />
-        );
-      default:
-        return null;
+
+  const saveParamFileContentProxy = () => {
+    const paramFileContents = getParamFileContents();
+    const paramFileName = getParamFileName() || DEFAULT_PARAM_FILE_NAME;
+
+    if (paramFileContents.length > 0) {
+      saveParamFileContent(paramFileContents, paramFileName);
     }
   };
+
+  const getPrimaryButtonTextForParamFileCard = () => {
+    let text = "";
+
+    hasParamFile() ? (text = "Edit parmfile") : (text = "Compose parmfile");
+
+    return text;
+  };
+
+  const getSecondaryButtonTextForParamFileCard = () => {
+    let text = "";
+
+    hasParamFile() ? (text = "Download parmfile") : (text = "");
+
+    return text;
+  };
+
+  const getTitleForParamFileCard = () => {
+    let title = "";
+
+    hasParamFile()
+      ? (title = "Edit existing Linux on IBM Z parameter file")
+      : (title = "Compose a new Linux on IBM Z parameter file");
+
+    return title;
+  };
+
+  useEffect(() => {
+    globalDispatch({
+      type: ACTION_UPDATE_APP_STEP,
+      nextStep: 9,
+    });
+  }, []);
 
   return (
     <>
       {showNotification && (
         <About
           closeNotification={closeNotification}
-          pruneSettings={pruneSettings}
+          pruneSettings={localPruneSettings}
         />
       )}
       {showInlineNotification && (
@@ -150,10 +150,117 @@ const LandingPage = ({
           className="landing-page__legal-banner"
         />
       )}
+      <PageHeader
+        actionBarOverflowAriaLabel={t("pageHeader.actionBarOverflowAriaLabel", {
+          ns: "common",
+        })}
+        allTagsModalSearchLabel={t("pageHeader.allTagsModalSearchLabel", {
+          ns: "common",
+        })}
+        allTagsModalSearchPlaceholderText={t(
+          "pageHeader.allTagsModalSearchPlaceholderText",
+          { ns: "common" },
+        )}
+        allTagsModalTitle={t("pageHeader.allTagsModalTitle", { ns: "common" })}
+        breadcrumbOverflowAriaLabel={t(
+          "pageHeader.breadcrumbOverflowAriaLabel",
+          { ns: "common" },
+        )}
+        breadcrumbs={[
+          {
+            href: import.meta.env.VITE_URL_PATH_PREFIX,
+            isCurrentPage: true,
+            key: "breadcrumb-01",
+            label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+          },
+        ]}
+        collapseHeaderIconDescription={t(
+          "pageHeader.collapseHeaderIconDescription",
+          { ns: "common" },
+        )}
+        expandHeaderIconDescription={t("expandHeaderIconDescription", {
+          ns: "common",
+        })}
+        pageActionsOverflowLabel={t("pageHeader.pageActionsOverflowLabel", {
+          ns: "common",
+        })}
+        showAllTagsLabel={t("pageHeader.showAllTagsLabel", { ns: "common" })}
+        subtitle={t("landingPage.pageHeader.subtitle")}
+        title={{
+          icon: function noRefCheck() {},
+          loading: false,
+          text: t("landingPage.pageHeader.title"),
+        }}
+        withoutBackground
+      />
       <FlexGrid className="landing-page__grid">
         <Row>
           <Column className="landing-page__grey-column-background">
-            {getPanel(panelConfig.panel)}
+            <ExpressiveCard
+              label={t("landingPage.expressiveCard.requirements.label")}
+              mediaRatio={null}
+              pictogram={() => {
+                return <ResultDraft size="24" />;
+              }}
+              onPrimaryButtonClick={() => {
+                updateShowSystemRequirementInformationModal(true);
+              }}
+              primaryButtonIcon={TaskView}
+              primaryButtonText={t("btnLabel.ReviewInformation", {
+                ns: "common",
+              })}
+              title={t("panel.information.requirementsHeader", {
+                ns: "panels",
+              })}
+              className="landing-page__express-card"
+            >
+              <p>{t("panel.hint.explanation", { ns: "panels" })}</p>
+            </ExpressiveCard>
+            <ExpressiveCard
+              label={t("landingPage.expressiveCard.tool.label")}
+              mediaRatio={null}
+              pictogram={() => {
+                return <SettingsEdit size="24" />;
+              }}
+              onPrimaryButtonClick={() => {
+                globalDispatch({
+                  type: ACTION_UPDATE_APP_IS_EDITING,
+                  nextIsEditing: true,
+                });
+              }}
+              primaryButtonIcon={Edit}
+              primaryButtonText={getPrimaryButtonTextForParamFileCard()}
+              primaryButtonHref={`${import.meta.env.VITE_URL_PATH_PREFIX}edit/`}
+              secondaryButtonText={getSecondaryButtonTextForParamFileCard()}
+              onSecondaryButtonClick={saveParamFileContentProxy}
+              secondaryButtonIcon={DocumentDownload}
+              title={getTitleForParamFileCard()}
+              className="landing-page__express-card"
+            >
+              {hasParamFile() ? (
+                <p>{t("landingPage.expressiveCard.tool.paraModify")}</p>
+              ) : (
+                <p>{t("landingPage.expressiveCard.tool.paraNew")}</p>
+              )}
+            </ExpressiveCard>
+            <ExpressiveCard
+              label={t("panel.nextSteps.header", { ns: "panels" })}
+              mediaRatio={null}
+              pictogram={() => {
+                return <NextOutline size="24" />;
+              }}
+              primaryButtonText={t("btnLabel.ReviewInformation", {
+                ns: "common",
+              })}
+              primaryButtonIcon={TaskView}
+              onPrimaryButtonClick={() => {
+                updateShowNextStepsInformationModal(true);
+              }}
+              title="Review next installation steps"
+              className="landing-page__express-card"
+            >
+              <p>{t("landingPage.expressiveCard.nextSteps.para")}</p>
+            </ExpressiveCard>
           </Column>
         </Row>
       </FlexGrid>
@@ -162,21 +269,8 @@ const LandingPage = ({
 };
 
 LandingPage.propTypes = {
-  panelConfig: PropTypes.shape({
-    panel: PropTypes.string.isRequired,
-    state: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object,
-  }).isRequired,
-  showNotification: PropTypes.bool.isRequired,
-  inlineNotification: PropTypes.shape({
-    show: PropTypes.bool.isRequired,
-    kind: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    subtitle: PropTypes.string.isRequired,
-  }).isRequired,
   closeNotification: PropTypes.func.isRequired,
-  localStorageKeys: PropTypes.array.isRequired,
+  resetToInitialState: PropTypes.func.isRequired,
 };
 
 export default LandingPage;

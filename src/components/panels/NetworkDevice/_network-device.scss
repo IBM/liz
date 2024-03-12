@@ -9,9 +9,13 @@
   $use-flexbox-grid: true
 );
 
-.network-device__grid {
-  &.cds--grid {
-    padding: 0;
+.network-device__layer {
+  padding: 0 react.$spacing-08 0 react.$spacing-08;
+
+  .network-device__grid {
+    &.cds--grid {
+      padding: 0;
+    }
   }
 }
 

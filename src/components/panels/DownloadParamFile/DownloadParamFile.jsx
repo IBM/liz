@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -28,15 +28,103 @@ import {
   LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
+  DEFAULT_PARAM_FILE_NAME,
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
 import { updateIsDisabled } from "../../../util/panel-utils";
+import { saveParamFileContent } from "../../../util/param-file-util";
 import "./_download-param-file.scss";
 
-const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
-  const { t } = useTranslation();
+const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
   const { state: globalState, dispatch: globalDispatch } =
     React.useContext(ApplicationContext);
+  const { t } = useTranslation();
+
+  const { state, dispatch, setStep, stateToParamFile } = props;
+  const publicRef = {
+    persistState: () => {
+      const paramFileContentToBePersisted = stateHasValidParamFileContents()
+        ? state.paramFileContent
+        : paramFileContent.data;
+
+      isCompleteAndValid((error, isCompleteAndValid) => {
+        let mergedSteps = {};
+
+        if (!error) {
+          mergedSteps = {
+            ...globalState,
+            steps: {
+              ...globalState.steps,
+              downloadParamFile: {
+                ...globalState.steps.downloadParamFile,
+                contents: paramFileContentToBePersisted,
+                modified: state.paramFileContentModified,
+                complete: true,
+                invalid: false,
+                origin: STATE_ORIGIN_USER,
+              },
+            },
+          };
+        } else if (isCompleteAndValid.isComplete) {
+          mergedSteps = {
+            ...globalState,
+            steps: {
+              ...globalState.steps,
+              downloadParamFile: {
+                ...globalState.steps.downloadParamFile,
+                contents: paramFileContentToBePersisted,
+                modified: state.paramFileContentModified,
+                complete: isCompleteAndValid.isComplete,
+                invalid: !isCompleteAndValid.isValid,
+                origin: STATE_ORIGIN_USER,
+              },
+            },
+          };
+        } else {
+          mergedSteps = {
+            ...globalState,
+            steps: {
+              ...globalState.steps,
+              downloadParamFile: {
+                ...globalState.steps.downloadParamFile,
+                contents: paramFileContentToBePersisted,
+                modified: state.paramFileContentModified,
+                disabled: false,
+                complete: isCompleteAndValid.isComplete,
+                invalid: !isCompleteAndValid.isValid,
+                origin: STATE_ORIGIN_USER,
+              },
+            },
+          };
+        }
+
+        globalDispatch({
+          type: ACTION_UPDATE_APP_STEPS,
+          nextSteps: mergedSteps.steps,
+        });
+        globalDispatch({
+          type: ACTION_UPDATE_APP_IS_DIRTY,
+          nextIsDirty: true,
+        });
+        globalDispatch({
+          type: ACTION_UPDATE_APP_IS_DISABLED,
+          nextSteps: updateIsDisabled(mergedSteps.steps),
+        });
+      });
+
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
+        JSON.stringify({
+          ...state,
+          paramFileContent: paramFileContentToBePersisted,
+          origin: STATE_ORIGIN_STORAGE,
+        }),
+      );
+    },
+  };
+
+  useEffect(publicRef.persistState, [state]);
+  useImperativeHandle(ref, () => publicRef);
 
   const stepLabels = {
     0: t("leftNavigation.progressStep.inputFileSelection.label"),
@@ -80,39 +168,13 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
     });
   };
 
-  const destroyClickedElement = (event) => {
-    // remove the link from the DOM
-    document.body.removeChild(event.target);
-  };
-
-  const saveParamFileContent = () => {
-    const textFileAsBlob = new Blob(
-      [
-        stateHasValidParamFileContents()
-          ? state.paramFileContent
-          : paramFileContent.data,
-      ],
-      {
-        type: "text/plain",
-      },
+  const saveParamFileContentProxy = () => {
+    saveParamFileContent(
+      stateHasValidParamFileContents()
+        ? state.paramFileContent
+        : paramFileContent.data,
+      DEFAULT_PARAM_FILE_NAME,
     );
-    const fileNameToSaveAs = "parmfile.txt";
-
-    const downloadLink = document.createElement("a");
-    downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
-    if (window.webkitURL != null) {
-      // Chrome allows the link to be clicked without actually adding it to the DOM.
-      downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    } else {
-      // Firefox requires the link to be added to the DOM before it can be clicked.
-      downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-      downloadLink.onclick = destroyClickedElement;
-      downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
-    }
-
-    downloadLink.click();
   };
 
   const getContent = (value) => {
@@ -137,8 +199,8 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
               className="download-param-file_incomplete-data-tag"
               type="cyan"
               title={label}
-              id={`tag__${property}`}
-              key={`tag__${property}`}
+              id={`tag-incomplete__${property}`}
+              key={`tag-incomplete__${property}`}
             >
               {label}
             </Tag>,
@@ -159,8 +221,8 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
               className="download-param-file_invalid-data-tag"
               type="cyan"
               title={label}
-              id={`tag__${property}`}
-              key={`tag__${property}`}
+              id={`tag-invalid__${property}`}
+              key={`tag-invalid__${property}`}
             >
               {label}
             </Tag>,
@@ -262,7 +324,7 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
           }
           copyContents={updateCopied}
           resetContents={resetParamFileTextAreaData}
-          downloadContents={saveParamFileContent}
+          downloadContents={saveParamFileContentProxy}
           onChange={(localParamFileContent) => {
             const localParamFileContentValue =
               localParamFileContent &&
@@ -315,7 +377,7 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
     </>
   );
   const markup = (
-    <Layer>
+    <Layer className="download-param-file_layer">
       <FlexGrid className="download-param-file_grid">
         <Row>
           <Column>{gridContentsMarkup}</Column>
@@ -358,83 +420,8 @@ const DownloadParamFile = ({ state, dispatch, setStep, stateToParamFile }) => {
     });
   };
 
-  useEffect(() => {
-    isCompleteAndValid((error, isCompleteAndValid) => {
-      let mergedSteps = {};
-
-      if (!error) {
-        mergedSteps = {
-          ...globalState,
-          steps: {
-            ...globalState.steps,
-            downloadParamFile: {
-              ...globalState.steps.downloadParamFile,
-              contents: state.paramFileContent,
-              modified: state.paramFileContentModified,
-              complete: true,
-              invalid: false,
-              origin: STATE_ORIGIN_USER,
-            },
-          },
-        };
-      } else if (isCompleteAndValid.isComplete) {
-        mergedSteps = {
-          ...globalState,
-          steps: {
-            ...globalState.steps,
-            downloadParamFile: {
-              ...globalState.steps.downloadParamFile,
-              contents: state.paramFileContent,
-              modified: state.paramFileContentModified,
-              complete: isCompleteAndValid.isComplete,
-              invalid: !isCompleteAndValid.isValid,
-              origin: STATE_ORIGIN_USER,
-            },
-          },
-        };
-      } else {
-        mergedSteps = {
-          ...globalState,
-          steps: {
-            ...globalState.steps,
-            downloadParamFile: {
-              ...globalState.steps.downloadParamFile,
-              contents: state?.paramFileContent ?? "",
-              modified: state.paramFileContentModified,
-              disabled: false,
-              complete: isCompleteAndValid.isComplete,
-              invalid: !isCompleteAndValid.isValid,
-              origin: STATE_ORIGIN_USER,
-            },
-          },
-        };
-      }
-
-      globalDispatch({
-        type: ACTION_UPDATE_APP_STEPS,
-        nextSteps: mergedSteps.steps,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DIRTY,
-        nextIsDirty: true,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DISABLED,
-        nextSteps: updateIsDisabled(mergedSteps.steps),
-      });
-    });
-
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
-      JSON.stringify({
-        ...state,
-        origin: STATE_ORIGIN_STORAGE,
-      }),
-    );
-  }, [state]);
-
   return markup;
-};
+});
 
 DownloadParamFile.propTypes = {
   setStep: PropTypes.func.isRequired,

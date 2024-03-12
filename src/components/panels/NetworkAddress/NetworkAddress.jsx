@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -14,6 +14,7 @@ import {
   FlexGrid,
   Row,
   Column,
+  ActionableNotification,
 } from "@carbon/react";
 import {
   ADDRESS_TYPE_IPV4,
@@ -57,14 +58,146 @@ import {
   isIpv4NetworkAddressValid,
   isIpv6NetworkAddressValid,
 } from "../../../util/network-address-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
 import { IPv4Panel, IPv6Panel } from "./components";
 import "./_network-address.scss";
 
-const NetworkAddress = ({ state, dispatch }) => {
+const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
+  const {
+    state: globalState,
+    dispatch: globalDispatch,
+    downloadParamFileDispatch,
+  } = React.useContext(ApplicationContext);
   const { t } = useTranslation();
-  const { state: globalState, dispatch: globalDispatch } =
-    React.useContext(ApplicationContext);
 
+  const { state, dispatch } = props;
+  const publicRef = {
+    persistState: () => {
+      let mergedSteps = {};
+
+      isCompleteAndValid((error, isCompleteAndValid) => {
+        if (!error) {
+          mergedSteps = {
+            ...globalState,
+            steps: {
+              ...globalState.steps,
+              networkAddress: {
+                ...globalState.steps.networkAddress,
+                addressType: state.addressType,
+                ipv4: {
+                  cidr: +state?.ipv4?.ipv4Cidr?.value,
+                  binary: state?.ipv4?.binary ?? "",
+                  netmask: state?.ipv4?.netmask?.value ?? "",
+                  address: state?.ipv4?.ipv4Address?.value ?? "",
+                },
+                ipv6: {
+                  cidr: +state?.ipv6?.ipv6Cidr?.value,
+                  address: state?.ipv6?.ipv6Address?.value ?? "",
+                },
+                gatewayIpAddress: state[ipVersion].gatewayIpAddress
+                  ? state[ipVersion].gatewayIpAddress.value
+                  : "",
+                nameserverIpAddress: state[ipVersion].nameserverIpAddress
+                  ? state[ipVersion].nameserverIpAddress.value
+                  : "",
+                hostName: state[ipVersion].hostName
+                  ? state[ipVersion].hostName.value
+                  : "",
+                complete: true,
+                invalid: false,
+                origin: STATE_ORIGIN_USER,
+              },
+            },
+          };
+        } else if (isCompleteAndValid.isComplete) {
+          mergedSteps = {
+            ...globalState,
+            steps: {
+              ...globalState.steps,
+              networkAddress: {
+                ...globalState.steps.networkAddress,
+                addressType: state.addressType,
+                ipv4: {
+                  cidr: +state?.ipv4?.ipv4Cidr?.value,
+                  binary: state?.ipv4?.binary ?? "",
+                  netmask: state?.ipv4?.netmask?.value ?? "",
+                  address: state?.ipv4?.ipv4Address?.value ?? "",
+                },
+                ipv6: {
+                  cidr: +state?.ipv6?.ipv6Cidr?.value,
+                  address: state?.ipv6?.ipv6Address?.value ?? "",
+                },
+                gatewayIpAddress:
+                  state[ipVersion]?.gatewayIpAddress?.value ?? "",
+                nameserverIpAddress:
+                  state[ipVersion]?.nameserverIpAddress?.value ?? "",
+                hostName: state[ipVersion]?.hostName?.value ?? "",
+                complete: isCompleteAndValid.isComplete,
+                invalid: !isCompleteAndValid.isValid,
+                origin: STATE_ORIGIN_USER,
+              },
+            },
+          };
+        } else {
+          mergedSteps = {
+            ...globalState,
+            steps: {
+              ...globalState.steps,
+              networkAddress: {
+                ...globalState.steps.networkAddress,
+                addressType: state?.addressType ?? ADDRESS_TYPE_IPV4,
+                ipv4: {
+                  cidr: +state?.ipv4?.ipv4Cidr?.value,
+                  binary: state?.ipv4?.binary ?? "",
+                  netmask: state?.ipv4?.netmask?.value ?? "",
+                  address: state?.ipv4?.ipv4Address?.value ?? "",
+                },
+                ipv6: {
+                  cidr: +state?.ipv6?.ipv6Cidr?.value,
+                  address: state?.ipv6?.ipv6Address?.value ?? "",
+                },
+                gatewayIpAddress:
+                  state[ipVersion]?.gatewayIpAddress?.value ?? "",
+                nameserverIpAddress:
+                  state[ipVersion]?.nameserverIpAddress?.value ?? "",
+                hostName: state[ipVersion]?.hostName?.value ?? "",
+                complete: isCompleteAndValid.isComplete,
+                invalid: !isCompleteAndValid.isValid,
+                origin: STATE_ORIGIN_USER,
+              },
+            },
+          };
+        }
+
+        globalDispatch({
+          type: ACTION_UPDATE_APP_STEPS,
+          nextSteps: mergedSteps.steps,
+        });
+        globalDispatch({
+          type: ACTION_UPDATE_APP_IS_DIRTY,
+          nextIsDirty: true,
+        });
+        globalDispatch({
+          type: ACTION_UPDATE_APP_IS_DISABLED,
+          nextSteps: updateIsDisabled(mergedSteps.steps),
+        });
+      });
+
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
+        JSON.stringify({
+          ...state,
+          origin: STATE_ORIGIN_STORAGE,
+        }),
+      );
+    },
+  };
+
+  useEffect(publicRef.persistState, [state]);
+  useImperativeHandle(ref, () => publicRef);
+
+  const paramFileHasBeenModifiedFromState =
+    globalState?.steps.downloadParamFile?.modified ?? false;
   const ipVersion =
     state.addressType && state.addressType === ADDRESS_TYPE_IPV6
       ? "ipv6"
@@ -417,127 +550,10 @@ const NetworkAddress = ({ state, dispatch }) => {
     });
   };
 
-  useEffect(() => {
-    let mergedSteps = {};
-
-    isCompleteAndValid((error, isCompleteAndValid) => {
-      if (!error) {
-        mergedSteps = {
-          ...globalState,
-          steps: {
-            ...globalState.steps,
-            networkAddress: {
-              ...globalState.steps.networkAddress,
-              addressType: state.addressType,
-              ipv4: {
-                cidr: +state?.ipv4?.ipv4Cidr?.value,
-                binary: state?.ipv4?.binary ?? "",
-                netmask: state?.ipv4?.netmask?.value ?? "",
-                address: state?.ipv4?.ipv4Address?.value ?? "",
-              },
-              ipv6: {
-                cidr: +state?.ipv6?.ipv6Cidr?.value,
-                address: state?.ipv6?.ipv6Address?.value ?? "",
-              },
-              gatewayIpAddress: state[ipVersion].gatewayIpAddress
-                ? state[ipVersion].gatewayIpAddress.value
-                : "",
-              nameserverIpAddress: state[ipVersion].nameserverIpAddress
-                ? state[ipVersion].nameserverIpAddress.value
-                : "",
-              hostName: state[ipVersion].hostName
-                ? state[ipVersion].hostName.value
-                : "",
-              complete: true,
-              invalid: false,
-              origin: STATE_ORIGIN_USER,
-            },
-          },
-        };
-      } else if (isCompleteAndValid.isComplete) {
-        mergedSteps = {
-          ...globalState,
-          steps: {
-            ...globalState.steps,
-            networkAddress: {
-              ...globalState.steps.networkAddress,
-              addressType: state.addressType,
-              ipv4: {
-                cidr: +state?.ipv4?.ipv4Cidr?.value,
-                binary: state?.ipv4?.binary ?? "",
-                netmask: state?.ipv4?.netmask?.value ?? "",
-                address: state?.ipv4?.ipv4Address?.value ?? "",
-              },
-              ipv6: {
-                cidr: +state?.ipv6?.ipv6Cidr?.value,
-                address: state?.ipv6?.ipv6Address?.value ?? "",
-              },
-              gatewayIpAddress: state[ipVersion]?.gatewayIpAddress?.value ?? "",
-              nameserverIpAddress:
-                state[ipVersion]?.nameserverIpAddress?.value ?? "",
-              hostName: state[ipVersion]?.hostName?.value ?? "",
-              complete: isCompleteAndValid.isComplete,
-              invalid: !isCompleteAndValid.isValid,
-              origin: STATE_ORIGIN_USER,
-            },
-          },
-        };
-      } else {
-        mergedSteps = {
-          ...globalState,
-          steps: {
-            ...globalState.steps,
-            networkAddress: {
-              ...globalState.steps.networkAddress,
-              addressType: state?.addressType ?? ADDRESS_TYPE_IPV4,
-              ipv4: {
-                cidr: +state?.ipv4?.ipv4Cidr?.value,
-                binary: state?.ipv4?.binary ?? "",
-                netmask: state?.ipv4?.netmask?.value ?? "",
-                address: state?.ipv4?.ipv4Address?.value ?? "",
-              },
-              ipv6: {
-                cidr: +state?.ipv6?.ipv6Cidr?.value,
-                address: state?.ipv6?.ipv6Address?.value ?? "",
-              },
-              gatewayIpAddress: state[ipVersion]?.gatewayIpAddress?.value ?? "",
-              nameserverIpAddress:
-                state[ipVersion]?.nameserverIpAddress?.value ?? "",
-              hostName: state[ipVersion]?.hostName?.value ?? "",
-              complete: isCompleteAndValid.isComplete,
-              invalid: !isCompleteAndValid.isValid,
-              origin: STATE_ORIGIN_USER,
-            },
-          },
-        };
-      }
-
-      globalDispatch({
-        type: ACTION_UPDATE_APP_STEPS,
-        nextSteps: mergedSteps.steps,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DIRTY,
-        nextIsDirty: true,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DISABLED,
-        nextSteps: updateIsDisabled(mergedSteps.steps),
-      });
-    });
-
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
-      JSON.stringify({
-        ...state,
-        origin: STATE_ORIGIN_STORAGE,
-      }),
-    );
-  }, [state]);
-
   const gridContentsMarkupRowOne = (
     <div className="network-address_column-left">
       <RadioButtonGroup
+        readOnly={paramFileHasBeenModifiedFromState}
         className="network-address_ip-version-group"
         legendText={t("panel.networkAddress.internetProtocolVersionTextLabel", {
           ns: "panels",
@@ -545,6 +561,8 @@ const NetworkAddress = ({ state, dispatch }) => {
         name="network-address_ip-version-group"
         defaultSelected={state?.addressType ?? ADDRESS_TYPE_IPV4}
         onChange={(selected) => {
+          if (paramFileHasBeenModifiedFromState) return;
+
           updateAddressType(selected);
         }}
       >
@@ -564,26 +582,74 @@ const NetworkAddress = ({ state, dispatch }) => {
 
   const getIPVersionSpecificMarkup = () => {
     if (state.addressType && state.addressType === ADDRESS_TYPE_IPV4) {
-      return <IPv4Panel updateFunction={updateFunction} state={state} />;
+      return (
+        <IPv4Panel
+          updateFunction={updateFunction}
+          state={state}
+          readOnly={paramFileHasBeenModifiedFromState}
+        />
+      );
     } else if (state.addressType && state.addressType === ADDRESS_TYPE_IPV6) {
-      return <IPv6Panel updateFunction={updateFunction} state={state} />;
+      return (
+        <IPv6Panel
+          updateFunction={updateFunction}
+          state={state}
+          readOnly={paramFileHasBeenModifiedFromState}
+        />
+      );
     } else if (!state.addressType) {
-      return <IPv4Panel updateFunction={updateFunction} state={state} />;
+      return (
+        <IPv4Panel
+          updateFunction={updateFunction}
+          state={state}
+          readOnly={paramFileHasBeenModifiedFromState}
+        />
+      );
     }
     return <></>;
   };
 
+  const parmfileHasBeenModifiedNotificationMarkup = (
+    <ActionableNotification
+      hideCloseButton
+      inline
+      lowContrast
+      className="intro_parmfile-purge-banner"
+      actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
+      aria-label="closes notification"
+      kind="info"
+      onActionButtonClick={() => {
+        resetParamFileTextAreaData(
+          globalState,
+          globalDispatch,
+          downloadParamFileDispatch,
+        );
+      }}
+      onClose={function noRefCheck() {}}
+      onCloseButtonClick={function noRefCheck() {}}
+      statusIconDescription="notification"
+      subtitle={t("panel.parmFileHasBeenModifiedNotificationSubtitle", {
+        ns: "common",
+      })}
+      title={t("modalHeading.discardParamFileModificationsPrompt")}
+    />
+  );
+
   return (
-    <Layer>
+    <Layer className="network-address__layer">
       <FlexGrid className="network-address__grid">
         <Row>
           <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
         {getIPVersionSpecificMarkup()}
+        <Row>
+          {paramFileHasBeenModifiedFromState &&
+            parmfileHasBeenModifiedNotificationMarkup}
+        </Row>
       </FlexGrid>
     </Layer>
   );
-};
+});
 
 NetworkAddress.propTypes = {
   state: PropTypes.shape({

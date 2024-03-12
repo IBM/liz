@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -13,6 +13,7 @@ import {
   Row,
   Column,
   Layer,
+  ActionableNotification,
 } from "@carbon/react";
 import {
   ACTION_UPDATE_DISTRIBUTION_NAME,
@@ -28,13 +29,78 @@ import {
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
 import { updateIsDisabled } from "../../../util/panel-utils";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
 import "./_input-file-selection.scss";
 
-const InputFileSelection = ({ state, dispatch }) => {
+const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
+  const {
+    state: globalState,
+    dispatch: globalDispatch,
+    downloadParamFileDispatch,
+  } = React.useContext(ApplicationContext);
   const { t } = useTranslation();
-  const { state: globalState, dispatch: globalDispatch } =
-    React.useContext(ApplicationContext);
 
+  const { state, dispatch } = props;
+  const publicRef = {
+    persistState: () => {
+      isComplete((error, isComplete) => {
+        let mergedSteps = {};
+
+        if (!error) {
+          mergedSteps = {
+            ...globalState,
+            steps: {
+              ...globalState.steps,
+              inputFileSelection: {
+                ...globalState.steps.inputFileSelection,
+                distributionName:
+                  state.selectedDistributionName &&
+                  state.selectedDistributionName.id
+                    ? state.selectedDistributionName.id
+                    : "",
+                distributionVersion:
+                  state.selectedDistributionVersion &&
+                  state.selectedDistributionVersion.id
+                    ? state.selectedDistributionVersion.id
+                    : "",
+                complete: isComplete,
+                disabled: false,
+                invalid: false,
+                origin: STATE_ORIGIN_USER,
+              },
+            },
+          };
+
+          globalDispatch({
+            type: ACTION_UPDATE_APP_STEPS,
+            nextSteps: mergedSteps.steps,
+          });
+          globalDispatch({
+            type: ACTION_UPDATE_APP_IS_DIRTY,
+            nextIsDirty: true,
+          });
+          globalDispatch({
+            type: ACTION_UPDATE_APP_IS_DISABLED,
+            nextSteps: updateIsDisabled(mergedSteps.steps),
+          });
+        }
+      });
+
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
+        JSON.stringify({
+          ...state,
+          origin: STATE_ORIGIN_STORAGE,
+        }),
+      );
+    },
+  };
+
+  useEffect(publicRef.persistState, [state]);
+  useImperativeHandle(ref, () => publicRef);
+
+  const paramFileHasBeenModifiedFromState =
+    globalState?.steps.downloadParamFile?.modified ?? false;
   const updateSelectedDistributionName = (
     selectedDistributionName,
     callback,
@@ -71,58 +137,31 @@ const InputFileSelection = ({ state, dispatch }) => {
     return callback(null, false);
   };
 
-  useEffect(() => {
-    isComplete((error, isComplete) => {
-      let mergedSteps = {};
-
-      if (!error) {
-        mergedSteps = {
-          ...globalState,
-          steps: {
-            ...globalState.steps,
-            inputFileSelection: {
-              ...globalState.steps.inputFileSelection,
-              distributionName:
-                state.selectedDistributionName &&
-                state.selectedDistributionName.id
-                  ? state.selectedDistributionName.id
-                  : "",
-              distributionVersion:
-                state.selectedDistributionVersion &&
-                state.selectedDistributionVersion.id
-                  ? state.selectedDistributionVersion.id
-                  : "",
-              complete: isComplete,
-              disabled: false,
-              invalid: false,
-              origin: STATE_ORIGIN_USER,
-            },
-          },
-        };
-
-        globalDispatch({
-          type: ACTION_UPDATE_APP_STEPS,
-          nextSteps: mergedSteps.steps,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DIRTY,
-          nextIsDirty: true,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DISABLED,
-          nextSteps: updateIsDisabled(mergedSteps.steps),
-        });
-      }
-    });
-
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
-      JSON.stringify({
-        ...state,
-        origin: STATE_ORIGIN_STORAGE,
-      }),
-    );
-  }, [state]);
+  const parmfileHasBeenModifiedNotificationMarkup = (
+    <ActionableNotification
+      hideCloseButton
+      inline
+      lowContrast
+      className="intro_parmfile-purge-banner"
+      actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
+      aria-label="closes notification"
+      kind="info"
+      onActionButtonClick={() => {
+        resetParamFileTextAreaData(
+          globalState,
+          globalDispatch,
+          downloadParamFileDispatch,
+        );
+      }}
+      onClose={function noRefCheck() {}}
+      onCloseButtonClick={function noRefCheck() {}}
+      statusIconDescription="notification"
+      subtitle={t("panel.parmFileHasBeenModifiedNotificationSubtitle", {
+        ns: "common",
+      })}
+      title={t("modalHeading.discardParamFileModificationsPrompt")}
+    />
+  );
 
   const gridContentsMarkupRowOne = (
     <>
@@ -131,17 +170,20 @@ const InputFileSelection = ({ state, dispatch }) => {
   );
   const gridContentsMarkupRowTwo = (
     <>
+      {/*
       <div>
         <div className="input-file-selection__subheading">
           {t("panel.inputFileSelection.hostOS", { ns: "panels" })}
         </div>
       </div>
+      */}
     </>
   );
   const gridContentsMarkupRowThreeColumnOne = (
     <div>
       <div className="input-file-selection__contentRowDropdowns">
         <Dropdown
+          readOnly={paramFileHasBeenModifiedFromState}
           aria-label={t(
             "panel.inputFileSelection.chooseDistributionFromeTemplateShort",
             { ns: "panels" },
@@ -161,11 +203,14 @@ const InputFileSelection = ({ state, dispatch }) => {
           invalid={false}
           disabled={false}
           onChange={({ selectedItem }) => {
+            if (paramFileHasBeenModifiedFromState) return;
+
             updateSelectedDistributionName(selectedItem);
           }}
           selectedItem={state.selectedDistributionName}
         />
         <Dropdown
+          readOnly={paramFileHasBeenModifiedFromState}
           aria-label={t(
             "panel.inputFileSelection.chooseVersionFromeTemplateShort",
             { ns: "panels" },
@@ -183,10 +228,14 @@ const InputFileSelection = ({ state, dispatch }) => {
           invalid={false}
           disabled={false}
           onChange={({ selectedItem }) => {
+            if (paramFileHasBeenModifiedFromState) return;
+
             updateSelectedDistributionVersion(selectedItem);
           }}
           selectedItem={state.selectedDistributionVersion}
         />
+        {paramFileHasBeenModifiedFromState &&
+          parmfileHasBeenModifiedNotificationMarkup}
       </div>
     </div>
   );
@@ -215,7 +264,7 @@ const InputFileSelection = ({ state, dispatch }) => {
   );
 
   return (
-    <Layer>
+    <Layer className="input-file-selection__layer">
       <FlexGrid className="input-file-selection__grid">
         <Row>
           <Column>{gridContentsMarkupRowOne}</Column>
@@ -230,7 +279,7 @@ const InputFileSelection = ({ state, dispatch }) => {
       </FlexGrid>
     </Layer>
   );
-};
+});
 
 InputFileSelection.propTypes = {
   state: PropTypes.shape({

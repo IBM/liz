@@ -4,6 +4,8 @@
  * (C) Copyright IBM Corp. 2023
  */
 
+import { nanoid } from "nanoid";
+
 const PANEL_DOWNLOAD_PARAM_FILE = "downloadParamFile";
 const PANEL_HINT = "hint";
 const PANEL_INFORMATION = "information";
@@ -12,6 +14,9 @@ const PANEL_INSTALLATION_PARAMETERS = "installationParameters";
 const PANEL_NETWORK_ADDRESS = "networkAddress";
 const PANEL_NETWORK_DEVICE = "networkDevice";
 const PANEL_NEXT_STEPS = "netxtSteps";
+const PANEL_SUMMARY = "summary";
+const PANEL_INTRO = "intro";
+const PANEL_LANDING_PAGE = "landingPage";
 const PANEL_UNKNOWN = "unknown";
 
 const ACTION_UPDATE_DISTRIBUTION_NAME = "updatedDistributionName";
@@ -61,10 +66,17 @@ const ACTION_UPDATE_NETWORK_DEVICE_PORT_NO = "updatePortNo";
 const ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID = "updatePciFunctionId";
 const ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER = "updateUserIdentifier";
 const ACTION_UPDATE_NETWORK_DEVICE_VLAN_ID = "updateVlanId";
+const ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE = "updateDownloadParmfile";
+const ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE_NAME =
+  "updateDownloadParmfileName";
+const ACTION_UPDATE_INTRO_PURGE_PARMFILE_SETTINGS =
+  "updatePurgeParmfileSettings";
 const ACTION_UPDATE_APP_NEXT_STEP = "updateAppNextStep";
 const ACTION_UPDATE_APP_STATE = "updateAppState";
 const ACTION_UPDATE_APP_STEP = "updateAppStep";
 const ACTION_UPDATE_APP_STEPS = "updateAppSteps";
+const ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE =
+  "updateAppUseStateFromLocalStorage";
 const ACTION_UPDATE_APP_PARAM_FILE_MODIFIED = "updateAppParamFileModified";
 const ACTION_UPDATE_APP_PARAM_FILE_CONTENT = "updateAppParamFileContent";
 const ACTION_UPDATE_APP_CAN_RENDER_STEP = "canRenderStep";
@@ -73,11 +85,12 @@ const ACTION_UPDATE_APP_HELP_PANEL_EXPANDED = "updateHelpPanelExpanded";
 const ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL = "updateShowConfirmationModal";
 const ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL =
   "showDiscardModifiedParamFileContentsModal";
-const ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL =
-  "updateShowUseExistingSettingsModal";
-const ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED =
-  "updateUseExistingSettingsModalOpened";
+const ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL =
+  "showSystemRequirementInformationModal";
+const ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL =
+  "showNextStepsInformationModal";
 const ACTION_UPDATE_APP_IS_DIRTY = "updateIsDirty";
+const ACTION_UPDATE_APP_IS_EDITING = "updateIsEditing";
 const ACTION_UPDATE_APP_IS_DISABLED = "updateIsDisabled";
 
 const LOCAL_STORAGE_KEY_APP = "com.ibm.systems.linux.z.app";
@@ -86,6 +99,7 @@ const LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION =
 const LOCAL_STORAGE_KEY_APP_INFORMATION = "com.ibm.systems.linux.z.information";
 const LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE =
   "com.ibm.systems.linux.z.downloadParamFile";
+const LOCAL_STORAGE_KEY_APP_INTRO = "com.ibm.systems.linux.z.intro";
 const LOCAL_STORAGE_KEY_APP_HINT = "com.ibm.systems.linux.z.hint";
 const LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS =
   "com.ibm.systems.linux.z.installationParameters";
@@ -94,6 +108,7 @@ const LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS =
 const LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE =
   "com.ibm.systems.linux.z.networkDevice";
 const LOCAL_STORAGE_KEY_APP_NEXT_STEPS = "com.ibm.systems.linux.z.nextSteps";
+const LOCAL_STORAGE_KEY_APP_SUMMARY = "com.ibm.systems.linux.z.summary";
 const LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION =
   "com.ibm.systems.linux.z.inlineNotification";
 
@@ -193,7 +208,148 @@ const DEFAULT_COMPUTED_NUMBER_OBJECT = {
 const DEFAULT_DISTRIBUTION_ID = "rhel";
 const DEFAULT_VERSION_ID = "version-9.x";
 
+const TEARSHEET_KIND_GETTING_STARTED = "gettingStarted";
+const TEARSHEET_KIND_NEXT_STEPS = "nextSteps";
+const TEARSHEET_KIND_NONE = "none";
+
+const TEARSHEET_TAB_CONTENT_CLASSIC_MODE = "tabContentClassicMode";
+const TEARSHEET_TAB_CONTENT_DPM = "tabContentDPM";
+
+const DEFAULT_PARAM_FILE_NAME = `parmfile__${nanoid()}.txt`;
+
+const DEFAULT_STEPS = {
+  inputFileSelection: {
+    distributionName: RHEL_V9_DISTRIBUTION_ID,
+    distributionVersion: RHEL_V9_VERSION_ID,
+    memorySize: 3,
+    diskSize: 10,
+    machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
+    docLink:
+      "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
+    complete: false,
+    disabled: false,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
+    index: 0,
+  },
+  information: {
+    complete: true,
+    disabled: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_INFORMATION,
+    index: 1,
+  },
+  downloadParamFile: {
+    presets: RHEL_PRESET,
+    contents: "",
+    modified: false,
+    complete: false,
+    disabled: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
+    index: 6,
+  },
+  hint: {
+    complete: true,
+    disabled: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_HINT,
+    index: 2,
+  },
+  installationParameters: {
+    networkInstallationUrl: "",
+    vnc: {
+      password: "",
+      enabled: true,
+    },
+    ssh: {
+      enabled: false,
+    },
+    complete: false,
+    disabled: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
+    index: 5,
+  },
+  networkAddress: {
+    addressType: ADDRESS_TYPE_IPV4,
+    ipv4: {
+      cidr: 1,
+      binary: "",
+      netmask: "",
+      address: "",
+    },
+    ipv6: {
+      cidr: 1,
+      address: "",
+    },
+    gatewayIpAddress: "",
+    nameserverIpAddress: "",
+    hostName: "",
+    domainSearchPath: "",
+    complete: false,
+    disabled: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
+    index: 4,
+  },
+  networkDevice: {
+    deviceType: DEVICE_TYPE_OSA,
+    osa: {
+      readChannel: "",
+      writeChannel: "",
+      dataChannel: "",
+      portNumber: 0,
+      layer: 0,
+    },
+    roce: {
+      fid: "",
+      uid: "",
+    },
+    vlan: {
+      id: 1,
+      enabled: false,
+    },
+    complete: false,
+    disabled: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
+    index: 3,
+  },
+  nextSteps: {
+    disabled: true,
+    complete: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
+    index: 7,
+  },
+  summary: {
+    downloadParmfile: false,
+    downloadParmfileName: "",
+    disabled: true,
+    complete: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_SUMMARY,
+    index: 8,
+  },
+  intro: {
+    purgeParmfileSettings: false,
+    disabled: true,
+    complete: true,
+    invalid: false,
+    localStorageKey: LOCAL_STORAGE_KEY_APP_INTRO,
+    index: 10,
+  },
+};
+
 export {
+  DEFAULT_STEPS,
+  DEFAULT_PARAM_FILE_NAME,
+  TEARSHEET_TAB_CONTENT_CLASSIC_MODE,
+  TEARSHEET_TAB_CONTENT_DPM,
+  TEARSHEET_KIND_NONE,
+  TEARSHEET_KIND_GETTING_STARTED,
+  TEARSHEET_KIND_NEXT_STEPS,
   DEFAULT_COMPUTED_NUMBER_OBJECT,
   DEFAULT_COMPUTED_STRING_OBJECT,
   DEFAULT_NUMBER_OBJECT,
@@ -206,6 +362,9 @@ export {
   PANEL_NETWORK_ADDRESS,
   PANEL_NETWORK_DEVICE,
   PANEL_NEXT_STEPS,
+  PANEL_SUMMARY,
+  PANEL_INTRO,
+  PANEL_LANDING_PAGE,
   PANEL_UNKNOWN,
   DEFAULT_DISTRIBUTION_ID,
   DEFAULT_VERSION_ID,
@@ -213,11 +372,13 @@ export {
   LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
   LOCAL_STORAGE_KEY_APP_INFORMATION,
   LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
+  LOCAL_STORAGE_KEY_APP_INTRO,
   LOCAL_STORAGE_KEY_APP_HINT,
   LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
   LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
   LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
+  LOCAL_STORAGE_KEY_APP_SUMMARY,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
   ACTION_UPDATE_APP_STATE,
   ACTION_UPDATE_APP_STEP,
@@ -227,11 +388,13 @@ export {
   ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
+  ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
-  ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL,
   ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
-  ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED,
+  ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
+  ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
   ACTION_UPDATE_APP_IS_DIRTY,
+  ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_IS_DISABLED,
   ACTION_UPDATE_APP_CAN_RENDER_STEP,
   ACTION_UPDATE_NETWORK_DEVICE_TYPE,
@@ -264,6 +427,9 @@ export {
   ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
   ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
   ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
+  ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE,
+  ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE_NAME,
+  ACTION_UPDATE_INTRO_PURGE_PARMFILE_SETTINGS,
   ACTION_UPDATE_NOP,
   ACTION_RESET_TO_INITIAL_STATE,
   ACTION_UPDATE_PARAM_FILE_COPIED,

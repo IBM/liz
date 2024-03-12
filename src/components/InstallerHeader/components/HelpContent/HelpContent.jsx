@@ -9,53 +9,11 @@ import { useTranslation } from "react-i18next";
 import { Button, FlexGrid, Row, Column, Layer } from "@carbon/react";
 import { Close } from "@carbon/icons-react";
 import PropTypes from "prop-types";
-import {
-  Information,
-  InputFileSelection,
-  InstallationParameters,
-  Hint,
-  NetworkAddress,
-  NetworkDevice,
-  NextSteps,
-  DownloadParamFile,
-} from "../../../help";
-import {
-  PANEL_DOWNLOAD_PARAM_FILE,
-  PANEL_HINT,
-  PANEL_INFORMATION,
-  PANEL_INPUT_FILE_SELECTION,
-  PANEL_INSTALLATION_PARAMETERS,
-  PANEL_NETWORK_ADDRESS,
-  PANEL_NETWORK_DEVICE,
-  PANEL_NEXT_STEPS,
-} from "../../../../util/constants";
+import { getHelpPanel as getPanel } from "../../../../uiUtil/panel-utils";
 import "./_help-content.scss";
 
 const HelpContent = ({ expanded, updateExpanded, helpPanelConfig }) => {
   const { t } = useTranslation();
-
-  const getPanel = (panel) => {
-    switch (panel) {
-      case PANEL_DOWNLOAD_PARAM_FILE:
-        return <DownloadParamFile />;
-      case PANEL_HINT:
-        return <Hint />;
-      case PANEL_INFORMATION:
-        return <Information />;
-      case PANEL_INPUT_FILE_SELECTION:
-        return <InputFileSelection />;
-      case PANEL_INSTALLATION_PARAMETERS:
-        return <InstallationParameters />;
-      case PANEL_NETWORK_ADDRESS:
-        return <NetworkAddress />;
-      case PANEL_NETWORK_DEVICE:
-        return <NetworkDevice />;
-      case PANEL_NEXT_STEPS:
-        return <NextSteps />;
-      default:
-        return null;
-    }
-  };
 
   const markup = (
     <Layer>

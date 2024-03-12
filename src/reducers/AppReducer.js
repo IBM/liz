@@ -14,12 +14,15 @@ import {
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
-  ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL,
   ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
-  ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED,
+  ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
+  ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
+  ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
   ACTION_UPDATE_APP_IS_DIRTY,
+  ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_IS_DISABLED,
   ACTION_UPDATE_APP_CAN_RENDER_STEP,
+  ACTION_RESET_TO_INITIAL_STATE,
   LOCAL_STORAGE_KEY_APP,
   STATE_ORIGIN_STORAGE,
 } from "../util/constants";
@@ -38,6 +41,8 @@ const reducer = (state, action) => {
   let updatedState = {};
 
   switch (action.type) {
+    case ACTION_RESET_TO_INITIAL_STATE:
+      return action.nextInitialState;
     case ACTION_UPDATE_APP_STATE:
       persistToLocalStorage(action.nextState);
       return action.nextState;
@@ -95,6 +100,13 @@ const reducer = (state, action) => {
       };
       persistToLocalStorage(updatedState);
       return updatedState;
+    case ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE:
+      updatedState = {
+        ...state,
+        useStateFromLocalStorage: action.nextUseStateFromLocalStorage,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
     case ACTION_UPDATE_APP_HELP_PANEL_EXPANDED:
       updatedState = {
         ...state,
@@ -109,13 +121,6 @@ const reducer = (state, action) => {
       };
       persistToLocalStorage(updatedState);
       return updatedState;
-    case ACTION_UPDATE_APP_SHOW_USE_EXISTING_SETTINGS_MODAL:
-      updatedState = {
-        ...state,
-        showUseExistingSettingsModal: action.nextShowUseExistingSettingsModal,
-      };
-      persistToLocalStorage(updatedState);
-      return updatedState;
     case ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL:
       updatedState = {
         ...state,
@@ -124,11 +129,18 @@ const reducer = (state, action) => {
       };
       persistToLocalStorage(updatedState);
       return updatedState;
-    case ACTION_UPDATE_APP_USE_EXISTING_SETTINGS_MODAL_OPENED:
+    case ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL:
       updatedState = {
         ...state,
-        useExistingSettingsModalOpened:
-          action.nextUseExistingSettingsModalOpened,
+        showNextStepsInformationModal: action.nextShowNextStepsInformationModal,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL:
+      updatedState = {
+        ...state,
+        showSystemRequirementInformationModal:
+          action.nextShowSystemRequirementInformationModal,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
@@ -136,6 +148,13 @@ const reducer = (state, action) => {
       updatedState = {
         ...state,
         isDirty: action.nextIsDirty,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_IS_EDITING:
+      updatedState = {
+        ...state,
+        isEditing: action.nextIsEditing,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
