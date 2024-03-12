@@ -147,12 +147,12 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
         )}
         breadcrumbs={[
           {
-            href: import.meta.env.VITE_URL_PATH_PREFIX,
+            href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
             key: "breadcrumb-01",
             label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
           },
           {
-            href: `${import.meta.env.VITE_URL_PATH_PREFIX}edit/`,
+            href: `${import.meta.env.VITE_URL_PATH_PREFIX}#/edit/`,
             isCurrentPage: true,
             key: "breadcrumb-02",
             label: t("pageHeader.breadcrumbs.composeParmfile", {

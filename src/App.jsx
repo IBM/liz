@@ -966,7 +966,7 @@ const App = () => {
         <Content className={contentClassName}>
           <Routes>
             <Route
-              exact={true}
+              exact
               path="/"
               element={
                 <ApplicationContext.Provider
@@ -981,8 +981,7 @@ const App = () => {
               }
             />
             <Route
-              exact={true}
-              path={`/edit/`}
+              path="/edit"
               element={
                 <ApplicationContext.Provider
                   value={{ state, dispatch, downloadParamFileDispatch }}

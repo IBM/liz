@@ -172,7 +172,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
         )}
         breadcrumbs={[
           {
-            href: import.meta.env.VITE_URL_PATH_PREFIX,
+            href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
             isCurrentPage: true,
             key: "breadcrumb-01",
             label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
@@ -234,7 +234,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
               }}
               primaryButtonIcon={Edit}
               primaryButtonText={getPrimaryButtonTextForParamFileCard()}
-              primaryButtonHref={`${import.meta.env.VITE_URL_PATH_PREFIX}edit/`}
+              primaryButtonHref={`${import.meta.env.VITE_URL_PATH_PREFIX}#/edit`}
               secondaryButtonText={getSecondaryButtonTextForParamFileCard()}
               onSecondaryButtonClick={saveParamFileContentProxy}
               secondaryButtonIcon={DocumentDownload}
