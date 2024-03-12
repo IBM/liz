@@ -197,7 +197,7 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
             type: ACTION_UPDATE_APP_IS_EDITING,
             nextIsEditing: false,
           });
-          navigate(import.meta.env.VITE_URL_PATH_PREFIX);
+          navigate("/#");
         }}
         onRequestSubmit={createParamFile}
         secondaryTitle=""
