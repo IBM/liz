@@ -86,7 +86,6 @@ const DeviceSettings = ({
             <div className="device-settings_grid-column-left">
               <Toggle
                 readOnly={readOnly}
-                defaultToggled
                 toggled={state.layer}
                 labelText={t("panel.networkDevice.layerTwoToggleTextLabel", {
                   ns: "panels",

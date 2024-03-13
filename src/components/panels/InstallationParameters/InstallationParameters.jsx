@@ -605,7 +605,7 @@ const InstallationParameters = forwardRef(
           labelA={t("btnLabel.No", { ns: "common" })}
           labelB={t("btnLabel.Yes", { ns: "common" })}
           id="vnc-toggle"
-          defaultToggled={useVncToggled}
+          toggled={useVncToggled}
           onToggle={() => {
             if (paramFileHasBeenModifiedFromState) return;
 
@@ -664,7 +664,7 @@ const InstallationParameters = forwardRef(
           labelA={t("btnLabel.No", { ns: "common" })}
           labelB={t("btnLabel.Yes", { ns: "common" })}
           id="ssh-toggle"
-          defaultToggled={useSshToggled}
+          toggled={useSshToggled}
           onToggle={() => {
             if (paramFileHasBeenModifiedFromState) return;
 

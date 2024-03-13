@@ -205,10 +205,12 @@ const App = () => {
       type: ACTION_UPDATE_APP_STEPS,
       nextSteps: DEFAULT_STEPS,
     });
-    dispatch({
-      type: ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
-      nextUseStateFromLocalStorage: false,
-    });
+    if (!state.isEditing) {
+      dispatch({
+        type: ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
+        nextUseStateFromLocalStorage: false,
+      });
+    }
   };
 
   const getHelpPanelConfig = ({ step }) => {
@@ -469,7 +471,7 @@ const App = () => {
             title: t("modalHeading.useExistingSettingsPrompt"),
             subtitle: t("modalBody.useExistingSettingsPrompt"),
             index: state.steps.intro.index,
-            includeStep: state.isEditing && state.useStateFromLocalStorage,
+            includeStep: state.useStateFromLocalStorage,
             introStep: true,
             resetToInitialState,
             localStorageKeys: getLocalStorageKeys(state),

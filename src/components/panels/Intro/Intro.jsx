@@ -150,7 +150,7 @@ const Intro = forwardRef(function Intro(props, ref) {
         labelB={t("btnLabel.Yes", { ns: "common" })}
         id="intro_purge-parmfile-settings-toggle"
         className="intro_purge-parmfile-settings-toggle"
-        defaultToggled={!purgeParmfileSettings}
+        toggled={!purgeParmfileSettings}
         onToggle={() => {
           if (purgeParmfileSettings) {
             updatePurgeParmfileSettings(false);

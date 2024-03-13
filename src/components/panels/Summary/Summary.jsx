@@ -101,7 +101,7 @@ const Summary = forwardRef(function Summary(props, ref) {
         labelB={t("btnLabel.Yes", { ns: "common" })}
         id="summary_download-parmfile-toggle"
         className="summary_download-parmfile-toggle"
-        defaultToggled={downloadParmfile}
+        toggled={downloadParmfile}
         onToggle={() => {
           if (downloadParmfile) {
             updateDownloadParmfile(false);

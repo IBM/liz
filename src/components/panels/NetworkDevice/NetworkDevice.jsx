@@ -661,7 +661,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
         labelB={t("btnLabel.Yes", { ns: "common" })}
         id="network-device_vlan-toggle"
         className="network-device_vlan-toggle"
-        defaultToggled={useVlanToggled}
+        toggled={useVlanToggled}
         onToggle={() => {
           if (paramFileHasBeenModifiedFromState) return;
 
