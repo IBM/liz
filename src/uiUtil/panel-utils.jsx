@@ -87,7 +87,6 @@ const getPanel = (panel, panelConfig, panelRef) => {
         <DownloadParamFile
           state={panelConfig.state}
           dispatch={panelConfig.dispatch}
-          setStep={panelConfig.params.setStep}
           stateToParamFile={panelConfig.params.stateToParamFile}
           ref={panelRef}
         />

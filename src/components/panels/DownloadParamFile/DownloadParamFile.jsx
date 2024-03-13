@@ -11,7 +11,6 @@ import {
   Layer,
   InlineNotification,
   ActionableNotification,
-  Tag,
   FlexGrid,
   Row,
   Column,
@@ -40,7 +39,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
     React.useContext(ApplicationContext);
   const { t } = useTranslation();
 
-  const { state, dispatch, setStep, stateToParamFile } = props;
+  const { state, dispatch, stateToParamFile } = props;
   const publicRef = {
     persistState: () => {
       const paramFileContentToBePersisted = stateHasValidParamFileContents()
@@ -126,17 +125,6 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
   useEffect(publicRef.persistState, [state]);
   useImperativeHandle(ref, () => publicRef);
 
-  const stepLabels = {
-    0: t("leftNavigation.progressStep.inputFileSelection.label"),
-    1: t("leftNavigation.progressStep.information.label"),
-    2: t("leftNavigation.progressStep.hint.label"),
-    3: t("leftNavigation.progressStep.networkDevice.label"),
-    4: t("leftNavigation.progressStep.networkAddress.label"),
-    5: t("leftNavigation.progressStep.installationParameters.label"),
-    6: t("leftNavigation.progressStep.downloadParamFile.label"),
-    7: t("leftNavigation.progressStep.nextSteps.label"),
-  };
-
   const paramFileContent = stateToParamFile(globalState);
 
   const updateCopied = () => {
@@ -174,82 +162,6 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         ? state.paramFileContent
         : paramFileContent.data,
       DEFAULT_PARAM_FILE_NAME,
-    );
-  };
-
-  const getContent = (value) => {
-    return <p>{value}</p>;
-  };
-
-  const getIncompleteOrInvalidMarkup = () => {
-    const incompleteListMarkup = [];
-    const invalidListMarkup = [];
-    const steps = paramFileContent.metadata.steps;
-
-    if (paramFileContent.metadata.hasIncompleteData) {
-      for (const property in steps) {
-        if (steps[property].complete === false) {
-          const label = stepLabels[steps[property].index];
-
-          incompleteListMarkup.push(
-            <Tag
-              onClick={() => {
-                setStep(steps[property].index);
-              }}
-              className="download-param-file_incomplete-data-tag"
-              type="cyan"
-              title={label}
-              id={`tag-incomplete__${property}`}
-              key={`tag-incomplete__${property}`}
-            >
-              {label}
-            </Tag>,
-          );
-        }
-      }
-    }
-    if (paramFileContent.metadata.hasInvalidData) {
-      for (const property in steps) {
-        if (steps[property].invalid === true) {
-          const label = stepLabels[steps[property].index];
-
-          invalidListMarkup.push(
-            <Tag
-              onClick={() => {
-                setStep(steps[property].index);
-              }}
-              className="download-param-file_invalid-data-tag"
-              type="cyan"
-              title={label}
-              id={`tag-invalid__${property}`}
-              key={`tag-invalid__${property}`}
-            >
-              {label}
-            </Tag>,
-          );
-        }
-      }
-    }
-
-    return (
-      <div className="download-param-file_data-tag-container">
-        {incompleteListMarkup.length > 0 && (
-          <div className="download-param-file_data-tag_heading">
-            {t("panel.downloadParamFile.stepsWithIncompleteData", {
-              ns: "panels",
-            })}
-          </div>
-        )}
-        {incompleteListMarkup.length > 0 && incompleteListMarkup}
-        {invalidListMarkup.length > 0 && (
-          <div className="download-param-file_data-tag_heading">
-            {t("panel.downloadParamFile.stepsWithInvalidData", {
-              ns: "panels",
-            })}
-          </div>
-        )}
-        {invalidListMarkup.length > 0 && invalidListMarkup}
-      </div>
     );
   };
 
@@ -346,9 +258,9 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
             text: t("panel.downloadParamFile.paramFileTextLabel", {
               ns: "panels",
             }),
-            content: getContent(
-              t("panel.downloadParamFile.paramFileHelp", { ns: "panels" }),
-            ),
+            content: t("panel.downloadParamFile.paramFileHelp", {
+              ns: "panels",
+            }),
           }}
         />
       </div>
@@ -371,9 +283,6 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
       {state.paramFileContentCopied ? (
         <span className="download-param-file_copied-label">Copied.</span>
       ) : null}
-      {(paramFileContent.metadata.hasIncompleteData ||
-        paramFileContent.metadata.hasInvalidData) &&
-        getIncompleteOrInvalidMarkup()}
     </>
   );
   const markup = (
@@ -424,7 +333,6 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
 });
 
 DownloadParamFile.propTypes = {
-  setStep: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   stateToParamFile: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,

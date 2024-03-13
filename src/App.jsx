@@ -277,7 +277,7 @@ const App = () => {
     return config;
   };
 
-  const getPanelConfig = ({ step, setStep }) => {
+  const getPanelConfig = ({ step }) => {
     let config;
 
     switch (step) {
@@ -405,7 +405,6 @@ const App = () => {
         config = {
           panel: PANEL_DOWNLOAD_PARAM_FILE,
           params: {
-            setStep,
             stateToParamFile,
             disableSubmit: !state.steps.downloadParamFile.complete,
             invalid: state.steps.downloadParamFile.invalid,
@@ -490,21 +489,20 @@ const App = () => {
     return config;
   };
 
-  const getPanelConfigArray = ({ setStep }) => {
+  const getPanelConfigArray = () => {
     return [
-      getPanelConfig({ step: state.steps.intro.index, setStep }),
-      getPanelConfig({ step: state.steps.inputFileSelection.index, setStep }),
-      getPanelConfig({ step: state.steps.information.index, setStep }),
-      getPanelConfig({ step: state.steps.hint.index, setStep }),
-      getPanelConfig({ step: state.steps.networkDevice.index, setStep }),
-      getPanelConfig({ step: state.steps.networkAddress.index, setStep }),
+      getPanelConfig({ step: state.steps.intro.index }),
+      getPanelConfig({ step: state.steps.inputFileSelection.index }),
+      getPanelConfig({ step: state.steps.information.index }),
+      getPanelConfig({ step: state.steps.hint.index }),
+      getPanelConfig({ step: state.steps.networkDevice.index }),
+      getPanelConfig({ step: state.steps.networkAddress.index }),
       getPanelConfig({
         step: state.steps.installationParameters.index,
-        setStep,
       }),
-      getPanelConfig({ step: state.steps.downloadParamFile.index, setStep }),
-      getPanelConfig({ step: state.steps.nextSteps.index, setStep }),
-      getPanelConfig({ step: state.steps.summary.index, setStep }),
+      getPanelConfig({ step: state.steps.downloadParamFile.index }),
+      getPanelConfig({ step: state.steps.nextSteps.index }),
+      getPanelConfig({ step: state.steps.summary.index }),
     ];
   };
 
@@ -627,7 +625,7 @@ const App = () => {
     updateModified(false);
   };
   const helpPanelConfig = getHelpPanelConfig({ step: state.step });
-  const panelConfigArray = getPanelConfigArray({ setStep: updateStep });
+  const panelConfigArray = getPanelConfigArray();
   const showHelpPanel = (flag) => {
     updateIsHelpPanelExpanded(flag);
   };
