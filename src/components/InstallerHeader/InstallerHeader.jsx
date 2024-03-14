@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import {
   Header,
@@ -24,15 +24,11 @@ const InstallerHeader = ({
   onShowNotification,
   onShowHelpPanel,
   helpPanelConfig,
+  isHelpPanelExpanded,
 }) => {
   const { t } = useTranslation();
 
-  const [state, setState] = useState({
-    expanded: true,
-  });
-
   const updateExpanded = (expanded) => {
-    setState({ ...state, expanded });
     onShowHelpPanel(expanded);
   };
 
@@ -68,7 +64,7 @@ const InstallerHeader = ({
             <HeaderGlobalAction
               aria-label={t("header.button.help", { ns: "common" })}
               onClick={() => {
-                return state.expanded
+                return isHelpPanelExpanded
                   ? updateExpanded(false)
                   : updateExpanded(true);
               }}
@@ -89,7 +85,7 @@ const InstallerHeader = ({
             preventCloseOnClickOutside
             closeIconDescription={t("btnLabel.Close", { ns: "common" })}
             className="installer-header_help-sidepanel-component"
-            open={state.expanded}
+            open={isHelpPanelExpanded}
             onRequestClose={() => updateExpanded(false)}
             title={t("rightNavigation.header")}
             subtitle=""
@@ -110,6 +106,7 @@ InstallerHeader.propTypes = {
     forPanel: PropTypes.string.isRequired,
     params: PropTypes.object,
   }).isRequired,
+  isHelpPanelExpanded: PropTypes.bool.isRequired,
 };
 
 export default InstallerHeader;

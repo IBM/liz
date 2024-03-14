@@ -5,7 +5,6 @@
  */
 
 import InstallerHeader from "./components/InstallerHeader";
-import InstallerStepTile from "./components/InstallerStepTile";
 
 import {
   Information,
@@ -20,7 +19,6 @@ import EditPage from "./content/EditPage";
 
 export {
   InstallerHeader,
-  InstallerStepTile,
   LandingPage,
   EditPage,
   Information,

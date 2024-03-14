@@ -23,6 +23,7 @@ import {
   ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_HELP_STEP,
   ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
+  ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
   DEFAULT_PARAM_FILE_NAME,
 } from "../../util/constants";
@@ -52,6 +53,12 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
     globalDispatch({
       type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
       nextShowLegalNotification: showLegalNotification,
+    });
+  };
+  const updateIsHelpPanelExpanded = (isHelpPanelExpanded) => {
+    globalDispatch({
+      type: ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
+      nextIsHelpPanelExpanded: isHelpPanelExpanded,
     });
   };
 
@@ -200,6 +207,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
                 return <ResultDraft size="24" />;
               }}
               onPrimaryButtonClick={() => {
+                updateIsHelpPanelExpanded(true);
                 globalDispatch({
                   type: ACTION_UPDATE_APP_HELP_STEP,
                   nextHelpStep: 1,
@@ -254,6 +262,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
               })}
               primaryButtonIcon={TaskView}
               onPrimaryButtonClick={() => {
+                updateIsHelpPanelExpanded(true);
                 globalDispatch({
                   type: ACTION_UPDATE_APP_HELP_STEP,
                   nextHelpStep: 2,

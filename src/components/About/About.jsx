@@ -8,6 +8,7 @@ import React, { useRef, useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { Button } from "@carbon/react";
 import { Close, Copy, LinuxAlt } from "@carbon/icons-react";
 import "./_about.scss";
 
@@ -96,24 +97,27 @@ const About = ({ closeNotification, pruneSettings }) => {
         </div>
       </li>
       <li className="about-dialog__about-report-button-container">
-        <a
-          href="BUG_TRACKER"
+        <Button
+          kind="ghost"
           data-title="report"
           id="about-dialog__about-report-button"
+          href="BUG_TRACKER"
           target="_blank"
+          className="about-dialog__about-report-button"
         >
           <span>{t("dialog.about.reportIssueLabel")}</span>
-        </a>
+        </Button>
       </li>
       <li className="about-dialog__about-prune-button-container">
-        <a
-          href="#"
+        <Button
+          kind="ghost"
           data-title="prune"
           id="about-dialog__about-prune-button"
           onClick={pruneSettings}
+          className="about-dialog__about-prune-button"
         >
           <span>{t("dialog.about.pruneSettingsLabel")}</span>
-        </a>
+        </Button>
       </li>
     </ul>
   );

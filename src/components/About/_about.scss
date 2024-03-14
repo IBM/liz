@@ -87,7 +87,7 @@
       padding-bottom: react.$spacing-02;
 
       code {
-        @include react.type-style("code-01"); 
+        @include react.type-style("code-01");
       }
 
       :first-of-type {
@@ -121,9 +121,11 @@
 .about-dialog__about-report-button-container {
   background: react.$background-inverse;
 
-  > a {
+  .about-dialog__about-report-button,
+  .about-dialog__about-prune-button {
     @include react.type-style("body-compact-01");
 
+    width: 100%;
     padding: react.$spacing-05;
     line-height: initial;
     transition: background-color 250ms;
@@ -143,6 +145,10 @@
   background: react.$background-inverse-hover;
 }
 
+.about-dialog__about-prune-button-container:focus-within button,
+.about-dialog__about-prune-button-container:hover button,
+.about-dialog__about-report-button-container:focus-within button,
+.about-dialog__about-report-button-container:hover button,
 .about-dialog__about-prune-button-container:focus-within a,
 .about-dialog__about-prune-button-container:hover a,
 .about-dialog__about-report-button-container:focus-within a,

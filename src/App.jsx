@@ -79,33 +79,6 @@ import LandingPage from "./content/LandingPage";
 import EditPage from "./content/EditPage";
 import "./App.scss";
 
-const PROGRESS_STEP_STATE_COMPLETE = "complete";
-const PROGRESS_STATE_INVALID = "invalid";
-const PROGRESS_STATE_DISABLED = "disabled";
-
-const getProgressStepState = (state, forProgressStepState) => {
-  if (
-    forProgressStepState === PROGRESS_STATE_INVALID ||
-    forProgressStepState === PROGRESS_STEP_STATE_COMPLETE ||
-    forProgressStepState === PROGRESS_STATE_DISABLED
-  ) {
-    return {
-      inputFileSelection: state.steps.inputFileSelection[forProgressStepState],
-      information: state.steps.information[forProgressStepState],
-      hint: state.steps.hint[forProgressStepState],
-      networkDevice: state.steps.networkDevice[forProgressStepState],
-      networkAddress: state.steps.networkAddress[forProgressStepState],
-      installationParameters:
-        state.steps.installationParameters[forProgressStepState],
-      downloadParamFile: state.steps.downloadParamFile[forProgressStepState],
-      nextSteps: state.steps.nextSteps[forProgressStepState],
-      summary: state.steps.summary[forProgressStepState],
-      intro: state.steps.intro[forProgressStepState],
-    };
-  }
-  return {};
-};
-
 const ApplicationContext = createContext({
   state: null,
   dispatch: null,
@@ -696,18 +669,6 @@ const App = () => {
     }
     return updateShowNotification(false);
   };
-  const progressStepComplete = getProgressStepState(
-    state,
-    PROGRESS_STEP_STATE_COMPLETE,
-  );
-  const progressStepInvalid = getProgressStepState(
-    state,
-    PROGRESS_STATE_INVALID,
-  );
-  const progressStepDisabled = getProgressStepState(
-    state,
-    PROGRESS_STATE_DISABLED,
-  );
   const contentClassName = state.isHelpPanelExpanded
     ? "app__full-height"
     : "app__full-height__collapsed";
@@ -766,15 +727,10 @@ const App = () => {
     <>
       <Layer className="app__layer">
         <InstallerHeader
-          showNotification={state.showNotification}
           onShowNotification={showNotification}
           onShowHelpPanel={showHelpPanel}
-          onProgress={updateStep}
-          progressStep={state.step}
-          progressStepComplete={progressStepComplete}
-          progressStepInvalid={progressStepInvalid}
-          progressStepDisabled={progressStepDisabled}
           helpPanelConfig={helpPanelConfig}
+          isHelpPanelExpanded={state.isHelpPanelExpanded}
         />
         {modalMarkup}
         <Content className={contentClassName}>
