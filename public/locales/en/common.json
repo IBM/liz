@@ -16,7 +16,7 @@
   "btnLabel.NextSteps": "Next steps",
   "btnLabel.ReviewInformation": "Review information",
   "btnLabel.ComposeParmfile": "Compose parmfile",
-  "btnLabel.EditParmfile": "Edit parmfile",
+  "btnLabel.EditParmfile": "Edit parameter file",
   "header.productName": "Installation assistant for Linux on IBM Z",
   "header.button.help": "Help",
   "invalidTextLabel": "A valid value is required",
