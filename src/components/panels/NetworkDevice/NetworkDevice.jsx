@@ -674,6 +674,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
       />
       {useVlanToggled && (
         <NumberInput
+          light
           allowEmpty
           min={1}
           max={4094}
@@ -715,6 +716,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
       state.selectedDeviceType === DEVICE_TYPE_OSA ? (
         <>
           <TextInput
+            light
             readOnly={paramFileHasBeenModifiedFromState}
             helperText={t("panel.networkDevice.readChannelHelp", {
               ns: "panels",
@@ -759,6 +761,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             }}
           />
           <TextInput
+            light
             readOnly={paramFileHasBeenModifiedFromState}
             helperText={t("panel.networkDevice.writeChannelHelp", {
               ns: "panels",
@@ -803,6 +806,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             }}
           />
           <TextInput
+            light
             readOnly={paramFileHasBeenModifiedFromState}
             helperText={t("panel.networkDevice.dataChannelHelp", {
               ns: "panels",

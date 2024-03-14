@@ -183,6 +183,7 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
     <div>
       <div className="input-file-selection__contentRowDropdowns">
         <Dropdown
+          light
           readOnly={paramFileHasBeenModifiedFromState}
           aria-label={t(
             "panel.inputFileSelection.chooseDistributionFromeTemplateShort",
@@ -210,6 +211,7 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
           selectedItem={state.selectedDistributionName}
         />
         <Dropdown
+          light
           readOnly={paramFileHasBeenModifiedFromState}
           aria-label={t(
             "panel.inputFileSelection.chooseVersionFromeTemplateShort",

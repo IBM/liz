@@ -391,6 +391,7 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupRowOne = (
       <>
         <TextInput
+          light
           readOnly={paramFileHasBeenModifiedFromState}
           type="url"
           id="installation-address-input"
@@ -444,6 +445,7 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupComputedRow = (
       <>
         <TextInput
+          light
           readOnly
           helperText={t(
             "panel.installationParameter.computedInstallationAddressHelp",
@@ -471,6 +473,7 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupRowTwoColumnOne = (
       <div className="installation-parameters_column-left">
         <TextInput
+          light
           readOnly={paramFileHasBeenModifiedFromState}
           disabled={state?.userAndPwdAreDisabled ?? true}
           helperText={t("panel.installationParameter.usernameHelp", {
@@ -533,6 +536,7 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupRowTwoColumnTwo = (
       <div className="installation-parameters_column-right">
         <PasswordInput
+          light
           readOnly={paramFileHasBeenModifiedFromState}
           disabled={state?.userAndPwdAreDisabled ?? true}
           autoComplete="true"
@@ -618,6 +622,7 @@ const InstallationParameters = forwardRef(
         />
         {useVncToggled && (
           <PasswordInput
+            light
             readOnly={paramFileHasBeenModifiedFromState}
             autoComplete="true"
             helperText={t("panel.installationParameter.vncPasswordHelp", {

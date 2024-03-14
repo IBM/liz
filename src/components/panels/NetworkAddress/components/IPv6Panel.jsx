@@ -39,6 +39,7 @@ const IPv6Panel = ({ updateFunction, state, readOnly }) => {
   const gridContentsMarkupRowTwoColumnOneIPv6 = (
     <div className="network-address_column-left">
       <TextInput
+        light
         readOnly={readOnly}
         id="network-address_ipv6-input"
         invalid={
@@ -93,6 +94,7 @@ const IPv6Panel = ({ updateFunction, state, readOnly }) => {
         }}
       />
       <NumberInput
+        light
         allowEmpty
         min={1}
         max={128}
@@ -157,6 +159,7 @@ const IPv6Panel = ({ updateFunction, state, readOnly }) => {
   const gridContentsMarkupRowTwoColumnTwo = (
     <div className="network-address_column-right">
       <TextInput
+        light
         readOnly={readOnly}
         id="network-address_gateway-input"
         invalid={
@@ -214,6 +217,7 @@ const IPv6Panel = ({ updateFunction, state, readOnly }) => {
         }}
       />
       <TextInput
+        light
         readOnly={readOnly}
         id="network-address_nameserver-input"
         invalid={
@@ -270,6 +274,7 @@ const IPv6Panel = ({ updateFunction, state, readOnly }) => {
         }}
       />
       <TextInput
+        light
         readOnly={readOnly}
         id="network-address_hostname-input"
         invalid={

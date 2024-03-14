@@ -83,6 +83,7 @@ const ParamFileTextArea = ({
   const textAreaClasses = `param-file-text-area_textarea ${textAreaModifiedClass}`;
   const textAreaMarkup = (
     <TextArea
+      light
       enableCounter
       labelText={label.text}
       helperText={label.content}
