@@ -7,6 +7,7 @@
 import {
   ACTION_UPDATE_APP_STATE,
   ACTION_UPDATE_APP_STEP,
+  ACTION_UPDATE_APP_HELP_STEP,
   ACTION_UPDATE_APP_STEPS,
   ACTION_UPDATE_APP_NEXT_STEP,
   ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
@@ -15,8 +16,6 @@ import {
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
   ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
-  ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
-  ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
   ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
   ACTION_UPDATE_APP_IS_DIRTY,
   ACTION_UPDATE_APP_IS_EDITING,
@@ -50,6 +49,13 @@ const reducer = (state, action) => {
       updatedState = {
         ...state,
         step: action.nextStep,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_HELP_STEP:
+      updatedState = {
+        ...state,
+        helpStep: action.nextHelpStep,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
@@ -126,21 +132,6 @@ const reducer = (state, action) => {
         ...state,
         showDiscardModifiedParamFileContentsModal:
           action.nextShowDiscardModifiedParamFileContentsModal,
-      };
-      persistToLocalStorage(updatedState);
-      return updatedState;
-    case ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL:
-      updatedState = {
-        ...state,
-        showNextStepsInformationModal: action.nextShowNextStepsInformationModal,
-      };
-      persistToLocalStorage(updatedState);
-      return updatedState;
-    case ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL:
-      updatedState = {
-        ...state,
-        showSystemRequirementInformationModal:
-          action.nextShowSystemRequirementInformationModal,
       };
       persistToLocalStorage(updatedState);
       return updatedState;

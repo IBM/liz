@@ -51,30 +51,30 @@ import {
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
 } from "../util/constants";
 
-const getHelpPanel = (panel) => {
-  switch (panel) {
+const getHelpPanel = ({ forPanel, params }) => {
+  switch (forPanel) {
     case PANEL_DOWNLOAD_PARAM_FILE:
-      return <DownloadParamFileHelp />;
+      return <DownloadParamFileHelp {...params} />;
     case PANEL_HINT:
-      return <HintHelp />;
+      return <HintHelp {...params} />;
     case PANEL_INFORMATION:
-      return <InformationHelp />;
+      return <InformationHelp {...params} />;
     case PANEL_INPUT_FILE_SELECTION:
-      return <InputFileSelectionHelp />;
+      return <InputFileSelectionHelp {...params} />;
     case PANEL_INSTALLATION_PARAMETERS:
-      return <InstallationParametersHelp />;
+      return <InstallationParametersHelp {...params} />;
     case PANEL_NETWORK_ADDRESS:
-      return <NetworkAddressHelp />;
+      return <NetworkAddressHelp {...params} />;
     case PANEL_NETWORK_DEVICE:
-      return <NetworkDeviceHelp />;
+      return <NetworkDeviceHelp {...params} />;
     case PANEL_NEXT_STEPS:
-      return <NextStepsHelp />;
+      return <NextStepsHelp {...params} />;
     case PANEL_SUMMARY:
-      return <SummaryHelp />;
+      return <SummaryHelp {...params} />;
     case PANEL_INTRO:
-      return <IntroHelp />;
+      return <IntroHelp {...params} />;
     case PANEL_LANDING_PAGE:
-      return <LandingPageHelp />;
+      return <LandingPageHelp {...params} />;
     default:
       return null;
   }

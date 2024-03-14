@@ -5,10 +5,8 @@
  */
 
 import React, { useReducer, createContext } from "react";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import {
-  Accordion,
-  AccordionItem,
   Modal,
   Content,
   ComposedModal,
@@ -16,14 +14,10 @@ import {
   ModalBody,
   ModalHeader,
   Layer,
-  UnorderedList,
-  ListItem,
-  InlineNotification,
 } from "@carbon/react";
 import { Routes, Route } from "react-router-dom";
 import InstallerHeader from "./components/InstallerHeader";
 import { stateToParamFile } from "./util/param-file-util";
-import { getLabel, getContent } from "./uiUtil/help-util";
 import { getLocalStorageKeys } from "./util/local-storage-util";
 
 import reducer from "./reducers/AppReducer";
@@ -53,6 +47,7 @@ import { createInitialState as createInitialIntroState } from "./states/IntroSta
 import {
   ADDRESS_TYPE_IPV4,
   ACTION_UPDATE_APP_STEP,
+  ACTION_UPDATE_APP_HELP_STEP,
   ACTION_UPDATE_APP_STEPS,
   ACTION_UPDATE_APP_NEXT_STEP,
   ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
@@ -60,8 +55,6 @@ import {
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
-  ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
-  ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
   ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
   ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
   ACTION_UPDATE_APP_CAN_RENDER_STEP,
@@ -220,56 +213,118 @@ const App = () => {
       case 0:
         config = {
           forPanel: PANEL_INPUT_FILE_SELECTION,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 1:
         config = {
           forPanel: PANEL_INFORMATION,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 2:
         config = {
           forPanel: PANEL_HINT,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 3:
         config = {
           forPanel: PANEL_NETWORK_DEVICE,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 4:
         config = {
           forPanel: PANEL_NETWORK_ADDRESS,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 5:
         config = {
           forPanel: PANEL_INSTALLATION_PARAMETERS,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 6:
         config = {
           forPanel: PANEL_DOWNLOAD_PARAM_FILE,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 7:
         config = {
           forPanel: PANEL_NEXT_STEPS,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 8:
         config = {
           forPanel: PANEL_SUMMARY,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       case 9:
         config = {
           forPanel: PANEL_LANDING_PAGE,
+          params: {
+            hasMultipleSteps: true,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+            useSsh: state.steps.installationParameters.ssh.enabled,
+            useVnc: state.steps.installationParameters.vnc.enabled,
+            networkAddress:
+              state.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
+                ? state.steps.networkAddress.ipv4.address
+                : state.steps.networkAddress.ipv6.address,
+            vncPassword: state.steps.installationParameters.vnc.password,
+          },
         };
         break;
       case 10:
         config = {
           forPanel: PANEL_INTRO,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
         };
         break;
       default:
@@ -535,27 +590,16 @@ const App = () => {
         showDiscardModifiedParamFileContentsModal,
     });
   };
-  const updateShowSystemRequirementInformationModal = (
-    showSystemRequirementInformationModal,
-  ) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
-      nextShowSystemRequirementInformationModal:
-        showSystemRequirementInformationModal,
-    });
-  };
-  const updateShowNextStepsInformationModal = (
-    showNextStepsInformationModal,
-  ) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
-      nextShowNextStepsInformationModal: showNextStepsInformationModal,
-    });
-  };
   const updateCanRenderStep = (canRenderStep) => {
     dispatch({
       type: ACTION_UPDATE_APP_CAN_RENDER_STEP,
       nextCanRenderStep: canRenderStep,
+    });
+  };
+  const updateCurrentHelpStep = (step) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_HELP_STEP,
+      nextHelpStep: step,
     });
   };
   const updateNextStep = (nextStep) => {
@@ -668,206 +712,6 @@ const App = () => {
     ? "app__full-height"
     : "app__full-height__collapsed";
 
-  const systemRequirementInformation = (
-    <>
-      <div className="hint_intro">
-        {t("panel.hint.explanation", { ns: "panels" })}
-      </div>
-      <UnorderedList>
-        <ListItem>{t("panel.hint.listItem1", { ns: "panels" })}</ListItem>
-        <UnorderedList>
-          <ListItem>{t("panel.hint.listItem2", { ns: "panels" })}</ListItem>
-          <ListItem>{t("panel.hint.listItem3", { ns: "panels" })}</ListItem>
-          <ListItem>{t("panel.hint.listItem4", { ns: "panels" })}</ListItem>
-        </UnorderedList>
-        <ListItem>{t("panel.hint.listItem5", { ns: "panels" })}</ListItem>
-        <UnorderedList>
-          <ListItem>{t("panel.hint.listItem6", { ns: "panels" })}</ListItem>
-          <ListItem>{t("panel.hint.listItem7", { ns: "panels" })}</ListItem>
-          <ListItem>{t("panel.hint.listItem8", { ns: "panels" })}</ListItem>
-          <ListItem>{t("panel.hint.listItem9", { ns: "panels" })}</ListItem>
-          <ListItem>{t("panel.hint.listItem10", { ns: "panels" })}</ListItem>
-        </UnorderedList>
-        <ListItem>{t("panel.hint.listItem11", { ns: "panels" })}</ListItem>
-        <UnorderedList>
-          <ListItem>{t("panel.hint.listItem12", { ns: "panels" })}</ListItem>
-          <ListItem>{t("panel.hint.listItem13", { ns: "panels" })}</ListItem>
-        </UnorderedList>
-      </UnorderedList>
-    </>
-  );
-
-  const useSsh = state.steps.installationParameters.ssh.enabled;
-  const useVnc = state.steps.installationParameters.vnc.enabled;
-  const networkAddress =
-    state.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
-      ? state.steps.networkAddress.ipv4.address
-      : state.steps.networkAddress.ipv6.address;
-  const vncPassword = state.steps.installationParameters.vnc.password;
-  const networkAddressForListItem = networkAddress || "[host-IP-address]";
-  const remoteAccessConfigIsMissing = !useSsh && !useVnc;
-
-  const vncInstructionsMarkup = (
-    <>
-      <div className="next-steps_para">
-        {t("panel.nextSteps.explanation2", { ns: "panels" })}
-      </div>
-      <UnorderedList>
-        <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem11" ns="panels">
-            VNC host:&nbsp;
-            <code className="next-steps__formatted-code">
-              {{ networkAddressForListItem }}
-            </code>
-          </Trans>
-          {!networkAddress &&
-            getLabel(
-              "",
-              t("showInformationLabel", { ns: "common" }),
-              getContent("The network address was not yet provided."),
-            )}
-        </ListItem>
-        {vncPassword && (
-          <ListItem>
-            <Trans i18nKey="panel.nextSteps.listItem12" ns="panels">
-              VNC password:&nbsp;
-              <code className="next-steps__formatted-code">
-                {{ vncPassword }}
-              </code>
-            </Trans>
-          </ListItem>
-        )}
-      </UnorderedList>
-    </>
-  );
-
-  const sshInstructionsMarkup = (
-    <>
-      <div className="next-steps_para">
-        {t("panel.nextSteps.explanation3", { ns: "panels" })}
-      </div>
-      <UnorderedList>
-        <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem13" ns="panels">
-            SSH host:&nbsp;
-            <code className="next-steps__formatted-code">
-              installer@{{ networkAddressForListItem }}
-            </code>
-          </Trans>
-          {!networkAddress &&
-            getLabel(
-              "",
-              t("showInformationLabel", { ns: "common" }),
-              getContent("The network address was not yet provided."),
-            )}
-        </ListItem>
-      </UnorderedList>
-    </>
-  );
-
-  const missingRemoteAccessNotification = (
-    <InlineNotification
-      hideCloseButton
-      statusIconDescription="notification"
-      subtitle={t("panel.nextSteps.missingRemoteAccessNotificationSubtitle", {
-        ns: "panels",
-      })}
-      title={t("panel.nextSteps.missingRemoteAccessNotificationTitle", {
-        ns: "panels",
-      })}
-      kind="warning"
-      className="next-steps_missing-remote-access-banner"
-    />
-  );
-
-  const nextStepsInformation = (
-    <>
-      <div className="next-steps_para_bottom">
-        {t("panel.nextSteps.explanation1", { ns: "panels" })}
-      </div>
-      <UnorderedList>
-        <ListItem>{t("panel.nextSteps.listItem1", { ns: "panels" })}</ListItem>
-        <UnorderedList>
-          <ListItem>
-            <Trans i18nKey="panel.nextSteps.listItem2" ns="panels">
-              The&nbsp;
-              <code className="next-steps__formatted-code">generic.ins</code>
-              &nbsp;File
-            </Trans>
-          </ListItem>
-          <ListItem>
-            <Trans i18nKey="panel.nextSteps.listItem3" ns="panels">
-              The&nbsp;
-              <code className="next-steps__formatted-code">images</code>
-              &nbsp;directory
-            </Trans>
-          </ListItem>
-        </UnorderedList>
-        <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem4" ns="panels">
-            Replace the file named&nbsp;
-            <code className="next-steps__formatted-code">genericdvd.prm</code>
-            &nbsp;with the parmfile contents downloaded from this application.
-          </Trans>
-        </ListItem>
-        <ListItem>{t("panel.nextSteps.listItem5", { ns: "panels" })}</ListItem>
-        <ListItem>
-          <Trans i18nKey="panel.nextSteps.listItem6" ns="panels">
-            Go to the&nbsp;
-            <code className="next-steps__formatted-code">
-              Systems Management
-            </code>
-            &nbsp;view for the mainframe containing the LPAR or DPM partition.
-          </Trans>
-        </ListItem>
-        <Accordion className="next-steps__accordion">
-          <AccordionItem
-            title={t("panel.nextSteps.listItem14", { ns: "panels" })}
-          >
-            <UnorderedList>
-              <ListItem>
-                <Trans i18nKey="panel.nextSteps.listItem8" ns="panels">
-                  Select the task&nbsp;
-                  <code className="next-steps__formatted-code">
-                    Recovery -&gt; Load from Removable Media or Server
-                  </code>
-                  .
-                </Trans>
-              </ListItem>
-              <ListItem>
-                {t("panel.nextSteps.listItem16", { ns: "panels" })}
-              </ListItem>
-              <ListItem>
-                {t("panel.nextSteps.listItem17", { ns: "panels" })}
-              </ListItem>
-            </UnorderedList>
-          </AccordionItem>
-          <AccordionItem
-            title={t("panel.nextSteps.listItem18", { ns: "panels" })}
-          >
-            <UnorderedList>
-              <ListItem>
-                {t("panel.nextSteps.listItem19", { ns: "panels" })}
-              </ListItem>
-              <ListItem>
-                {t("panel.nextSteps.listItem20", { ns: "panels" })}
-              </ListItem>
-              <ListItem>
-                {t("panel.nextSteps.listItem21", { ns: "panels" })}
-              </ListItem>
-              <ListItem>
-                {t("panel.nextSteps.listItem22", { ns: "panels" })}
-              </ListItem>
-            </UnorderedList>
-          </AccordionItem>
-        </Accordion>
-      </UnorderedList>
-      {useVnc && vncInstructionsMarkup}
-      {useSsh && sshInstructionsMarkup}
-      {remoteAccessConfigIsMissing && missingRemoteAccessNotification}
-    </>
-  );
-
   const modalMarkup = (
     <>
       <ComposedModal
@@ -914,36 +758,6 @@ const App = () => {
         }}
       >
         <div>{t("modalBody.discardParamFileModificationsPrompt")}</div>
-      </Modal>
-      <Modal
-        preventCloseOnClickOutside
-        open={state.showSystemRequirementInformationModal}
-        modalHeading={t("modalHeading.showSystemRequirementInformation")}
-        modalLabel={t("modalLabel.showSystemRequirementInformation")}
-        primaryButtonText={t("btnLabel.OK", { ns: "common" })}
-        onRequestClose={() => {
-          updateShowSystemRequirementInformationModal(false);
-        }}
-        onRequestSubmit={() => {
-          updateShowSystemRequirementInformationModal(false);
-        }}
-      >
-        <div>{systemRequirementInformation}</div>
-      </Modal>
-      <Modal
-        preventCloseOnClickOutside
-        open={state.showNextStepsInformationModal}
-        modalHeading={t("modalHeading.showNextStepsInformation")}
-        modalLabel={t("modalLabel.showNextStepsInformation")}
-        primaryButtonText={t("btnLabel.OK", { ns: "common" })}
-        onRequestClose={() => {
-          updateShowNextStepsInformationModal(false);
-        }}
-        onRequestSubmit={() => {
-          updateShowNextStepsInformationModal(false);
-        }}
-      >
-        <div>{nextStepsInformation}</div>
       </Modal>
     </>
   );

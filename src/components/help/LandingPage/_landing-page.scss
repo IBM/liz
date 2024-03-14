@@ -8,8 +8,18 @@
   $font-path: "@ibm/plex"
 );
 
+.help-panel__landing-page__header {
+  @include react.type-style("heading-01");
+  @include react.font-weight("semibold");
+}
+
+.help-panel__landing-page__footer {
+  /* nop */
+}
+
 .help-panel__landing-page__content {
   @include react.type-style("body-compact-01");
 
+  padding: react.$spacing-03 0 react.$spacing-07 0;
   white-space: pre-line;
 }

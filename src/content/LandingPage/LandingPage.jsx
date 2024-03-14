@@ -20,9 +20,8 @@ import PropTypes from "prop-types";
 import About from "../../components/About";
 import {
   ACTION_UPDATE_APP_STEP,
-  ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
-  ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
   ACTION_UPDATE_APP_IS_EDITING,
+  ACTION_UPDATE_APP_HELP_STEP,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
   DEFAULT_PARAM_FILE_NAME,
 } from "../../util/constants";
@@ -47,24 +46,6 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
 
   const showNotification = globalState.showNotification || false;
   const localStorageKeys = getLocalStorageKeys(globalState);
-
-  const updateShowSystemRequirementInformationModal = (
-    showSystemRequirementInformationModal,
-  ) => {
-    globalDispatch({
-      type: ACTION_UPDATE_APP_SHOW_SYSTEM_REQUIREMENT_INFORMATION_MODAL,
-      nextShowSystemRequirementInformationModal:
-        showSystemRequirementInformationModal,
-    });
-  };
-  const updateShowNextStepsInformationModal = (
-    showNextStepsInformationModal,
-  ) => {
-    globalDispatch({
-      type: ACTION_UPDATE_APP_SHOW_NEXT_STEP_INFORMATION_MODAL,
-      nextShowNextStepsInformationModal: showNextStepsInformationModal,
-    });
-  };
 
   const localPruneSettings = () => {
     pruneSettings(localStorageKeys);
@@ -182,9 +163,12 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
           "pageHeader.collapseHeaderIconDescription",
           { ns: "common" },
         )}
-        expandHeaderIconDescription={t("expandHeaderIconDescription", {
-          ns: "common",
-        })}
+        expandHeaderIconDescription={t(
+          "pageHeader.expandHeaderIconDescription",
+          {
+            ns: "common",
+          },
+        )}
         pageActionsOverflowLabel={t("pageHeader.pageActionsOverflowLabel", {
           ns: "common",
         })}
@@ -207,7 +191,10 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
                 return <ResultDraft size="24" />;
               }}
               onPrimaryButtonClick={() => {
-                updateShowSystemRequirementInformationModal(true);
+                globalDispatch({
+                  type: ACTION_UPDATE_APP_HELP_STEP,
+                  nextHelpStep: 1,
+                });
               }}
               primaryButtonIcon={TaskView}
               primaryButtonText={t("btnLabel.ReviewInformation", {
@@ -258,7 +245,10 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
               })}
               primaryButtonIcon={TaskView}
               onPrimaryButtonClick={() => {
-                updateShowNextStepsInformationModal(true);
+                globalDispatch({
+                  type: ACTION_UPDATE_APP_HELP_STEP,
+                  nextHelpStep: 2,
+                });
               }}
               title={t("modalHeading.showNextStepsInformation")}
               className="landing-page__express-card"

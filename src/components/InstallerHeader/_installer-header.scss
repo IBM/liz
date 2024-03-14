@@ -32,7 +32,22 @@
   }
 }
 
+.c4p--side-panel {
+  background-color: react.$background !important;
+
+  &.installer-header_help-sidepanel-component {
+    background-color: react.$background;
+  }
+
+  .c4p--side-panel__header {
+    background-color: react.$background !important;
+
+    .c4p--side-panel__title {
+      background-color: react.$background !important;
+    }
+  }
+}
+
 .installer-header__panel-component-header {
   padding: 0 react.$spacing-05 0 react.$spacing-05;
 }
-

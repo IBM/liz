@@ -12,10 +12,10 @@ import {
   HeaderName,
   HeaderGlobalBar,
   HeaderGlobalAction,
-  HeaderPanel,
   SkipToContent,
 } from "@carbon/react";
 import { Help, LinuxAlt } from "@carbon/icons-react";
+import { SidePanel } from "@carbon/ibm-products";
 import PropTypes from "prop-types";
 import HelpContent from "./components/HelpContent";
 import "./_installer-header.scss";
@@ -23,11 +23,6 @@ import "./_installer-header.scss";
 const InstallerHeader = ({
   onShowNotification,
   onShowHelpPanel,
-  onProgress,
-  progressStep,
-  progressStepComplete,
-  progressStepInvalid,
-  progressStepDisabled,
   helpPanelConfig,
 }) => {
   const { t } = useTranslation();
@@ -40,6 +35,26 @@ const InstallerHeader = ({
     setState({ ...state, expanded });
     onShowHelpPanel(expanded);
   };
+
+  const hasParams = helpPanelConfig.params
+    ? Object.keys(helpPanelConfig.params).length > 0
+    : false;
+  const hasMultipleSteps = hasParams
+    ? helpPanelConfig.params.hasMultipleSteps
+    : false;
+  const currentHelpStep = hasParams
+    ? helpPanelConfig.params.currentHelpStep
+    : 0;
+  const updateCurrentHelpStep = hasParams
+    ? helpPanelConfig.params.updateCurrentHelpStep
+    : null;
+
+  const sidePanelProps = hasMultipleSteps
+    ? {
+        currentStep: currentHelpStep,
+        onNavigationBack: () => updateCurrentHelpStep(currentHelpStep - 1),
+      }
+    : {};
 
   return (
     <HeaderContainer
@@ -69,17 +84,19 @@ const InstallerHeader = ({
               <LinuxAlt size="24" />
             </HeaderGlobalAction>
           </HeaderGlobalBar>
-          <HeaderPanel
-            expanded={state.expanded}
-            aria-label={t("header.button.help", { ns: "common" })}
-            className="installer-header__panel-component"
+          <SidePanel
+            animateTitle
+            preventCloseOnClickOutside
+            closeIconDescription={t("btnLabel.Close", { ns: "common" })}
+            className="installer-header_help-sidepanel-component"
+            open={state.expanded}
+            onRequestClose={() => updateExpanded(false)}
+            title={t("rightNavigation.header")}
+            subtitle=""
+            {...sidePanelProps}
           >
-            <HelpContent
-              expanded={state.expanded}
-              updateExpanded={updateExpanded}
-              helpPanelConfig={helpPanelConfig}
-            />
-          </HeaderPanel>
+            <HelpContent helpPanelConfig={helpPanelConfig} />
+          </SidePanel>
         </Header>
       )}
     />
@@ -89,40 +106,9 @@ const InstallerHeader = ({
 InstallerHeader.propTypes = {
   onShowNotification: PropTypes.func.isRequired,
   onShowHelpPanel: PropTypes.func.isRequired,
-  onProgress: PropTypes.func.isRequired,
-  progressStep: PropTypes.number.isRequired,
-  progressStepComplete: PropTypes.shape({
-    inputFileSelection: PropTypes.bool.isRequired,
-    information: PropTypes.bool.isRequired,
-    hint: PropTypes.bool.isRequired,
-    networkDevice: PropTypes.bool.isRequired,
-    networkAddress: PropTypes.bool.isRequired,
-    installationParameters: PropTypes.bool.isRequired,
-    downloadParamFile: PropTypes.bool.isRequired,
-    nextSteps: PropTypes.bool.isRequired,
-  }).isRequired,
-  progressStepInvalid: PropTypes.shape({
-    inputFileSelection: PropTypes.bool.isRequired,
-    information: PropTypes.bool.isRequired,
-    hint: PropTypes.bool.isRequired,
-    networkDevice: PropTypes.bool.isRequired,
-    networkAddress: PropTypes.bool.isRequired,
-    installationParameters: PropTypes.bool.isRequired,
-    downloadParamFile: PropTypes.bool.isRequired,
-    nextSteps: PropTypes.bool.isRequired,
-  }).isRequired,
-  progressStepDisabled: PropTypes.shape({
-    inputFileSelection: PropTypes.bool.isRequired,
-    information: PropTypes.bool.isRequired,
-    hint: PropTypes.bool.isRequired,
-    networkDevice: PropTypes.bool.isRequired,
-    networkAddress: PropTypes.bool.isRequired,
-    installationParameters: PropTypes.bool.isRequired,
-    downloadParamFile: PropTypes.bool.isRequired,
-    nextSteps: PropTypes.bool.isRequired,
-  }).isRequired,
   helpPanelConfig: PropTypes.shape({
     forPanel: PropTypes.string.isRequired,
+    params: PropTypes.object,
   }).isRequired,
 };
 

@@ -164,9 +164,12 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
           "pageHeader.collapseHeaderIconDescription",
           { ns: "common" },
         )}
-        expandHeaderIconDescription={t("expandHeaderIconDescription", {
-          ns: "common",
-        })}
+        expandHeaderIconDescription={t(
+          "pageHeader.expandHeaderIconDescription",
+          {
+            ns: "common",
+          },
+        )}
         pageActionsOverflowLabel={t("pageHeader.pageActionsOverflowLabel", {
           ns: "common",
         })}

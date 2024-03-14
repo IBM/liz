@@ -15,6 +15,7 @@ const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_APP));
   const defaultState = {
     step: 0,
+    helpStep: 0,
     nextStep: 0,
     steps: DEFAULT_STEPS,
     showNotification: false,
