@@ -22,6 +22,7 @@ import {
   ACTION_UPDATE_APP_STEP,
   ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_HELP_STEP,
+  ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
   DEFAULT_PARAM_FILE_NAME,
 } from "../../util/constants";
@@ -47,6 +48,13 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
   const showNotification = globalState.showNotification || false;
   const localStorageKeys = getLocalStorageKeys(globalState);
 
+  const updateShowLegalNotification = (showLegalNotification) => {
+    globalDispatch({
+      type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
+      nextShowLegalNotification: showLegalNotification,
+    });
+  };
+
   const localPruneSettings = () => {
     pruneSettings(localStorageKeys);
     resetToInitialState();
@@ -63,6 +71,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
     const localInlineNotification = Object.assign({}, inlineNotification);
     localInlineNotification.show = false;
 
+    updateShowLegalNotification(false);
     localStorage.setItem(
       LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
       JSON.stringify(localInlineNotification),

@@ -19,6 +19,7 @@ const createInitialState = (skipLocalStorageUsage = false) => {
     nextStep: 0,
     steps: DEFAULT_STEPS,
     showNotification: false,
+    showLegalNotification: true,
     isDirty: false,
     isEditing: false,
     canRenderStep: true,

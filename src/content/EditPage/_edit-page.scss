@@ -8,9 +8,33 @@
   $font-path: "@ibm/plex"
 );
 
-.edit-page__full-page {
+.edit-page__full-page__wo-legal-banner {
   .c4p--create-full-page__content {
     background: react.$layer-01;
+  }
+
+  /*
+   * hack to move the button bar into the visible area
+   * of the viewport so that the user does not need to
+   * scroll to the end of the page to reache these buttons.
+   */
+  .c4p--create-full-page__influencer-and-body-container {
+    height: calc(100vh - react.$spacing-13) !important;
+  }
+}
+
+.edit-page__full-page__w-legal-banner {
+  .c4p--create-full-page__content {
+    background: react.$layer-01;
+  }
+
+  /*
+    * hack to move the button bar into the visible area
+    * of the viewport so that the user does not need to
+    * scroll to the end of the page to reache these buttons.
+    */
+  .c4p--create-full-page__influencer-and-body-container {
+    height: calc(100vh - react.$spacing-13 - react.$spacing-09) !important;
   }
 }
 

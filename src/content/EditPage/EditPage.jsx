@@ -16,6 +16,7 @@ import {
   ACTION_UPDATE_APP_STEP,
   ACTION_UPDATE_APP_NEXT_STEP,
   ACTION_UPDATE_APP_IS_EDITING,
+  ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
   DEFAULT_PARAM_FILE_NAME,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
 } from "../../util/constants";
@@ -37,7 +38,11 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
 
   const hasLocalStorageState = state.useStateFromLocalStorage;
   const showNotification = state.showNotification || false;
+  const showInlineNotification = state.showLegalNotification;
   const localStorageKeys = getLocalStorageKeys(state);
+
+  const CLASS_WITH_LEGAL_BANNER = "edit-page__full-page__w-legal-banner";
+  const CLASS_WITHOUT_LEGAL_BANNER = "edit-page__full-page__wo-legal-banner";
 
   const updateStep = (step) => {
     dispatch({
@@ -53,6 +58,13 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
     });
   };
 
+  const updateShowLegalNotification = (showLegalNotification) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
+      nextShowLegalNotification: showLegalNotification,
+    });
+  };
+
   const localPruneSettings = () => {
     pruneSettings(localStorageKeys);
     resetToInitialState();
@@ -62,13 +74,16 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
     t("legalNotice.headerLabel"),
     t("legalNotice.contentLabel"),
   );
-  const showInlineNotification = inlineNotification
-    ? inlineNotification.show
-    : false;
+
+  const fullPageClassName = showInlineNotification
+    ? CLASS_WITH_LEGAL_BANNER
+    : CLASS_WITHOUT_LEGAL_BANNER;
+
   const onCloseInlineNotification = () => {
     const localInlineNotification = Object.assign({}, inlineNotification);
     localInlineNotification.show = false;
 
+    updateShowLegalNotification(false);
     localStorage.setItem(
       LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
       JSON.stringify(localInlineNotification),
@@ -183,7 +198,7 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
         withoutBackground
       />
       <CreateFullPage
-        className="edit-page__full-page"
+        className={fullPageClassName}
         backButtonText={t("btnLabel.Back", { ns: "common" })}
         cancelButtonText={t("btnLabel.Cancel", { ns: "common" })}
         modalDangerButtonText={t(

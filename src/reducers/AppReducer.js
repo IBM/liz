@@ -13,6 +13,7 @@ import {
   ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
   ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
+  ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
   ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
@@ -96,6 +97,13 @@ const reducer = (state, action) => {
       updatedState = {
         ...state,
         showNotification: action.nextShowNotification,
+      };
+      persistToLocalStorage(updatedState);
+      return updatedState;
+    case ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION:
+      updatedState = {
+        ...state,
+        showLegalNotification: action.nextShowLegalNotification,
       };
       persistToLocalStorage(updatedState);
       return updatedState;
