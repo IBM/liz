@@ -280,13 +280,6 @@ const App = () => {
             hasMultipleSteps: true,
             currentHelpStep: state.helpStep,
             updateCurrentHelpStep,
-            useSsh: state.steps.installationParameters.ssh.enabled,
-            useVnc: state.steps.installationParameters.vnc.enabled,
-            networkAddress:
-              state.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
-                ? state.steps.networkAddress.ipv4.address
-                : state.steps.networkAddress.ipv6.address,
-            vncPassword: state.steps.installationParameters.vnc.password,
           },
         };
         break;

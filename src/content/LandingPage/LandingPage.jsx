@@ -4,25 +4,31 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { InlineNotification, FlexGrid, Row, Column } from "@carbon/react";
-import { ExpressiveCard, PageHeader } from "@carbon/ibm-products";
+import {
+  ExpressiveCard,
+  ProductiveCard,
+  PageHeader,
+} from "@carbon/ibm-products";
 import {
   ResultDraft,
   SettingsEdit,
   NextOutline,
   DocumentDownload,
   Edit,
-  TaskView,
+  Popup,
+  CollapseAll,
+  Add,
+  Subtract,
 } from "@carbon/icons-react";
 import About from "../../components/About";
 import {
+  ADDRESS_TYPE_IPV4,
   ACTION_UPDATE_APP_STEP,
   ACTION_UPDATE_APP_IS_EDITING,
-  ACTION_UPDATE_APP_HELP_STEP,
   ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
-  ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
   DEFAULT_PARAM_FILE_NAME,
 } from "../../util/constants";
@@ -38,26 +44,46 @@ import {
   getLocalStorageKeys,
 } from "../../util/local-storage-util";
 import { ApplicationContext } from "../../App";
+import { NextSteps, SystemRequirements } from "./components";
 import "./_landing-page.scss";
 
 const LandingPage = () => {
   const { t } = useTranslation();
-  const { state, dispatch, helper } = React.useContext(ApplicationContext);
+  const {
+    state: globalState,
+    dispatch,
+    helper,
+  } = React.useContext(ApplicationContext);
+
+  const [requirementsCardIsExpanded, setRequirementsCardIsExpanded] =
+    useState(false);
+  const [nextStepsCardIsExpanded, setNextStepsCardIsExpanded] = useState(false);
+
   const { closeNotification, resetToInitialState } = helper;
 
-  const showNotification = state.showNotification || false;
-  const localStorageKeys = getLocalStorageKeys(state);
+  const showNotification = globalState.showNotification || false;
+  const localStorageKeys = getLocalStorageKeys(globalState);
+  const productiveCardsAreExpanded =
+    requirementsCardIsExpanded || nextStepsCardIsExpanded;
+
+  const useSsh = globalState.steps.installationParameters.ssh.enabled;
+  const useVnc = globalState.steps.installationParameters.vnc.enabled;
+  const networkAddress =
+    globalState.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
+      ? globalState.steps.networkAddress.ipv4.address
+      : globalState.steps.networkAddress.ipv6.address;
+  const vncPassword = globalState.steps.installationParameters.vnc.password;
+  const nextStepsProps = {
+    useSsh,
+    useVnc,
+    networkAddress,
+    vncPassword,
+  };
 
   const updateShowLegalNotification = (showLegalNotification) => {
     dispatch({
       type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
       nextShowLegalNotification: showLegalNotification,
-    });
-  };
-  const updateIsHelpPanelExpanded = (isHelpPanelExpanded) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
-      nextIsHelpPanelExpanded: isHelpPanelExpanded,
     });
   };
 
@@ -199,79 +225,127 @@ const LandingPage = () => {
       <FlexGrid className="landing-page__grid">
         <Row>
           <Column className="landing-page__grey-column-background">
-            <ExpressiveCard
-              label={t("landingPage.expressiveCard.requirements.label")}
-              mediaRatio={null}
-              pictogram={() => {
-                return <ResultDraft size="24" />;
-              }}
-              onPrimaryButtonClick={() => {
-                updateIsHelpPanelExpanded(true);
-                dispatch({
-                  type: ACTION_UPDATE_APP_HELP_STEP,
-                  nextHelpStep: 1,
-                });
-              }}
-              primaryButtonIcon={TaskView}
-              primaryButtonText={t("btnLabel.ReviewInformation", {
-                ns: "common",
-              })}
-              title={t("panel.information.requirementsHeader", {
-                ns: "panels",
-              })}
-              className="landing-page__express-card"
-            >
-              <p>{t("panel.hint.explanation", { ns: "panels" })}</p>
-            </ExpressiveCard>
-            <ExpressiveCard
-              label={t("landingPage.expressiveCard.tool.label")}
-              mediaRatio={null}
-              pictogram={() => {
-                return <SettingsEdit size="24" />;
-              }}
-              onPrimaryButtonClick={() => {
-                dispatch({
-                  type: ACTION_UPDATE_APP_IS_EDITING,
-                  nextIsEditing: true,
-                });
-              }}
-              primaryButtonIcon={Edit}
-              primaryButtonText={getPrimaryButtonTextForParamFileCard()}
-              primaryButtonHref={`${import.meta.env.VITE_URL_PATH_PREFIX}#/edit`}
-              secondaryButtonText={getSecondaryButtonTextForParamFileCard()}
-              onSecondaryButtonClick={saveParamFileContentProxy}
-              secondaryButtonIcon={DocumentDownload}
-              title={getTitleForParamFileCard()}
-              className="landing-page__express-card"
-            >
-              {hasParamFile() ? (
-                <p>{t("landingPage.expressiveCard.tool.paraModify")}</p>
-              ) : (
-                <p>{t("landingPage.expressiveCard.tool.paraNew")}</p>
-              )}
-            </ExpressiveCard>
-            <ExpressiveCard
-              label={t("panel.nextSteps.header", { ns: "panels" })}
-              mediaRatio={null}
-              pictogram={() => {
-                return <NextOutline size="24" />;
-              }}
-              primaryButtonText={t("btnLabel.ReviewInformation", {
-                ns: "common",
-              })}
-              primaryButtonIcon={TaskView}
-              onPrimaryButtonClick={() => {
-                updateIsHelpPanelExpanded(true);
-                dispatch({
-                  type: ACTION_UPDATE_APP_HELP_STEP,
-                  nextHelpStep: 2,
-                });
-              }}
-              title={t("modalHeading.showNextStepsInformation")}
-              className="landing-page__express-card"
-            >
-              <p>{t("landingPage.expressiveCard.nextSteps.para")}</p>
-            </ExpressiveCard>
+            {!nextStepsCardIsExpanded && (
+              <ProductiveCard
+                label={t("landingPage.expressiveCard.requirements.label")}
+                mediaRatio={null}
+                pictogram={() => {
+                  return <ResultDraft size="24" />;
+                }}
+                onPrimaryButtonClick={() => {
+                  if (requirementsCardIsExpanded) {
+                    setRequirementsCardIsExpanded(false);
+                  } else {
+                    setRequirementsCardIsExpanded(true);
+                  }
+                }}
+                primaryButtonIcon={requirementsCardIsExpanded ? Subtract : Add}
+                primaryButtonText={t("btnLabel.ReviewInformation", {
+                  ns: "common",
+                })}
+                title={t("panel.information.requirementsHeader", {
+                  ns: "panels",
+                })}
+                className="landing-page__express-card"
+                actionIcons={[
+                  {
+                    id: "1",
+                    icon: requirementsCardIsExpanded
+                      ? (props) => <CollapseAll size={16} {...props} />
+                      : (props) => <Popup size={16} {...props} />,
+                    onClick: () => {
+                      if (requirementsCardIsExpanded) {
+                        setRequirementsCardIsExpanded(false);
+                      } else {
+                        setRequirementsCardIsExpanded(true);
+                      }
+                    },
+                    iconDescription: requirementsCardIsExpanded
+                      ? t("btnLabel.Collapse", { ns: "common" })
+                      : t("btnLabel.Expand", { ns: "common" }),
+                  },
+                ]}
+              >
+                {requirementsCardIsExpanded && <SystemRequirements />}
+                {!requirementsCardIsExpanded && (
+                  <p>{t("panel.hint.explanation", { ns: "panels" })}</p>
+                )}
+              </ProductiveCard>
+            )}
+            {!productiveCardsAreExpanded && (
+              <ExpressiveCard
+                label={t("landingPage.expressiveCard.tool.label")}
+                mediaRatio={null}
+                pictogram={() => {
+                  return <SettingsEdit size="24" />;
+                }}
+                onPrimaryButtonClick={() => {
+                  dispatch({
+                    type: ACTION_UPDATE_APP_IS_EDITING,
+                    nextIsEditing: true,
+                  });
+                }}
+                primaryButtonIcon={Edit}
+                primaryButtonText={getPrimaryButtonTextForParamFileCard()}
+                primaryButtonHref={`${import.meta.env.VITE_URL_PATH_PREFIX}#/edit`}
+                secondaryButtonText={getSecondaryButtonTextForParamFileCard()}
+                onSecondaryButtonClick={saveParamFileContentProxy}
+                secondaryButtonIcon={DocumentDownload}
+                title={getTitleForParamFileCard()}
+                className="landing-page__express-card"
+              >
+                {hasParamFile() ? (
+                  <p>{t("landingPage.expressiveCard.tool.paraModify")}</p>
+                ) : (
+                  <p>{t("landingPage.expressiveCard.tool.paraNew")}</p>
+                )}
+              </ExpressiveCard>
+            )}
+            {!requirementsCardIsExpanded && (
+              <ProductiveCard
+                label={t("panel.nextSteps.header", { ns: "panels" })}
+                mediaRatio={null}
+                pictogram={() => {
+                  return <NextOutline size="24" />;
+                }}
+                primaryButtonText={t("btnLabel.ReviewInformation", {
+                  ns: "common",
+                })}
+                primaryButtonIcon={nextStepsCardIsExpanded ? Subtract : Add}
+                onPrimaryButtonClick={() => {
+                  if (nextStepsCardIsExpanded) {
+                    setNextStepsCardIsExpanded(false);
+                  } else {
+                    setNextStepsCardIsExpanded(true);
+                  }
+                }}
+                title={t("modalHeading.showNextStepsInformation")}
+                className="landing-page__express-card"
+                actionIcons={[
+                  {
+                    id: "1",
+                    icon: nextStepsCardIsExpanded
+                      ? (props) => <CollapseAll size={16} {...props} />
+                      : (props) => <Popup size={16} {...props} />,
+                    onClick: () => {
+                      if (nextStepsCardIsExpanded) {
+                        setNextStepsCardIsExpanded(false);
+                      } else {
+                        setNextStepsCardIsExpanded(true);
+                      }
+                    },
+                    iconDescription: requirementsCardIsExpanded
+                      ? t("btnLabel.Collapse", { ns: "common" })
+                      : t("btnLabel.Expand", { ns: "common" }),
+                  },
+                ]}
+              >
+                {nextStepsCardIsExpanded && <NextSteps {...nextStepsProps} />}
+                {!nextStepsCardIsExpanded && (
+                  <p>{t("landingPage.expressiveCard.nextSteps.para")}</p>
+                )}
+              </ProductiveCard>
+            )}
           </Column>
         </Row>
       </FlexGrid>

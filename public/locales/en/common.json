@@ -11,6 +11,8 @@
   "btnLabel.Cancel": "Cancel",
   "btnLabel.Create": "Create",
   "btnLabel.Modify": "Modify",
+  "btnLabel.Expand": "Expand",
+  "btnLabel.Collapse": "Collapse",
   "btnLabel.ViewAll": "View all",
   "btnLabel.SystemRequirements": "System requirements",
   "btnLabel.NextSteps": "Next steps",
