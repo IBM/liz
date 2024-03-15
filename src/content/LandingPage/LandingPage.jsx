@@ -334,7 +334,7 @@ const LandingPage = () => {
                         setNextStepsCardIsExpanded(true);
                       }
                     },
-                    iconDescription: requirementsCardIsExpanded
+                    iconDescription: nextStepsCardIsExpanded
                       ? t("btnLabel.Collapse", { ns: "common" })
                       : t("btnLabel.Expand", { ns: "common" }),
                   },
