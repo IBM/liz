@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { InlineNotification } from "@carbon/react";
 import { CreateFullPage, PageHeader } from "@carbon/ibm-products";
-import PropTypes from "prop-types";
 import { getSteps, getInlineNotification } from "../../uiUtil/panel-utils";
 import { ApplicationContext } from "../../App";
 import {
@@ -31,9 +30,12 @@ import {
 import About from "../../components/About";
 import "./_edit-page.scss";
 
-const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
+const EditPage = () => {
   const { t } = useTranslation();
-  const { state, dispatch } = React.useContext(ApplicationContext);
+  const { state, dispatch, helper, config } =
+    React.useContext(ApplicationContext);
+  const { closeNotification, resetToInitialState } = helper;
+  const { panelConfig } = config;
   const navigate = useNavigate();
 
   const hasLocalStorageState = state.useStateFromLocalStorage;
@@ -225,19 +227,6 @@ const EditPage = ({ panelConfig, closeNotification, resetToInitialState }) => {
       </CreateFullPage>
     </>
   );
-};
-
-EditPage.propTypes = {
-  panelConfig: PropTypes.arrayOf(
-    PropTypes.shape({
-      panel: PropTypes.string.isRequired,
-      state: PropTypes.object.isRequired,
-      dispatch: PropTypes.func.isRequired,
-      params: PropTypes.object,
-    }).isRequired,
-  ).isRequired,
-  closeNotification: PropTypes.func.isRequired,
-  resetToInitialState: PropTypes.func.isRequired,
 };
 
 export default EditPage;

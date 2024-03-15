@@ -16,7 +16,6 @@ import {
   Edit,
   TaskView,
 } from "@carbon/icons-react";
-import PropTypes from "prop-types";
 import About from "../../components/About";
 import {
   ACTION_UPDATE_APP_STEP,
@@ -41,22 +40,22 @@ import {
 import { ApplicationContext } from "../../App";
 import "./_landing-page.scss";
 
-const LandingPage = ({ closeNotification, resetToInitialState }) => {
+const LandingPage = () => {
   const { t } = useTranslation();
-  const { state: globalState, dispatch: globalDispatch } =
-    React.useContext(ApplicationContext);
+  const { state, dispatch, helper } = React.useContext(ApplicationContext);
+  const { closeNotification, resetToInitialState } = helper;
 
-  const showNotification = globalState.showNotification || false;
-  const localStorageKeys = getLocalStorageKeys(globalState);
+  const showNotification = state.showNotification || false;
+  const localStorageKeys = getLocalStorageKeys(state);
 
   const updateShowLegalNotification = (showLegalNotification) => {
-    globalDispatch({
+    dispatch({
       type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
       nextShowLegalNotification: showLegalNotification,
     });
   };
   const updateIsHelpPanelExpanded = (isHelpPanelExpanded) => {
-    globalDispatch({
+    dispatch({
       type: ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
       nextIsHelpPanelExpanded: isHelpPanelExpanded,
     });
@@ -125,7 +124,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
   };
 
   useEffect(() => {
-    globalDispatch({
+    dispatch({
       type: ACTION_UPDATE_APP_STEP,
       nextStep: 9,
     });
@@ -208,7 +207,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
               }}
               onPrimaryButtonClick={() => {
                 updateIsHelpPanelExpanded(true);
-                globalDispatch({
+                dispatch({
                   type: ACTION_UPDATE_APP_HELP_STEP,
                   nextHelpStep: 1,
                 });
@@ -231,7 +230,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
                 return <SettingsEdit size="24" />;
               }}
               onPrimaryButtonClick={() => {
-                globalDispatch({
+                dispatch({
                   type: ACTION_UPDATE_APP_IS_EDITING,
                   nextIsEditing: true,
                 });
@@ -263,7 +262,7 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
               primaryButtonIcon={TaskView}
               onPrimaryButtonClick={() => {
                 updateIsHelpPanelExpanded(true);
-                globalDispatch({
+                dispatch({
                   type: ACTION_UPDATE_APP_HELP_STEP,
                   nextHelpStep: 2,
                 });
@@ -278,11 +277,6 @@ const LandingPage = ({ closeNotification, resetToInitialState }) => {
       </FlexGrid>
     </>
   );
-};
-
-LandingPage.propTypes = {
-  closeNotification: PropTypes.func.isRequired,
-  resetToInitialState: PropTypes.func.isRequired,
 };
 
 export default LandingPage;

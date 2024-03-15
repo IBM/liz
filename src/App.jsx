@@ -740,13 +740,19 @@ const App = () => {
               path="/"
               element={
                 <ApplicationContext.Provider
-                  value={{ state, dispatch, downloadParamFileDispatch }}
+                  value={{
+                    state,
+                    dispatch,
+                    componentDispatchers: {
+                      downloadParamFileDispatch,
+                    },
+                    helper: {
+                      closeNotification,
+                      resetToInitialState,
+                    },
+                  }}
                 >
-                  <LandingPage
-                    showNotification={state.showNotification || false}
-                    closeNotification={closeNotification}
-                    resetToInitialState={resetToInitialState}
-                  />
+                  <LandingPage />
                 </ApplicationContext.Provider>
               }
             />
@@ -754,14 +760,22 @@ const App = () => {
               path="/edit"
               element={
                 <ApplicationContext.Provider
-                  value={{ state, dispatch, downloadParamFileDispatch }}
+                  value={{
+                    state,
+                    dispatch,
+                    componentDispatchers: {
+                      downloadParamFileDispatch,
+                    },
+                    helper: {
+                      closeNotification,
+                      resetToInitialState,
+                    },
+                    config: {
+                      panelConfig: panelConfigArray,
+                    },
+                  }}
                 >
-                  <EditPage
-                    panelConfig={panelConfigArray}
-                    showNotification={state.showNotification || false}
-                    closeNotification={closeNotification}
-                    resetToInitialState={resetToInitialState}
-                  />
+                  <EditPage />
                 </ApplicationContext.Provider>
               }
             />
