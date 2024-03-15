@@ -7,3 +7,29 @@
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
+
+.next-steps_copy-button_copied {
+  margin-left: react.$spacing-03;
+  vertical-align: middle;
+
+  svg {
+    padding: react.$spacing-01;
+    fill: react.$support-success;
+  }
+}
+
+.next-steps_copy-button {
+  margin-left: react.$spacing-03;
+  vertical-align: middle;
+  cursor: pointer;
+
+  svg {
+    padding: react.$spacing-01;
+  }
+
+  &:hover {
+    svg {
+      background: react.$background-hover;
+    }
+  }
+}

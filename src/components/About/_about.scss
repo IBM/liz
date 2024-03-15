@@ -82,6 +82,28 @@
 
     padding: react.$spacing-05;
 
+    .about-dialog__about-build-info__commit-hash__copied,
+    .about-dialog__about-build-info__date__copied {
+      padding-bottom: react.$spacing-02;
+
+      code {
+        @include react.type-style("code-01");
+      }
+
+      :first-of-type {
+        margin-right: react.$spacing-03;
+      }
+
+      :last-of-type {
+        vertical-align: bottom;
+
+        svg {
+          padding: react.$spacing-01;
+          fill: react.$support-success;
+        }
+      }
+    }
+
     .about-dialog__about-build-info__commit-hash,
     .about-dialog__about-build-info__date {
       padding-bottom: react.$spacing-02;

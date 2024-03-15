@@ -277,7 +277,7 @@ const App = () => {
         config = {
           forPanel: PANEL_LANDING_PAGE,
           params: {
-            hasMultipleSteps: true,
+            hasMultipleSteps: false,
             currentHelpStep: state.helpStep,
             updateCurrentHelpStep,
           },

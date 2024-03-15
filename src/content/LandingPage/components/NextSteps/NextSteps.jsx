@@ -4,8 +4,9 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Trans, useTranslation } from "react-i18next";
 import {
   UnorderedList,
@@ -14,14 +15,83 @@ import {
   Accordion,
   AccordionItem,
 } from "@carbon/react";
+import { Checkmark, Copy } from "@carbon/icons-react";
 import { getLabel, getContent } from "../../../../uiUtil/help-util";
 import "./_next-steps.scss";
 
 const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
   const { t } = useTranslation();
 
+  const [vncHostHasBeenCopied, setVncHostHasBeenCopied] = useState(false);
+  const [vncPasswordHasBeenCopied, setVncPasswordHasBeenCopied] =
+    useState(false);
+  const [sshHostHasBeenCopied, setSshHostHasBeenCopied] = useState(false);
+
+  const COPY_TYPE_VNC_HOST = 0;
+  const COPY_TYPE_VNC_PASSWORD = 1;
+  const COPY_TYPE_SSH_HOST = 2;
+
+  const updateCopied = (type) => {
+    switch (type) {
+      case COPY_TYPE_VNC_HOST:
+        setVncHostHasBeenCopied(true);
+        break;
+      case COPY_TYPE_VNC_PASSWORD:
+        setVncPasswordHasBeenCopied(true);
+        break;
+      case COPY_TYPE_SSH_HOST:
+        setSshHostHasBeenCopied(true);
+        break;
+      default:
+        break;
+    }
+
+    const timer = setTimeout(() => {
+      switch (type) {
+        case COPY_TYPE_VNC_HOST:
+          setVncHostHasBeenCopied(false);
+          break;
+        case COPY_TYPE_VNC_PASSWORD:
+          setVncPasswordHasBeenCopied(false);
+          break;
+        case COPY_TYPE_SSH_HOST:
+          setSshHostHasBeenCopied(false);
+          break;
+        default:
+          break;
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  };
+
   const networkAddressForListItem = networkAddress || "[host-IP-address]";
   const remoteAccessConfigIsMissing = !useSsh && !useVnc;
+
+  const vncHostCopyIcon = vncHostHasBeenCopied ? (
+    <Checkmark size="20" />
+  ) : (
+    <Copy size="20" />
+  );
+  const vncPasswordCopyIcon = vncPasswordHasBeenCopied ? (
+    <Checkmark size="20" />
+  ) : (
+    <Copy size="20" />
+  );
+  const sshHostCopyIcon = sshHostHasBeenCopied ? (
+    <Checkmark size="20" />
+  ) : (
+    <Copy size="20" />
+  );
+
+  const vncHostCopyClass = vncHostHasBeenCopied
+    ? "next-steps_copy-button_copied"
+    : "next-steps_copy-button";
+  const vncPasswordCopyClass = vncPasswordHasBeenCopied
+    ? "next-steps_copy-button_copied"
+    : "next-steps_copy-button";
+  const sshHostCopyClass = sshHostHasBeenCopied
+    ? "next-steps_copy-button_copied"
+    : "next-steps_copy-button";
 
   const vncInstructionsMarkup = (
     <>
@@ -42,6 +112,17 @@ const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
               t("showInformationLabel", { ns: "common" }),
               getContent("The network address was not yet provided."),
             )}
+          <span
+            className={vncHostCopyClass}
+            title={t("btnLabel.Copy", { ns: "common" })}
+          >
+            <CopyToClipboard
+              text={networkAddressForListItem}
+              onCopy={() => updateCopied(COPY_TYPE_VNC_HOST)}
+            >
+              {vncHostCopyIcon}
+            </CopyToClipboard>
+          </span>
         </ListItem>
         {vncPassword && (
           <ListItem>
@@ -51,6 +132,17 @@ const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
                 {{ vncPassword }}
               </code>
             </Trans>
+            <span
+              className={vncPasswordCopyClass}
+              title={t("btnLabel.Copy", { ns: "common" })}
+            >
+              <CopyToClipboard
+                text={vncPassword}
+                onCopy={() => updateCopied(COPY_TYPE_VNC_PASSWORD)}
+              >
+                {vncPasswordCopyIcon}
+              </CopyToClipboard>
+            </span>
           </ListItem>
         )}
       </UnorderedList>
@@ -76,6 +168,17 @@ const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
               t("showInformationLabel", { ns: "common" }),
               getContent("The network address was not yet provided."),
             )}
+          <span
+            className={sshHostCopyClass}
+            title={t("btnLabel.Copy", { ns: "common" })}
+          >
+            <CopyToClipboard
+              text={`installer@${networkAddressForListItem}`}
+              onCopy={() => updateCopied(COPY_TYPE_SSH_HOST)}
+            >
+              {sshHostCopyIcon}
+            </CopyToClipboard>
+          </span>
         </ListItem>
       </UnorderedList>
     </>
