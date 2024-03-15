@@ -19,9 +19,13 @@
 }
 
 .device-settings_grid-column-left {
-  /* empty block */
+  .device-settings_toggle-label-nowrap {
+    white-space: pre;
+  }
 }
 
 .device-settings_grid-column-right {
-  /* empty block */
+  .device-settings_toggle-label-nowrap {
+    white-space: pre;
+  }
 }

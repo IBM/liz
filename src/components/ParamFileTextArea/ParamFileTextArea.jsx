@@ -113,7 +113,7 @@ ParamFileTextArea.propTypes = {
   allowDownload: PropTypes.bool,
   label: PropTypes.shape({
     text: PropTypes.string,
-    content: PropTypes.object,
+    content: PropTypes.string,
   }),
 };
 

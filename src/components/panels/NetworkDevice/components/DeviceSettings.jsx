@@ -85,6 +85,7 @@ const DeviceSettings = ({
           <Column>
             <div className="device-settings_grid-column-left">
               <Toggle
+                className="device-settings_toggle-label-nowrap"
                 readOnly={readOnly}
                 toggled={state.layer}
                 labelText={t("panel.networkDevice.layerTwoToggleTextLabel", {
@@ -108,6 +109,7 @@ const DeviceSettings = ({
           <Column>
             <div className="device-settings_grid-column-right">
               <Toggle
+                className="device-settings_toggle-label-nowrap"
                 readOnly={readOnly}
                 toggled={state.useMultiPort}
                 labelText={t("panel.networkDevice.multiPortToggleTextLabel", {
