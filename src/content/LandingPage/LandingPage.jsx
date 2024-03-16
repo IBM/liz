@@ -247,6 +247,7 @@ const LandingPage = () => {
                 title={t("panel.information.requirementsHeader", {
                   ns: "panels",
                 })}
+                titleSize="large"
                 className="landing-page__express-card"
                 actionIcons={[
                   {
@@ -306,9 +307,7 @@ const LandingPage = () => {
               <ProductiveCard
                 label={t("panel.nextSteps.header", { ns: "panels" })}
                 mediaRatio={null}
-                pictogram={() => {
-                  return <NextOutline size="24" />;
-                }}
+                pictogram={() => <NextOutline size="24" />}
                 primaryButtonText={t("btnLabel.ReviewInformation", {
                   ns: "common",
                 })}
@@ -321,6 +320,7 @@ const LandingPage = () => {
                   }
                 }}
                 title={t("modalHeading.showNextStepsInformation")}
+                titleSize="large"
                 className="landing-page__express-card"
                 actionIcons={[
                   {
