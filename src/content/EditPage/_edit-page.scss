@@ -47,6 +47,12 @@
   width: 100%;
 }
 
+.edit-page__page-header {
+  .cds--grid {
+    margin-inline: inherit;
+  }
+}
+
 .edit-page__step-header {
   background: react.$layer-01;
   margin-right: 0;

@@ -147,6 +147,7 @@ const EditPage = () => {
       )}
 
       <PageHeader
+        className="edit-page__page-header"
         actionBarOverflowAriaLabel={t("pageHeader.actionBarOverflowAriaLabel", {
           ns: "common",
         })}

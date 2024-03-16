@@ -101,6 +101,8 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
 
   const paramFileHasBeenModifiedFromState =
     globalState?.steps.downloadParamFile?.modified ?? false;
+  const hasSelectedDistributionName =
+    state.selectedDistributionName && state.selectedDistributionName.label;
   const updateSelectedDistributionName = (
     selectedDistributionName,
     callback,
@@ -212,7 +214,9 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
         />
         <Dropdown
           light
-          readOnly={paramFileHasBeenModifiedFromState}
+          readOnly={
+            paramFileHasBeenModifiedFromState || !hasSelectedDistributionName
+          }
           aria-label={t(
             "panel.inputFileSelection.chooseVersionFromeTemplateShort",
             { ns: "panels" },

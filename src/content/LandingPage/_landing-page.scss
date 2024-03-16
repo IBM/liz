@@ -59,6 +59,12 @@
   margin: 0 react.$spacing-13 react.$spacing-06 react.$spacing-13;
 }
 
+.landing-page__page-header {
+  .cds--grid {
+    margin-inline: inherit;
+  }
+}
+
 .landing-page__legal-banner {
   &.cds--inline-notification {
     max-width: 100%;

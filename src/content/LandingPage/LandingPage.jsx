@@ -177,6 +177,7 @@ const LandingPage = () => {
         />
       )}
       <PageHeader
+        className="landing-page__page-header"
         actionBarOverflowAriaLabel={t("pageHeader.actionBarOverflowAriaLabel", {
           ns: "common",
         })}
