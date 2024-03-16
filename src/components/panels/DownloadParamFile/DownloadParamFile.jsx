@@ -28,6 +28,8 @@ import {
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
   DEFAULT_PARAM_FILE_NAME,
+  RHEL_V9_DISTRIBUTION_ID,
+  PRESETS,
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
 import { updateIsDisabled } from "../../../util/panel-utils";
@@ -40,6 +42,10 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
   const { t } = useTranslation();
 
   const { state, dispatch, stateToParamFile } = props;
+  const distributionName =
+    globalState.steps.inputFileSelection.distributionName ??
+    RHEL_V9_DISTRIBUTION_ID;
+  const presets = PRESETS[distributionName];
   const publicRef = {
     persistState: () => {
       const paramFileContentToBePersisted = stateHasValidParamFileContents()
@@ -57,6 +63,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
               downloadParamFile: {
                 ...globalState.steps.downloadParamFile,
                 contents: paramFileContentToBePersisted,
+                presets,
                 modified: state.paramFileContentModified,
                 complete: true,
                 invalid: false,
@@ -72,6 +79,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
               downloadParamFile: {
                 ...globalState.steps.downloadParamFile,
                 contents: paramFileContentToBePersisted,
+                presets,
                 modified: state.paramFileContentModified,
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
@@ -87,6 +95,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
               downloadParamFile: {
                 ...globalState.steps.downloadParamFile,
                 contents: paramFileContentToBePersisted,
+                presets,
                 modified: state.paramFileContentModified,
                 disabled: false,
                 complete: isCompleteAndValid.isComplete,
