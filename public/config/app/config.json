@@ -1,0 +1,8 @@
+{
+  "config": {
+    "bugTrackerUrl": "BUG_TRACKER",
+    "buildDate": "BUILD_DATE",
+    "commitHashShort": "COMMIT_HASH_SHORT",
+    "commitHashLong": "COMMIT_HASH_LONG"
+  }
+}

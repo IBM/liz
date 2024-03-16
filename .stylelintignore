@@ -21,6 +21,7 @@ doc/**/*
 .husky/*
 .github/*
 public/locales/**/*.json
+public/config/**/*.json
 .env
 .env.github
 .travis.yml

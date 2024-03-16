@@ -13,3 +13,4 @@ doc/**/*
 **/*.png
 **/*.html
 public/locales/**/*.json
+public/config/**/*.json

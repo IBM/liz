@@ -17,6 +17,20 @@ const About = ({ closeNotification, pruneSettings }) => {
 
   const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
   const [commitHashHasBeenCopied, setCommitHashHasBeenCopied] = useState(false);
+  const [appConfig, setAppConfig] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_URL_PATH_PREFIX}config/app/config.json`,
+      );
+      const config = await response.json();
+
+      setAppConfig(config);
+    };
+
+    fetchData();
+  }, []);
 
   const COPY_TYPE_BUILD_DATE = 0;
   const COPY_TYPE_COMMIT_HASH = 1;
@@ -48,9 +62,10 @@ const About = ({ closeNotification, pruneSettings }) => {
     return () => clearTimeout(timer);
   };
 
-  const buildDate = "BUILD_DATE";
-  const commitHashShort = "COMMIT_HASH_SHORT";
-  const commitHashLong = "COMMIT_HASH_LONG";
+  const buildDate = appConfig?.config?.buildDate ?? "";
+  const commitHashShort = appConfig?.config?.commitHashShort ?? "";
+  const commitHashLong = appConfig?.config?.commitHashLong ?? "";
+  const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
 
   const buildDateCopyIcon = buildDateBeenCopied ? (
     <Checkmark size="20" />
@@ -158,7 +173,7 @@ const About = ({ closeNotification, pruneSettings }) => {
           kind="ghost"
           data-title="report"
           id="about-dialog__about-report-button"
-          href="BUG_TRACKER"
+          href={bugTrackerUrl}
           target="_blank"
           className="about-dialog__about-report-button"
         >
