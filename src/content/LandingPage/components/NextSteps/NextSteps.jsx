@@ -112,17 +112,19 @@ const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
               t("showInformationLabel", { ns: "common" }),
               getContent("The network address was not yet provided."),
             )}
-          <span
-            className={vncHostCopyClass}
-            title={t("btnLabel.Copy", { ns: "common" })}
-          >
-            <CopyToClipboard
-              text={networkAddressForListItem}
-              onCopy={() => updateCopied(COPY_TYPE_VNC_HOST)}
+          {networkAddress && (
+            <span
+              className={vncHostCopyClass}
+              title={t("btnLabel.Copy", { ns: "common" })}
             >
-              {vncHostCopyIcon}
-            </CopyToClipboard>
-          </span>
+              <CopyToClipboard
+                text={networkAddressForListItem}
+                onCopy={() => updateCopied(COPY_TYPE_VNC_HOST)}
+              >
+                {vncHostCopyIcon}
+              </CopyToClipboard>
+            </span>
+          )}
         </ListItem>
         {vncPassword && (
           <ListItem>
@@ -168,17 +170,19 @@ const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
               t("showInformationLabel", { ns: "common" }),
               getContent("The network address was not yet provided."),
             )}
-          <span
-            className={sshHostCopyClass}
-            title={t("btnLabel.Copy", { ns: "common" })}
-          >
-            <CopyToClipboard
-              text={`installer@${networkAddressForListItem}`}
-              onCopy={() => updateCopied(COPY_TYPE_SSH_HOST)}
+          {networkAddress && (
+            <span
+              className={sshHostCopyClass}
+              title={t("btnLabel.Copy", { ns: "common" })}
             >
-              {sshHostCopyIcon}
-            </CopyToClipboard>
-          </span>
+              <CopyToClipboard
+                text={`installer@${networkAddressForListItem}`}
+                onCopy={() => updateCopied(COPY_TYPE_SSH_HOST)}
+              >
+                {sshHostCopyIcon}
+              </CopyToClipboard>
+            </span>
+          )}
         </ListItem>
       </UnorderedList>
     </>
