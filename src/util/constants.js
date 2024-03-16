@@ -168,18 +168,35 @@ const RHEL_V9_DISTRIBUTION_LABEL = "Red Hat Enterprise Linux 9";
 const RHEL_V9_VERSION_ID = "version-9.x";
 const RHEL_V9_VERSION_LABEL = "9.x";
 
+const SLES_V12_DISTRIBUTION_ID = "sles";
+const SLES_V12_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server 12 SP5";
+const SLES_V12_VERSION_ID = "version-12";
+const SLES_V12_VERSION_LABEL = "12";
+
 const DISTRIBUTION_LIST = [
   {
     id: RHEL_V9_DISTRIBUTION_ID,
     label: RHEL_V9_DISTRIBUTION_LABEL,
   },
-];
-const VERSION_LIST = [
   {
-    id: RHEL_V9_VERSION_ID,
-    label: RHEL_V9_VERSION_LABEL,
+    id: SLES_V12_DISTRIBUTION_ID,
+    label: SLES_V12_DISTRIBUTION_LABEL,
   },
 ];
+const VERSION_LIST = {
+  rhel: [
+    {
+      id: RHEL_V9_VERSION_ID,
+      label: RHEL_V9_VERSION_LABEL,
+    },
+  ],
+  sles: [
+    {
+      id: SLES_V12_VERSION_ID,
+      label: SLES_V12_VERSION_LABEL,
+    },
+  ],
+};
 
 const DEFAULT_STRING_OBJECT = {
   value: "",

@@ -101,8 +101,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
 
   const paramFileHasBeenModifiedFromState =
     globalState?.steps.downloadParamFile?.modified ?? false;
-  const hasSelectedDistributionName =
-    state.selectedDistributionName && state.selectedDistributionName.label;
   const updateSelectedDistributionName = (
     selectedDistributionName,
     callback,
@@ -209,37 +207,44 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
             if (paramFileHasBeenModifiedFromState) return;
 
             updateSelectedDistributionName(selectedItem);
+            updateSelectedDistributionVersion({});
           }}
           selectedItem={state.selectedDistributionName}
         />
-        <Dropdown
-          light
-          readOnly={
-            paramFileHasBeenModifiedFromState || !hasSelectedDistributionName
-          }
-          aria-label={t(
-            "panel.inputFileSelection.chooseVersionFromeTemplateShort",
-            { ns: "panels" },
-          )}
-          id="version-selection"
-          items={VERSION_LIST}
-          titleText={t("panel.inputFileSelection.chooseVersionFromeTemplate", {
-            ns: "panels",
-          })}
-          label={t("panel.inputFileSelection.chooseVersionFromeTemplateShort", {
-            ns: "panels",
-          })}
-          size="md"
-          warn={false}
-          invalid={false}
-          disabled={false}
-          onChange={({ selectedItem }) => {
-            if (paramFileHasBeenModifiedFromState) return;
+        {Object.keys(state.selectedDistributionName).length > 0 && (
+          <Dropdown
+            light
+            readOnly={paramFileHasBeenModifiedFromState}
+            aria-label={t(
+              "panel.inputFileSelection.chooseVersionFromeTemplateShort",
+              { ns: "panels" },
+            )}
+            id="version-selection"
+            items={VERSION_LIST[state.selectedDistributionName.id]}
+            titleText={t(
+              "panel.inputFileSelection.chooseVersionFromeTemplate",
+              {
+                ns: "panels",
+              },
+            )}
+            label={t(
+              "panel.inputFileSelection.chooseVersionFromeTemplateShort",
+              {
+                ns: "panels",
+              },
+            )}
+            size="md"
+            warn={false}
+            invalid={false}
+            disabled={false}
+            onChange={({ selectedItem }) => {
+              if (paramFileHasBeenModifiedFromState) return;
 
-            updateSelectedDistributionVersion(selectedItem);
-          }}
-          selectedItem={state.selectedDistributionVersion}
-        />
+              updateSelectedDistributionVersion(selectedItem);
+            }}
+            selectedItem={state.selectedDistributionVersion}
+          />
+        )}
         {paramFileHasBeenModifiedFromState &&
           parmfileHasBeenModifiedNotificationMarkup}
       </div>

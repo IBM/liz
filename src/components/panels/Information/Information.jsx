@@ -79,9 +79,12 @@ const Information = forwardRef(function Information(props, ref) {
   const distributionName = distribution.name
     ? DISTRIBUTION_LIST.find((x) => x.id === distribution.name).label
     : "";
-  const distributionVersion = distribution.version
-    ? VERSION_LIST.find((x) => x.id === distribution.version).label
-    : "";
+  const distributionVersion =
+    distribution.name && distribution.version
+      ? VERSION_LIST[distribution.name].find(
+          (x) => x.id === distribution.version,
+        ).label
+      : "";
   const memorySize = systemRequirements.memory ? systemRequirements.memory : 0;
   const diskSize = systemRequirements.disk ? systemRequirements.disk : 0;
   const machineLevel = systemRequirements.level ? systemRequirements.level : "";
