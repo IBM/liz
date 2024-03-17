@@ -658,6 +658,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
           updateFunction={updateFunction}
           state={state}
           readOnly={paramFileHasBeenModifiedFromState}
+          requiresDomainSearchName={requiresDomainSearchName}
         />
       );
     } else if (!state.addressType) {

@@ -31,8 +31,16 @@ const stateToIpv6NetworkAddressParams = (state) => {
     state?.steps?.networkAddress.hostName &&
     state?.steps?.networkAddress.hostName.length > 0
   );
+  const hostIpFragment =
+    installationParameters.addressType === ADDRESS_TYPE_IPV4
+      ? `hostip=${ipAddress}/${prefixLength}`
+      : `hostip=[${ipAddress}]/${prefixLength}`;
+  const gatewayFragment =
+    installationParameters.addressType === ADDRESS_TYPE_IPV4
+      ? `gateway=${gatewayIpAddress}`
+      : `gateway=[${gatewayIpAddress}]`;
 
-  return `${hasHostName ? `hostname=${hostName} ` : ""}hostip=${ipAddress}/${prefixLength} gateway=${gatewayIpAddress}`;
+  return `${hasHostName ? `hostname=${hostName} ` : ""}${hostIpFragment} ${gatewayFragment}`;
 };
 
 const stateToNetworkAddressParams = (state) => {

@@ -352,9 +352,9 @@ const IPv6Panel = ({
             ns: "panels",
           })}
           value={
-            state.ipv6 && state.ipv6.domainSearchPathe
+            state.ipv6 && state.ipv6.domainSearchPath
               ? state.ipv6.domainSearchPath.value
-              : 1
+              : ""
           }
           onChange={(localDomainSearchPath) => {
             if (readOnly) return;
