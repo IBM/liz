@@ -27,12 +27,15 @@ import {
   ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
   ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
   ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
+  ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD,
   ACTION_UPDATE_APP_STEPS,
   ACTION_UPDATE_APP_IS_DIRTY,
   ACTION_UPDATE_APP_IS_DISABLED,
   LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
+  SLES_V12_DISTRIBUTION_ID,
+  DEFAULT_DISTRIBUTION_ID,
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
 import { updateIsDisabled } from "../../../util/panel-utils";
@@ -46,8 +49,10 @@ const InstallationParameters = forwardRef(
     const {
       state: globalState,
       dispatch: globalDispatch,
-      downloadParamFileDispatch,
+      componentDispatchers,
     } = React.useContext(ApplicationContext);
+    const downloadParamFileDispatch =
+      componentDispatchers.downloadParamFileDispatch;
     const { t } = useTranslation();
 
     const { state, dispatch, ipAddressVersion } = props;
@@ -69,6 +74,7 @@ const InstallationParameters = forwardRef(
                     enabled: state?.useVnc ?? true,
                   },
                   ssh: {
+                    password: state.sshPassword,
                     enabled: state.useSsh,
                   },
                   complete: true,
@@ -90,6 +96,7 @@ const InstallationParameters = forwardRef(
                     enabled: state?.useVnc ?? true,
                   },
                   ssh: {
+                    password: state.sshPassword,
                     enabled: state.useSsh,
                   },
                   complete: isCompleteAndValid.isComplete,
@@ -112,6 +119,7 @@ const InstallationParameters = forwardRef(
                     enabled: state?.useVnc ?? true,
                   },
                   ssh: {
+                    password: state.sshPassword,
                     enabled: state?.useSsh ?? "",
                   },
                   disabled: false,
@@ -211,6 +219,13 @@ const InstallationParameters = forwardRef(
       dispatch({
         type: ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
         nextVncPassword: password,
+      });
+    };
+
+    const updateSshPassword = (password) => {
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD,
+        nextSshPassword: password,
       });
     };
 
@@ -326,6 +341,11 @@ const InstallationParameters = forwardRef(
     const useVncToggled = state?.useVnc ?? true;
     const paramFileHasBeenModifiedFromState =
       globalState?.steps.downloadParamFile?.modified ?? false;
+    const distributionName =
+      globalState?.steps?.inputFileSelection?.distributionName ??
+      DEFAULT_DISTRIBUTION_ID;
+    const requiresSshPassword =
+      distributionName && distributionName === SLES_V12_DISTRIBUTION_ID;
 
     const isCompleteAndValid = (callback) => {
       let isComplete = false;
@@ -680,6 +700,42 @@ const InstallationParameters = forwardRef(
             }
           }}
         />
+        {useSshToggled && requiresSshPassword && (
+          <PasswordInput
+            light
+            readOnly={paramFileHasBeenModifiedFromState}
+            autoComplete="true"
+            helperText={t("panel.installationParameter.sshPasswordHelp", {
+              ns: "panels",
+            })}
+            id="ssh-password-input"
+            invalidText={t("invalidTextLabel", { ns: "common" })}
+            labelText={t("panel.installationParameter.sshPasswordTextLabel", {
+              ns: "panels",
+            })}
+            placeholder={t(
+              "panel.installationParameter.sshPasswordPlaceholder",
+              {
+                ns: "panels",
+              },
+            )}
+            value={state.vncPassword ? state.sshPassword : ""}
+            onChange={(password) => {
+              if (paramFileHasBeenModifiedFromState) return;
+
+              updateSshPassword(
+                password && password.target ? password.target.value : "",
+              );
+            }}
+            onBlur={(password) => {
+              if (paramFileHasBeenModifiedFromState) return;
+
+              updateSshPassword(
+                password && password.target ? password.target.value : "",
+              );
+            }}
+          />
+        )}
       </div>
     );
 
@@ -750,6 +806,7 @@ InstallationParameters.propTypes = {
     }),
     userAndPwdAreDisabled: PropTypes.bool.isRequired,
     vncPassword: PropTypes.string.isRequired,
+    sshPassword: PropTypes.string.isRequired,
     installationAddress: PropTypes.shape({
       value: PropTypes.string.isRequired,
       computed: PropTypes.string.isRequired,

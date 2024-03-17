@@ -27,14 +27,18 @@ import {
   UPDATE_FUNCTION__IPV4_GATEWAY,
   UPDATE_FUNCTION__IPV4_NAMESERVER,
   UPDATE_FUNCTION__IPV4_HOSTNAME,
+  UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH,
   UPDATE_FUNCTION__IPV6_ADDRESS,
   UPDATE_FUNCTION__IPV6_PREFIX,
   UPDATE_FUNCTION__IPV6_GATEWAY,
   UPDATE_FUNCTION__IPV6_NAMESERVER,
   UPDATE_FUNCTION__IPV6_HOSTNAME,
+  UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH,
   ACTION_UPDATE_NETWORK_ADDRESS_NETMASK,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV4_HOSTNAME,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV6_HOSTNAME,
+  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_DOMAIN_SEARCH_PATH,
+  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_DOMAIN_SEARCH_PATH,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV4_NS_ADDRESS,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV6_NS_ADDRESS,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV4_GW_ADDRESS,
@@ -51,6 +55,8 @@ import {
   LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
+  SLES_V12_DISTRIBUTION_ID,
+  DEFAULT_DISTRIBUTION_ID,
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
 import { updateIsDisabled } from "../../../util/panel-utils";
@@ -66,8 +72,10 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
   const {
     state: globalState,
     dispatch: globalDispatch,
-    downloadParamFileDispatch,
+    componentDispatchers,
   } = React.useContext(ApplicationContext);
+  const downloadParamFileDispatch =
+    componentDispatchers.downloadParamFileDispatch;
   const { t } = useTranslation();
 
   const { state, dispatch } = props;
@@ -103,6 +111,9 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
                 hostName: state[ipVersion].hostName
                   ? state[ipVersion].hostName.value
                   : "",
+                domainSearchPath: state[ipVersion].domainSearchPath
+                  ? state[ipVersion].domainSearchPath.value
+                  : "",
                 complete: true,
                 invalid: false,
                 origin: STATE_ORIGIN_USER,
@@ -132,6 +143,8 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
                 nameserverIpAddress:
                   state[ipVersion]?.nameserverIpAddress?.value ?? "",
                 hostName: state[ipVersion]?.hostName?.value ?? "",
+                domainSearchPath:
+                  state[ipVersion]?.domainSearchPath?.value ?? "",
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 origin: STATE_ORIGIN_USER,
@@ -161,6 +174,8 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
                 nameserverIpAddress:
                   state[ipVersion]?.nameserverIpAddress?.value ?? "",
                 hostName: state[ipVersion]?.hostName?.value ?? "",
+                domainSearchPath:
+                  state[ipVersion]?.domainSearchPath?.value ?? "",
                 complete: isCompleteAndValid.isComplete,
                 invalid: !isCompleteAndValid.isValid,
                 origin: STATE_ORIGIN_USER,
@@ -202,6 +217,11 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     state.addressType && state.addressType === ADDRESS_TYPE_IPV6
       ? "ipv6"
       : "ipv4";
+  const distributionName =
+    globalState?.steps?.inputFileSelection?.distributionName ??
+    DEFAULT_DISTRIBUTION_ID;
+  const requiresDomainSearchName =
+    distributionName && distributionName === SLES_V12_DISTRIBUTION_ID;
 
   const updateFunction = ({
     propertyName = UPDATE_FUNCTION__UNKNOWN,
@@ -223,6 +243,8 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
       updateNameserverAddress(propertyValue, propertyIsValid);
     } else if (propertyName === UPDATE_FUNCTION__IPV4_HOSTNAME) {
       updateHostName(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH) {
+      updateDomainSearchPath(propertyValue, propertyIsValid);
     } else if (propertyName === UPDATE_FUNCTION__IPV6_ADDRESS) {
       updateIpv6Address(propertyValue, propertyIsValid);
     } else if (propertyName === UPDATE_FUNCTION__IPV6_PREFIX) {
@@ -233,6 +255,8 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
       updateNameserverAddress(propertyValue, propertyIsValid);
     } else if (propertyName === UPDATE_FUNCTION__IPV6_HOSTNAME) {
       updateHostName(propertyValue, propertyIsValid);
+    } else if (propertyName === UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH) {
+      updateDomainSearchPath(propertyValue, propertyIsValid);
     } else if (UPDATE_FUNCTION__UNKNOWN) {
       console.log("Unknown property name passed to update proxy function.");
     }
@@ -346,6 +370,20 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     });
   };
 
+  const updateDomainSearchPath = (domainSearchPath, valid) => {
+    dispatch({
+      type:
+        ipVersion === ADDRESS_TYPE_IPV4 ||
+        state.addressType === ADDRESS_TYPE_IPV4
+          ? ACTION_UPDATE_NETWORK_ADDRESS_IPV4_DOMAIN_SEARCH_PATH
+          : ACTION_UPDATE_NETWORK_ADDRESS_IPV6_DOMAIN_SEARCH_PATH,
+      nextDomainSearchPath: {
+        value: domainSearchPath,
+        valid,
+      },
+    });
+  };
+
   const ipv4Namespace = state.ipv4;
   const ipv6Namespace = state.ipv6;
 
@@ -413,12 +451,21 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     return true;
   };
 
+  const isDomainSearchPathValid = () => {
+    if (state[ipVersion].domainSearchPath) {
+      return state[ipVersion].domainSearchPath.valid;
+    }
+    // return true since domainSearchPath is optional
+    return true;
+  };
+
   const isValid = () => {
     return (
       isIpAddressValid() &&
       isGatewayIpAddressValid() &&
       isNameserverIpAddressValid() &&
-      isHostNameValid()
+      isHostNameValid() &&
+      isDomainSearchPathValid()
     );
   };
 
@@ -519,12 +566,24 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     return true;
   };
 
+  const isDomainSearchPathComplete = () => {
+    if (state[ipVersion].hostName) {
+      return (
+        typeof state[ipVersion].domainSearchPath === "object" &&
+        typeof state[ipVersion].domainSearchPath.value === "string"
+      );
+    }
+    // return true since domainSearchPath is optional
+    return true;
+  };
+
   const isComplete = () => {
     return (
       isIpDataComplete() &&
       isGatewayIpAddressComplete() &&
       isNameserverIpAddressComplete() &&
-      isHostNameComplete()
+      isHostNameComplete() &&
+      isDomainSearchPathComplete()
     );
   };
 
@@ -587,6 +646,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
           updateFunction={updateFunction}
           state={state}
           readOnly={paramFileHasBeenModifiedFromState}
+          requiresDomainSearchName={requiresDomainSearchName}
         />
       );
     } else if (state.addressType && state.addressType === ADDRESS_TYPE_IPV6) {
@@ -603,6 +663,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
           updateFunction={updateFunction}
           state={state}
           readOnly={paramFileHasBeenModifiedFromState}
+          requiresDomainSearchName={requiresDomainSearchName}
         />
       );
     }
@@ -662,6 +723,7 @@ NetworkAddress.propTypes = {
       gatewayIpAddress: PropTypes.object.isRequired,
       nameserverIpAddress: PropTypes.object.isRequired,
       hostName: PropTypes.object.isRequired,
+      domainSearchPath: PropTypes.object.isRequired,
     }),
     ipv6: PropTypes.shape({
       ipv6Cidr: PropTypes.object.isRequired,
@@ -669,6 +731,7 @@ NetworkAddress.propTypes = {
       gatewayIpAddress: PropTypes.object.isRequired,
       nameserverIpAddress: PropTypes.object.isRequired,
       hostName: PropTypes.object.isRequired,
+      domainSearchPath: PropTypes.object.isRequired,
     }),
   }).isRequired,
   dispatch: PropTypes.func.isRequired,

@@ -26,6 +26,7 @@ const createInitialState = () => {
     password: DEFAULT_STRING_OBJECT,
     userAndPwdAreDisabled: true,
     vncPassword: "",
+    sshPassword: "",
     origin: STATE_ORIGIN_DEFAULT,
   };
 

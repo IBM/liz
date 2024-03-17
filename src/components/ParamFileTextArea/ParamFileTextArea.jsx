@@ -85,6 +85,7 @@ const ParamFileTextArea = ({
     <TextArea
       light
       enableCounter
+      maxCount={860}
       labelText={label.text}
       helperText={label.content}
       className={textAreaClasses}

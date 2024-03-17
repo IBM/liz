@@ -11,6 +11,7 @@ import {
   ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
   ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
   ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
+  ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD,
   ACTION_RESET_TO_INITIAL_STATE,
 } from "../util/constants";
 
@@ -50,6 +51,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         vncPassword: action.nextVncPassword,
+      };
+    case ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD:
+      return {
+        ...state,
+        sshPassword: action.nextSshPassword,
       };
   }
 

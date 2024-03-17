@@ -8,6 +8,8 @@ import {
   ACTION_UPDATE_NETWORK_ADDRESS_NETMASK,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV4_HOSTNAME,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV6_HOSTNAME,
+  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_DOMAIN_SEARCH_PATH,
+  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_DOMAIN_SEARCH_PATH,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV4_NS_ADDRESS,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV6_NS_ADDRESS,
   ACTION_UPDATE_NETWORK_ADDRESS_IPV4_GW_ADDRESS,
@@ -56,6 +58,28 @@ const reducer = (state, action) => {
         ipv6: {
           ...state.ipv6,
           hostName: action.nextHostName,
+        },
+        addressType: state.addressType || ADDRESS_TYPE_IPV4,
+      };
+    case ACTION_UPDATE_NETWORK_ADDRESS_IPV4_DOMAIN_SEARCH_PATH:
+      return {
+        ipv4: {
+          ...state.ipv4,
+          domainSearchPath: action.nextDomainSearchPath,
+        },
+        ipv6: {
+          ...state.ipv6,
+        },
+        addressType: state.addressType || ADDRESS_TYPE_IPV4,
+      };
+    case ACTION_UPDATE_NETWORK_ADDRESS_IPV6_DOMAIN_SEARCH_PATH:
+      return {
+        ipv4: {
+          ...state.ipv4,
+        },
+        ipv6: {
+          ...state.ipv6,
+          domainSearchPath: action.nextDomainSearchPath,
         },
         addressType: state.addressType || ADDRESS_TYPE_IPV4,
       };

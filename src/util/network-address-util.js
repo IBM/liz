@@ -146,6 +146,22 @@ const isHostnameValid = (hostName) => {
   );
 };
 
+const isDomainSearchPathValid = (domainSearchPath) => {
+  // the domainSearchPath is optional,
+  // if it is a zero length string mark it as a valid value.
+  if (typeof domainSearchPath === "string" && domainSearchPath.length === 0) {
+    return true;
+  }
+
+  return (
+    domainSearchPath &&
+    typeof domainSearchPath === "string" &&
+    domainSearchPath.length <= 253 &&
+    domainNameHasValidLabels(domainSearchPath) &&
+    isValidHostname(domainSearchPath)
+  );
+};
+
 const isIpv4NetworkAddressValid = (ipv4Address) => {
   const match = ipv4Address.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
   return (
@@ -171,6 +187,7 @@ export {
   netmaskToBinary,
   domainNameHasValidLabels,
   isHostnameValid,
+  isDomainSearchPathValid,
   isIpv4NetworkAddressValid,
   isIpv6NetworkAddressValid,
 };

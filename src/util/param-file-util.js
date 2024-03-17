@@ -6,6 +6,7 @@
 
 import {
   DEFAULT_PARAM_FILE_NAME,
+  DEFAULT_DISTRIBUTION_ID,
   RHEL_V9_DISTRIBUTION_ID,
   SLES_V12_DISTRIBUTION_ID,
 } from "./constants";
@@ -72,7 +73,11 @@ const hasInvalidData = (steps) => {
 };
 
 const stateToParamFile = (state) => {
-  const distributionName = state.steps.inputFileSelection.distributionName;
+  const distributionName =
+    state.steps.inputFileSelection.distributionName &&
+    state.steps.inputFileSelection.distributionName.length > 0
+      ? state.steps.inputFileSelection.distributionName
+      : DEFAULT_DISTRIBUTION_ID;
   const functionNames = getFunctionsForDistribution()[distributionName];
 
   const stateToInstallationRepoParamsResult =

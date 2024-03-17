@@ -18,6 +18,7 @@ import {
   UPDATE_FUNCTION__IPV4_GATEWAY,
   UPDATE_FUNCTION__IPV4_NAMESERVER,
   UPDATE_FUNCTION__IPV4_HOSTNAME,
+  UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH,
 } from "../../../../util/constants";
 import {
   isIpv4NetworkAddressValid,
@@ -26,10 +27,16 @@ import {
   netmaskToBinary,
   netmaskToCidr,
   isHostnameValid,
+  isDomainSearchPathValid,
 } from "../../../../util/network-address-util";
 import "./_ip-panels.scss";
 
-const IPv4Panel = ({ updateFunction, state, readOnly }) => {
+const IPv4Panel = ({
+  updateFunction,
+  state,
+  readOnly,
+  requiresDomainSearchName,
+}) => {
   const { t } = useTranslation();
 
   const PLACEHOLDER_GATEWAY_ADDRESS_IPV4 = t(
@@ -457,6 +464,68 @@ const IPv4Panel = ({ updateFunction, state, readOnly }) => {
           });
         }}
       />
+      {requiresDomainSearchName && (
+        <TextInput
+          light
+          readOnly={readOnly}
+          id="network-address_domain-search-path-input"
+          invalid={
+            state && state.ipv4 && state.ipv4.domainSearchPath
+              ? !state.ipv4.domainSearchPath.valid
+              : false
+          }
+          invalidText={t("invalidTextLabel", { ns: "common" })}
+          labelText={t("panel.networkAddress.domainSearchPathTextLabel", {
+            ns: "panels",
+          })}
+          helperText={t("panel.networkAddress.domainSearchPathHelp", {
+            ns: "panels",
+          })}
+          placeholder={t("panel.networkAddress.domainSearchPathPlaceholder", {
+            ns: "panels",
+          })}
+          value={
+            state.ipv4 && state.ipv4.domainSearchPath
+              ? state.ipv4.domainSearchPath.value
+              : ""
+          }
+          onChange={(localDomainSearchPath) => {
+            if (readOnly) return;
+
+            const localDomainSearchPathValue =
+              localDomainSearchPath &&
+              localDomainSearchPath.target &&
+              localDomainSearchPath.target.value
+                ? localDomainSearchPath.target.value
+                : "";
+            // while editing we don't update the validity but set it to true
+            // cause we don't want to have the form validation logic kick in.
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH,
+              propertyValue: localDomainSearchPathValue,
+              propertyIsValid: true,
+            });
+          }}
+          onBlur={(localDomainSearchPath) => {
+            if (readOnly) return;
+
+            const localDomainSearchPathValue =
+              localDomainSearchPath &&
+              localDomainSearchPath.target &&
+              localDomainSearchPath.target.value
+                ? localDomainSearchPath.target.value
+                : "";
+            const localDomainSearchPathValueIsValid =
+              isDomainSearchPathValid(localDomainSearchPathValue) &&
+              !isIP(localDomainSearchPathValue);
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH,
+              propertyValue: localDomainSearchPathValue,
+              propertyIsValid: localDomainSearchPathValueIsValid,
+            });
+          }}
+        />
+      )}
     </div>
   );
 
@@ -472,6 +541,7 @@ IPv4Panel.propTypes = {
   updateFunction: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  requiresDomainSearchName: PropTypes.bool.isRequired,
 };
 
 export default IPv4Panel;

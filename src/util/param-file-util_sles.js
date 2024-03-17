@@ -13,10 +13,12 @@ const stateToIpv4NetworkAddressParams = (state) => {
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
   const prefixLength = installationParameters?.ipv4?.cidr ?? 1;
   const hostName = installationParameters?.hostName ?? "";
+  const hasHostName = !!(
+    state?.steps?.networkAddress.hostName &&
+    state?.steps?.networkAddress.hostName.length > 0
+  );
 
-  return `Hostname=${hostName} HostIP=${ipAddress}/${prefixLength}
-Gateway=${gatewayIpAddress}
-`;
+  return `${hasHostName ? `hostname=${hostName} ` : ""}hostip=${ipAddress}/${prefixLength} gateway=${gatewayIpAddress}`;
 };
 
 const stateToIpv6NetworkAddressParams = (state) => {
@@ -25,10 +27,12 @@ const stateToIpv6NetworkAddressParams = (state) => {
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
   const prefixLength = installationParameters?.ipv6?.cidr ?? 1;
   const hostName = installationParameters?.hostName ?? "";
+  const hasHostName = !!(
+    state?.steps?.networkAddress.hostName &&
+    state?.steps?.networkAddress.hostName.length > 0
+  );
 
-  return `Hostname=${hostName} HostIP=${ipAddress}/${prefixLength}
-Gateway=${gatewayIpAddress}
-`;
+  return `${hasHostName ? `hostname=${hostName} ` : ""}hostip=${ipAddress}/${prefixLength} gateway=${gatewayIpAddress}`;
 };
 
 const stateToNetworkAddressParams = (state) => {
@@ -47,12 +51,16 @@ const stateToNetworkAddressParams = (state) => {
       installationParameters.addressType === ADDRESS_TYPE_IPV4
         ? stateToIpv4NetworkAddressParams(state)
         : stateToIpv6NetworkAddressParams(state);
+    const hasDomainSearchPath = !!(
+      installationParameters.domainSearchPath &&
+      installationParameters.domainSearchPath.length > 0
+    );
     const nameserver =
       installationParameters.addressType === ADDRESS_TYPE_IPV4
         ? `nameserver=${installationParameters.nameserverIpAddress}`
         : `nameserver=[${installationParameters.nameserverIpAddress}]`;
     const installationRepoLine = `${ipAddressParemeters}
-${nameserver}
+${nameserver}${hasDomainSearchPath ? ` domain=${installationParameters.domainSearchPath}` : ""}
 `;
     paramFileContents = {
       contents: `${installationRepoLine}`,
@@ -156,7 +164,7 @@ const stateToVncParams = (state) => {
       installationParameters.vnc.password &&
       installationParameters.vnc.password.length > 0
     ) {
-      const vncServerLine = `vnc=1 VNCPassword=${installationParameters.vnc.password}`;
+      const vncServerLine = `vnc=1 vncpassword=${installationParameters.vnc.password}`;
       paramFileContents = {
         contents: `${vncServerLine}`,
         complete: installationParameters.complete,
@@ -191,7 +199,11 @@ const stateToSshParams = (state) => {
     installationParameters.ssh &&
     installationParameters.ssh.enabled === true
   ) {
-    const sshServerLine = `ssh=1${installationParameters.ssh.password ? installationParameters.ssh.password : ""}`;
+    const hasSshPassword = !!(
+      installationParameters.ssh.password &&
+      installationParameters.ssh.password.length > 0
+    );
+    const sshServerLine = `ssh=1${hasSshPassword ? ` ssh.password=${installationParameters.ssh.password}` : ""}`;
     paramFileContents = {
       contents: `${sshServerLine}`,
       complete: installationParameters.complete,

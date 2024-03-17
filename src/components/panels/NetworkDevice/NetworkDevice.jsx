@@ -64,8 +64,10 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
   const {
     state: globalState,
     dispatch: globalDispatch,
-    downloadParamFileDispatch,
+    componentDispatchers,
   } = React.useContext(ApplicationContext);
+  const downloadParamFileDispatch =
+    componentDispatchers.downloadParamFileDispatch;
   const { t } = useTranslation();
 
   const { state, dispatch } = props;

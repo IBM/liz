@@ -32,6 +32,7 @@ const createInitialState = () => {
       gatewayIpAddress: DEFAULT_STRING_OBJECT,
       nameserverIpAddress: DEFAULT_STRING_OBJECT,
       hostName: DEFAULT_STRING_OBJECT,
+      domainSearchPath: DEFAULT_STRING_OBJECT,
     },
     ipv6: {
       ipv6Cidr: {
