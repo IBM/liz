@@ -719,7 +719,7 @@ const InstallationParameters = forwardRef(
                 ns: "panels",
               },
             )}
-            value={state.vncPassword ? state.sshPassword : ""}
+            value={state.sshPassword ? state.sshPassword : ""}
             onChange={(password) => {
               if (paramFileHasBeenModifiedFromState) return;
 
