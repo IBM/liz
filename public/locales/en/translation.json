@@ -35,7 +35,7 @@
   "leftNavigation.progressStep.nextSteps.label": "Next steps",
   "leftNavigation.progressStep.nextSteps.secondaryLabel": "Review your next steps for installing Linux.",
   "leftNavigation.progressStep.summary.label": "Summary",
-  "leftNavigation.progressStep.summary.secondaryLabel": "The parameter file has been composed. If toggled below clicking the create button downloads the file to your computer.",
+  "leftNavigation.progressStep.summary.secondaryLabel": "The parameter file has been composed. Set the Download parameter file toggle to yes and click Create or Modify to download the file.",
   "header.button.profileSettings": "Profile Settings",
   "rightNavigation.header": "Help & Documentation",
   "dialog.about.headerLabel": "About this app",

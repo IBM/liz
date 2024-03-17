@@ -162,5 +162,5 @@
   "panel.summary.downloadParmfileNamePlaceholder": "parmfile.txt",
   "panel.intro.purgeParmfileSettingsToggleTextLabel": "Use existing settings",
   "panel.intro.parmFilePurgeNotificationTitle": "Deleting settings",
-  "panel.intro.parmFilePurgeNotificationSubtitle": "If proceeding to the next step the existing settings will be purged. You will have to start anew with an empty baseline."
+  "panel.intro.parmFilePurgeNotificationSubtitle": "If you proceed to the next step, the existing settings will be purged. You will start anew with an empty parameter file."
 }
