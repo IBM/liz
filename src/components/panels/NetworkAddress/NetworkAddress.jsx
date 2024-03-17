@@ -220,8 +220,11 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
   const distributionName =
     globalState?.steps?.inputFileSelection?.distributionName ??
     DEFAULT_DISTRIBUTION_ID;
-  const requiresDomainSearchName =
-    distributionName && distributionName === SLES_V12_DISTRIBUTION_ID;
+  const requiresDomainSearchName = !!(
+    distributionName &&
+    distributionName.length > 0 &&
+    distributionName === SLES_V12_DISTRIBUTION_ID
+  );
 
   const updateFunction = ({
     propertyName = UPDATE_FUNCTION__UNKNOWN,

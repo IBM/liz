@@ -43,6 +43,7 @@ const createInitialState = () => {
       gatewayIpAddress: DEFAULT_STRING_OBJECT,
       nameserverIpAddress: DEFAULT_STRING_OBJECT,
       hostName: DEFAULT_STRING_OBJECT,
+      domainSearchPath: DEFAULT_STRING_OBJECT,
     },
     addressType: ADDRESS_TYPE_IPV4,
     origin: STATE_ORIGIN_DEFAULT,
