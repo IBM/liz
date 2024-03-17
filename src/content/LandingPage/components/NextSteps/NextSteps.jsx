@@ -17,9 +17,16 @@ import {
 } from "@carbon/react";
 import { Checkmark, Copy } from "@carbon/icons-react";
 import { getLabel, getContent } from "../../../../uiUtil/help-util";
+import { ADDRESS_TYPE_IPV4 } from "../../../../util/constants";
 import "./_next-steps.scss";
 
-const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
+const NextSteps = ({
+  useSsh,
+  useVnc,
+  networkAddress,
+  addressType,
+  vncPassword,
+}) => {
   const { t } = useTranslation();
 
   const [vncHostHasBeenCopied, setVncHostHasBeenCopied] = useState(false);
@@ -64,7 +71,9 @@ const NextSteps = ({ useSsh, useVnc, networkAddress, vncPassword }) => {
     return () => clearTimeout(timer);
   };
 
-  const networkAddressForListItem = networkAddress || "[host-IP-address]";
+  const networkAddressForListItem =
+    `${addressType === ADDRESS_TYPE_IPV4 ? `${networkAddress}` : `[${networkAddress}]`}` ||
+    "[host-IP-address]";
   const remoteAccessConfigIsMissing = !useSsh && !useVnc;
 
   const vncHostCopyIcon = vncHostHasBeenCopied ? (
@@ -330,6 +339,7 @@ NextSteps.propTypes = {
   useSsh: PropTypes.bool,
   useVnc: PropTypes.bool,
   networkAddress: PropTypes.string,
+  addressType: PropTypes.string,
   vncPassword: PropTypes.string,
 };
 

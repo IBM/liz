@@ -77,6 +77,7 @@ const LandingPage = () => {
     useSsh,
     useVnc,
     networkAddress,
+    addressType: globalState.steps.networkAddress.addressType,
     vncPassword,
   };
 
