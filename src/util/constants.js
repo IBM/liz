@@ -159,13 +159,38 @@ const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
 const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
 const RHEL_PRESET = "ro ramdisk_size=40000 cio_ignore=all,!condev";
-const SLES_PRESET = "ro TERM=xterm manual=0 cio_ignore=all,!6152";
+const SLES_PRESET =
+  "ro term=dumb ramdisk_size=40000 manual=0 cio_ignore=all,!6152";
 const UBUNTU_PRESET = "ro locale=en_US auto=true priority=critical";
 
 const PRESETS = {
   rhel: RHEL_PRESET,
   sles: SLES_PRESET,
   ubuntu: UBUNTU_PRESET,
+};
+
+const SYSTEM_REQUIREMENTS = {
+  rhel: {
+    memorySize: 3,
+    diskSize: 10,
+    machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
+    docLink:
+      "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
+  },
+  sles: {
+    memorySize: 3,
+    diskSize: 10,
+    machineLevel:
+      "IBM z13(r), IBM z14(r), IBM z15(r), IBM z16(r), IBM LinuxONE Emperor II, Rockhopper II or Emperor 4",
+    docLink:
+      "https://documentation.suse.com/sles/15-SP5/single-html/SLES-deployment/#sec-zseries-requirements",
+  },
+  ubuntu: {
+    memorySize: 3,
+    diskSize: 10,
+    machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
+    docLink: "https://some.ubuntu.domain/some/path/to/documentation",
+  },
 };
 
 const DEVICE_TYPE_LIST = [
@@ -184,10 +209,10 @@ const RHEL_V9_DISTRIBUTION_LABEL = "Red Hat Enterprise Linux 9";
 const RHEL_V9_VERSION_ID = "version-9.x";
 const RHEL_V9_VERSION_LABEL = "9.x";
 
-const SLES_V12_DISTRIBUTION_ID = "sles";
-const SLES_V12_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server 12 SP5";
-const SLES_V12_VERSION_ID = "version-12";
-const SLES_V12_VERSION_LABEL = "12";
+const SLES_V15_DISTRIBUTION_ID = "sles";
+const SLES_V15_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server 15 SP5";
+const SLES_V15_VERSION_ID = "version-15";
+const SLES_V15_VERSION_LABEL = "15";
 
 const UBUNTU_V20_DISTRIBUTION_ID = "ubuntu";
 const UBUNTU_V20_DISTRIBUTION_LABEL = "Ubuntu Server 20.04.6 LTS";
@@ -202,8 +227,8 @@ const DISTRIBUTION_LIST = [
     label: RHEL_V9_DISTRIBUTION_LABEL,
   },
   {
-    id: SLES_V12_DISTRIBUTION_ID,
-    label: SLES_V12_DISTRIBUTION_LABEL,
+    id: SLES_V15_DISTRIBUTION_ID,
+    label: SLES_V15_DISTRIBUTION_LABEL,
   },
   {
     id: UBUNTU_V20_DISTRIBUTION_ID,
@@ -219,8 +244,8 @@ const VERSION_LIST = {
   ],
   sles: [
     {
-      id: SLES_V12_VERSION_ID,
-      label: SLES_V12_VERSION_LABEL,
+      id: SLES_V15_VERSION_ID,
+      label: SLES_V15_VERSION_LABEL,
     },
   ],
   ubuntu: [
@@ -273,11 +298,7 @@ const DEFAULT_STEPS = {
   inputFileSelection: {
     distributionName: RHEL_V9_DISTRIBUTION_ID,
     distributionVersion: RHEL_V9_VERSION_ID,
-    memorySize: 3,
-    diskSize: 10,
-    machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
-    docLink:
-      "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
+    systemRequirements: SYSTEM_REQUIREMENTS,
     complete: false,
     disabled: false,
     invalid: false,
@@ -537,10 +558,10 @@ export {
   RHEL_V9_DISTRIBUTION_LABEL,
   RHEL_V9_VERSION_ID,
   RHEL_V9_VERSION_LABEL,
-  SLES_V12_DISTRIBUTION_ID,
-  SLES_V12_DISTRIBUTION_LABEL,
-  SLES_V12_VERSION_ID,
-  SLES_V12_VERSION_LABEL,
+  SLES_V15_DISTRIBUTION_ID,
+  SLES_V15_DISTRIBUTION_LABEL,
+  SLES_V15_VERSION_ID,
+  SLES_V15_VERSION_LABEL,
   UBUNTU_V20_DISTRIBUTION_ID,
   UBUNTU_V20_DISTRIBUTION_LABEL,
   UBUNTU_V20_VERSION_ID,

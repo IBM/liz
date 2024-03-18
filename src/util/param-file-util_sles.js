@@ -6,6 +6,7 @@
 
 import { toChannelSegments } from "./network-device-util";
 import { ADDRESS_TYPE_IPV4, DEVICE_TYPE_OSA } from "./constants";
+import { getInterfaceNameParamContents } from "./param-file-util_common";
 
 const stateToIpv4NetworkAddressParams = (state) => {
   const installationParameters = state?.steps?.networkAddress ?? {};
@@ -111,6 +112,17 @@ const stateToNetworkDeviceParams = (state) => {
     installationParameters.deviceType === DEVICE_TYPE_OSA
       ? stateToOsaNetworkDeviceParams(installationParameters)
       : `net.ifnames=0`;
+  const hasVlanId =
+    installationParameters.vlan.enabled &&
+    typeof installationParameters.vlan === "object" &&
+    typeof installationParameters.vlan.id === "number" &&
+    installationParameters.vlan.id > 0;
+  const interfaceName =
+    getInterfaceNameParamContents(installationParameters) || "";
+  const vlanId = `vlan=${getVlanName(
+    interfaceName,
+    installationParameters.vlan.id,
+  )}:${interfaceName}`;
   let paramFileContents = {
     contents: "",
     complete: false,
@@ -120,7 +132,7 @@ const stateToNetworkDeviceParams = (state) => {
 
   // => rd.znet...
   if (installationParameters) {
-    const installationRepoLine = `${networkDeviceSettings}`;
+    const installationRepoLine = `${hasVlanId ? `${networkDeviceSettings} ${vlanId}` : networkDeviceSettings}`;
     paramFileContents = {
       contents: `${installationRepoLine}`,
       complete: installationParameters.complete,
@@ -221,6 +233,13 @@ const stateToSshParams = (state) => {
   }
 
   return paramFileContents;
+};
+
+const getVlanName = (interfaceName, vlanId) => {
+  if (interfaceName && vlanId) {
+    return `${interfaceName}.${vlanId}`;
+  }
+  return ``;
 };
 
 export {

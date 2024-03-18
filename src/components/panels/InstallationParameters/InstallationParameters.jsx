@@ -34,7 +34,7 @@ import {
   LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
-  SLES_V12_DISTRIBUTION_ID,
+  SLES_V15_DISTRIBUTION_ID,
   DEFAULT_DISTRIBUTION_ID,
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
@@ -345,7 +345,7 @@ const InstallationParameters = forwardRef(
       globalState?.steps?.inputFileSelection?.distributionName ??
       DEFAULT_DISTRIBUTION_ID;
     const requiresSshPassword =
-      distributionName && distributionName === SLES_V12_DISTRIBUTION_ID;
+      distributionName && distributionName === SLES_V15_DISTRIBUTION_ID;
 
     const isCompleteAndValid = (callback) => {
       let isComplete = false;

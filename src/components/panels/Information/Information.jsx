@@ -33,7 +33,7 @@ const Information = forwardRef(function Information(props, ref) {
     componentDispatchers.downloadParamFileDispatch;
   const { t } = useTranslation();
 
-  const { state, distribution, systemRequirements, docLink } = props;
+  const { state, distribution, systemRequirements } = props;
   const publicRef = {
     persistState: () => {
       const mergedSteps = {
@@ -87,9 +87,16 @@ const Information = forwardRef(function Information(props, ref) {
           (x) => x.id === distribution.version,
         ).label
       : "";
-  const memorySize = systemRequirements.memory ? systemRequirements.memory : 0;
-  const diskSize = systemRequirements.disk ? systemRequirements.disk : 0;
-  const machineLevel = systemRequirements.level ? systemRequirements.level : "";
+  const memorySize = systemRequirements.memorySize
+    ? systemRequirements.memorySize
+    : 0;
+  const diskSize = systemRequirements.diskSize
+    ? systemRequirements.diskSize
+    : 0;
+  const machineLevel = systemRequirements.machineLevel
+    ? systemRequirements.machineLevel
+    : "";
+  const docLink = systemRequirements.docLink ? systemRequirements.docLink : "";
 
   const DEFAULT_MEMORY_SIZE_UNIT = "GiB";
   const DEFAULT_DISK_SIZE_UNIT = "GiB";
@@ -224,15 +231,15 @@ const Information = forwardRef(function Information(props, ref) {
 Information.propTypes = {
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-  docLink: PropTypes.string.isRequired,
   distribution: PropTypes.shape({
     name: PropTypes.string.isRequired,
     version: PropTypes.string.isRequired,
   }).isRequired,
   systemRequirements: PropTypes.shape({
-    disk: PropTypes.number.isRequired,
-    memory: PropTypes.number.isRequired,
-    level: PropTypes.string.isRequired,
+    diskSize: PropTypes.number.isRequired,
+    memorySize: PropTypes.number.isRequired,
+    machineLevel: PropTypes.string.isRequired,
+    docLink: PropTypes.string.isRequired,
   }).isRequired,
 };
 

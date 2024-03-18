@@ -328,11 +328,11 @@ const App = () => {
           dispatch: informationDispatch,
           state: informationState,
           params: {
-            systemRequirements: {
-              disk: state.steps.inputFileSelection.diskSize,
-              memory: state.steps.inputFileSelection.memorySize,
-              level: state.steps.inputFileSelection.machineLevel,
-            },
+            systemRequirements: state.steps.inputFileSelection.distributionName
+              ? state.steps.inputFileSelection.systemRequirements[
+                  state.steps.inputFileSelection.distributionName
+                ]
+              : {},
             distribution: {
               name: state.steps.inputFileSelection.distributionName,
               version: state.steps.inputFileSelection.distributionVersion,

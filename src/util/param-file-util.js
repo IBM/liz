@@ -8,7 +8,7 @@ import {
   DEFAULT_PARAM_FILE_NAME,
   DEFAULT_DISTRIBUTION_ID,
   RHEL_V9_DISTRIBUTION_ID,
-  SLES_V12_DISTRIBUTION_ID,
+  SLES_V15_DISTRIBUTION_ID,
   UBUNTU_V20_DISTRIBUTION_ID,
 } from "./constants";
 import {
@@ -47,7 +47,7 @@ const getFunctionsForDistribution = () => {
       stateToVncParams: stateToVncParamsRhel,
       stateToInstallationRepoParams: stateToInstallationRepoParamsRhel,
     },
-    [SLES_V12_DISTRIBUTION_ID]: {
+    [SLES_V15_DISTRIBUTION_ID]: {
       stateToNetworkAddressParams: stateToNetworkAddressParamsSles,
       stateToNetworkDeviceParams: stateToNetworkDeviceParamsSles,
       stateToSshParams: stateToSshParamsSles,
