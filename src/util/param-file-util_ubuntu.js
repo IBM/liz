@@ -11,14 +11,16 @@ const stateToIpv4NetworkAddressParams = (state) => {
   const installationParameters = state?.steps?.networkAddress ?? {};
   const ipAddress = installationParameters?.ipv4?.address ?? "";
   const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
-  const prefixLength = installationParameters?.ipv4?.cidr ?? 1;
+  const netmask = installationParameters?.ipv4?.netmask ?? 1;
   const hostName = installationParameters?.hostName ?? "";
   const hasHostName = !!(
     state?.steps?.networkAddress.hostName &&
     state?.steps?.networkAddress.hostName.length > 0
   );
-
-  return `${hasHostName ? `hostname=${hostName} ` : ""}hostip=${ipAddress}/${prefixLength} gateway=${gatewayIpAddress}`;
+  return `netcfg/get_ipaddress=${ipAddress} netcfg/get_netmask=${netmask}
+netcfg/get_gateway=${gatewayIpAddress}
+netcfg/use_autoconfig=1 netcfg/disable_dhcp=true
+${hasHostName ? `hostname=${hostName} ` : ""}`;
 };
 
 const stateToIpv6NetworkAddressParams = (state) => {
@@ -33,14 +35,17 @@ const stateToIpv6NetworkAddressParams = (state) => {
   );
   const hostIpFragment =
     installationParameters.addressType === ADDRESS_TYPE_IPV4
-      ? `hostip=${ipAddress}/${prefixLength}`
+      ? `hostip=${ipAddress}`
       : `hostip=[${ipAddress}]/${prefixLength}`;
   const gatewayFragment =
     installationParameters.addressType === ADDRESS_TYPE_IPV4
-      ? `gateway=${gatewayIpAddress}`
-      : `gateway=[${gatewayIpAddress}]`;
+      ? `netcfg/get_gateway=${gatewayIpAddress}`
+      : `netcfg/get_gateway=[${gatewayIpAddress}]`;
 
-  return `${hasHostName ? `hostname=${hostName} ` : ""}${hostIpFragment} ${gatewayFragment}`;
+  return `netcfg/get_ipaddress=${hostIpFragment}
+netcfg/get_gateway=${gatewayFragment}
+netcfg/use_autoconfig=1 netcfg/disable_dhcp=true
+${hasHostName ? `hostname=${hostName} ` : ""}`;
 };
 
 const stateToNetworkAddressParams = (state) => {
@@ -65,8 +70,8 @@ const stateToNetworkAddressParams = (state) => {
     );
     const nameserver =
       installationParameters.addressType === ADDRESS_TYPE_IPV4
-        ? `nameserver=${installationParameters.nameserverIpAddress}`
-        : `nameserver=[${installationParameters.nameserverIpAddress}]`;
+        ? `netcfg/get_nameservers=${installationParameters.nameserverIpAddress}`
+        : `netcfg/get_nameservers=[${installationParameters.nameserverIpAddress}]`;
     const installationRepoLine = `${ipAddressParemeters}
 ${nameserver}${hasDomainSearchPath ? ` domain=${installationParameters.domainSearchPath}` : ""}
 `;
@@ -100,9 +105,10 @@ const stateToOsaNetworkDeviceParams = (installationParameters) => {
   const layer = installationParameters?.osa?.layer ?? "";
   const portNumber = installationParameters?.osa?.portNumber ?? "";
 
-  return `instnetdev=osa osainterface=qdio layer2=${layer} portno=${portNumber} osahwaddr=
-readchannel=${sanitisedReadChannel} writechannel=${sanitisedWriteChannel} datachannel=${sanitisedDataChannel}
-`;
+  return `s390-netdevice/choose_networktype=qeth
+s390-netdevice/qeth/layer2=${!!layer} s390-netdevice/qeth/port=${portNumber}
+netdevice/qeth/layer2=${!!layer} netcfg/confirm_static=true
+s390-netdevice/qeth/choose=${sanitisedReadChannel}-${sanitisedWriteChannel}-${sanitisedDataChannel}`;
 };
 
 const stateToNetworkDeviceParams = (state) => {
@@ -110,7 +116,7 @@ const stateToNetworkDeviceParams = (state) => {
   const networkDeviceSettings =
     installationParameters.deviceType === DEVICE_TYPE_OSA
       ? stateToOsaNetworkDeviceParams(installationParameters)
-      : `net.ifnames=0`;
+      : ``;
   let paramFileContents = {
     contents: "",
     complete: false,
@@ -143,7 +149,7 @@ const stateToInstallationRepoParams = (state) => {
   };
 
   // => inst.repo=...
-  const installationRepoLine = `install=${networkInstallationUrl}`;
+  const installationRepoLine = `url=${networkInstallationUrl}`;
   paramFileContents = {
     contents: `${installationRepoLine}`,
     complete: installationParameters.complete,

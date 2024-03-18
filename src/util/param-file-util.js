@@ -9,6 +9,7 @@ import {
   DEFAULT_DISTRIBUTION_ID,
   RHEL_V9_DISTRIBUTION_ID,
   SLES_V12_DISTRIBUTION_ID,
+  UBUNTU_V20_DISTRIBUTION_ID,
 } from "./constants";
 import {
   getLocalStorageContentsForSummaryStep,
@@ -29,6 +30,14 @@ import {
   stateToInstallationRepoParams as stateToInstallationRepoParamsSles,
 } from "./param-file-util_sles";
 
+import {
+  stateToNetworkAddressParams as stateToNetworkAddressParamsUbuntu,
+  stateToNetworkDeviceParams as stateToNetworkDeviceParamsUbuntu,
+  stateToSshParams as stateToSshParamsUbuntu,
+  stateToVncParams as stateToVncParamsUbuntu,
+  stateToInstallationRepoParams as stateToInstallationRepoParamsUbuntu,
+} from "./param-file-util_ubuntu";
+
 const getFunctionsForDistribution = () => {
   return {
     [RHEL_V9_DISTRIBUTION_ID]: {
@@ -44,6 +53,13 @@ const getFunctionsForDistribution = () => {
       stateToSshParams: stateToSshParamsSles,
       stateToVncParams: stateToVncParamsSles,
       stateToInstallationRepoParams: stateToInstallationRepoParamsSles,
+    },
+    [UBUNTU_V20_DISTRIBUTION_ID]: {
+      stateToNetworkAddressParams: stateToNetworkAddressParamsUbuntu,
+      stateToNetworkDeviceParams: stateToNetworkDeviceParamsUbuntu,
+      stateToSshParams: stateToSshParamsUbuntu,
+      stateToVncParams: stateToVncParamsUbuntu,
+      stateToInstallationRepoParams: stateToInstallationRepoParamsUbuntu,
     },
   };
 };

@@ -159,12 +159,13 @@ const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
 const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
 const RHEL_PRESET = "ro ramdisk_size=40000 cio_ignore=all,!condev";
-const SLES_PRESET =
-  "ramdisk_size=131072 root=/dev/ram1 ro init=/linuxrc TERM=dumb";
+const SLES_PRESET = "ro TERM=xterm manual=0 cio_ignore=all,!6152";
+const UBUNTU_PRESET = "ro locale=en_US auto=true priority=critical";
 
 const PRESETS = {
   rhel: RHEL_PRESET,
   sles: SLES_PRESET,
+  ubuntu: UBUNTU_PRESET,
 };
 
 const DEVICE_TYPE_LIST = [
@@ -188,6 +189,13 @@ const SLES_V12_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server 12 SP5";
 const SLES_V12_VERSION_ID = "version-12";
 const SLES_V12_VERSION_LABEL = "12";
 
+const UBUNTU_V20_DISTRIBUTION_ID = "ubuntu";
+const UBUNTU_V20_DISTRIBUTION_LABEL = "Ubuntu Server 20.04.6 LTS";
+const UBUNTU_V20_VERSION_ID = "version-20";
+const UBUNTU_V20_VERSION_LABEL = "20.04.6";
+const UBUNTU_V22_VERSION_ID = "version-22";
+const UBUNTU_V22_VERSION_LABEL = "22.04.4";
+
 const DISTRIBUTION_LIST = [
   {
     id: RHEL_V9_DISTRIBUTION_ID,
@@ -196,6 +204,10 @@ const DISTRIBUTION_LIST = [
   {
     id: SLES_V12_DISTRIBUTION_ID,
     label: SLES_V12_DISTRIBUTION_LABEL,
+  },
+  {
+    id: UBUNTU_V20_DISTRIBUTION_ID,
+    label: UBUNTU_V20_DISTRIBUTION_LABEL,
   },
 ];
 const VERSION_LIST = {
@@ -209,6 +221,16 @@ const VERSION_LIST = {
     {
       id: SLES_V12_VERSION_ID,
       label: SLES_V12_VERSION_LABEL,
+    },
+  ],
+  ubuntu: [
+    {
+      id: UBUNTU_V20_VERSION_ID,
+      label: UBUNTU_V20_VERSION_LABEL,
+    },
+    {
+      id: UBUNTU_V22_VERSION_ID,
+      label: UBUNTU_V22_VERSION_LABEL,
     },
   ],
 };
@@ -507,6 +529,7 @@ export {
   UPDATE_FUNCTION__USER_IDENTIFIER,
   RHEL_PRESET,
   SLES_PRESET,
+  UBUNTU_PRESET,
   DEVICE_TYPE_LIST,
   DISTRIBUTION_LIST,
   VERSION_LIST,
@@ -518,4 +541,10 @@ export {
   SLES_V12_DISTRIBUTION_LABEL,
   SLES_V12_VERSION_ID,
   SLES_V12_VERSION_LABEL,
+  UBUNTU_V20_DISTRIBUTION_ID,
+  UBUNTU_V20_DISTRIBUTION_LABEL,
+  UBUNTU_V20_VERSION_ID,
+  UBUNTU_V20_VERSION_LABEL,
+  UBUNTU_V22_VERSION_ID,
+  UBUNTU_V22_VERSION_LABEL,
 };
