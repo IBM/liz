@@ -160,7 +160,7 @@ const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
 const RHEL_PRESET = "ro ramdisk_size=40000 cio_ignore=all,!condev";
 const SLES_PRESET =
-  "ro term=dumb ramdisk_size=40000 manual=0 cio_ignore=all,!6152";
+  "ro term=dumb ramdisk_size=50000 manual=0 cio_ignore=all,!6152";
 const UBUNTU_PRESET = "ro locale=en_US auto=true priority=critical";
 
 const PRESETS = {

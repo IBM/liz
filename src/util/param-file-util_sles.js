@@ -102,8 +102,7 @@ const stateToOsaNetworkDeviceParams = (installationParameters) => {
   const portNumber = installationParameters?.osa?.portNumber ?? "";
 
   return `instnetdev=osa osainterface=qdio layer2=${layer} portno=${portNumber} osahwaddr=
-readchannel=${sanitisedReadChannel} writechannel=${sanitisedWriteChannel} datachannel=${sanitisedDataChannel}
-`;
+readchannel=${sanitisedReadChannel} writechannel=${sanitisedWriteChannel} datachannel=${sanitisedDataChannel}`;
 };
 
 const stateToNetworkDeviceParams = (state) => {
@@ -119,7 +118,8 @@ const stateToNetworkDeviceParams = (state) => {
     installationParameters.vlan.id > 0;
   const interfaceName =
     getInterfaceNameParamContents(installationParameters) || "";
-  const vlanId = `vlan=${getVlanName(
+  const vlanId = `
+vlan=${getVlanName(
     interfaceName,
     installationParameters.vlan.id,
   )}:${interfaceName}`;

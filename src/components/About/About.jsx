@@ -66,6 +66,7 @@ const About = ({ closeNotification, pruneSettings }) => {
   const commitHashShort = appConfig?.config?.commitHashShort ?? "";
   const commitHashLong = appConfig?.config?.commitHashLong ?? "";
   const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
+  const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? "";
 
   const buildDateCopyIcon = buildDateBeenCopied ? (
     <Checkmark size="20" />
@@ -167,6 +168,18 @@ const About = ({ closeNotification, pruneSettings }) => {
             </span>
           </div>
         </div>
+      </li>
+      <li className="about-dialog__about-kissues-button-container">
+        <Button
+          kind="ghost"
+          data-title="report"
+          id="about-dialog__about-kissues-button"
+          href={knownIssuesUrl}
+          target="_blank"
+          className="about-dialog__about-kissues-button"
+        >
+          <span>{t("dialog.about.knownIssuesLabel")}</span>
+        </Button>
       </li>
       <li className="about-dialog__about-report-button-container">
         <Button

@@ -140,11 +140,13 @@
 }
 
 .about-dialog__about-prune-button-container,
-.about-dialog__about-report-button-container {
+.about-dialog__about-report-button-container,
+.about-dialog__about-kissues-button-container {
   background: react.$background-inverse;
 
   .about-dialog__about-report-button,
-  .about-dialog__about-prune-button {
+  .about-dialog__about-prune-button,
+  .about-dialog__about-kissues-button {
     @include react.type-style("body-compact-01");
 
     width: 100%;
@@ -163,7 +165,9 @@
 }
 
 .about-dialog__about-report-button-container:focus-within,
-.about-dialog__about-report-button-container:hover {
+.about-dialog__about-report-button-container:hover,
+.about-dialog__about-kissues-button-container:focus-within,
+.about-dialog__about-kissues-button-container:hover {
   background: react.$background-inverse-hover;
 }
 
@@ -171,9 +175,13 @@
 .about-dialog__about-prune-button-container:hover button,
 .about-dialog__about-report-button-container:focus-within button,
 .about-dialog__about-report-button-container:hover button,
+.about-dialog__about-kissues-button-container:focus-within button,
+.about-dialog__about-kissues-button-container:hover button,
 .about-dialog__about-prune-button-container:focus-within a,
 .about-dialog__about-prune-button-container:hover a,
 .about-dialog__about-report-button-container:focus-within a,
-.about-dialog__about-report-button-container:hover a {
+.about-dialog__about-report-button-container:hover a,
+.about-dialog__about-kissues-button-container:focus-within a,
+.about-dialog__about-kissues-button-container:hover a {
   color: react.$background;
 }
