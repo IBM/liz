@@ -42,7 +42,7 @@
   "dialog.about.buildDateLabel": "Build date: <1>{{buildDate}}</1>",
   "dialog.about.commitHashLabel": "Commit hash: <1>{{commitHashShort}}</1>",
   "dialog.about.reportIssueLabel": "Report an issue",
-  "dialog.about.knownIssuesLabel": "Known issue",
+  "dialog.about.knownIssuesLabel": "Known issues",
   "dialog.about.pruneSettingsLabel": "Prune Settings",
   "landingPage.pageHeader.subtitle": "Start paving the road for a successful installation journey",
   "landingPage.pageHeader.title": "Linux on IBM Z installation",
