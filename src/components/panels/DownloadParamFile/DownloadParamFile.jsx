@@ -223,7 +223,10 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
               ns="panels"
             >
               You may&nbsp;
-              <Link href="#" onClick={resetParamFileTextAreaData}>
+              <Link
+                onClick={resetParamFileTextAreaData}
+                className="download-param-file_modified-data-message-link-anchor"
+              >
                 reset
               </Link>
               &nbsp; the generated data to its original state.
