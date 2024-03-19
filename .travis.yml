@@ -15,7 +15,7 @@ before_script:
   - travis_retry npm install -g license-checker-rseidelsohn
   - travis_retry npm install
   - perl -i -p -e 's/BUG_TRACKER/$ENV{BUG_TRACKER}/' public/config/app/config.json
-  - perl -i -p -e 's/BUG_TRACKER/$ENV{KNOWN_ISSUES}/' public/config/app/config.json
+  - perl -i -p -e 's/KNOWN_ISSUES/$ENV{KNOWN_ISSUES}/' public/config/app/config.json
   - perl -i -p -e 's/BUILD_DATE/$ENV{BUILD_DATE}/' public/config/app/config.json
   - perl -i -p -e 's/COMMIT_HASH_SHORT/$ENV{COMMIT_HASH_SHORT}/' public/config/app/config.json
   - perl -i -p -e 's/COMMIT_HASH_LONG/$ENV{COMMIT_HASH_LONG}/' public/config/app/config.json
