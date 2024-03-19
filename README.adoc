@@ -17,8 +17,9 @@ _Linux Installer on Z assistant that is supposed to be run on GitHub Pages._
 
 toc::[]
 
+== Known issues
 
-
+A list of known issues is maintained at https://github.ibm.com/linuxonz/liz/wiki/Known-Issues[this location]. You may review it prior to reporting an issue.
 
 == Prerequisites
 
