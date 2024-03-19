@@ -178,10 +178,9 @@ const SYSTEM_REQUIREMENTS = {
       "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
   },
   sles: {
-    memorySize: 3,
+    memorySize: 1.5,
     diskSize: 10,
-    machineLevel:
-      "IBM z13(r), IBM z14(r), IBM z15(r), IBM z16(r), IBM LinuxONE Emperor II, Rockhopper II or Emperor 4",
+    machineLevel: "IBM zEnterprise EC12, BC12 IBM LinuxONE Emperor, Rockhopper",
     docLink:
       "https://documentation.suse.com/sles/15-SP5/single-html/SLES-deployment/#sec-zseries-requirements",
   },
