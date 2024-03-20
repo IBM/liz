@@ -3,10 +3,12 @@
  *
  * (C) Copyright IBM Corp. 2023
  */
- 
+
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
+
+@use "@carbon/ibm-products/css/index";
 
 body,
 html,
