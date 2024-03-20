@@ -706,13 +706,15 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     <Layer className="network-address__layer">
       <FlexGrid className="network-address__grid">
         <Row>
+          <Column>
+            {paramFileHasBeenModifiedFromState &&
+              parmfileHasBeenModifiedNotificationMarkup}
+          </Column>
+        </Row>
+        <Row>
           <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
         {getIPVersionSpecificMarkup()}
-        <Row>
-          {paramFileHasBeenModifiedFromState &&
-            parmfileHasBeenModifiedNotificationMarkup}
-        </Row>
       </FlexGrid>
     </Layer>
   );

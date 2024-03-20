@@ -106,7 +106,7 @@ const Information = forwardRef(function Information(props, ref) {
       hideCloseButton
       inline
       lowContrast
-      className="intro_parmfile-purge-banner"
+      className="information__parmfile-purge-banner"
       actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
       aria-label="closes notification"
       kind="info"
@@ -129,6 +129,8 @@ const Information = forwardRef(function Information(props, ref) {
 
   const markup = (
     <Layer className="information__layer">
+      {paramFileHasBeenModifiedFromState &&
+        parmfileHasBeenModifiedNotificationMarkup}
       <div className="information_content">
         <Trans i18nKey="panel.information.requirementsExplanation" ns="panels">
           These are the minimum system requirements for installing the target
@@ -220,8 +222,6 @@ const Information = forwardRef(function Information(props, ref) {
           {distributionName}
         </Link>
       </div>
-      {paramFileHasBeenModifiedFromState &&
-        parmfileHasBeenModifiedNotificationMarkup}
     </Layer>
   );
 

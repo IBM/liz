@@ -769,6 +769,12 @@ const InstallationParameters = forwardRef(
       <Layer className="installation-parameters__layer">
         <FlexGrid className="installation-parameters__grid">
           <Row>
+            <Column>
+              {paramFileHasBeenModifiedFromState &&
+                parmfileHasBeenModifiedNotificationMarkup}
+            </Column>
+          </Row>
+          <Row>
             <Column>{gridContentsMarkupRowOne}</Column>
           </Row>
           <Row>
@@ -781,10 +787,6 @@ const InstallationParameters = forwardRef(
           <Row>
             <Column>{gridContentsMarkupRowThreeColumnOne}</Column>
             <Column>{gridContentsMarkupRowThreeColumnTwo}</Column>
-          </Row>
-          <Row>
-            {paramFileHasBeenModifiedFromState &&
-              parmfileHasBeenModifiedNotificationMarkup}
           </Row>
         </FlexGrid>
       </Layer>

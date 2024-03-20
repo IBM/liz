@@ -112,7 +112,7 @@ const Intro = forwardRef(function Intro(props, ref) {
       })}
       title={t("panel.intro.parmFilePurgeNotificationTitle", { ns: "panels" })}
       kind="warning"
-      className="intro_parmfile-purge-banner"
+      className="intro_parmfile-purge-warning-banner"
     />
   );
 
@@ -144,6 +144,8 @@ const Intro = forwardRef(function Intro(props, ref) {
 
   const gridContentsMarkup = (
     <>
+      {paramFileHasBeenModifiedFromState &&
+        parmfileHasBeenModifiedNotificationMarkup}
       <Toggle
         labelText={t("panel.intro.purgeParmfileSettingsToggleTextLabel", {
           ns: "panels",
@@ -162,8 +164,6 @@ const Intro = forwardRef(function Intro(props, ref) {
         }}
       />
       {purgeParmfileSettings && parmfilePurgeNotificationMarkup}
-      {paramFileHasBeenModifiedFromState &&
-        parmfileHasBeenModifiedNotificationMarkup}
     </>
   );
 

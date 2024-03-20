@@ -30,6 +30,11 @@
 }
 
 .intro_parmfile-purge-banner {
+  margin: 0 0 react.$spacing-07 0;
+  max-width: 100% !important;
+}
+
+.intro_parmfile-purge-warning-banner {
   margin: react.$spacing-07 0 0 0;
   max-width: 100% !important;
 }

@@ -247,8 +247,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
             selectedItem={state.selectedDistributionVersion}
           />
         )}
-        {paramFileHasBeenModifiedFromState &&
-          parmfileHasBeenModifiedNotificationMarkup}
       </div>
     </div>
   );
@@ -278,6 +276,8 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
 
   return (
     <Layer className="input-file-selection__layer">
+      {paramFileHasBeenModifiedFromState &&
+        parmfileHasBeenModifiedNotificationMarkup}
       <FlexGrid className="input-file-selection__grid">
         <Row>
           <Column>{gridContentsMarkupRowOne}</Column>

@@ -51,6 +51,11 @@
   }
 }
 
+.information__parmfile-purge-banner {
+  margin: react.$spacing-07 0 react.$spacing-06 0;
+  max-width: 100% !important;
+}
+
 .information_heading_alt {
   @include react.type-style("heading-01");
   @include react.font-weight("semibold");

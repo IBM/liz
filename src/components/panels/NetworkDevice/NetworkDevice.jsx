@@ -887,15 +887,17 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     <Layer className="network-device__layer">
       <FlexGrid className="network-device__grid">
         <Row>
+          <Column>
+            {paramFileHasBeenModifiedFromState &&
+              parmfileHasBeenModifiedNotificationMarkup}
+          </Column>
+        </Row>
+        <Row>
           <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
         <Row>
           <Column>{gridContentsMarkupRowTwoColumnOne}</Column>
           <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
-        </Row>
-        <Row>
-          {paramFileHasBeenModifiedFromState &&
-            parmfileHasBeenModifiedNotificationMarkup}
         </Row>
       </FlexGrid>
     </Layer>
