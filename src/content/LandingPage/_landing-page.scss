@@ -8,6 +8,8 @@
   $font-path: "@ibm/plex"
 );
 
+@use "@carbon/ibm-products/css/index";
+
 @import "./overrides";
 
 .landing-page__illo {
