@@ -6,7 +6,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { InlineNotification, FlexGrid, Row, Column } from "@carbon/react";
+import { InlineNotification, FlexGrid, Row, Column, Link } from "@carbon/react";
 import {
   ExpressiveCard,
   ProductiveCard,
@@ -157,6 +157,59 @@ const LandingPage = () => {
     });
   }, []);
 
+  const getBreadcrumbs = () => {
+    const breadcrumbs = [
+      {
+        href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
+        isCurrentPage: true,
+        key: "breadcrumb-01",
+        label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+      },
+    ];
+
+    if (requirementsCardIsExpanded) {
+      breadcrumbs.push({
+        href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
+        isCurrentPage: true,
+        key: "breadcrumb-02",
+        label: t("panel.information.requirementsHeader", {
+          ns: "panels",
+        }),
+      });
+      breadcrumbs[0].isCurrentPage = false;
+      breadcrumbs[0].label = (
+        <Link
+          href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
+          onClick={() => {
+            setRequirementsCardIsExpanded(false);
+          }}
+        >
+          {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+        </Link>
+      );
+    } else if (nextStepsCardIsExpanded) {
+      breadcrumbs.push({
+        href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
+        isCurrentPage: true,
+        key: "breadcrumb-02",
+        label: t("modalHeading.showNextStepsInformation"),
+      });
+      breadcrumbs[0].isCurrentPage = false;
+      breadcrumbs[0].label = (
+        <Link
+          href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
+          onClick={() => {
+            setNextStepsCardIsExpanded(false);
+          }}
+        >
+          {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+        </Link>
+      );
+    }
+
+    return breadcrumbs;
+  };
+
   return (
     <>
       {showNotification && (
@@ -194,14 +247,7 @@ const LandingPage = () => {
           "pageHeader.breadcrumbOverflowAriaLabel",
           { ns: "common" },
         )}
-        breadcrumbs={[
-          {
-            href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
-            isCurrentPage: true,
-            key: "breadcrumb-01",
-            label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
-          },
-        ]}
+        breadcrumbs={getBreadcrumbs()}
         collapseHeaderIconDescription={t(
           "pageHeader.collapseHeaderIconDescription",
           { ns: "common" },
