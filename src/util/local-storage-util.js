@@ -16,6 +16,7 @@ import {
   LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
   LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
   LOCAL_STORAGE_KEY_APP,
+  LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
 } from "./constants";
 
@@ -163,6 +164,7 @@ const pruneSettings = (localStorageKeys) => {
       localStorage.removeItem(localStorageKeys[i]);
     }
     localStorage.removeItem(LOCAL_STORAGE_KEY_APP);
+    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_LANDING_PAGE);
     localStorage.removeItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION);
   }
 };
