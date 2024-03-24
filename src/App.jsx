@@ -750,6 +750,48 @@ const App = () => {
               }
             />
             <Route
+              exact
+              path="/expanded-requirements-card"
+              element={
+                <ApplicationContext.Provider
+                  value={{
+                    state,
+                    dispatch,
+                    componentDispatchers: {
+                      downloadParamFileDispatch,
+                    },
+                    helper: {
+                      closeNotification,
+                      resetToInitialState,
+                    },
+                  }}
+                >
+                  <LandingPage />
+                </ApplicationContext.Provider>
+              }
+            />
+            <Route
+              exact
+              path="/expanded-nextsteps-card"
+              element={
+                <ApplicationContext.Provider
+                  value={{
+                    state,
+                    dispatch,
+                    componentDispatchers: {
+                      downloadParamFileDispatch,
+                    },
+                    helper: {
+                      closeNotification,
+                      resetToInitialState,
+                    },
+                  }}
+                >
+                  <LandingPage />
+                </ApplicationContext.Provider>
+              }
+            />
+            <Route
               path="/edit"
               element={
                 <ApplicationContext.Provider

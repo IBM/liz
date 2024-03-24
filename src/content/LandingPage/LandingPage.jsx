@@ -5,6 +5,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { InlineNotification, FlexGrid, Row, Column, Link } from "@carbon/react";
 import {
@@ -49,6 +50,7 @@ import "./_landing-page.scss";
 
 const LandingPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const {
     state: globalState,
     dispatch,
@@ -155,6 +157,17 @@ const LandingPage = () => {
       type: ACTION_UPDATE_APP_STEP,
       nextStep: 9,
     });
+    if (
+      window.location.hash &&
+      window.location.hash === "#/expanded-requirements-card"
+    ) {
+      setRequirementsCardIsExpanded(true);
+    } else if (
+      window.location.hash &&
+      window.location.hash === "#/expanded-nextsteps-card"
+    ) {
+      setNextStepsCardIsExpanded(true);
+    }
   }, []);
 
   const getBreadcrumbs = () => {
@@ -177,6 +190,7 @@ const LandingPage = () => {
         }),
       });
       breadcrumbs[0].isCurrentPage = false;
+      breadcrumbs[0].title = t("pageHeader.breadcrumbs.home", { ns: "common" });
       breadcrumbs[0].label = (
         <Link
           href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
@@ -195,6 +209,7 @@ const LandingPage = () => {
         label: t("modalHeading.showNextStepsInformation"),
       });
       breadcrumbs[0].isCurrentPage = false;
+      breadcrumbs[0].title = t("pageHeader.breadcrumbs.home", { ns: "common" });
       breadcrumbs[0].label = (
         <Link
           href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
@@ -208,6 +223,33 @@ const LandingPage = () => {
     }
 
     return breadcrumbs;
+  };
+
+  const hrefForRequirementsCard = requirementsCardIsExpanded
+    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-requirements-card`
+    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
+  const hrefForNextStepsCard = nextStepsCardIsExpanded
+    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-nextsteps-card`
+    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
+
+  const collapseRequirementsCard = () => {
+    setRequirementsCardIsExpanded(false);
+    navigate("/");
+  };
+
+  const collapseNextStepsCard = () => {
+    setNextStepsCardIsExpanded(false);
+    navigate("/");
+  };
+
+  const expandRequirementsCard = () => {
+    setRequirementsCardIsExpanded(true);
+    navigate("/expanded-requirements-card");
+  };
+
+  const expandNextStepsCard = () => {
+    setNextStepsCardIsExpanded(true);
+    navigate("/expanded-nextsteps-card");
   };
 
   return (
@@ -282,9 +324,9 @@ const LandingPage = () => {
                 }}
                 onPrimaryButtonClick={() => {
                   if (requirementsCardIsExpanded) {
-                    setRequirementsCardIsExpanded(false);
+                    collapseRequirementsCard();
                   } else {
-                    setRequirementsCardIsExpanded(true);
+                    expandRequirementsCard();
                   }
                 }}
                 primaryButtonIcon={requirementsCardIsExpanded ? Subtract : Add}
@@ -298,15 +340,16 @@ const LandingPage = () => {
                 className="landing-page__express-card"
                 actionIcons={[
                   {
-                    id: "1",
+                    id: "landing-page__productive-card_expand-requirements",
+                    href: hrefForRequirementsCard,
                     icon: requirementsCardIsExpanded
                       ? (props) => <CollapseAll size={16} {...props} />
                       : (props) => <Popup size={16} {...props} />,
                     onClick: () => {
                       if (requirementsCardIsExpanded) {
-                        setRequirementsCardIsExpanded(false);
+                        collapseRequirementsCard();
                       } else {
-                        setRequirementsCardIsExpanded(true);
+                        expandRequirementsCard();
                       }
                     },
                     iconDescription: requirementsCardIsExpanded
@@ -361,9 +404,9 @@ const LandingPage = () => {
                 primaryButtonIcon={nextStepsCardIsExpanded ? Subtract : Add}
                 onPrimaryButtonClick={() => {
                   if (nextStepsCardIsExpanded) {
-                    setNextStepsCardIsExpanded(false);
+                    collapseNextStepsCard();
                   } else {
-                    setNextStepsCardIsExpanded(true);
+                    expandNextStepsCard();
                   }
                 }}
                 title={t("modalHeading.showNextStepsInformation")}
@@ -371,15 +414,16 @@ const LandingPage = () => {
                 className="landing-page__express-card"
                 actionIcons={[
                   {
-                    id: "1",
+                    id: "landing-page__productive-card_expand-nextsteps",
+                    href: hrefForNextStepsCard,
                     icon: nextStepsCardIsExpanded
                       ? (props) => <CollapseAll size={16} {...props} />
                       : (props) => <Popup size={16} {...props} />,
                     onClick: () => {
                       if (nextStepsCardIsExpanded) {
-                        setNextStepsCardIsExpanded(false);
+                        collapseNextStepsCard();
                       } else {
-                        setNextStepsCardIsExpanded(true);
+                        expandNextStepsCard();
                       }
                     },
                     iconDescription: nextStepsCardIsExpanded
