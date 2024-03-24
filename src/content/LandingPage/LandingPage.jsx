@@ -256,7 +256,7 @@ const LandingPage = () => {
   const hrefForRequirementsCard = requirementsCardIsExpanded
     ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-requirements-card`
     : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
-  const classNameForRequirementsCardTtitle = requirementsCardHasBeenReviewed
+  const classNameForRequirementsCardTitle = requirementsCardHasBeenReviewed
     ? "landing-page__page-header__productive-card-title__green-icon"
     : "landing-page__page-header__productive-card-title__icon";
   const titleForRequirementsCard = requirementsCardHasBeenReviewed ? (
@@ -264,7 +264,7 @@ const LandingPage = () => {
       <span className="landing-page__page-header__productive-card-title__text">
         {t("panel.information.requirementsHeader", { ns: "panels" })}
       </span>
-      <span className={classNameForRequirementsCardTtitle}>
+      <span className={classNameForRequirementsCardTitle}>
         <CheckmarkFilled />
       </span>
     </>
@@ -273,7 +273,7 @@ const LandingPage = () => {
       <span className="landing-page__page-header__productive-card-title__text">
         {t("panel.information.requirementsHeader", { ns: "panels" })}
       </span>
-      <span className={classNameForRequirementsCardTtitle}>
+      <span className={classNameForRequirementsCardTitle}>
         <CheckmarkOutline />
       </span>
     </>
@@ -281,7 +281,7 @@ const LandingPage = () => {
   const hrefForNextStepsCard = nextStepsCardIsExpanded
     ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-nextsteps-card`
     : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
-  const classNameForNextStepsCardTtitle = nextStepsCardHasBeenReviewed
+  const classNameForNextStepsCardTitle = nextStepsCardHasBeenReviewed
     ? "landing-page__page-header__productive-card-title__green-icon"
     : "landing-page__page-header__productive-card-title__icon";
   const titleForNextStepsCard = nextStepsCardHasBeenReviewed ? (
@@ -289,7 +289,7 @@ const LandingPage = () => {
       <span className="landing-page__page-header__productive-card-title__text">
         {t("modalHeading.showNextStepsInformation")}
       </span>
-      <span className={classNameForNextStepsCardTtitle}>
+      <span className={classNameForNextStepsCardTitle}>
         <CheckmarkFilled />
       </span>
     </>
@@ -298,7 +298,29 @@ const LandingPage = () => {
       <span className="landing-page__page-header__productive-card-title__text">
         {t("modalHeading.showNextStepsInformation")}
       </span>
-      <span className={classNameForNextStepsCardTtitle}>
+      <span className={classNameForNextStepsCardTitle}>
+        <CheckmarkOutline />
+      </span>
+    </>
+  );
+  const classNameForParmfileCardTitle = hasParamFile()
+    ? "landing-page__page-header__productive-card-title__green-icon"
+    : "landing-page__page-header__productive-card-title__icon";
+  const titleForParmfileCard = hasParamFile() ? (
+    <>
+      <span className="landing-page__page-header__productive-card-title__text">
+        {getTitleForParamFileCard()}
+      </span>
+      <span className={classNameForParmfileCardTitle}>
+        <CheckmarkFilled />
+      </span>
+    </>
+  ) : (
+    <>
+      <span className="landing-page__page-header__productive-card-title__text">
+        {getTitleForParamFileCard()}
+      </span>
+      <span className={classNameForParmfileCardTitle}>
         <CheckmarkOutline />
       </span>
     </>
@@ -435,7 +457,7 @@ const LandingPage = () => {
                 secondaryButtonText={getSecondaryButtonTextForParamFileCard()}
                 onSecondaryButtonClick={saveParamFileContentProxy}
                 secondaryButtonIcon={DocumentDownload}
-                title={getTitleForParamFileCard()}
+                title={titleForParmfileCard}
                 className="landing-page__express-card"
               >
                 {hasParamFile() ? (
