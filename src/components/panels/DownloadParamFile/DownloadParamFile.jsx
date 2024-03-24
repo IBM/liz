@@ -28,7 +28,7 @@ import {
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
   DEFAULT_PARAM_FILE_NAME,
-  RHEL_V9_DISTRIBUTION_ID,
+  RHEL_DISTRIBUTION_ID,
   PRESETS,
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
@@ -44,7 +44,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
   const { state, dispatch, stateToParamFile } = props;
   const distributionName =
     globalState.steps.inputFileSelection.distributionName ??
-    RHEL_V9_DISTRIBUTION_ID;
+    RHEL_DISTRIBUTION_ID;
   const presets = PRESETS[distributionName];
   const publicRef = {
     persistState: () => {

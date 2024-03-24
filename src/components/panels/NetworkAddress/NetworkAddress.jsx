@@ -55,8 +55,8 @@ import {
   LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
-  SLES_V15_DISTRIBUTION_ID,
-  UBUNTU_V20_DISTRIBUTION_ID,
+  SLES_DISTRIBUTION_ID,
+  UBUNTU_DISTRIBUTION_ID,
   DEFAULT_DISTRIBUTION_ID,
 } from "../../../util/constants";
 import { ApplicationContext } from "../../../App";
@@ -224,8 +224,8 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
   const requiresDomainSearchName = !!(
     distributionName &&
     distributionName.length > 0 &&
-    (distributionName === SLES_V15_DISTRIBUTION_ID ||
-      distributionName === UBUNTU_V20_DISTRIBUTION_ID)
+    (distributionName === SLES_DISTRIBUTION_ID ||
+      distributionName === UBUNTU_DISTRIBUTION_ID)
   );
 
   const updateFunction = ({

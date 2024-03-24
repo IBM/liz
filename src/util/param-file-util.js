@@ -7,9 +7,9 @@
 import {
   DEFAULT_PARAM_FILE_NAME,
   DEFAULT_DISTRIBUTION_ID,
-  RHEL_V9_DISTRIBUTION_ID,
-  SLES_V15_DISTRIBUTION_ID,
-  UBUNTU_V20_DISTRIBUTION_ID,
+  RHEL_DISTRIBUTION_ID,
+  SLES_DISTRIBUTION_ID,
+  UBUNTU_DISTRIBUTION_ID,
 } from "./constants";
 import {
   getLocalStorageContentsForSummaryStep,
@@ -40,21 +40,21 @@ import {
 
 const getFunctionsForDistribution = () => {
   return {
-    [RHEL_V9_DISTRIBUTION_ID]: {
+    [RHEL_DISTRIBUTION_ID]: {
       stateToNetworkAddressParams: stateToNetworkAddressParamsRhel,
       stateToNetworkDeviceParams: stateToNetworkDeviceParamsRhel,
       stateToSshParams: stateToSshParamsRhel,
       stateToVncParams: stateToVncParamsRhel,
       stateToInstallationRepoParams: stateToInstallationRepoParamsRhel,
     },
-    [SLES_V15_DISTRIBUTION_ID]: {
+    [SLES_DISTRIBUTION_ID]: {
       stateToNetworkAddressParams: stateToNetworkAddressParamsSles,
       stateToNetworkDeviceParams: stateToNetworkDeviceParamsSles,
       stateToSshParams: stateToSshParamsSles,
       stateToVncParams: stateToVncParamsSles,
       stateToInstallationRepoParams: stateToInstallationRepoParamsSles,
     },
-    [UBUNTU_V20_DISTRIBUTION_ID]: {
+    [UBUNTU_DISTRIBUTION_ID]: {
       stateToNetworkAddressParams: stateToNetworkAddressParamsUbuntu,
       stateToNetworkDeviceParams: stateToNetworkDeviceParamsUbuntu,
       stateToSshParams: stateToSshParamsUbuntu,

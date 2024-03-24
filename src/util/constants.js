@@ -170,7 +170,7 @@ const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
 const RHEL_PRESET = "ro ramdisk_size=40000 cio_ignore=all,!condev";
 const SLES_PRESET =
-  "ro term=dumb ramdisk_size=50000 manual=0 cio_ignore=all,!6152";
+  "ro term=dumb init=/linuxrc linuxrclog=/dev/console MANUAL=0 deviceautoconfig=0";
 const UBUNTU_PRESET = "ro locale=en_US auto=true priority=critical";
 
 const PRESETS = {
@@ -213,35 +213,35 @@ const DEVICE_TYPE_LIST = [
   },
 ];
 
-const RHEL_V9_DISTRIBUTION_ID = "rhel";
-const RHEL_V9_DISTRIBUTION_LABEL = "Red Hat Enterprise Linux 9";
+const RHEL_DISTRIBUTION_ID = "rhel";
+const RHEL_DISTRIBUTION_LABEL = "Red Hat Enterprise Linux";
 const RHEL_V9_VERSION_ID = "version-9.x";
 const RHEL_V9_VERSION_LABEL = "9.x";
 
-const SLES_V15_DISTRIBUTION_ID = "sles";
-const SLES_V15_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server 15 SP5";
+const SLES_DISTRIBUTION_ID = "sles";
+const SLES_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server";
 const SLES_V15_VERSION_ID = "version-15";
-const SLES_V15_VERSION_LABEL = "15";
+const SLES_V15_VERSION_LABEL = "15 SP5";
 
-const UBUNTU_V20_DISTRIBUTION_ID = "ubuntu";
-const UBUNTU_V20_DISTRIBUTION_LABEL = "Ubuntu Server 20.04.6 LTS";
+const UBUNTU_DISTRIBUTION_ID = "ubuntu";
+const UBUNTU_DISTRIBUTION_LABEL = "Ubuntu Server";
 const UBUNTU_V20_VERSION_ID = "version-20";
-const UBUNTU_V20_VERSION_LABEL = "20.04.6";
+const UBUNTU_V20_VERSION_LABEL = "20.04.6 LTS";
 const UBUNTU_V22_VERSION_ID = "version-22";
-const UBUNTU_V22_VERSION_LABEL = "22.04.4";
+const UBUNTU_V22_VERSION_LABEL = "22.04.4 LTS";
 
 const DISTRIBUTION_LIST = [
   {
-    id: RHEL_V9_DISTRIBUTION_ID,
-    label: RHEL_V9_DISTRIBUTION_LABEL,
+    id: RHEL_DISTRIBUTION_ID,
+    label: RHEL_DISTRIBUTION_LABEL,
   },
   {
-    id: SLES_V15_DISTRIBUTION_ID,
-    label: SLES_V15_DISTRIBUTION_LABEL,
+    id: SLES_DISTRIBUTION_ID,
+    label: SLES_DISTRIBUTION_LABEL,
   },
   {
-    id: UBUNTU_V20_DISTRIBUTION_ID,
-    label: UBUNTU_V20_DISTRIBUTION_LABEL,
+    id: UBUNTU_DISTRIBUTION_ID,
+    label: UBUNTU_DISTRIBUTION_LABEL,
   },
 ];
 const VERSION_LIST = {
@@ -305,7 +305,7 @@ const DEFAULT_PARAM_FILE_NAME = `parmfile__${nanoid()}.txt`;
 
 const DEFAULT_STEPS = {
   inputFileSelection: {
-    distributionName: RHEL_V9_DISTRIBUTION_ID,
+    distributionName: RHEL_DISTRIBUTION_ID,
     distributionVersion: RHEL_V9_VERSION_ID,
     systemRequirements: SYSTEM_REQUIREMENTS,
     complete: false,
@@ -568,16 +568,16 @@ export {
   DEVICE_TYPE_LIST,
   DISTRIBUTION_LIST,
   VERSION_LIST,
-  RHEL_V9_DISTRIBUTION_ID,
-  RHEL_V9_DISTRIBUTION_LABEL,
+  RHEL_DISTRIBUTION_ID,
+  RHEL_DISTRIBUTION_LABEL,
   RHEL_V9_VERSION_ID,
   RHEL_V9_VERSION_LABEL,
-  SLES_V15_DISTRIBUTION_ID,
-  SLES_V15_DISTRIBUTION_LABEL,
+  SLES_DISTRIBUTION_ID,
+  SLES_DISTRIBUTION_LABEL,
   SLES_V15_VERSION_ID,
   SLES_V15_VERSION_LABEL,
-  UBUNTU_V20_DISTRIBUTION_ID,
-  UBUNTU_V20_DISTRIBUTION_LABEL,
+  UBUNTU_DISTRIBUTION_ID,
+  UBUNTU_DISTRIBUTION_LABEL,
   UBUNTU_V20_VERSION_ID,
   UBUNTU_V20_VERSION_LABEL,
   UBUNTU_V22_VERSION_ID,
