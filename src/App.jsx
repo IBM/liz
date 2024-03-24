@@ -31,6 +31,7 @@ import networkDeviceReducer from "./reducers/NetworkDeviceReducer";
 import nextStepsReducer from "./reducers/NextStepsReducer";
 import summaryReducer from "./reducers/SummaryReducer";
 import introReducer from "./reducers/IntroReducer";
+import landingPageReducer from "./reducers/LandingPageReducer";
 
 import createInitialState from "./states/AppState";
 import { createInitialState as createInitialDownloadParamFileState } from "./states/DownloadParamFileState";
@@ -43,6 +44,7 @@ import { createInitialState as createInitialNetworkDeviceState } from "./states/
 import { createInitialState as createInitialNextStepsState } from "./states/NextStepsState";
 import { createInitialState as createInitialSummaryState } from "./states/SummaryState";
 import { createInitialState as createInitialIntroState } from "./states/IntroState";
+import { createInitialState as createInitialLandingPageState } from "./states/LandingPageState";
 
 import {
   ADDRESS_TYPE_IPV4,
@@ -129,6 +131,10 @@ const App = () => {
     introReducer,
     createInitialIntroState(),
   );
+  const [landingPageState, landingPageDispatch] = useReducer(
+    landingPageReducer,
+    createInitialLandingPageState(),
+  );
 
   const resetToInitialState = () => {
     downloadParamFileDispatch({
@@ -166,6 +172,10 @@ const App = () => {
     summaryDispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
       nextInitialState: createInitialSummaryState(),
+    });
+    landingPageDispatch({
+      type: ACTION_RESET_TO_INITIAL_STATE,
+      nextInitialState: createInitialLandingPageState(),
     });
     dispatch({
       type: ACTION_UPDATE_APP_STEPS,
@@ -745,7 +755,10 @@ const App = () => {
                     },
                   }}
                 >
-                  <LandingPage />
+                  <LandingPage
+                    dispatch={landingPageDispatch}
+                    state={landingPageState}
+                  />
                 </ApplicationContext.Provider>
               }
             />
@@ -766,7 +779,10 @@ const App = () => {
                     },
                   }}
                 >
-                  <LandingPage />
+                  <LandingPage
+                    dispatch={landingPageDispatch}
+                    state={landingPageState}
+                  />
                 </ApplicationContext.Provider>
               }
             />
@@ -787,7 +803,10 @@ const App = () => {
                     },
                   }}
                 >
-                  <LandingPage />
+                  <LandingPage
+                    dispatch={landingPageDispatch}
+                    state={landingPageState}
+                  />
                 </ApplicationContext.Provider>
               }
             />

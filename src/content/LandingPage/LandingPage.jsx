@@ -4,7 +4,8 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { InlineNotification, FlexGrid, Row, Column, Link } from "@carbon/react";
@@ -32,8 +33,15 @@ import {
   ACTION_UPDATE_APP_STEP,
   ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
+  ACTION_UPDATE_REQUIREMENTS_CARD_IS_EXPANDED,
+  ACTION_UPDATE_REQUIREMENTS_CARD_HAS_BEEN_REVIEWED,
+  ACTION_UPDATE_NEXT_STEPS_CARD_IS_EXPANDED,
+  ACTION_UPDATE_NEXT_STEPS_CARD_HAS_BEEN_REVIEWED,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
   DEFAULT_PARAM_FILE_NAME,
+  LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
+  STATE_ORIGIN_STORAGE,
+  STATE_ORIGIN_USER,
 } from "../../util/constants";
 import {
   saveParamFileContent,
@@ -50,29 +58,65 @@ import { ApplicationContext } from "../../App";
 import { NextSteps, SystemRequirements } from "./components";
 import "./_landing-page.scss";
 
-const LandingPage = () => {
+const LandingPage = forwardRef(function LandingPage(props, ref) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     state: globalState,
-    dispatch,
+    dispatch: globalDispatch,
     helper,
   } = React.useContext(ApplicationContext);
+  const { dispatch, state } = props;
+  const publicRef = {
+    persistState: () => {
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
+        JSON.stringify({
+          ...state,
+          origin: STATE_ORIGIN_STORAGE,
+        }),
+      );
+    },
+  };
 
-  const [requirementsCardIsExpanded, setRequirementsCardIsExpanded] =
-    useState(false);
-  const [requirementsCardHasBeenReviewed, setRequirementsCardHasBeenReviewed] =
-    useState(false);
-  const [nextStepsCardIsExpanded, setNextStepsCardIsExpanded] = useState(false);
-  const [nextStepsCardHasBeenReviewed, setNextStepsCardHasBeenReviewed] =
-    useState(false);
+  const updateRequirementsCardIsExpanded = (flag) => {
+    dispatch({
+      type: ACTION_UPDATE_REQUIREMENTS_CARD_IS_EXPANDED,
+      nextOrigin: STATE_ORIGIN_USER,
+      nextRequirementsCardIsExpanded: flag,
+    });
+  };
+
+  const updateNextStepsCardIsExpanded = (flag) => {
+    dispatch({
+      type: ACTION_UPDATE_NEXT_STEPS_CARD_IS_EXPANDED,
+      nextOrigin: STATE_ORIGIN_USER,
+      nextNextStepsCardIsExpanded: flag,
+    });
+  };
+
+  const updateRequirementsCardHasBeenReviewed = (flag) => {
+    dispatch({
+      type: ACTION_UPDATE_REQUIREMENTS_CARD_HAS_BEEN_REVIEWED,
+      nextOrigin: STATE_ORIGIN_USER,
+      nextRequirementsCardHasBeenReviewed: flag,
+    });
+  };
+
+  const updateNextStepsCardHasBeenReviewed = (flag) => {
+    dispatch({
+      type: ACTION_UPDATE_NEXT_STEPS_CARD_HAS_BEEN_REVIEWED,
+      nextOrigin: STATE_ORIGIN_USER,
+      nextNextStepsCardHasBeenReviewed: flag,
+    });
+  };
 
   const { closeNotification, resetToInitialState } = helper;
 
   const showNotification = globalState.showNotification || false;
   const localStorageKeys = getLocalStorageKeys(globalState);
   const productiveCardsAreExpanded =
-    requirementsCardIsExpanded || nextStepsCardIsExpanded;
+    state.requirementsCardIsExpanded || state.nextStepsCardIsExpanded;
 
   const useSsh = globalState.steps.installationParameters.ssh.enabled;
   const useVnc = globalState.steps.installationParameters.vnc.enabled;
@@ -90,7 +134,7 @@ const LandingPage = () => {
   };
 
   const updateShowLegalNotification = (showLegalNotification) => {
-    dispatch({
+    globalDispatch({
       type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
       nextShowLegalNotification: showLegalNotification,
     });
@@ -168,7 +212,7 @@ const LandingPage = () => {
       },
     ];
 
-    if (requirementsCardIsExpanded) {
+    if (state.requirementsCardIsExpanded) {
       breadcrumbs.push({
         href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
         isCurrentPage: true,
@@ -183,13 +227,13 @@ const LandingPage = () => {
         <Link
           href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
           onClick={() => {
-            setRequirementsCardIsExpanded(false);
+            updateRequirementsCardIsExpanded(false);
           }}
         >
           {t("pageHeader.breadcrumbs.home", { ns: "common" })}
         </Link>
       );
-    } else if (nextStepsCardIsExpanded) {
+    } else if (state.nextStepsCardIsExpanded) {
       breadcrumbs.push({
         href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
         isCurrentPage: true,
@@ -202,7 +246,7 @@ const LandingPage = () => {
         <Link
           href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
           onClick={() => {
-            setNextStepsCardIsExpanded(false);
+            updateNextStepsCardIsExpanded(false);
           }}
         >
           {t("pageHeader.breadcrumbs.home", { ns: "common" })}
@@ -214,29 +258,29 @@ const LandingPage = () => {
   };
 
   const collapseRequirementsCard = () => {
-    setRequirementsCardIsExpanded(false);
-    setRequirementsCardHasBeenReviewed(true);
+    updateRequirementsCardIsExpanded(false);
+    updateRequirementsCardHasBeenReviewed(true);
     navigate("/");
   };
 
   const collapseNextStepsCard = () => {
-    setNextStepsCardIsExpanded(false);
-    setNextStepsCardHasBeenReviewed(true);
+    updateNextStepsCardIsExpanded(false);
+    updateNextStepsCardHasBeenReviewed(true);
     navigate("/");
   };
 
   const expandRequirementsCard = () => {
-    setRequirementsCardIsExpanded(true);
+    updateRequirementsCardIsExpanded(true);
     navigate("/expanded-requirements-card");
   };
 
   const expandNextStepsCard = () => {
-    setNextStepsCardIsExpanded(true);
+    updateNextStepsCardIsExpanded(true);
     navigate("/expanded-nextsteps-card");
   };
 
   useEffect(() => {
-    dispatch({
+    globalDispatch({
       type: ACTION_UPDATE_APP_STEP,
       nextStep: 9,
     });
@@ -244,22 +288,26 @@ const LandingPage = () => {
       window.location.hash &&
       window.location.hash === "#/expanded-requirements-card"
     ) {
-      setRequirementsCardIsExpanded(true);
+      updateRequirementsCardIsExpanded(true);
     } else if (
       window.location.hash &&
       window.location.hash === "#/expanded-nextsteps-card"
     ) {
-      setNextStepsCardIsExpanded(true);
+      updateNextStepsCardIsExpanded(true);
     }
   }, []);
 
-  const hrefForRequirementsCard = requirementsCardIsExpanded
+  useEffect(publicRef.persistState, [state]);
+  useImperativeHandle(ref, () => publicRef);
+
+  const hrefForRequirementsCard = state.requirementsCardIsExpanded
     ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-requirements-card`
     : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
-  const classNameForRequirementsCardTitle = requirementsCardHasBeenReviewed
-    ? "landing-page__page-header__productive-card-title__green-icon"
-    : "landing-page__page-header__productive-card-title__icon";
-  const titleForRequirementsCard = requirementsCardHasBeenReviewed ? (
+  const classNameForRequirementsCardTitle =
+    state.requirementsCardHasBeenReviewed
+      ? "landing-page__page-header__productive-card-title__green-icon"
+      : "landing-page__page-header__productive-card-title__icon";
+  const titleForRequirementsCard = state.requirementsCardHasBeenReviewed ? (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {t("panel.information.requirementsHeader", { ns: "panels" })}
@@ -278,13 +326,13 @@ const LandingPage = () => {
       </span>
     </>
   );
-  const hrefForNextStepsCard = nextStepsCardIsExpanded
+  const hrefForNextStepsCard = state.nextStepsCardIsExpanded
     ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-nextsteps-card`
     : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
-  const classNameForNextStepsCardTitle = nextStepsCardHasBeenReviewed
+  const classNameForNextStepsCardTitle = state.nextStepsCardHasBeenReviewed
     ? "landing-page__page-header__productive-card-title__green-icon"
     : "landing-page__page-header__productive-card-title__icon";
-  const titleForNextStepsCard = nextStepsCardHasBeenReviewed ? (
+  const titleForNextStepsCard = state.nextStepsCardHasBeenReviewed ? (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {t("modalHeading.showNextStepsInformation")}
@@ -393,7 +441,7 @@ const LandingPage = () => {
       <FlexGrid className="landing-page__grid">
         <Row>
           <Column className="landing-page__grey-column-background">
-            {!nextStepsCardIsExpanded && (
+            {!state.nextStepsCardIsExpanded && (
               <ProductiveCard
                 label={t("landingPage.expressiveCard.requirements.label")}
                 mediaRatio={null}
@@ -401,13 +449,15 @@ const LandingPage = () => {
                   return <ResultDraft size="24" />;
                 }}
                 onPrimaryButtonClick={() => {
-                  if (requirementsCardIsExpanded) {
+                  if (state.requirementsCardIsExpanded) {
                     collapseRequirementsCard();
                   } else {
                     expandRequirementsCard();
                   }
                 }}
-                primaryButtonIcon={requirementsCardIsExpanded ? Subtract : Add}
+                primaryButtonIcon={
+                  state.requirementsCardIsExpanded ? Subtract : Add
+                }
                 primaryButtonText={productiveCardPrimaryButtonText}
                 title={titleForRequirementsCard}
                 titleSize="large"
@@ -416,24 +466,24 @@ const LandingPage = () => {
                   {
                     id: "landing-page__productive-card_expand-requirements",
                     href: hrefForRequirementsCard,
-                    icon: requirementsCardIsExpanded
+                    icon: state.requirementsCardIsExpanded
                       ? (props) => <CollapseAll size={16} {...props} />
                       : (props) => <Popup size={16} {...props} />,
                     onClick: () => {
-                      if (requirementsCardIsExpanded) {
+                      if (state.requirementsCardIsExpanded) {
                         collapseRequirementsCard();
                       } else {
                         expandRequirementsCard();
                       }
                     },
-                    iconDescription: requirementsCardIsExpanded
+                    iconDescription: state.requirementsCardIsExpanded
                       ? t("btnLabel.Collapse", { ns: "common" })
                       : t("btnLabel.Expand", { ns: "common" }),
                   },
                 ]}
               >
-                {requirementsCardIsExpanded && <SystemRequirements />}
-                {!requirementsCardIsExpanded && (
+                {state.requirementsCardIsExpanded && <SystemRequirements />}
+                {!state.requirementsCardIsExpanded && (
                   <p>{t("panel.hint.explanation", { ns: "panels" })}</p>
                 )}
               </ProductiveCard>
@@ -446,7 +496,7 @@ const LandingPage = () => {
                   return <SettingsEdit size="24" />;
                 }}
                 onPrimaryButtonClick={() => {
-                  dispatch({
+                  globalDispatch({
                     type: ACTION_UPDATE_APP_IS_EDITING,
                     nextIsEditing: true,
                   });
@@ -467,15 +517,17 @@ const LandingPage = () => {
                 )}
               </ExpressiveCard>
             )}
-            {!requirementsCardIsExpanded && (
+            {!state.requirementsCardIsExpanded && (
               <ProductiveCard
                 label={t("panel.nextSteps.header", { ns: "panels" })}
                 mediaRatio={null}
                 pictogram={() => <NextOutline size="24" />}
                 primaryButtonText={productiveCardPrimaryButtonText}
-                primaryButtonIcon={nextStepsCardIsExpanded ? Subtract : Add}
+                primaryButtonIcon={
+                  state.nextStepsCardIsExpanded ? Subtract : Add
+                }
                 onPrimaryButtonClick={() => {
-                  if (nextStepsCardIsExpanded) {
+                  if (state.nextStepsCardIsExpanded) {
                     collapseNextStepsCard();
                   } else {
                     expandNextStepsCard();
@@ -488,24 +540,26 @@ const LandingPage = () => {
                   {
                     id: "landing-page__productive-card_expand-nextsteps",
                     href: hrefForNextStepsCard,
-                    icon: nextStepsCardIsExpanded
+                    icon: state.nextStepsCardIsExpanded
                       ? (props) => <CollapseAll size={16} {...props} />
                       : (props) => <Popup size={16} {...props} />,
                     onClick: () => {
-                      if (nextStepsCardIsExpanded) {
+                      if (state.nextStepsCardIsExpanded) {
                         collapseNextStepsCard();
                       } else {
                         expandNextStepsCard();
                       }
                     },
-                    iconDescription: nextStepsCardIsExpanded
+                    iconDescription: state.nextStepsCardIsExpanded
                       ? t("btnLabel.Collapse", { ns: "common" })
                       : t("btnLabel.Expand", { ns: "common" }),
                   },
                 ]}
               >
-                {nextStepsCardIsExpanded && <NextSteps {...nextStepsProps} />}
-                {!nextStepsCardIsExpanded && (
+                {state.nextStepsCardIsExpanded && (
+                  <NextSteps {...nextStepsProps} />
+                )}
+                {!state.nextStepsCardIsExpanded && (
                   <p>{t("landingPage.expressiveCard.nextSteps.para")}</p>
                 )}
               </ProductiveCard>
@@ -515,6 +569,11 @@ const LandingPage = () => {
       </FlexGrid>
     </>
   );
+});
+
+LandingPage.propTypes = {
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default LandingPage;
