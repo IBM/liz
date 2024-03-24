@@ -59,6 +59,20 @@
   margin: 0 react.$spacing-13 react.$spacing-06 react.$spacing-13;
 }
 
+.landing-page__page-header__productive-card-title__icon {
+  vertical-align: middle;
+  padding-left: react.$spacing-03;
+}
+
+.landing-page__page-header__productive-card-title__green-icon {
+  vertical-align: middle;
+  padding-left: react.$spacing-03;
+
+  svg {
+    fill: react.$support-success;
+  }
+}
+
 .landing-page__page-header {
   .cds--grid {
     margin-inline: inherit;

@@ -17,6 +17,7 @@
   "btnLabel.SystemRequirements": "System requirements",
   "btnLabel.NextSteps": "Next steps",
   "btnLabel.ReviewInformation": "Review information",
+  "btnLabel.MarkAsReviewed": "Mark as reviewed",
   "btnLabel.ComposeParmfile": "Compose parmeter file",
   "btnLabel.EditParmfile": "Edit parameter file",
   "header.productName": "Installation assistant for Linux on IBM Z",

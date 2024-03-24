@@ -23,6 +23,8 @@ import {
   CollapseAll,
   Add,
   Subtract,
+  CheckmarkOutline,
+  CheckmarkFilled,
 } from "@carbon/icons-react";
 import About from "../../components/About";
 import {
@@ -59,7 +61,11 @@ const LandingPage = () => {
 
   const [requirementsCardIsExpanded, setRequirementsCardIsExpanded] =
     useState(false);
+  const [requirementsCardHasBeenReviewed, setRequirementsCardHasBeenReviewed] =
+    useState(false);
   const [nextStepsCardIsExpanded, setNextStepsCardIsExpanded] = useState(false);
+  const [nextStepsCardHasBeenReviewed, setNextStepsCardHasBeenReviewed] =
+    useState(false);
 
   const { closeNotification, resetToInitialState } = helper;
 
@@ -152,24 +158,6 @@ const LandingPage = () => {
     return title;
   };
 
-  useEffect(() => {
-    dispatch({
-      type: ACTION_UPDATE_APP_STEP,
-      nextStep: 9,
-    });
-    if (
-      window.location.hash &&
-      window.location.hash === "#/expanded-requirements-card"
-    ) {
-      setRequirementsCardIsExpanded(true);
-    } else if (
-      window.location.hash &&
-      window.location.hash === "#/expanded-nextsteps-card"
-    ) {
-      setNextStepsCardIsExpanded(true);
-    }
-  }, []);
-
   const getBreadcrumbs = () => {
     const breadcrumbs = [
       {
@@ -225,20 +213,15 @@ const LandingPage = () => {
     return breadcrumbs;
   };
 
-  const hrefForRequirementsCard = requirementsCardIsExpanded
-    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-requirements-card`
-    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
-  const hrefForNextStepsCard = nextStepsCardIsExpanded
-    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-nextsteps-card`
-    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
-
   const collapseRequirementsCard = () => {
     setRequirementsCardIsExpanded(false);
+    setRequirementsCardHasBeenReviewed(true);
     navigate("/");
   };
 
   const collapseNextStepsCard = () => {
     setNextStepsCardIsExpanded(false);
+    setNextStepsCardHasBeenReviewed(true);
     navigate("/");
   };
 
@@ -251,6 +234,79 @@ const LandingPage = () => {
     setNextStepsCardIsExpanded(true);
     navigate("/expanded-nextsteps-card");
   };
+
+  useEffect(() => {
+    dispatch({
+      type: ACTION_UPDATE_APP_STEP,
+      nextStep: 9,
+    });
+    if (
+      window.location.hash &&
+      window.location.hash === "#/expanded-requirements-card"
+    ) {
+      setRequirementsCardIsExpanded(true);
+    } else if (
+      window.location.hash &&
+      window.location.hash === "#/expanded-nextsteps-card"
+    ) {
+      setNextStepsCardIsExpanded(true);
+    }
+  }, []);
+
+  const hrefForRequirementsCard = requirementsCardIsExpanded
+    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-requirements-card`
+    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
+  const classNameForRequirementsCardTtitle = requirementsCardHasBeenReviewed
+    ? "landing-page__page-header__productive-card-title__green-icon"
+    : "landing-page__page-header__productive-card-title__icon";
+  const titleForRequirementsCard = requirementsCardHasBeenReviewed ? (
+    <>
+      <span className="landing-page__page-header__productive-card-title__text">
+        {t("panel.information.requirementsHeader", { ns: "panels" })}
+      </span>
+      <span className={classNameForRequirementsCardTtitle}>
+        <CheckmarkFilled />
+      </span>
+    </>
+  ) : (
+    <>
+      <span className="landing-page__page-header__productive-card-title__text">
+        {t("panel.information.requirementsHeader", { ns: "panels" })}
+      </span>
+      <span className={classNameForRequirementsCardTtitle}>
+        <CheckmarkOutline />
+      </span>
+    </>
+  );
+  const hrefForNextStepsCard = nextStepsCardIsExpanded
+    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-nextsteps-card`
+    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
+  const classNameForNextStepsCardTtitle = nextStepsCardHasBeenReviewed
+    ? "landing-page__page-header__productive-card-title__green-icon"
+    : "landing-page__page-header__productive-card-title__icon";
+  const titleForNextStepsCard = nextStepsCardHasBeenReviewed ? (
+    <>
+      <span className="landing-page__page-header__productive-card-title__text">
+        {t("modalHeading.showNextStepsInformation")}
+      </span>
+      <span className={classNameForNextStepsCardTtitle}>
+        <CheckmarkFilled />
+      </span>
+    </>
+  ) : (
+    <>
+      <span className="landing-page__page-header__productive-card-title__text">
+        {t("modalHeading.showNextStepsInformation")}
+      </span>
+      <span className={classNameForNextStepsCardTtitle}>
+        <CheckmarkOutline />
+      </span>
+    </>
+  );
+
+  const productiveCardPrimaryButtonText = productiveCardsAreExpanded
+    ? t("btnLabel.MarkAsReviewed", { ns: "common" })
+    : t("btnLabel.ReviewInformation", { ns: "common" });
 
   return (
     <>
@@ -330,12 +386,8 @@ const LandingPage = () => {
                   }
                 }}
                 primaryButtonIcon={requirementsCardIsExpanded ? Subtract : Add}
-                primaryButtonText={t("btnLabel.ReviewInformation", {
-                  ns: "common",
-                })}
-                title={t("panel.information.requirementsHeader", {
-                  ns: "panels",
-                })}
+                primaryButtonText={productiveCardPrimaryButtonText}
+                title={titleForRequirementsCard}
                 titleSize="large"
                 className="landing-page__express-card"
                 actionIcons={[
@@ -398,9 +450,7 @@ const LandingPage = () => {
                 label={t("panel.nextSteps.header", { ns: "panels" })}
                 mediaRatio={null}
                 pictogram={() => <NextOutline size="24" />}
-                primaryButtonText={t("btnLabel.ReviewInformation", {
-                  ns: "common",
-                })}
+                primaryButtonText={productiveCardPrimaryButtonText}
                 primaryButtonIcon={nextStepsCardIsExpanded ? Subtract : Add}
                 onPrimaryButtonClick={() => {
                   if (nextStepsCardIsExpanded) {
@@ -409,7 +459,7 @@ const LandingPage = () => {
                     expandNextStepsCard();
                   }
                 }}
-                title={t("modalHeading.showNextStepsInformation")}
+                title={titleForNextStepsCard}
                 titleSize="large"
                 className="landing-page__express-card"
                 actionIcons={[
