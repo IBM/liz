@@ -25,7 +25,7 @@ import {
   Add,
   Subtract,
   CheckmarkOutline,
-  CheckmarkFilled,
+  Incomplete,
 } from "@carbon/icons-react";
 import About from "../../components/About";
 import {
@@ -305,15 +305,15 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
   const classNameForRequirementsCardTitle =
     state.requirementsCardHasBeenReviewed
-      ? "landing-page__page-header__productive-card-title__green-icon"
-      : "landing-page__page-header__productive-card-title__icon";
+      ? "landing-page__page-header__productive-card-title__complete-icon"
+      : "landing-page__page-header__productive-card-title__incomplete-icon";
   const titleForRequirementsCard = state.requirementsCardHasBeenReviewed ? (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {t("panel.information.requirementsHeader", { ns: "panels" })}
       </span>
       <span className={classNameForRequirementsCardTitle}>
-        <CheckmarkFilled />
+        <CheckmarkOutline />
       </span>
     </>
   ) : (
@@ -322,7 +322,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         {t("panel.information.requirementsHeader", { ns: "panels" })}
       </span>
       <span className={classNameForRequirementsCardTitle}>
-        <CheckmarkOutline />
+        <Incomplete />
       </span>
     </>
   );
@@ -330,15 +330,15 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-nextsteps-card`
     : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
   const classNameForNextStepsCardTitle = state.nextStepsCardHasBeenReviewed
-    ? "landing-page__page-header__productive-card-title__green-icon"
-    : "landing-page__page-header__productive-card-title__icon";
+    ? "landing-page__page-header__productive-card-title__complete-icon"
+    : "landing-page__page-header__productive-card-title__incomplete-icon";
   const titleForNextStepsCard = state.nextStepsCardHasBeenReviewed ? (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {t("modalHeading.showNextStepsInformation")}
       </span>
       <span className={classNameForNextStepsCardTitle}>
-        <CheckmarkFilled />
+        <CheckmarkOutline />
       </span>
     </>
   ) : (
@@ -347,20 +347,20 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         {t("modalHeading.showNextStepsInformation")}
       </span>
       <span className={classNameForNextStepsCardTitle}>
-        <CheckmarkOutline />
+        <Incomplete />
       </span>
     </>
   );
   const classNameForParmfileCardTitle = hasParamFile()
-    ? "landing-page__page-header__productive-card-title__green-icon"
-    : "landing-page__page-header__productive-card-title__icon";
+    ? "landing-page__page-header__productive-card-title__complete-icon"
+    : "landing-page__page-header__productive-card-title__incomplete-icon";
   const titleForParmfileCard = hasParamFile() ? (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {getTitleForParamFileCard()}
       </span>
       <span className={classNameForParmfileCardTitle}>
-        <CheckmarkFilled />
+        <CheckmarkOutline />
       </span>
     </>
   ) : (
@@ -369,7 +369,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         {getTitleForParamFileCard()}
       </span>
       <span className={classNameForParmfileCardTitle}>
-        <CheckmarkOutline />
+        <Incomplete />
       </span>
     </>
   );
@@ -445,9 +445,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
               <ProductiveCard
                 label={t("landingPage.expressiveCard.requirements.label")}
                 mediaRatio={null}
-                pictogram={() => {
-                  return <ResultDraft size="24" />;
-                }}
+                pictogram={() => <ResultDraft size="24" />}
                 onPrimaryButtonClick={() => {
                   if (state.requirementsCardIsExpanded) {
                     collapseRequirementsCard();
@@ -492,9 +490,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
               <ExpressiveCard
                 label={t("landingPage.expressiveCard.tool.label")}
                 mediaRatio={null}
-                pictogram={() => {
-                  return <SettingsEdit size="24" />;
-                }}
+                pictogram={() => <SettingsEdit size="24" />}
                 onPrimaryButtonClick={() => {
                   globalDispatch({
                     type: ACTION_UPDATE_APP_IS_EDITING,

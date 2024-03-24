@@ -59,17 +59,21 @@
   margin: 0 react.$spacing-13 react.$spacing-06 react.$spacing-13;
 }
 
-.landing-page__page-header__productive-card-title__icon {
-  vertical-align: middle;
-  padding-left: react.$spacing-03;
-}
-
-.landing-page__page-header__productive-card-title__green-icon {
+.landing-page__page-header__productive-card-title__complete-icon {
   vertical-align: middle;
   padding-left: react.$spacing-03;
 
   svg {
-    fill: react.$support-success;
+    fill: react.$interactive;
+  }
+}
+
+.landing-page__page-header__productive-card-title__incomplete-icon {
+  vertical-align: middle;
+  padding-left: react.$spacing-03;
+
+  svg {
+    fill: react.$interactive;
   }
 }
 
