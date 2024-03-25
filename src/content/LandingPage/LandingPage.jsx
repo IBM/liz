@@ -671,6 +671,7 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                 secondaryButtonIcon={DocumentDownload}
                 secondaryButtonKind="ghost"
                 title={titleForParmfileCard}
+                titleSize="large"
                 className="landing-page__express-card"
               >
                 {hasParamFile() ? (
