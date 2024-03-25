@@ -8,12 +8,15 @@ import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { InlineNotification, FlexGrid, Row, Column, Link } from "@carbon/react";
 import {
-  ExpressiveCard,
-  ProductiveCard,
-  PageHeader,
-} from "@carbon/ibm-products";
+  InlineNotification,
+  FlexGrid,
+  Row,
+  Column,
+  Link,
+  Button,
+} from "@carbon/react";
+import { ProductiveCard, PageHeader } from "@carbon/ibm-products";
 import {
   ResultDraft,
   SettingsEdit,
@@ -26,6 +29,8 @@ import {
   Subtract,
   CheckmarkOutline,
   Incomplete,
+  Warning,
+  Linux,
 } from "@carbon/icons-react";
 import About from "../../components/About";
 import {
@@ -42,6 +47,8 @@ import {
   LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
   STATE_ORIGIN_STORAGE,
   STATE_ORIGIN_USER,
+  DISTRIBUTION_LIST,
+  VERSION_LIST,
 } from "../../util/constants";
 import {
   saveParamFileContent,
@@ -312,18 +319,30 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       <span className="landing-page__page-header__productive-card-title__text">
         {t("panel.information.requirementsHeader", { ns: "panels" })}
       </span>
-      <span className={classNameForRequirementsCardTitle}>
-        <CheckmarkOutline />
-      </span>
+      <Button
+        hasIconOnly
+        className={classNameForRequirementsCardTitle}
+        size="sm"
+        kind="ghost"
+        iconDescription={t("leftNavigation.descriptionForCompleteStep")}
+        onClick={function noRefCheck() {}}
+        renderIcon={CheckmarkOutline}
+      />
     </>
   ) : (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {t("panel.information.requirementsHeader", { ns: "panels" })}
       </span>
-      <span className={classNameForRequirementsCardTitle}>
-        <Incomplete />
-      </span>
+      <Button
+        hasIconOnly
+        className={classNameForRequirementsCardTitle}
+        size="sm"
+        kind="ghost"
+        iconDescription={t("leftNavigation.descriptionForIncompleteStep")}
+        onClick={function noRefCheck() {}}
+        renderIcon={Incomplete}
+      />
     </>
   );
   const hrefForNextStepsCard = state.nextStepsCardIsExpanded
@@ -337,30 +356,127 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       <span className="landing-page__page-header__productive-card-title__text">
         {t("modalHeading.showNextStepsInformation")}
       </span>
-      <span className={classNameForNextStepsCardTitle}>
-        <CheckmarkOutline />
-      </span>
+      <Button
+        hasIconOnly
+        className={classNameForNextStepsCardTitle}
+        size="sm"
+        kind="ghost"
+        iconDescription={t("leftNavigation.descriptionForCompleteStep")}
+        onClick={function noRefCheck() {}}
+        renderIcon={CheckmarkOutline}
+      />
     </>
   ) : (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {t("modalHeading.showNextStepsInformation")}
       </span>
-      <span className={classNameForNextStepsCardTitle}>
-        <Incomplete />
-      </span>
+      <Button
+        hasIconOnly
+        className={classNameForNextStepsCardTitle}
+        size="sm"
+        kind="ghost"
+        iconDescription={t("leftNavigation.descriptionForIncompleteStep")}
+        onClick={function noRefCheck() {}}
+        renderIcon={Incomplete}
+      />
     </>
   );
-  const classNameForParmfileCardTitle = hasParamFile()
-    ? "landing-page__page-header__productive-card-title__complete-icon"
-    : "landing-page__page-header__productive-card-title__incomplete-icon";
+  const hasInvalidSteps = () => {
+    const steps = globalState.steps;
+    const stepKeys = Object.keys(steps);
+    let hasInvalidSteps = false;
+
+    stepKeys.forEach((key) => {
+      if (steps[key].invalid) {
+        hasInvalidSteps = true;
+      }
+    });
+
+    return hasInvalidSteps;
+  };
+  const hasIncompleteSteps = () => {
+    const steps = globalState.steps;
+    const stepKeys = Object.keys(steps);
+    let hasIncompleteSteps = false;
+
+    stepKeys.forEach((key) => {
+      if (!steps[key].complete) {
+        hasIncompleteSteps = true;
+      }
+    });
+
+    return hasIncompleteSteps;
+  };
+  const getClassNameForParmfileCardTitle = () => {
+    if (hasParamFile() && hasInvalidSteps()) {
+      return "landing-page__page-header__productive-card-title__incomplete-error-icon";
+    } else if (hasParamFile() && hasIncompleteSteps()) {
+      return "landing-page__page-header__productive-card-title__incomplete-icon";
+    } else if (!hasParamFile()) {
+      return "landing-page__page-header__productive-card-title__incomplete-icon";
+    }
+
+    return "landing-page__page-header__productive-card-title__complete-icon";
+  };
+  const getIconForParmfileCardTitle = () => {
+    if (hasParamFile() && hasInvalidSteps()) {
+      return (
+        <Button
+          hasIconOnly
+          className={getClassNameForParmfileCardTitle()}
+          size="sm"
+          kind="ghost"
+          iconDescription={t("leftNavigation.descriptionForInvalidStep")}
+          onClick={function noRefCheck() {}}
+          renderIcon={Warning}
+        />
+      );
+    } else if (hasParamFile() && hasIncompleteSteps()) {
+      return (
+        <Button
+          hasIconOnly
+          className={getClassNameForParmfileCardTitle()}
+          size="sm"
+          kind="ghost"
+          iconDescription={t("leftNavigation.descriptionForIncompleteStep")}
+          onClick={function noRefCheck() {}}
+          renderIcon={Incomplete}
+        />
+      );
+    } else if (!hasParamFile()) {
+      return (
+        <Button
+          hasIconOnly
+          className={getClassNameForParmfileCardTitle()}
+          size="sm"
+          kind="ghost"
+          iconDescription={t("leftNavigation.descriptionForIncompleteStep")}
+          onClick={function noRefCheck() {}}
+          renderIcon={Incomplete}
+        />
+      );
+    }
+
+    return (
+      <Button
+        hasIconOnly
+        className={getClassNameForParmfileCardTitle()}
+        size="sm"
+        kind="ghost"
+        iconDescription={t("leftNavigation.descriptionForCompleteStep")}
+        onClick={function noRefCheck() {}}
+        renderIcon={CheckmarkOutline}
+      />
+    );
+  };
   const titleForParmfileCard = hasParamFile() ? (
     <>
       <span className="landing-page__page-header__productive-card-title__text">
         {getTitleForParamFileCard()}
       </span>
-      <span className={classNameForParmfileCardTitle}>
-        <CheckmarkOutline />
+      <span className={getClassNameForParmfileCardTitle()}>
+        {getIconForParmfileCardTitle()}
       </span>
     </>
   ) : (
@@ -368,8 +484,8 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       <span className="landing-page__page-header__productive-card-title__text">
         {getTitleForParamFileCard()}
       </span>
-      <span className={classNameForParmfileCardTitle}>
-        <Incomplete />
+      <span className={getClassNameForParmfileCardTitle()}>
+        {getIconForParmfileCardTitle()}
       </span>
     </>
   );
@@ -377,6 +493,55 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
   const productiveCardPrimaryButtonText = productiveCardsAreExpanded
     ? t("btnLabel.MarkAsReviewed", { ns: "common" })
     : t("btnLabel.ReviewInformation", { ns: "common" });
+
+  const getActionIconsForParmfileCard = () => {
+    const distributionName =
+      globalState.steps.inputFileSelection.distributionName;
+    const hasDistributionName =
+      distributionName &&
+      typeof distributionName === "string" &&
+      distributionName.length > 0;
+    const distributionVersion =
+      globalState.steps.inputFileSelection.distributionVersion;
+    const hasDistributionVersion =
+      distributionVersion &&
+      typeof distributionVersion === "string" &&
+      distributionVersion.length > 0;
+
+    if (hasParamFile() && hasDistributionName && hasDistributionVersion) {
+      const linuxDistributionLabel = t(
+        "panel.inputFileSelection.linuxDistributionLabel",
+        { ns: "panels" },
+      );
+      const linuxVersionLabel = t(
+        "panel.inputFileSelection.linuxVersionLabel",
+        {
+          ns: "panels",
+        },
+      );
+      const distributionNameText = distributionName
+        ? DISTRIBUTION_LIST.find((x) => x.id === distributionName).label
+        : "";
+      const distributionVersionText =
+        distributionName && distributionVersion
+          ? VERSION_LIST[distributionName].find(
+              (x) => x.id === distributionVersion,
+            ).label
+          : "";
+      const iconLabel = `${linuxDistributionLabel}: ${distributionNameText}
+${linuxVersionLabel}: ${distributionVersionText}`;
+      const iconMarkup = () => <Linux size={20} />;
+      return [
+        {
+          id: "landing-page__expressive-card_show-distribution-info",
+          icon: iconMarkup,
+          onClick: function noRefCheck() {},
+          iconDescription: iconLabel,
+        },
+      ];
+    }
+    return null;
+  };
 
   return (
     <>
@@ -487,7 +652,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
               </ProductiveCard>
             )}
             {!productiveCardsAreExpanded && (
-              <ExpressiveCard
+              <ProductiveCard
                 label={t("landingPage.expressiveCard.tool.label")}
                 mediaRatio={null}
                 pictogram={() => <SettingsEdit size="24" />}
@@ -497,12 +662,14 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     nextIsEditing: true,
                   });
                 }}
+                actionIcons={getActionIconsForParmfileCard()}
                 primaryButtonIcon={Edit}
                 primaryButtonText={getPrimaryButtonTextForParamFileCard()}
                 primaryButtonHref={`${import.meta.env.VITE_URL_PATH_PREFIX}#/edit`}
                 secondaryButtonText={getSecondaryButtonTextForParamFileCard()}
                 onSecondaryButtonClick={saveParamFileContentProxy}
                 secondaryButtonIcon={DocumentDownload}
+                secondaryButtonKind="ghost"
                 title={titleForParmfileCard}
                 className="landing-page__express-card"
               >
@@ -511,7 +678,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                 ) : (
                   <p>{t("landingPage.expressiveCard.tool.paraNew")}</p>
                 )}
-              </ExpressiveCard>
+              </ProductiveCard>
             )}
             {!state.requirementsCardIsExpanded && (
               <ProductiveCard

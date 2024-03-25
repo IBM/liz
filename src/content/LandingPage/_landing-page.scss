@@ -57,6 +57,10 @@
 .landing-page__express-card {
   background: react.$background;
   margin: 0 react.$spacing-13 react.$spacing-06 react.$spacing-13;
+
+  .cds--tooltip-content {
+    white-space: pre;
+  }
 }
 
 .landing-page__page-header__productive-card-title__complete-icon {
@@ -64,7 +68,7 @@
   padding-left: react.$spacing-03;
 
   svg {
-    fill: react.$interactive;
+    fill: react.$interactive !important;
   }
 }
 
@@ -73,7 +77,16 @@
   padding-left: react.$spacing-03;
 
   svg {
-    fill: react.$interactive;
+    fill: react.$interactive !important;
+  }
+}
+
+.landing-page__page-header__productive-card-title__incomplete-error-icon {
+  vertical-align: middle;
+  padding-left: react.$spacing-03;
+
+  svg {
+    fill: react.$support-error !important;
   }
 }
 
