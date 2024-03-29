@@ -28,6 +28,8 @@
   "toggle.disableLabel": "Disabled",
   "increment.number": "Increment number",
   "decrement.number": "Decrement number",
+  "copied.short": "Copied",
+  "copied.long": "Copied to clipboard",
   "pageHeader.actionBarOverflowAriaLabel": "Show further action bar items",
   "pageHeader.allTagsModalSearchLabel": "Search all tags",
   "pageHeader.allTagsModalSearchPlaceholderText": "Enter search string",

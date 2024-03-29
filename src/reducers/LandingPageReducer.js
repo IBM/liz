@@ -7,6 +7,7 @@
 import {
   ACTION_UPDATE_NOP,
   ACTION_RESET_TO_INITIAL_STATE,
+  ACTION_UPDATE_PARMFILE_CARD_IS_EXPANDED,
   ACTION_UPDATE_REQUIREMENTS_CARD_IS_EXPANDED,
   ACTION_UPDATE_REQUIREMENTS_CARD_HAS_BEEN_REVIEWED,
   ACTION_UPDATE_NEXT_STEPS_CARD_IS_EXPANDED,
@@ -15,6 +16,12 @@ import {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case ACTION_UPDATE_PARMFILE_CARD_IS_EXPANDED:
+      return {
+        ...state,
+        parmfileCardIsExpanded: action.nextParmfileCardIsExpanded,
+        origin: action.nextOrigin,
+      };
     case ACTION_UPDATE_REQUIREMENTS_CARD_IS_EXPANDED:
       return {
         ...state,

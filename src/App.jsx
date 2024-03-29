@@ -788,6 +788,30 @@ const App = () => {
             />
             <Route
               exact
+              path="/expanded-parmfile-card"
+              element={
+                <ApplicationContext.Provider
+                  value={{
+                    state,
+                    dispatch,
+                    componentDispatchers: {
+                      downloadParamFileDispatch,
+                    },
+                    helper: {
+                      closeNotification,
+                      resetToInitialState,
+                    },
+                  }}
+                >
+                  <LandingPage
+                    dispatch={landingPageDispatch}
+                    state={landingPageState}
+                  />
+                </ApplicationContext.Provider>
+              }
+            />
+            <Route
+              exact
               path="/expanded-nextsteps-card"
               element={
                 <ApplicationContext.Provider

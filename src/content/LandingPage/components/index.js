@@ -6,5 +6,6 @@
 
 import NextSteps from "./NextSteps";
 import SystemRequirements from "./SystemRequirements";
+import Parmfile from "./Parmfile";
 
-export { NextSteps, SystemRequirements };
+export { NextSteps, SystemRequirements, Parmfile };

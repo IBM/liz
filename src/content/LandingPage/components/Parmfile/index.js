@@ -1,0 +1,8 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2024
+ */
+
+import Parmfile from "./Parmfile";
+export default Parmfile;

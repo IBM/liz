@@ -18,6 +18,7 @@ const createInitialState = () => {
     requirementsCardHasBeenReviewed: false,
     nextStepsCardIsExpanded: false,
     nextStepsCardHasBeenReviewed: false,
+    parmfileCardIsExpanded: false,
     origin: STATE_ORIGIN_DEFAULT,
   };
 

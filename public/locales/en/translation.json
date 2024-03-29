@@ -51,6 +51,7 @@
   "landingPage.expressiveCard.tool.label": "Start composing",
   "landingPage.expressiveCard.requirements.label": "Getting started",
   "landingPage.expressiveCard.nextSteps.para": "Review next steps on how to proceed with a LPAR managed in classic mode or partitions managed by DPM.",
+  "landingPage.expressiveCard.distributionInformation": "The below parameter file has been generated for the following Linux distribution and version. It can be modified using the guided flow initially used to create it.",
   "editPage.pageHeader.subtitle.new": "Compose a new Linux on IBM Z parameter file",
   "editPage.pageHeader.subtitle.modify": "Modify an existing Linux on IBM Z parameter file",
   "editPage.pageHeader.title.new": "New parameter file",

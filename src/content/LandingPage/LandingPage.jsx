@@ -16,11 +16,8 @@ import {
   Link,
   Button,
 } from "@carbon/react";
-import { ProductiveCard, PageHeader } from "@carbon/ibm-products";
+import { ExpressiveCard, PageHeader } from "@carbon/ibm-products";
 import {
-  ResultDraft,
-  SettingsEdit,
-  NextOutline,
   DocumentDownload,
   Edit,
   Popup,
@@ -38,6 +35,7 @@ import {
   ACTION_UPDATE_APP_STEP,
   ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
+  ACTION_UPDATE_PARMFILE_CARD_IS_EXPANDED,
   ACTION_UPDATE_REQUIREMENTS_CARD_IS_EXPANDED,
   ACTION_UPDATE_REQUIREMENTS_CARD_HAS_BEEN_REVIEWED,
   ACTION_UPDATE_NEXT_STEPS_CARD_IS_EXPANDED,
@@ -47,8 +45,6 @@ import {
   LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
   STATE_ORIGIN_STORAGE,
   STATE_ORIGIN_USER,
-  DISTRIBUTION_LIST,
-  VERSION_LIST,
 } from "../../util/constants";
 import {
   saveParamFileContent,
@@ -62,7 +58,7 @@ import {
   getLocalStorageKeys,
 } from "../../util/local-storage-util";
 import { ApplicationContext } from "../../App";
-import { NextSteps, SystemRequirements } from "./components";
+import { NextSteps, SystemRequirements, Parmfile } from "./components";
 import "./_landing-page.scss";
 
 const LandingPage = forwardRef(function LandingPage(props, ref) {
@@ -84,6 +80,14 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         }),
       );
     },
+  };
+
+  const updateParmfileCardIsExpanded = (flag) => {
+    dispatch({
+      type: ACTION_UPDATE_PARMFILE_CARD_IS_EXPANDED,
+      nextOrigin: STATE_ORIGIN_USER,
+      nextParmfileCardIsExpanded: flag,
+    });
   };
 
   const updateRequirementsCardIsExpanded = (flag) => {
@@ -122,8 +126,12 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
 
   const showNotification = globalState.showNotification || false;
   const localStorageKeys = getLocalStorageKeys(globalState);
-  const productiveCardsAreExpanded =
+  const hideRequirementsCard =
+    state.parmfileCardIsExpanded || state.nextStepsCardIsExpanded;
+  const hideParmfileCard =
     state.requirementsCardIsExpanded || state.nextStepsCardIsExpanded;
+  const hideNextStepsCard =
+    state.parmfileCardIsExpanded || state.requirementsCardIsExpanded;
 
   const useSsh = globalState.steps.installationParameters.ssh.enabled;
   const useVnc = globalState.steps.installationParameters.vnc.enabled;
@@ -264,6 +272,11 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     return breadcrumbs;
   };
 
+  const collapseParmfileCard = () => {
+    updateParmfileCardIsExpanded(false);
+    navigate("/");
+  };
+
   const collapseRequirementsCard = () => {
     updateRequirementsCardIsExpanded(false);
     updateRequirementsCardHasBeenReviewed(true);
@@ -276,12 +289,23 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     navigate("/");
   };
 
+  const expandParmfileCard = () => {
+    updateRequirementsCardIsExpanded(false);
+    updateParmfileCardIsExpanded(true);
+    updateNextStepsCardIsExpanded(false);
+    navigate("/expanded-parmfile-card");
+  };
+
   const expandRequirementsCard = () => {
     updateRequirementsCardIsExpanded(true);
+    updateParmfileCardIsExpanded(false);
+    updateNextStepsCardIsExpanded(false);
     navigate("/expanded-requirements-card");
   };
 
   const expandNextStepsCard = () => {
+    updateRequirementsCardIsExpanded(false);
+    updateParmfileCardIsExpanded(false);
     updateNextStepsCardIsExpanded(true);
     navigate("/expanded-nextsteps-card");
   };
@@ -307,9 +331,6 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
   useEffect(publicRef.persistState, [state]);
   useImperativeHandle(ref, () => publicRef);
 
-  const hrefForRequirementsCard = state.requirementsCardIsExpanded
-    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-requirements-card`
-    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
   const classNameForRequirementsCardTitle =
     state.requirementsCardHasBeenReviewed
       ? "landing-page__page-header__productive-card-title__complete-icon"
@@ -345,9 +366,6 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       />
     </>
   );
-  const hrefForNextStepsCard = state.nextStepsCardIsExpanded
-    ? `${import.meta.env.VITE_URL_PATH_PREFIX}#/expanded-nextsteps-card`
-    : `${import.meta.env.VITE_URL_PATH_PREFIX}#/`;
   const classNameForNextStepsCardTitle = state.nextStepsCardHasBeenReviewed
     ? "landing-page__page-header__productive-card-title__complete-icon"
     : "landing-page__page-header__productive-card-title__incomplete-icon";
@@ -490,9 +508,10 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     </>
   );
 
-  const productiveCardPrimaryButtonText = productiveCardsAreExpanded
-    ? t("btnLabel.MarkAsReviewed", { ns: "common" })
-    : t("btnLabel.ReviewInformation", { ns: "common" });
+  const productiveCardPrimaryButtonText =
+    hideRequirementsCard || hideNextStepsCard
+      ? t("btnLabel.MarkAsReviewed", { ns: "common" })
+      : t("btnLabel.ReviewInformation", { ns: "common" });
 
   const getActionIconsForParmfileCard = () => {
     const distributionName =
@@ -509,34 +528,21 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       distributionVersion.length > 0;
 
     if (hasParamFile() && hasDistributionName && hasDistributionVersion) {
-      const linuxDistributionLabel = t(
-        "panel.inputFileSelection.linuxDistributionLabel",
-        { ns: "panels" },
-      );
-      const linuxVersionLabel = t(
-        "panel.inputFileSelection.linuxVersionLabel",
-        {
-          ns: "panels",
-        },
-      );
-      const distributionNameText = distributionName
-        ? DISTRIBUTION_LIST.find((x) => x.id === distributionName).label
-        : "";
-      const distributionVersionText =
-        distributionName && distributionVersion
-          ? VERSION_LIST[distributionName].find(
-              (x) => x.id === distributionVersion,
-            ).label
-          : "";
-      const iconLabel = `${linuxDistributionLabel}: ${distributionNameText}
-${linuxVersionLabel}: ${distributionVersionText}`;
       const iconMarkup = () => <Linux size={20} />;
       return [
         {
           id: "landing-page__expressive-card_show-distribution-info",
           icon: iconMarkup,
-          onClick: function noRefCheck() {},
-          iconDescription: iconLabel,
+          onClick: () => {
+            if (state.parmfileCardIsExpanded) {
+              collapseParmfileCard();
+            } else {
+              expandParmfileCard();
+            }
+          },
+          iconDescription: state.parmfileCardIsExpanded
+            ? t("btnLabel.Collapse", { ns: "common" })
+            : t("btnLabel.Expand", { ns: "common" }),
         },
       ];
     }
@@ -606,11 +612,10 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
       <FlexGrid className="landing-page__grid">
         <Row>
           <Column className="landing-page__grey-column-background">
-            {!state.nextStepsCardIsExpanded && (
-              <ProductiveCard
+            {!hideRequirementsCard && (
+              <ExpressiveCard
                 label={t("landingPage.expressiveCard.requirements.label")}
                 mediaRatio={null}
-                pictogram={() => <ResultDraft size="24" />}
                 onPrimaryButtonClick={() => {
                   if (state.requirementsCardIsExpanded) {
                     collapseRequirementsCard();
@@ -628,7 +633,6 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                 actionIcons={[
                   {
                     id: "landing-page__productive-card_expand-requirements",
-                    href: hrefForRequirementsCard,
                     icon: state.requirementsCardIsExpanded
                       ? (props) => <CollapseAll size={16} {...props} />
                       : (props) => <Popup size={16} {...props} />,
@@ -644,18 +648,18 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                       : t("btnLabel.Expand", { ns: "common" }),
                   },
                 ]}
+                actionsPlacement="top"
               >
                 {state.requirementsCardIsExpanded && <SystemRequirements />}
                 {!state.requirementsCardIsExpanded && (
                   <p>{t("panel.hint.explanation", { ns: "panels" })}</p>
                 )}
-              </ProductiveCard>
+              </ExpressiveCard>
             )}
-            {!productiveCardsAreExpanded && (
-              <ProductiveCard
+            {!hideParmfileCard && (
+              <ExpressiveCard
                 label={t("landingPage.expressiveCard.tool.label")}
                 mediaRatio={null}
-                pictogram={() => <SettingsEdit size="24" />}
                 onPrimaryButtonClick={() => {
                   globalDispatch({
                     type: ACTION_UPDATE_APP_IS_EDITING,
@@ -663,6 +667,7 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                   });
                 }}
                 actionIcons={getActionIconsForParmfileCard()}
+                actionsPlacement="top"
                 primaryButtonIcon={Edit}
                 primaryButtonText={getPrimaryButtonTextForParamFileCard()}
                 primaryButtonHref={`${import.meta.env.VITE_URL_PATH_PREFIX}#/edit`}
@@ -674,18 +679,29 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                 titleSize="large"
                 className="landing-page__express-card"
               >
-                {hasParamFile() ? (
-                  <p>{t("landingPage.expressiveCard.tool.paraModify")}</p>
-                ) : (
-                  <p>{t("landingPage.expressiveCard.tool.paraNew")}</p>
+                {state.parmfileCardIsExpanded && (
+                  <Parmfile
+                    parmfile={globalState.steps.downloadParamFile.contents}
+                    distributionName={
+                      globalState.steps.inputFileSelection.distributionName
+                    }
+                    distributionVersion={
+                      globalState.steps.inputFileSelection.distributionVersion
+                    }
+                  />
                 )}
-              </ProductiveCard>
+                {!state.parmfileCardIsExpanded &&
+                  (hasParamFile() ? (
+                    <p>{t("landingPage.expressiveCard.tool.paraModify")}</p>
+                  ) : (
+                    <p>{t("landingPage.expressiveCard.tool.paraNew")}</p>
+                  ))}
+              </ExpressiveCard>
             )}
-            {!state.requirementsCardIsExpanded && (
-              <ProductiveCard
+            {!hideNextStepsCard && (
+              <ExpressiveCard
                 label={t("panel.nextSteps.header", { ns: "panels" })}
                 mediaRatio={null}
-                pictogram={() => <NextOutline size="24" />}
                 primaryButtonText={productiveCardPrimaryButtonText}
                 primaryButtonIcon={
                   state.nextStepsCardIsExpanded ? Subtract : Add
@@ -703,7 +719,6 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                 actionIcons={[
                   {
                     id: "landing-page__productive-card_expand-nextsteps",
-                    href: hrefForNextStepsCard,
                     icon: state.nextStepsCardIsExpanded
                       ? (props) => <CollapseAll size={16} {...props} />
                       : (props) => <Popup size={16} {...props} />,
@@ -719,6 +734,7 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                       : t("btnLabel.Expand", { ns: "common" }),
                   },
                 ]}
+                actionsPlacement="top"
               >
                 {state.nextStepsCardIsExpanded && (
                   <NextSteps {...nextStepsProps} />
@@ -726,7 +742,7 @@ ${linuxVersionLabel}: ${distributionVersionText}`;
                 {!state.nextStepsCardIsExpanded && (
                   <p>{t("landingPage.expressiveCard.nextSteps.para")}</p>
                 )}
-              </ProductiveCard>
+              </ExpressiveCard>
             )}
           </Column>
         </Row>

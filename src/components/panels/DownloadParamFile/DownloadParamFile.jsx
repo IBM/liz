@@ -293,7 +293,9 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         paramFileContent.metadata.hasInvalidData) &&
         notificationMarkup}
       {state.paramFileContentCopied ? (
-        <span className="download-param-file_copied-label">Copied.</span>
+        <span className="download-param-file_copied-label">
+          {t("copied.short", { ns: "common" })}.
+        </span>
       ) : null}
     </>
   );
