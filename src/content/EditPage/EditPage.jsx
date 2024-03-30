@@ -26,6 +26,7 @@ import {
 import {
   pruneSettings,
   getLocalStorageKeys,
+  parmfileCardIsExpanded,
 } from "../../util/local-storage-util";
 import About from "../../components/About";
 import "./_edit-page.scss";
@@ -165,7 +166,7 @@ const EditPage = () => {
         )}
         breadcrumbs={[
           {
-            href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
+            href: `${import.meta.env.VITE_URL_PATH_PREFIX}${parmfileCardIsExpanded() ? "#/expanded-parmfile-card" : "#"}`,
             key: "breadcrumb-01",
             label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
           },
@@ -218,7 +219,9 @@ const EditPage = () => {
             type: ACTION_UPDATE_APP_IS_EDITING,
             nextIsEditing: false,
           });
-          navigate("/#");
+          navigate(
+            `${parmfileCardIsExpanded() ? "/expanded-parmfile-card" : "/"}`,
+          );
         }}
         onRequestSubmit={createParamFile}
         secondaryTitle=""

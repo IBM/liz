@@ -510,7 +510,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
 
   const productiveCardPrimaryButtonText =
     hideRequirementsCard || hideNextStepsCard
-      ? t("btnLabel.MarkAsReviewed", { ns: "common" })
+      ? t("btnLabel.Close", { ns: "common" })
       : t("btnLabel.ReviewInformation", { ns: "common" });
 
   const getActionIconsForParmfileCard = () => {

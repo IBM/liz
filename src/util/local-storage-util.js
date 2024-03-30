@@ -122,19 +122,51 @@ const getLocalStorageContentsForSummaryStep = () => {
   return summary;
 };
 
+const getLocalStorageContentsForLandingPage = () => {
+  const landingPageString = localStorage.getItem(
+    LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
+  );
+  const landingPage =
+    typeof landingPageString === "string" ? JSON.parse(landingPageString) : {};
+
+  return landingPage;
+};
+
+const nextStepsCardHasBeenReviewed = () => {
+  const landingPage = getLocalStorageContentsForLandingPage();
+  return landingPage.nextStepsCardHasBeenReviewed;
+};
+
+const nextStepsCardIsExpanded = () => {
+  const landingPage = getLocalStorageContentsForLandingPage();
+  return landingPage.nextStepsCardIsExpanded;
+};
+
+const parmfileCardIsExpanded = () => {
+  const landingPage = getLocalStorageContentsForLandingPage();
+  return landingPage.parmfileCardIsExpanded;
+};
+
+const requirementsCardHasBeenReviewed = () => {
+  const landingPage = getLocalStorageContentsForLandingPage();
+  return landingPage.requirementsCardHasBeenReviewed;
+};
+
+const requirementsCardIsExpanded = () => {
+  const landingPage = getLocalStorageContentsForLandingPage();
+  return landingPage.requirementsCardIsExpanded;
+};
+
 const hasLocalStorageState = () => {
   const downloadParamFileStep =
     getLocalStorageContentsForDownloadParamFileStep();
   const summary = getLocalStorageContentsForSummaryStep();
-  // const hint = getLocalStorageContentsForHintStep();
   const information = getLocalStorageContentsForInformationStep();
   const inputFileSelection = getLocalStorageContentsForInputFileSelectionStep();
   const installationParameter =
     getLocalStorageContentsForInstallationParameterStep();
-  // const intro = getLocalStorageContentsForIntroStep();
   const networkAddress = getLocalStorageContentsForNetworkAddressStep();
   const networkDevive = getLocalStorageContentsForNetworkDeviceStep();
-  // const nextSteps = getLocalStorageContentsForNextStepStep();
 
   if (
     downloadParamFileStep &&
@@ -196,4 +228,10 @@ export {
   getLocalStorageContentsForNetworkAddressStep,
   getLocalStorageContentsForNetworkDeviceStep,
   getLocalStorageContentsForNextStepStep,
+  getLocalStorageContentsForLandingPage,
+  nextStepsCardHasBeenReviewed,
+  nextStepsCardIsExpanded,
+  parmfileCardIsExpanded,
+  requirementsCardHasBeenReviewed,
+  requirementsCardIsExpanded,
 };
