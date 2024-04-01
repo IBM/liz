@@ -7,33 +7,35 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import PropTypes from "prop-types";
-import { Layer, Link, ActionableNotification } from "@carbon/react";
 import {
-  DISTRIBUTION_LIST,
-  VERSION_LIST,
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
+  Layer,
+  Link,
+  ActionableNotification,
+  FlexGrid,
+  Row,
+  Column,
+} from "@carbon/react";
+import { DISTRIBUTION_LIST, VERSION_LIST } from "../../../util/constants";
+import {
   LOCAL_STORAGE_KEY_APP_INFORMATION,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
-} from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
-import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
+} from "../../../util/local-storage-constants";
+import { ApplicationContext, InformationContext } from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import "./_information.scss";
 
 const Information = forwardRef(function Information(props, ref) {
   const {
     state: globalState,
-    dispatch: globalDispatch,
-    componentDispatchers,
+    updateNextStep,
+    updateIsDirty,
+    updateIsDisabled,
   } = React.useContext(ApplicationContext);
-  const downloadParamFileDispatch =
-    componentDispatchers.downloadParamFileDispatch;
+  const { state } = React.useContext(InformationContext);
   const { t } = useTranslation();
-
-  const { state, distribution, systemRequirements } = props;
+  const { distribution, systemRequirements } = props;
   const publicRef = {
     persistState: () => {
       const mergedSteps = {
@@ -50,18 +52,9 @@ const Information = forwardRef(function Information(props, ref) {
         },
       };
 
-      globalDispatch({
-        type: ACTION_UPDATE_APP_STEPS,
-        nextSteps: mergedSteps.steps,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DIRTY,
-        nextIsDirty: true,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DISABLED,
-        nextSteps: updateIsDisabled(mergedSteps.steps),
-      });
+      updateNextStep(mergedSteps.steps);
+      updateIsDirty(true);
+      updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
 
       localStorage.setItem(
         LOCAL_STORAGE_KEY_APP_INFORMATION,
@@ -106,16 +99,12 @@ const Information = forwardRef(function Information(props, ref) {
       hideCloseButton
       inline
       lowContrast
-      className="information__parmfile-purge-banner"
+      className="information_parmfile-purge-banner"
       actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData(
-          globalState,
-          globalDispatch,
-          downloadParamFileDispatch,
-        );
+        resetParamFileTextAreaData();
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}
@@ -128,7 +117,7 @@ const Information = forwardRef(function Information(props, ref) {
   );
 
   const markup = (
-    <Layer className="information__layer">
+    <>
       {paramFileHasBeenModifiedFromState &&
         parmfileHasBeenModifiedNotificationMarkup}
       <div className="information_content">
@@ -222,15 +211,21 @@ const Information = forwardRef(function Information(props, ref) {
           {distributionName}
         </Link>
       </div>
-    </Layer>
+    </>
   );
 
-  return markup;
+  return (
+    <Layer className="information__layer">
+      <FlexGrid className="information__grid">
+        <Row>
+          <Column>{markup}</Column>
+        </Row>
+      </FlexGrid>
+    </Layer>
+  );
 });
 
 Information.propTypes = {
-  state: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
   distribution: PropTypes.shape({
     name: PropTypes.string.isRequired,
     version: PropTypes.string.isRequired,

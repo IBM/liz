@@ -7,7 +7,7 @@
 import {
   LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
   STATE_ORIGIN_DEFAULT,
-} from "../util/constants";
+} from "../util/local-storage-constants";
 
 const createInitialState = () => {
   const initialState = JSON.parse(

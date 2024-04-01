@@ -4,11 +4,11 @@
  * (C) Copyright IBM Corp. 2023
  */
 
+import { DEFAULT_STEPS } from "../util/constants";
 import {
   LOCAL_STORAGE_KEY_APP,
   STATE_ORIGIN_DEFAULT,
-  DEFAULT_STEPS,
-} from "../util/constants";
+} from "../util/local-storage-constants";
 import { hasLocalStorageState } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
@@ -18,16 +18,10 @@ const createInitialState = (skipLocalStorageUsage = false) => {
     helpStep: 0,
     nextStep: 0,
     steps: DEFAULT_STEPS,
-    showNotification: false,
     showLegalNotification: true,
     isDirty: false,
     isEditing: false,
     canRenderStep: true,
-    isHelpPanelExpanded: true,
-    showConfirmationModal: false,
-    showDiscardModifiedParamFileContentsModal: false,
-    showSystemRequirementInformationModal: false,
-    showNextStepsInformationModal: false,
     useStateFromLocalStorage: hasLocalStorageState(),
     origin: STATE_ORIGIN_DEFAULT,
   };

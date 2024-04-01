@@ -187,7 +187,6 @@ const DeviceSettings = ({
         <Column>
           <div className="device-settings_grid-column-single">
             <TextInput
-              light
               readOnly={readOnly}
               id="pci-function-input"
               invalidText={t("invalidTextLabel", { ns: "common" })}
@@ -240,7 +239,6 @@ const DeviceSettings = ({
               }}
             />
             <TextInput
-              light
               readOnly={readOnly}
               id="user-identifier-input"
               invalidText={t("invalidTextLabel", { ns: "common" })}

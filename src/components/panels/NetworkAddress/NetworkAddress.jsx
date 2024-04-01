@@ -6,7 +6,6 @@
 
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
 import {
   Layer,
   RadioButtonGroup,
@@ -34,52 +33,47 @@ import {
   UPDATE_FUNCTION__IPV6_NAMESERVER,
   UPDATE_FUNCTION__IPV6_HOSTNAME,
   UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH,
-  ACTION_UPDATE_NETWORK_ADDRESS_NETMASK,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_HOSTNAME,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_HOSTNAME,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_DOMAIN_SEARCH_PATH,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_DOMAIN_SEARCH_PATH,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_NS_ADDRESS,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_NS_ADDRESS,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_GW_ADDRESS,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_GW_ADDRESS,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_ADDRESS,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_ADDRESS,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_CIDR,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV6_CIDR,
-  ACTION_UPDATE_NETWORK_ADDRESS_IPV4_BINARY,
-  ACTION_UPDATE_NETWORK_ADDRESS_TYPE,
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
-  LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
-  STATE_ORIGIN_USER,
-  STATE_ORIGIN_STORAGE,
   SLES_DISTRIBUTION_ID,
   UBUNTU_DISTRIBUTION_ID,
   DEFAULT_DISTRIBUTION_ID,
 } from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
+import {
+  LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
+  STATE_ORIGIN_USER,
+  STATE_ORIGIN_STORAGE,
+} from "../../../util/local-storage-constants";
+import { ApplicationContext, NetworkAddressContext } from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import {
   isIpv4NetworkAddressValid,
   isIpv6NetworkAddressValid,
 } from "../../../util/network-address-util";
-import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import { IPv4Panel, IPv6Panel } from "./components";
 import "./_network-address.scss";
 
 const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
   const {
     state: globalState,
-    dispatch: globalDispatch,
-    componentDispatchers,
+    updateNextStep,
+    updateIsDirty,
+    updateIsDisabled,
   } = React.useContext(ApplicationContext);
-  const downloadParamFileDispatch =
-    componentDispatchers.downloadParamFileDispatch;
+  const {
+    state,
+    updateNetmask,
+    updateIpv4Cidr,
+    updateIpv6Cidr,
+    updateBinary,
+    updateAddressType,
+    updateIpv4Address,
+    updateIpv6Address,
+    updateGatewayAddress,
+    updateNameserverAddress,
+    updateHostName,
+    updateDomainSearchPath,
+  } = React.useContext(NetworkAddressContext);
   const { t } = useTranslation();
-
-  const { state, dispatch } = props;
   const publicRef = {
     persistState: () => {
       let mergedSteps = {};
@@ -185,18 +179,9 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
           };
         }
 
-        globalDispatch({
-          type: ACTION_UPDATE_APP_STEPS,
-          nextSteps: mergedSteps.steps,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DIRTY,
-          nextIsDirty: true,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DISABLED,
-          nextSteps: updateIsDisabled(mergedSteps.steps),
-        });
+        updateNextStep(mergedSteps.steps);
+        updateIsDirty(true);
+        updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
       });
 
       localStorage.setItem(
@@ -265,128 +250,6 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     } else if (UPDATE_FUNCTION__UNKNOWN) {
       console.log("Unknown property name passed to update proxy function.");
     }
-  };
-
-  const updateNetmask = (netmask, valid, computed) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_ADDRESS_NETMASK,
-      nextNetmask: {
-        value: netmask,
-        valid,
-        computed,
-      },
-    });
-  };
-
-  const updateIpv4Cidr = (ipv4Cidr, valid, computed) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_ADDRESS_IPV4_CIDR,
-      nextIpv4Cidr: {
-        value: ipv4Cidr,
-        valid,
-        computed,
-      },
-    });
-  };
-
-  const updateIpv6Cidr = (ipv6Cidr, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_ADDRESS_IPV6_CIDR,
-      nextIpv6Cidr: {
-        value: ipv6Cidr,
-        valid,
-      },
-    });
-  };
-
-  const updateBinary = (binary) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_ADDRESS_IPV4_BINARY,
-      nextBinary: binary,
-    });
-  };
-
-  const updateAddressType = (addressType) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_ADDRESS_TYPE,
-      nextAddressType: addressType,
-    });
-  };
-
-  const updateIpv4Address = (ipv4Address, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_ADDRESS_IPV4_ADDRESS,
-      nextIpv4Address: {
-        value: ipv4Address,
-        valid,
-      },
-    });
-  };
-
-  const updateIpv6Address = (ipv6Address, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_ADDRESS_IPV6_ADDRESS,
-      nextIpv6Address: {
-        value: ipv6Address,
-        valid,
-      },
-    });
-  };
-
-  const updateGatewayAddress = (gatewayIpAddress, valid) => {
-    dispatch({
-      type:
-        ipVersion === ADDRESS_TYPE_IPV4 ||
-        state.addressType === ADDRESS_TYPE_IPV4
-          ? ACTION_UPDATE_NETWORK_ADDRESS_IPV4_GW_ADDRESS
-          : ACTION_UPDATE_NETWORK_ADDRESS_IPV6_GW_ADDRESS,
-      nextGatewayIpAddress: {
-        value: gatewayIpAddress,
-        valid,
-      },
-    });
-  };
-
-  const updateNameserverAddress = (nameserverIpAddress, valid) => {
-    dispatch({
-      type:
-        ipVersion === ADDRESS_TYPE_IPV4 ||
-        state.addressType === ADDRESS_TYPE_IPV4
-          ? ACTION_UPDATE_NETWORK_ADDRESS_IPV4_NS_ADDRESS
-          : ACTION_UPDATE_NETWORK_ADDRESS_IPV6_NS_ADDRESS,
-      nextNameserverIpAddress: {
-        value: nameserverIpAddress,
-        valid,
-      },
-    });
-  };
-
-  const updateHostName = (hostName, valid) => {
-    dispatch({
-      type:
-        ipVersion === ADDRESS_TYPE_IPV4 ||
-        state.addressType === ADDRESS_TYPE_IPV4
-          ? ACTION_UPDATE_NETWORK_ADDRESS_IPV4_HOSTNAME
-          : ACTION_UPDATE_NETWORK_ADDRESS_IPV6_HOSTNAME,
-      nextHostName: {
-        value: hostName,
-        valid,
-      },
-    });
-  };
-
-  const updateDomainSearchPath = (domainSearchPath, valid) => {
-    dispatch({
-      type:
-        ipVersion === ADDRESS_TYPE_IPV4 ||
-        state.addressType === ADDRESS_TYPE_IPV4
-          ? ACTION_UPDATE_NETWORK_ADDRESS_IPV4_DOMAIN_SEARCH_PATH
-          : ACTION_UPDATE_NETWORK_ADDRESS_IPV6_DOMAIN_SEARCH_PATH,
-      nextDomainSearchPath: {
-        value: domainSearchPath,
-        valid,
-      },
-    });
   };
 
   const ipv4Namespace = state.ipv4;
@@ -686,11 +549,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData(
-          globalState,
-          globalDispatch,
-          downloadParamFileDispatch,
-        );
+        resetParamFileTextAreaData();
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}
@@ -719,30 +578,5 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     </Layer>
   );
 });
-
-NetworkAddress.propTypes = {
-  state: PropTypes.shape({
-    addressType: PropTypes.string.isRequired,
-    ipv4: PropTypes.shape({
-      netmask: PropTypes.object.isRequired,
-      ipv4Cidr: PropTypes.object.isRequired,
-      binary: PropTypes.string.isRequired,
-      ipv4Address: PropTypes.object.isRequired,
-      gatewayIpAddress: PropTypes.object.isRequired,
-      nameserverIpAddress: PropTypes.object.isRequired,
-      hostName: PropTypes.object.isRequired,
-      domainSearchPath: PropTypes.object.isRequired,
-    }),
-    ipv6: PropTypes.shape({
-      ipv6Cidr: PropTypes.object.isRequired,
-      ipv6Address: PropTypes.object.isRequired,
-      gatewayIpAddress: PropTypes.object.isRequired,
-      nameserverIpAddress: PropTypes.object.isRequired,
-      hostName: PropTypes.object.isRequired,
-      domainSearchPath: PropTypes.object.isRequired,
-    }),
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
 
 export default NetworkAddress;

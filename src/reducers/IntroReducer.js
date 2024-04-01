@@ -8,7 +8,7 @@ import {
   ACTION_UPDATE_NOP,
   ACTION_RESET_TO_INITIAL_STATE,
   ACTION_UPDATE_INTRO_PURGE_PARMFILE_SETTINGS,
-} from "../util/constants";
+} from "../util/reducer-action-constants";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -19,7 +19,8 @@ const reducer = (state, action) => {
         origin: action.nextOrigin,
       };
     case ACTION_RESET_TO_INITIAL_STATE:
-      return action.nextInitialState;
+      // for combined states the state is prefixed by the reducer name
+      return action.nextInitialState.introReducer || action.nextInitialState;
     case ACTION_UPDATE_NOP:
       return {};
   }

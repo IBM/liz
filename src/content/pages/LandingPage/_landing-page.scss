@@ -1,0 +1,92 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2024
+ */
+
+@use "@carbon/react" with (
+  $font-path: "@ibm/plex"
+);
+
+.liz__landing-page__legal-banner {
+  &.cds--inline-notification {
+    max-width: 100%;
+  }
+}
+
+.liz__landing-page__root-layer__with-legal-banner {
+  // the height of the legal banner equals $spacing-09
+  height: calc(
+    100% - react.$spacing-09 - react.$spacing-12 - react.$spacing-03 -
+      react.$spacing-04
+  );
+  width: 100%;
+  background: react.$layer-02;
+
+  .liz__landing-page__page-header {
+    .cds--grid {
+      margin-inline: inherit;
+    }
+  }
+}
+
+.liz__landing-page__root-layer__wo-legal-banner {
+  // the height of the page header equals the sum of all spacing values
+  height: calc(
+    100% - react.$spacing-12 - react.$spacing-03 - react.$spacing-04
+  );
+  width: 100%;
+  background: react.$layer-02;
+
+  .liz__landing-page__page-header {
+    .cds--grid {
+      margin-inline: inherit;
+    }
+  }
+}
+
+.liz__landing-page__grid-layer {
+  height: 100%;
+  width: 100%;
+  background: react.$layer-01;
+
+  .liz__landing-page__grid {
+    height: 100%;
+    padding: react.$spacing-06 react.$spacing-06 0 react.$spacing-06;
+    margin-left: 0;
+    max-width: 100% !important;
+    width: 100%;
+
+    .liz__landing-page__expressive-card {
+      margin: 0 react.$spacing-13 react.$spacing-06 react.$spacing-13;
+      background: react.$layer-02;
+
+      .liz__landing-page__page-header__productive-card-title__complete-icon {
+        vertical-align: middle;
+        margin-left: react.$spacing-02;
+
+        svg {
+          fill: react.$interactive !important;
+        }
+      }
+
+      .liz__landing-page__page-header__productive-card-title__incomplete-icon {
+        vertical-align: middle;
+        margin-left: react.$spacing-02;
+
+        svg {
+          fill: react.$interactive !important;
+        }
+      }
+
+      .liz__landing-page__page-header__productive-card-title__incomplete-error-icon {
+        vertical-align: middle;
+        margin-left: react.$spacing-02;
+
+        svg {
+          fill: react.$support-error !important;
+        }
+      }
+    }
+  }
+}

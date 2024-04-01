@@ -15,37 +15,29 @@ import {
   InlineNotification,
   ActionableNotification,
 } from "@carbon/react";
-import PropTypes from "prop-types";
 import {
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
-  ACTION_UPDATE_INTRO_PURGE_PARMFILE_SETTINGS,
   LOCAL_STORAGE_KEY_APP_INTRO,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
-} from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
-import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
-import { pruneSettings } from "../../../util/local-storage-util";
+} from "../../../util/local-storage-constants";
+import { ApplicationContext, IntroContext } from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import "./_intro.scss";
 
 const Intro = forwardRef(function Intro(props, ref) {
   const {
     state: globalState,
-    dispatch: globalDispatch,
-    componentDispatchers,
+    updateNextStep,
+    updateIsDirty,
+    updateIsDisabled,
+    resetToInitialState,
   } = React.useContext(ApplicationContext);
-  const downloadParamFileDispatch =
-    componentDispatchers.downloadParamFileDispatch;
+  const { state, updatePurgeParmfileSettings } = React.useContext(IntroContext);
   const { t } = useTranslation();
-
-  const { state, dispatch, resetToInitialState, localStorageKeys } = props;
   const publicRef = {
     pruneSettings: () => {
       if (purgeParmfileSettings) {
-        pruneSettings(localStorageKeys);
         resetToInitialState();
       }
     },
@@ -65,18 +57,9 @@ const Intro = forwardRef(function Intro(props, ref) {
         },
       };
 
-      globalDispatch({
-        type: ACTION_UPDATE_APP_STEPS,
-        nextSteps: mergedSteps.steps,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DIRTY,
-        nextIsDirty: true,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DISABLED,
-        nextSteps: updateIsDisabled(mergedSteps.steps),
-      });
+      updateNextStep(mergedSteps.steps);
+      updateIsDirty(true);
+      updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
 
       localStorage.setItem(
         LOCAL_STORAGE_KEY_APP_INTRO,
@@ -94,14 +77,6 @@ const Intro = forwardRef(function Intro(props, ref) {
   const paramFileHasBeenModifiedFromState =
     globalState?.steps.downloadParamFile?.modified ?? false;
   const purgeParmfileSettings = state.purgeParmfileSettings;
-
-  const updatePurgeParmfileSettings = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_INTRO_PURGE_PARMFILE_SETTINGS,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextPurgeParmfileSettings: flag,
-    });
-  };
 
   const parmfilePurgeNotificationMarkup = (
     <InlineNotification
@@ -126,11 +101,7 @@ const Intro = forwardRef(function Intro(props, ref) {
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData(
-          globalState,
-          globalDispatch,
-          downloadParamFileDispatch,
-        );
+        resetParamFileTextAreaData();
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}
@@ -179,12 +150,5 @@ const Intro = forwardRef(function Intro(props, ref) {
 
   return markup;
 });
-
-Intro.propTypes = {
-  state: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  resetToInitialState: PropTypes.func.isRequired,
-  localStorageKeys: PropTypes.array.isRequired,
-};
 
 export default Intro;

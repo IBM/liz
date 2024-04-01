@@ -18,30 +18,39 @@ import {
 } from "@carbon/react";
 import { ParamFileTextArea } from "../../ParamFileTextArea";
 import {
-  ACTION_UPDATE_PARAM_FILE_COPIED,
-  ACTION_UPDATE_PARAM_FILE_MODIFIED,
-  ACTION_UPDATE_PARAM_FILE_CONTENT,
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
   LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
+} from "../../../util/local-storage-constants";
+import {
   DEFAULT_PARAM_FILE_NAME,
   RHEL_DISTRIBUTION_ID,
   PRESETS,
 } from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
+import {
+  ApplicationContext,
+  DownloadParamFileContext,
+} from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { saveParamFileContent } from "../../../util/param-file-util";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
-  const { state: globalState, dispatch: globalDispatch } =
-    React.useContext(ApplicationContext);
+  const { stateToParamFile } = props;
+  const {
+    state: globalState,
+    updateNextStep,
+    updateIsDirty,
+    updateIsDisabled,
+  } = React.useContext(ApplicationContext);
   const { t } = useTranslation();
 
-  const { state, dispatch, stateToParamFile } = props;
+  const {
+    state,
+    updatParamFileCopied,
+    updateModified,
+    updateParamFileContent,
+  } = React.useContext(DownloadParamFileContext);
   const distributionName =
     globalState.steps.inputFileSelection.distributionName ??
     RHEL_DISTRIBUTION_ID;
@@ -106,18 +115,9 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
           };
         }
 
-        globalDispatch({
-          type: ACTION_UPDATE_APP_STEPS,
-          nextSteps: mergedSteps.steps,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DIRTY,
-          nextIsDirty: true,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DISABLED,
-          nextSteps: updateIsDisabled(mergedSteps.steps),
-        });
+        updateNextStep(mergedSteps.steps);
+        updateIsDirty(true);
+        updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
       });
 
       localStorage.setItem(
@@ -137,32 +137,12 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
   const paramFileContent = stateToParamFile(globalState);
 
   const updateCopied = () => {
-    dispatch({
-      type: ACTION_UPDATE_PARAM_FILE_COPIED,
-      nextParamFileContentCopied: true,
-    });
+    updatParamFileCopied(true);
 
     const timer = setTimeout(() => {
-      dispatch({
-        type: ACTION_UPDATE_PARAM_FILE_COPIED,
-        nextParamFileContentCopied: false,
-      });
+      updatParamFileCopied(false);
     }, 2000);
     return () => clearTimeout(timer);
-  };
-
-  const updateModified = (paramFileContentModified) => {
-    dispatch({
-      type: ACTION_UPDATE_PARAM_FILE_MODIFIED,
-      nextParamFileContentModified: paramFileContentModified,
-    });
-  };
-
-  const updateParamFileContent = (paramFileContent) => {
-    dispatch({
-      type: ACTION_UPDATE_PARAM_FILE_CONTENT,
-      nextParamFileContent: paramFileContent,
-    });
   };
 
   const saveParamFileContentProxy = () => {
@@ -347,9 +327,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
 });
 
 DownloadParamFile.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   stateToParamFile: PropTypes.func.isRequired,
-  state: PropTypes.object.isRequired,
 };
 
 export default DownloadParamFile;

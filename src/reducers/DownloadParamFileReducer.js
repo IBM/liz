@@ -9,12 +9,16 @@ import {
   ACTION_UPDATE_PARAM_FILE_MODIFIED,
   ACTION_UPDATE_PARAM_FILE_CONTENT,
   ACTION_RESET_TO_INITIAL_STATE,
-} from "../util/constants";
+} from "../util/reducer-action-constants";
 
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION_RESET_TO_INITIAL_STATE:
-      return action.nextInitialState;
+      // for combined states the state is prefixed by the reducer name
+      return (
+        action.nextInitialState.downloadParamFileReducer ||
+        action.nextInitialState
+      );
     case ACTION_UPDATE_PARAM_FILE_COPIED:
       return {
         ...state,

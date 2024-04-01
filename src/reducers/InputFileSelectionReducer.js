@@ -8,12 +8,16 @@ import {
   ACTION_UPDATE_DISTRIBUTION_NAME,
   ACTION_UPDATE_DISTRIBUTION_VERSION,
   ACTION_RESET_TO_INITIAL_STATE,
-} from "../util/constants";
+} from "../util/reducer-action-constants";
 
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION_RESET_TO_INITIAL_STATE:
-      return action.nextInitialState;
+      // for combined states the state is prefixed by the reducer name
+      return (
+        action.nextInitialState.inputFileSelectionReducer ||
+        action.nextInitialState
+      );
     case ACTION_UPDATE_DISTRIBUTION_NAME:
       return {
         ...state,

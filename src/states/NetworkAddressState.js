@@ -6,10 +6,9 @@
 
 import {
   LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
-  ADDRESS_TYPE_IPV4,
   STATE_ORIGIN_DEFAULT,
-  DEFAULT_STRING_OBJECT,
-} from "../util/constants";
+} from "../util/local-storage-constants";
+import { DEFAULT_STRING_OBJECT, ADDRESS_TYPE_IPV4 } from "../util/constants";
 
 const createInitialState = () => {
   const initialState = JSON.parse(

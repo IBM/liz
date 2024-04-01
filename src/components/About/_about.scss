@@ -153,7 +153,7 @@
   .about-dialog__about-kissues-button {
     @include react.type-style("body-compact-01");
 
-    width: 100%;
+    min-width: 100%;
     padding: react.$spacing-05;
     line-height: initial;
     transition: background-color 250ms;

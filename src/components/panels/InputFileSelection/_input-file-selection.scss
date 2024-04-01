@@ -51,11 +51,6 @@
 .input-file-selection__layer {
   padding: 0 react.$spacing-08 0 react.$spacing-08;
 
-  .intro_parmfile-purge-banner {
-    margin: react.$spacing-07 0 0 0;
-    max-width: 100% !important;
-  }
-
   .input-file-selection__grid {
     &.cds--grid {
       padding: 0;
@@ -66,4 +61,9 @@
       padding: 0 0 react.$spacing-07 0;
     }
   }
+}
+
+.input-file-selection_parmfile-purge-banner {
+  margin: 0 0 react.$spacing-07 0;
+  max-width: 100% !important;
 }

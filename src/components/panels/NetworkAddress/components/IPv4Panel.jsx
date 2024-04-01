@@ -51,7 +51,6 @@ const IPv4Panel = ({
   const gridContentsMarkupRowTwoColumnOneIPv4 = (
     <div className="network-address_column-left">
       <TextInput
-        light
         readOnly={readOnly}
         id="network-address_ipv4-input"
         invalidText={t("invalidTextLabel", { ns: "common" })}
@@ -106,7 +105,6 @@ const IPv4Panel = ({
         }}
       />
       <NumberInput
-        light
         allowEmpty
         min={1}
         max={32}
@@ -205,7 +203,6 @@ const IPv4Panel = ({
         }}
       />
       <TextInput
-        light
         readOnly={readOnly}
         id="network-address_ipv4-netmask"
         invalid={
@@ -280,7 +277,6 @@ const IPv4Panel = ({
         }}
       />
       <TextInput
-        light
         readOnly
         id="network-address_ipv4-binary"
         invalidText={t("invalidTextLabel", { ns: "common" })}
@@ -299,7 +295,6 @@ const IPv4Panel = ({
   const gridContentsMarkupRowTwoColumnTwo = (
     <div className="network-address_column-right">
       <TextInput
-        light
         readOnly={readOnly}
         id="network-address_gateway-input"
         invalid={
@@ -357,7 +352,6 @@ const IPv4Panel = ({
         }}
       />
       <TextInput
-        light
         readOnly={readOnly}
         id="network-address_nameserver-input"
         invalid={
@@ -414,7 +408,6 @@ const IPv4Panel = ({
         }}
       />
       <TextInput
-        light
         readOnly={readOnly}
         id="network-address_hostname-input"
         invalid={
@@ -466,7 +459,6 @@ const IPv4Panel = ({
       />
       {requiresDomainSearchName && (
         <TextInput
-          light
           readOnly={readOnly}
           id="network-address_domain-search-path-input"
           invalid={

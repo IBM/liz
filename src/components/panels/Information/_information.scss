@@ -11,6 +11,17 @@
 
 .information__layer {
   padding: 0 react.$spacing-08 0 react.$spacing-08;
+
+  .information__grid {
+    &.cds--grid {
+      padding: 0;
+    }
+  }
+
+  .information_parmfile-purge-banner {
+    margin: 0 0 react.$spacing-07 0;
+    max-width: 100% !important;
+  }
 }
 
 .table-container {

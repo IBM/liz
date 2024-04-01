@@ -1,0 +1,84 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2024
+ */
+
+@use "@carbon/react" with (
+  $font-path: "@ibm/plex"
+);
+
+.liz__edit-page__legal-banner {
+  &.cds--inline-notification {
+    max-width: 100%;
+  }
+}
+
+.liz__edit-page__root-layer__with-legal-banner {
+  // the height of the legal banner equals $spacing-09
+  height: calc(
+    100% - react.$spacing-09 - react.$spacing-12 - react.$spacing-03 -
+      react.$spacing-04
+  );
+  width: 100%;
+  background: react.$layer-02;
+
+  .liz__edit-page__page-header {
+    .cds--grid {
+      margin-inline: inherit;
+    }
+  }
+
+  /*
+    * hack to move the button bar into the visible area
+    * of the viewport so that the user does not need to
+    * scroll to the end of the page to reache these buttons.
+    */
+  .c4p--create-full-page__influencer-and-body-container {
+    height: calc(
+      100vh - react.$spacing-12 - react.$spacing-12 - react.$spacing-05 -
+        react.$spacing-02
+    ) !important;
+  }
+}
+
+.liz__edit-page__root-layer__wo-legal-banner {
+  // the height of the page header equals the sum of all spacing values
+  height: calc(
+    100% - react.$spacing-12 - react.$spacing-03 - react.$spacing-04
+  );
+  width: 100%;
+  background: react.$layer-02;
+
+  .liz__edit-page__page-header {
+    .cds--grid {
+      margin-inline: inherit;
+    }
+  }
+
+  /*
+    * hack to move the button bar into the visible area
+    * of the viewport so that the user does not need to
+    * scroll to the end of the page to reache these buttons.
+    */
+  .c4p--create-full-page__influencer-and-body-container {
+    height: calc(
+      100vh - react.$spacing-12 - react.$spacing-12 - react.$spacing-05 -
+        react.$spacing-02
+    ) !important;
+  }
+}
+
+.liz__edit-page__grid-layer {
+  // height: 100%;
+  width: 100%;
+  background: react.$layer-01;
+
+  .liz__edit-page__grid {
+    // height: 100%;
+    padding: 0;
+    margin-left: 0;
+    max-width: 100% !important;
+    width: 100%;
+  }
+}

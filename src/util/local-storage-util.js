@@ -7,18 +7,19 @@
 import {
   LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
   LOCAL_STORAGE_KEY_APP_SUMMARY,
-  LOCAL_STORAGE_KEY_APP_HINT,
   LOCAL_STORAGE_KEY_APP_INFORMATION,
   LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
   LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   LOCAL_STORAGE_KEY_APP_INTRO,
   LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
   LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
-  LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
   LOCAL_STORAGE_KEY_APP,
   LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
+  LOCAL_STORAGE_KEY_APP_EDIT_PAGE,
+  LOCAL_STORAGE_KEY_APP_HEADER,
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
-} from "./constants";
+  STATE_ORIGIN_STORAGE,
+} from "./local-storage-constants";
 
 const getLocalStorageContentsForDownloadParamFileStep = () => {
   const downloadParamFileString = localStorage.getItem(
@@ -30,13 +31,6 @@ const getLocalStorageContentsForDownloadParamFileStep = () => {
       : {};
 
   return downloadParamFile;
-};
-
-const getLocalStorageContentsForHintStep = () => {
-  const hintString = localStorage.getItem(LOCAL_STORAGE_KEY_APP_HINT);
-  const hint = typeof hintString === "string" ? JSON.parse(hintString) : {};
-
-  return hint;
 };
 
 const getLocalStorageContentsForInformationStep = () => {
@@ -102,16 +96,6 @@ const getLocalStorageContentsForNetworkDeviceStep = () => {
       : {};
 
   return networkDevice;
-};
-
-const getLocalStorageContentsForNextStepStep = () => {
-  const nextStepsString = localStorage.getItem(
-    LOCAL_STORAGE_KEY_APP_NEXT_STEPS,
-  );
-  const nextSteps =
-    typeof nextStepsString === "string" ? JSON.parse(nextStepsString) : {};
-
-  return nextSteps;
 };
 
 const getLocalStorageContentsForSummaryStep = () => {
@@ -197,6 +181,8 @@ const pruneSettings = (localStorageKeys) => {
     }
     localStorage.removeItem(LOCAL_STORAGE_KEY_APP);
     localStorage.removeItem(LOCAL_STORAGE_KEY_APP_LANDING_PAGE);
+    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_EDIT_PAGE);
+    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_HEADER);
     localStorage.removeItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION);
   }
 };
@@ -214,24 +200,33 @@ const getLocalStorageKeys = (state) => {
   return localStorageKeys;
 };
 
+const persistToLocalStorage = (key, state) => {
+  localStorage.setItem(
+    key,
+    JSON.stringify({
+      ...state,
+      origin: STATE_ORIGIN_STORAGE,
+    }),
+  );
+};
+
 export {
   pruneSettings,
   hasLocalStorageState,
   getLocalStorageKeys,
   getLocalStorageContentsForDownloadParamFileStep,
   getLocalStorageContentsForSummaryStep,
-  getLocalStorageContentsForHintStep,
   getLocalStorageContentsForInformationStep,
   getLocalStorageContentsForInputFileSelectionStep,
   getLocalStorageContentsForInstallationParameterStep,
   getLocalStorageContentsForIntroStep,
   getLocalStorageContentsForNetworkAddressStep,
   getLocalStorageContentsForNetworkDeviceStep,
-  getLocalStorageContentsForNextStepStep,
   getLocalStorageContentsForLandingPage,
   nextStepsCardHasBeenReviewed,
   nextStepsCardIsExpanded,
   parmfileCardIsExpanded,
   requirementsCardHasBeenReviewed,
   requirementsCardIsExpanded,
+  persistToLocalStorage,
 };

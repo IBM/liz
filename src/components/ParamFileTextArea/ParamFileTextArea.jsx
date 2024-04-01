@@ -83,7 +83,6 @@ const ParamFileTextArea = ({
   const textAreaClasses = `param-file-text-area_textarea ${textAreaModifiedClass}`;
   const textAreaMarkup = (
     <TextArea
-      light
       enableCounter
       maxCount={860}
       labelText={label.text}

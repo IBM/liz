@@ -21,13 +21,16 @@ import {
   ACTION_UPDATE_NETWORK_ADDRESS_IPV4_BINARY,
   ACTION_UPDATE_NETWORK_ADDRESS_TYPE,
   ACTION_RESET_TO_INITIAL_STATE,
-  ADDRESS_TYPE_IPV4,
-} from "../util/constants";
+} from "../util/reducer-action-constants";
+import { ADDRESS_TYPE_IPV4 } from "../util/constants";
 
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTION_RESET_TO_INITIAL_STATE:
-      return action.nextInitialState;
+      // for combined states the state is prefixed by the reducer name
+      return (
+        action.nextInitialState.networkAddressReducer || action.nextInitialState
+      );
     case ACTION_UPDATE_NETWORK_ADDRESS_NETMASK:
       return {
         ipv4: {

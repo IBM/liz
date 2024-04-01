@@ -12,7 +12,7 @@ import {
   ACTION_UPDATE_REQUIREMENTS_CARD_HAS_BEEN_REVIEWED,
   ACTION_UPDATE_NEXT_STEPS_CARD_IS_EXPANDED,
   ACTION_UPDATE_NEXT_STEPS_CARD_HAS_BEEN_REVIEWED,
-} from "../util/constants";
+} from "../util/reducer-action-constants";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -48,7 +48,10 @@ const reducer = (state, action) => {
         origin: action.nextOrigin,
       };
     case ACTION_RESET_TO_INITIAL_STATE:
-      return action.nextInitialState;
+      // for combined states the state is prefixed by the reducer name
+      return (
+        action.nextInitialState.landingPageReducer || action.nextInitialState
+      );
     case ACTION_UPDATE_NOP:
       return {};
   }

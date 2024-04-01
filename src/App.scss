@@ -6,23 +6,3 @@
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
-
-.app__layer {
-  height: 100%;
-}
-
-.app__full-height {
-  height: 100%;
-
-  &.cds--content {
-    padding: 0 calc(3 * react.$spacing-13) 0 0;
-  }
-}
-
-.app__full-height__collapsed {
-  height: 100%;
-
-  &.cds--content {
-    padding: 0;
-  }
-}

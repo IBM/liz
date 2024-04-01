@@ -30,6 +30,7 @@
   "decrement.number": "Decrement number",
   "copied.short": "Copied",
   "copied.long": "Copied to clipboard",
+  "message.loading": "Loading",
   "pageHeader.actionBarOverflowAriaLabel": "Show further action bar items",
   "pageHeader.allTagsModalSearchLabel": "Search all tags",
   "pageHeader.allTagsModalSearchPlaceholderText": "Enter search string",

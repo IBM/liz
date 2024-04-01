@@ -16,7 +16,9 @@ pkg.component.Decorator = true;
 i18Init();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Router basename="/">
-    <App />
-  </Router>,
+  <React.StrictMode>
+    <Router basename="/">
+      <App />
+    </Router>
+  </React.StrictMode>,
 );

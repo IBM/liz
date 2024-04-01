@@ -21,25 +21,20 @@ import {
 import isUrl from "is-url-superb";
 import { toUrl, isHostnameValid } from "../../../util/network-address-util";
 import {
-  ACTION_UPDATE_INSTALLATION_PARAM_USE_SSH,
-  ACTION_UPDATE_INSTALLATION_PARAM_USE_VNC,
-  ACTION_UPDATE_INSTALLATION_PARAM_ADDRESS,
-  ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
-  ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
-  ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
-  ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD,
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
   LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
+} from "../../../util/local-storage-constants";
+import {
   SLES_DISTRIBUTION_ID,
   DEFAULT_DISTRIBUTION_ID,
 } from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
-import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
+import {
+  ApplicationContext,
+  InstallationParameterContext,
+} from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
@@ -48,14 +43,22 @@ const InstallationParameters = forwardRef(
   function InstallationParameters(props, ref) {
     const {
       state: globalState,
-      dispatch: globalDispatch,
-      componentDispatchers,
+      updateNextStep,
+      updateIsDirty,
+      updateIsDisabled,
     } = React.useContext(ApplicationContext);
-    const downloadParamFileDispatch =
-      componentDispatchers.downloadParamFileDispatch;
     const { t } = useTranslation();
-
-    const { state, dispatch, ipAddressVersion } = props;
+    const {
+      state,
+      updateUseSsh,
+      updateUseVnc,
+      updateInstallationAddress,
+      updateUserName,
+      updatePassword,
+      updateVncPassword,
+      updateSshPassword,
+    } = React.useContext(InstallationParameterContext);
+    const { ipAddressVersion } = props;
     const publicRef = {
       persistState: () => {
         let mergedSteps = {};
@@ -131,18 +134,9 @@ const InstallationParameters = forwardRef(
             };
           }
 
-          globalDispatch({
-            type: ACTION_UPDATE_APP_STEPS,
-            nextSteps: mergedSteps.steps,
-          });
-          globalDispatch({
-            type: ACTION_UPDATE_APP_IS_DIRTY,
-            nextIsDirty: true,
-          });
-          globalDispatch({
-            type: ACTION_UPDATE_APP_IS_DISABLED,
-            nextSteps: updateIsDisabled(mergedSteps.steps),
-          });
+          updateNextStep(mergedSteps.steps);
+          updateIsDirty(true);
+          updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
         });
 
         localStorage.setItem(
@@ -157,77 +151,6 @@ const InstallationParameters = forwardRef(
 
     useEffect(publicRef.persistState, [state]);
     useImperativeHandle(ref, () => publicRef);
-
-    const updateUseSsh = (flag) => {
-      dispatch({
-        type: ACTION_UPDATE_INSTALLATION_PARAM_USE_SSH,
-        nextUseSsh: flag,
-      });
-    };
-
-    const updateUseVnc = (flag) => {
-      dispatch({
-        type: ACTION_UPDATE_INSTALLATION_PARAM_USE_VNC,
-        nextUseVnc: flag,
-      });
-    };
-
-    const updateInstallationAddress = (address, computedAddress, valid) => {
-      dispatch({
-        type: ACTION_UPDATE_INSTALLATION_PARAM_ADDRESS,
-        nextInstallationAddress: {
-          value: address,
-          computed: computedAddress,
-          valid,
-        },
-        nextUserAndPwdAreDisabled:
-          !address ||
-          address.length === 0 ||
-          installationAddressContainsUidOrPwd(address),
-        nextUserName: {
-          value: "",
-          valid: true,
-        },
-        nextPassword: {
-          value: "",
-          valid: true,
-        },
-      });
-    };
-
-    const updateUserName = (userName, valid) => {
-      dispatch({
-        type: ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
-        nextUserName: {
-          value: userName,
-          valid,
-        },
-      });
-    };
-
-    const updatePassword = (password, valid) => {
-      dispatch({
-        type: ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
-        nextPassword: {
-          value: password,
-          valid,
-        },
-      });
-    };
-
-    const updateVncPassword = (password) => {
-      dispatch({
-        type: ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
-        nextVncPassword: password,
-      });
-    };
-
-    const updateSshPassword = (password) => {
-      dispatch({
-        type: ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD,
-        nextSshPassword: password,
-      });
-    };
 
     const isUserNameInputValid = (userName) => {
       // The username is optional, if it is a zero length string
@@ -288,21 +211,6 @@ const InstallationParameters = forwardRef(
         );
       }
       return "";
-    };
-
-    const installationAddressContainsUidOrPwd = (address) => {
-      if (address && address.length > 0) {
-        const installationAddressUrl = toUrl(address);
-        const username = installationAddressUrl?.username ?? "";
-        const password = installationAddressUrl?.password ?? "";
-        if (
-          (username && username.length > 0) ||
-          (password && password.length > 0)
-        ) {
-          return true;
-        }
-      }
-      return false;
     };
 
     const computeInstallationAddress = (url = "", uid = "", pwd = "") => {
@@ -411,7 +319,6 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupRowOne = (
       <>
         <TextInput
-          light
           readOnly={paramFileHasBeenModifiedFromState}
           type="url"
           id="installation-address-input"
@@ -465,7 +372,6 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupComputedRow = (
       <>
         <TextInput
-          light
           readOnly
           helperText={t(
             "panel.installationParameter.computedInstallationAddressHelp",
@@ -493,7 +399,6 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupRowTwoColumnOne = (
       <div className="installation-parameters_column-left">
         <TextInput
-          light
           readOnly={paramFileHasBeenModifiedFromState}
           disabled={state?.userAndPwdAreDisabled ?? true}
           helperText={t("panel.installationParameter.usernameHelp", {
@@ -556,7 +461,6 @@ const InstallationParameters = forwardRef(
     const gridContentsMarkupRowTwoColumnTwo = (
       <div className="installation-parameters_column-right">
         <PasswordInput
-          light
           readOnly={paramFileHasBeenModifiedFromState}
           disabled={state?.userAndPwdAreDisabled ?? true}
           autoComplete="true"
@@ -642,7 +546,6 @@ const InstallationParameters = forwardRef(
         />
         {useVncToggled && (
           <PasswordInput
-            light
             readOnly={paramFileHasBeenModifiedFromState}
             autoComplete="true"
             helperText={t("panel.installationParameter.vncPasswordHelp", {
@@ -702,7 +605,6 @@ const InstallationParameters = forwardRef(
         />
         {useSshToggled && requiresSshPassword && (
           <PasswordInput
-            light
             readOnly={paramFileHasBeenModifiedFromState}
             autoComplete="true"
             helperText={t("panel.installationParameter.sshPasswordHelp", {
@@ -749,11 +651,7 @@ const InstallationParameters = forwardRef(
         aria-label="closes notification"
         kind="info"
         onActionButtonClick={() => {
-          resetParamFileTextAreaData(
-            globalState,
-            globalDispatch,
-            downloadParamFileDispatch,
-          );
+          resetParamFileTextAreaData();
         }}
         onClose={function noRefCheck() {}}
         onCloseButtonClick={function noRefCheck() {}}
@@ -795,27 +693,6 @@ const InstallationParameters = forwardRef(
 );
 
 InstallationParameters.propTypes = {
-  state: PropTypes.shape({
-    useSsh: PropTypes.bool.isRequired,
-    useVnc: PropTypes.bool.isRequired,
-    userName: PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      valid: PropTypes.bool.isRequired,
-    }),
-    password: PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      valid: PropTypes.bool.isRequired,
-    }),
-    userAndPwdAreDisabled: PropTypes.bool.isRequired,
-    vncPassword: PropTypes.string.isRequired,
-    sshPassword: PropTypes.string.isRequired,
-    installationAddress: PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      computed: PropTypes.string.isRequired,
-      valid: PropTypes.bool.isRequired,
-    }),
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
   ipAddressVersion: PropTypes.string.isRequired,
 };
 

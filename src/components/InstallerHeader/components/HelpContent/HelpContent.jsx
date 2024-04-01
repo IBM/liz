@@ -7,7 +7,7 @@
 import React from "react";
 import { FlexGrid, Row, Column, Layer } from "@carbon/react";
 import PropTypes from "prop-types";
-import { getHelpPanel as getPanel } from "../../../../uiUtil/panel-utils";
+import { getHelpPanel as getPanel } from "../../../../uiUtil/panel-util";
 import "./_help-content.scss";
 
 const HelpContent = ({ helpPanelConfig }) => {

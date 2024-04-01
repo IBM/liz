@@ -6,28 +6,26 @@
 
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
 import { Layer, Toggle, FlexGrid, Row, Column, TextInput } from "@carbon/react";
 import {
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
   LOCAL_STORAGE_KEY_APP_SUMMARY,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
-  ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE,
-  ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE_NAME,
-} from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
+} from "../../../util/local-storage-constants";
+import { ApplicationContext, SummaryContext } from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import "./_summary.scss";
 
 const Summary = forwardRef(function Summary(props, ref) {
-  const { state: globalState, dispatch: globalDispatch } =
-    React.useContext(ApplicationContext);
+  const {
+    state: globalState,
+    updateNextStep,
+    updateIsDirty,
+    updateIsDisabled,
+  } = React.useContext(ApplicationContext);
+  const { state, updateDownloadParmfile, updateDownloadParmfileName } =
+    React.useContext(SummaryContext);
   const { t } = useTranslation();
-
-  const { dispatch, state } = props;
   const publicRef = {
     persistState: () => {
       const mergedSteps = {
@@ -46,18 +44,9 @@ const Summary = forwardRef(function Summary(props, ref) {
         },
       };
 
-      globalDispatch({
-        type: ACTION_UPDATE_APP_STEPS,
-        nextSteps: mergedSteps.steps,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DIRTY,
-        nextIsDirty: true,
-      });
-      globalDispatch({
-        type: ACTION_UPDATE_APP_IS_DISABLED,
-        nextSteps: updateIsDisabled(mergedSteps.steps),
-      });
+      updateNextStep(mergedSteps.steps);
+      updateIsDirty(true);
+      updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
 
       localStorage.setItem(
         LOCAL_STORAGE_KEY_APP_SUMMARY,
@@ -74,22 +63,6 @@ const Summary = forwardRef(function Summary(props, ref) {
 
   const downloadParmfile = state.downloadParmfile;
   const downloadParmfileName = state.downloadParmfileName;
-
-  const updateDownloadParmfile = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextDownloadParmfile: flag,
-    });
-  };
-
-  const updateDownloadParmfileName = (name) => {
-    dispatch({
-      type: ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE_NAME,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextDownloadParmfileName: name,
-    });
-  };
 
   const gridContentsMarkup = (
     <>
@@ -156,10 +129,5 @@ const Summary = forwardRef(function Summary(props, ref) {
 
   return markup;
 });
-
-Summary.propTypes = {
-  state: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
 
 export default Summary;

@@ -6,7 +6,6 @@
 
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
 import {
   Layer,
   NumberInput,
@@ -36,41 +35,40 @@ import {
   UPDATE_FUNCTION__PORT_NO,
   UPDATE_FUNCTION__PCI_FUNCTION_ID,
   UPDATE_FUNCTION__USER_IDENTIFIER,
-  ACTION_UPDATE_NETWORK_DEVICE_TYPE,
-  ACTION_UPDATE_NETWORK_DEVICE_USE_VLAN,
-  ACTION_UPDATE_NETWORK_DEVICE_READ_CHANNEL_ID,
-  ACTION_UPDATE_NETWORK_DEVICE_WRITE_CHANNEL_ID,
-  ACTION_UPDATE_NETWORK_DEVICE_DATA_CHANNEL_ID,
-  ACTION_UPDATE_NETWORK_DEVICE_LAYER,
-  ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT,
-  ACTION_UPDATE_NETWORK_DEVICE_PORT_NO,
-  ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID,
-  ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER,
-  ACTION_UPDATE_NETWORK_DEVICE_VLAN_ID,
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
+} from "../../../util/constants";
+import {
   LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
-} from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
-import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
+} from "../../../util/local-storage-constants";
+import { ApplicationContext, NetworkDeviceContext } from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import DeviceSettings from "./components/DeviceSettings";
 import "./_network-device.scss";
 
 const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
   const {
     state: globalState,
-    dispatch: globalDispatch,
-    componentDispatchers,
+    updateNextStep,
+    updateIsDirty,
+    updateIsDisabled,
   } = React.useContext(ApplicationContext);
-  const downloadParamFileDispatch =
-    componentDispatchers.downloadParamFileDispatch;
+  const {
+    state,
+    updateSelectedDeviceType,
+    updateUseVlan,
+    updateReadChannelId,
+    updateWriteChannelId,
+    updateDataChannelId,
+    updateLayer,
+    updateUseMultiPort,
+    updatePortNo,
+    updatePciFunctionId,
+    updateUserIdentifier,
+    updateVlanId,
+  } = React.useContext(NetworkDeviceContext);
   const { t } = useTranslation();
-
-  const { state, dispatch } = props;
   const publicRef = {
     persistState: () => {
       let mergedSteps = {};
@@ -203,18 +201,9 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
           };
         }
 
-        globalDispatch({
-          type: ACTION_UPDATE_APP_STEPS,
-          nextSteps: mergedSteps.steps,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DIRTY,
-          nextIsDirty: true,
-        });
-        globalDispatch({
-          type: ACTION_UPDATE_APP_IS_DISABLED,
-          nextSteps: updateIsDisabled(mergedSteps.steps),
-        });
+        updateNextStep(mergedSteps.steps);
+        updateIsDirty(true);
+        updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
       });
 
       localStorage.setItem(
@@ -263,105 +252,6 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     } else if (propertyName === UPDATE_FUNCTION__USER_IDENTIFIER) {
       updateUserIdentifier(propertyValue, propertyIsValid);
     }
-  };
-
-  const updateSelectedDeviceType = (selectedDeviceType) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_TYPE,
-      nextSelectedDeviceType: selectedDeviceType,
-    });
-  };
-
-  const updateUseVlan = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_USE_VLAN,
-      nextUseVlan: flag,
-    });
-  };
-
-  const updateReadChannelId = (readChannelId, computedReadChannelId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_READ_CHANNEL_ID,
-      nextReadChannelId: {
-        value: readChannelId,
-        computed: computedReadChannelId,
-        valid,
-      },
-    });
-  };
-
-  const updateWriteChannelId = (
-    writeChannelId,
-    computedWriteChannelId,
-    valid,
-  ) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_WRITE_CHANNEL_ID,
-      nextWriteChannelId: {
-        value: writeChannelId,
-        computed: computedWriteChannelId,
-        valid,
-      },
-    });
-  };
-
-  const updateDataChannelId = (dataChannelId, computedDataChannelId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_DATA_CHANNEL_ID,
-      nextDataChannelId: {
-        value: dataChannelId,
-        computed: computedDataChannelId,
-        valid,
-      },
-    });
-  };
-
-  const updateLayer = (layer) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_LAYER,
-      nextLayer: layer,
-    });
-  };
-
-  const updateUseMultiPort = (useMultiPort) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT,
-      nextUseMultiPort: useMultiPort,
-    });
-  };
-
-  const updatePortNo = (portNo) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_PORT_NO,
-      nextPortNo: portNo,
-    });
-  };
-
-  const updatePciFunctionId = (pciFunctionId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID,
-      nextPciFunctionId: {
-        value: pciFunctionId,
-        valid,
-      },
-    });
-  };
-
-  const updateUserIdentifier = (userIdentifier, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER,
-      nextUserIdentifier: {
-        value: userIdentifier,
-        valid,
-      },
-    });
-  };
-
-  const updateVlanId = (vlanId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_VLAN_ID,
-      nextVlanId: { value: vlanId, valid },
-    });
   };
 
   const isReadChannelIdValid = (readChannelIdValue) => {
@@ -676,7 +566,6 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
       />
       {useVlanToggled && (
         <NumberInput
-          light
           allowEmpty
           min={1}
           max={4094}
@@ -718,7 +607,6 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
       state.selectedDeviceType === DEVICE_TYPE_OSA ? (
         <>
           <TextInput
-            light
             readOnly={paramFileHasBeenModifiedFromState}
             helperText={t("panel.networkDevice.readChannelHelp", {
               ns: "panels",
@@ -763,7 +651,6 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             }}
           />
           <TextInput
-            light
             readOnly={paramFileHasBeenModifiedFromState}
             helperText={t("panel.networkDevice.writeChannelHelp", {
               ns: "panels",
@@ -808,7 +695,6 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             }}
           />
           <TextInput
-            light
             readOnly={paramFileHasBeenModifiedFromState}
             helperText={t("panel.networkDevice.dataChannelHelp", {
               ns: "panels",
@@ -862,16 +748,12 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
       hideCloseButton
       inline
       lowContrast
-      className="intro_parmfile-purge-banner"
+      className="network-device_parmfile-purge-banner"
       actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData(
-          globalState,
-          globalDispatch,
-          downloadParamFileDispatch,
-        );
+        resetParamFileTextAreaData();
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}
@@ -903,22 +785,5 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     </Layer>
   );
 });
-
-NetworkDevice.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  state: PropTypes.shape({
-    selectedDeviceType: PropTypes.string.isRequired,
-    readChannelId: PropTypes.object.isRequired,
-    writeChannelId: PropTypes.object.isRequired,
-    dataChannelId: PropTypes.object.isRequired,
-    layer: PropTypes.bool.isRequired,
-    useMultiPort: PropTypes.bool.isRequired,
-    portNo: PropTypes.bool.isRequired,
-    pciFunctionId: PropTypes.object.isRequired,
-    userIdentifier: PropTypes.object.isRequired,
-    vlanId: PropTypes.object.isRequired,
-    useVlan: PropTypes.bool.isRequired,
-  }).isRequired,
-};
 
 export default NetworkDevice;

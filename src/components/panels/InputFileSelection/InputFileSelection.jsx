@@ -6,7 +6,6 @@
 
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
 import {
   Dropdown,
   /* FileUploader, */ FlexGrid,
@@ -16,33 +15,32 @@ import {
   ActionableNotification,
 } from "@carbon/react";
 import {
-  ACTION_UPDATE_DISTRIBUTION_NAME,
-  ACTION_UPDATE_DISTRIBUTION_VERSION,
-  ACTION_UPDATE_APP_STEPS,
-  ACTION_UPDATE_APP_IS_DIRTY,
-  ACTION_UPDATE_APP_IS_DISABLED,
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
-  DISTRIBUTION_LIST,
-  VERSION_LIST,
   LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
-} from "../../../util/constants";
-import { ApplicationContext } from "../../../App";
-import { updateIsDisabled } from "../../../util/panel-utils";
-import { resetParamFileTextAreaData } from "../../../uiUtil/panel-utils";
+} from "../../../util/local-storage-constants";
+import { DISTRIBUTION_LIST, VERSION_LIST } from "../../../util/constants";
+import {
+  ApplicationContext,
+  InputFileSelectionContext,
+} from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
   const {
     state: globalState,
-    dispatch: globalDispatch,
-    componentDispatchers,
+    updateNextStep,
+    updateIsDirty,
+    updateIsDisabled,
   } = React.useContext(ApplicationContext);
-  const downloadParamFileDispatch =
-    componentDispatchers.downloadParamFileDispatch;
   const { t } = useTranslation();
-
-  const { state, dispatch } = props;
+  const {
+    state,
+    updateSelectedDistributionName,
+    updateSelectedDistributionVersion,
+  } = React.useContext(InputFileSelectionContext);
   const publicRef = {
     persistState: () => {
       isComplete((error, isComplete) => {
@@ -73,18 +71,9 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
             },
           };
 
-          globalDispatch({
-            type: ACTION_UPDATE_APP_STEPS,
-            nextSteps: mergedSteps.steps,
-          });
-          globalDispatch({
-            type: ACTION_UPDATE_APP_IS_DIRTY,
-            nextIsDirty: true,
-          });
-          globalDispatch({
-            type: ACTION_UPDATE_APP_IS_DISABLED,
-            nextSteps: updateIsDisabled(mergedSteps.steps),
-          });
+          updateNextStep(mergedSteps.steps);
+          updateIsDirty(true);
+          updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
         }
       });
 
@@ -103,27 +92,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
 
   const paramFileHasBeenModifiedFromState =
     globalState?.steps.downloadParamFile?.modified ?? false;
-  const updateSelectedDistributionName = (
-    selectedDistributionName,
-    callback,
-  ) => {
-    dispatch({
-      type: ACTION_UPDATE_DISTRIBUTION_NAME,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextSelectedDistributionName: selectedDistributionName,
-    });
-  };
-
-  const updateSelectedDistributionVersion = (
-    selectedDistributionVersion,
-    callback,
-  ) => {
-    dispatch({
-      type: ACTION_UPDATE_DISTRIBUTION_VERSION,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextSelectedDistributionVersion: selectedDistributionVersion,
-    });
-  };
 
   const isComplete = (callback) => {
     if (
@@ -144,16 +112,12 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
       hideCloseButton
       inline
       lowContrast
-      className="intro_parmfile-purge-banner"
+      className="input-file-selection_parmfile-purge-banner"
       actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData(
-          globalState,
-          globalDispatch,
-          downloadParamFileDispatch,
-        );
+        resetParamFileTextAreaData();
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}
@@ -185,7 +149,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
     <div>
       <div className="input-file-selection__contentRowDropdowns">
         <Dropdown
-          light
           readOnly={paramFileHasBeenModifiedFromState}
           aria-label={t(
             "panel.inputFileSelection.chooseDistributionFromeTemplateShort",
@@ -215,7 +178,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
         />
         {Object.keys(state.selectedDistributionName).length > 0 && (
           <Dropdown
-            light
             readOnly={paramFileHasBeenModifiedFromState}
             aria-label={t(
               "panel.inputFileSelection.chooseVersionFromeTemplateShort",
@@ -276,9 +238,13 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
 
   return (
     <Layer className="input-file-selection__layer">
-      {paramFileHasBeenModifiedFromState &&
-        parmfileHasBeenModifiedNotificationMarkup}
       <FlexGrid className="input-file-selection__grid">
+        <Row>
+          <Column>
+            {paramFileHasBeenModifiedFromState &&
+              parmfileHasBeenModifiedNotificationMarkup}
+          </Column>
+        </Row>
         <Row>
           <Column>{gridContentsMarkupRowOne}</Column>
         </Row>
@@ -293,14 +259,5 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
     </Layer>
   );
 });
-
-InputFileSelection.propTypes = {
-  state: PropTypes.shape({
-    selectedDistributionName: PropTypes.object.isRequired,
-    selectedDistributionVersion: PropTypes.object.isRequired,
-    origin: PropTypes.string.isRequired,
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
 
 export default InputFileSelection;

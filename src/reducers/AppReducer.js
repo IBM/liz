@@ -12,60 +12,49 @@ import {
   ACTION_UPDATE_APP_NEXT_STEP,
   ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
   ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
-  ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
-  ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
-  ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
-  ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL,
   ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
   ACTION_UPDATE_APP_IS_DIRTY,
   ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_IS_DISABLED,
   ACTION_UPDATE_APP_CAN_RENDER_STEP,
   ACTION_RESET_TO_INITIAL_STATE,
-  LOCAL_STORAGE_KEY_APP,
-  STATE_ORIGIN_STORAGE,
-} from "../util/constants";
-
-const persistToLocalStorage = (state) => {
-  localStorage.setItem(
-    LOCAL_STORAGE_KEY_APP,
-    JSON.stringify({
-      ...state,
-      origin: STATE_ORIGIN_STORAGE,
-    }),
-  );
-};
+} from "../util/reducer-action-constants";
+import { LOCAL_STORAGE_KEY_APP } from "../util/local-storage-constants";
+import { persistToLocalStorage } from "../util/local-storage-util";
 
 const reducer = (state, action) => {
   let updatedState = {};
 
   switch (action.type) {
     case ACTION_RESET_TO_INITIAL_STATE:
-      return action.nextInitialState;
+      // for combined states the state is prefixed by the reducer name
+      updatedState = action.nextInitialState.reducer || action.nextInitialState;
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
+      return updatedState;
     case ACTION_UPDATE_APP_STATE:
-      persistToLocalStorage(action.nextState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, action.nextState);
       return action.nextState;
     case ACTION_UPDATE_APP_STEP:
       updatedState = {
         ...state,
         step: action.nextStep,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_HELP_STEP:
       updatedState = {
         ...state,
         helpStep: action.nextHelpStep,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_NEXT_STEP:
       updatedState = {
         ...state,
         nextStep: action.nextNextStep,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_PARAM_FILE_CONTENT:
       updatedState = {
@@ -78,7 +67,7 @@ const reducer = (state, action) => {
           },
         },
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_PARAM_FILE_MODIFIED:
       updatedState = {
@@ -91,71 +80,42 @@ const reducer = (state, action) => {
           },
         },
       };
-      persistToLocalStorage(updatedState);
-      return updatedState;
-    case ACTION_UPDATE_APP_SHOW_NOTIFICATION:
-      updatedState = {
-        ...state,
-        showNotification: action.nextShowNotification,
-      };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION:
       updatedState = {
         ...state,
         showLegalNotification: action.nextShowLegalNotification,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_CAN_RENDER_STEP:
       updatedState = {
         ...state,
         canRenderStep: action.nextCanRenderStep,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE:
       updatedState = {
         ...state,
         useStateFromLocalStorage: action.nextUseStateFromLocalStorage,
       };
-      persistToLocalStorage(updatedState);
-      return updatedState;
-    case ACTION_UPDATE_APP_HELP_PANEL_EXPANDED:
-      updatedState = {
-        ...state,
-        isHelpPanelExpanded: action.nextIsHelpPanelExpanded,
-      };
-      persistToLocalStorage(updatedState);
-      return updatedState;
-    case ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL:
-      updatedState = {
-        ...state,
-        showConfirmationModal: action.nextShowConfirmationModal,
-      };
-      persistToLocalStorage(updatedState);
-      return updatedState;
-    case ACTION_UPDATE_APP_SHOW_DISCARD_MODIFIED_PARAM_FILE_CONTENTS_MODAL:
-      updatedState = {
-        ...state,
-        showDiscardModifiedParamFileContentsModal:
-          action.nextShowDiscardModifiedParamFileContentsModal,
-      };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_IS_DIRTY:
       updatedState = {
         ...state,
         isDirty: action.nextIsDirty,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_IS_EDITING:
       updatedState = {
         ...state,
         isEditing: action.nextIsEditing,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
     case ACTION_UPDATE_APP_STEPS:
     case ACTION_UPDATE_APP_IS_DISABLED:
@@ -163,7 +123,7 @@ const reducer = (state, action) => {
         ...state,
         steps: action.nextSteps,
       };
-      persistToLocalStorage(updatedState);
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       console.log(updatedState);
       return updatedState;
   }
