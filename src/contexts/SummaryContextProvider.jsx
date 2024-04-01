@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import summaryReducer from "../reducers/SummaryReducer";
 import { createInitialState as createInitialSummaryState } from "../states/SummaryState";
@@ -24,7 +24,7 @@ const SummaryContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialSummaryState(),
+      nextInitialState: createInitialSummaryState(true),
     });
   };
 
@@ -44,16 +44,29 @@ const SummaryContextProvider = ({ value, children }) => {
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateDownloadParmfile,
+      updateDownloadParmfileName,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updateDownloadParmfile,
+      updateDownloadParmfileName,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <SummaryContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updateDownloadParmfile,
-        updateDownloadParmfileName,
-      }}
-    >
+    <SummaryContext.Provider value={getContextValue()}>
       {children}
     </SummaryContext.Provider>
   );

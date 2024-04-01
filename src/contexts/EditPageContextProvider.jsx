@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import editPageReducer from "../reducers/EditPageReducer";
 import { createInitialState as createInitialEditPageState } from "../states/EditPageState";
@@ -19,18 +19,25 @@ const EditPageContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialEditPageState(),
+      nextInitialState: createInitialEditPageState(true),
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      resetToInitialState,
+    }),
+    [value, state, resetToInitialState],
+  );
+
   return (
-    <EditPageContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-      }}
-    >
+    <EditPageContext.Provider value={getContextValue()}>
       {children}
     </EditPageContext.Provider>
   );

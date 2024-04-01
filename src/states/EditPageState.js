@@ -9,7 +9,7 @@ import {
   STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
 
-const createInitialState = () => {
+const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY_APP_EDIT_PAGE),
   );
@@ -17,7 +17,7 @@ const createInitialState = () => {
     origin: STATE_ORIGIN_DEFAULT,
   };
 
-  if (initialState) {
+  if (initialState && !skipLocalStorageUsage) {
     return initialState;
   }
 

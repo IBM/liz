@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import inputFileSelectionReducer from "../reducers/InputFileSelectionReducer";
 import { createInitialState as createInitialInputFileSelectionState } from "../states/InputFileSelectionState";
@@ -24,7 +24,7 @@ const InputFileSelectionContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialInputFileSelectionState(),
+      nextInitialState: createInitialInputFileSelectionState(true),
     });
   };
 
@@ -44,16 +44,29 @@ const InputFileSelectionContextProvider = ({ value, children }) => {
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateSelectedDistributionName,
+      updateSelectedDistributionVersion,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updateSelectedDistributionName,
+      updateSelectedDistributionVersion,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <InputFileSelectionContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updateSelectedDistributionName,
-        updateSelectedDistributionVersion,
-      }}
-    >
+    <InputFileSelectionContext.Provider value={getContextValue()}>
       {children}
     </InputFileSelectionContext.Provider>
   );

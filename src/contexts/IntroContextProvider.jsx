@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import introReducer from "../reducers/IntroReducer";
 import { createInitialState as createInitialIntroState } from "../states/IntroState";
@@ -20,7 +20,7 @@ const IntroContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialIntroState(),
+      nextInitialState: createInitialIntroState(true),
     });
   };
 
@@ -32,15 +32,22 @@ const IntroContextProvider = ({ value, children }) => {
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updatePurgeParmfileSettings,
+      resetToInitialState,
+    }),
+    [value, state, updatePurgeParmfileSettings, resetToInitialState],
+  );
+
   return (
-    <IntroContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updatePurgeParmfileSettings,
-      }}
-    >
+    <IntroContext.Provider value={getContextValue()}>
       {children}
     </IntroContext.Provider>
   );

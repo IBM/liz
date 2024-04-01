@@ -350,20 +350,20 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     </>
   );
 
-  const getActionIconsForParmfileCard = () => {
-    const distributionName =
-      globalState.steps.inputFileSelection.distributionName;
-    const hasDistributionName =
-      distributionName &&
-      typeof distributionName === "string" &&
-      distributionName.length > 0;
-    const distributionVersion =
-      globalState.steps.inputFileSelection.distributionVersion;
-    const hasDistributionVersion =
-      distributionVersion &&
-      typeof distributionVersion === "string" &&
-      distributionVersion.length > 0;
+  const distributionName =
+    globalState.steps.inputFileSelection.distributionName;
+  const hasDistributionName =
+    distributionName &&
+    typeof distributionName === "string" &&
+    distributionName.length > 0;
+  const distributionVersion =
+    globalState.steps.inputFileSelection.distributionVersion;
+  const hasDistributionVersion =
+    distributionVersion &&
+    typeof distributionVersion === "string" &&
+    distributionVersion.length > 0;
 
+  const getActionIconsForParmfileCard = () => {
     if (hasParamFile() && hasDistributionName && hasDistributionVersion) {
       const iconMarkup = () => <Linux size={20} />;
       return [
@@ -408,7 +408,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
   const getSecondaryButtonTextForParamFileCard = () => {
     let text = "";
 
-    hasParamFile()
+    hasParamFile() && hasDistributionName && hasDistributionVersion
       ? (text = t("btnLabel.Download", { ns: "common" }))
       : (text = "");
 
@@ -557,7 +557,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         >
           {state.parmfileCardIsExpanded && (
             <Parmfile
-              parmfile={globalState.steps.downloadParamFile.contents}
+              parmfile={getParamFileContents()}
               distributionName={
                 globalState.steps.inputFileSelection.distributionName
               }

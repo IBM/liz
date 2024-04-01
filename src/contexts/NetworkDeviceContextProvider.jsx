@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import networkDeviceReducer from "../reducers/NetworkDeviceReducer";
 import { createInitialState as createInitialNetworkDeviceState } from "../states/NetworkDeviceState";
@@ -32,7 +32,7 @@ const NetworkDeviceContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialNetworkDeviceState(),
+      nextInitialState: createInitialNetworkDeviceState(true),
     });
   };
 
@@ -135,25 +135,47 @@ const NetworkDeviceContextProvider = ({ value, children }) => {
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateSelectedDeviceType,
+      updateUseVlan,
+      updateReadChannelId,
+      updateWriteChannelId,
+      updateDataChannelId,
+      updateLayer,
+      updateUseMultiPort,
+      updatePortNo,
+      updatePciFunctionId,
+      updateUserIdentifier,
+      updateVlanId,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updateSelectedDeviceType,
+      updateUseVlan,
+      updateReadChannelId,
+      updateWriteChannelId,
+      updateDataChannelId,
+      updateLayer,
+      updateUseMultiPort,
+      updatePortNo,
+      updatePciFunctionId,
+      updateUserIdentifier,
+      updateVlanId,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <NetworkDeviceContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updateSelectedDeviceType,
-        updateUseVlan,
-        updateReadChannelId,
-        updateWriteChannelId,
-        updateDataChannelId,
-        updateLayer,
-        updateUseMultiPort,
-        updatePortNo,
-        updatePciFunctionId,
-        updateUserIdentifier,
-        updateVlanId,
-      }}
-    >
+    <NetworkDeviceContext.Provider value={getContextValue()}>
       {children}
     </NetworkDeviceContext.Provider>
   );

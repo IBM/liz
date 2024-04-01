@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -40,82 +40,16 @@ import { stateToParamFile } from "../util/param-file-util";
 import { ApplicationContext } from ".";
 
 import reducer from "../reducers/AppReducer";
-import downloadParamFileReducer from "../reducers/DownloadParamFileReducer";
-import editPageReducer from "../reducers/EditPageReducer";
-import headerReducer from "../reducers/HeaderReducer";
-import informationReducer from "../reducers/InformationReducer";
-import inputFileSelectionReducer from "../reducers/InputFileSelectionReducer";
-import installationParameterReducer from "../reducers/InstallationParameterReducer";
-import networkAddressReducer from "../reducers/NetworkAddressReducer";
-import networkDeviceReducer from "../reducers/NetworkDeviceReducer";
-import summaryReducer from "../reducers/SummaryReducer";
-import introReducer from "../reducers/IntroReducer";
-import landingPageReducer from "../reducers/LandingPageReducer";
-
 import createInitialState from "../states/AppState";
-import { createInitialState as createInitialDownloadParamFileState } from "../states/DownloadParamFileState";
-import { createInitialState as createInitialEditPageState } from "../states/EditPageState";
-import { createInitialState as createInitialHeaderState } from "../states/HeaderState";
-import { createInitialState as createInitialInformationState } from "../states/InformationState";
-import { createInitialState as createInitialInputFileSelectionState } from "../states/InputFileSelectionState";
-import { createInitialState as createInitialInstallationParameterState } from "../states/InstallationParameterState";
-import { createInitialState as createInitialNetworkAddressState } from "../states/NetworkAddressState";
-import { createInitialState as createInitialNetworkDeviceState } from "../states/NetworkDeviceState";
-import { createInitialState as createInitialSummaryState } from "../states/SummaryState";
-import { createInitialState as createInitialIntroState } from "../states/IntroState";
-import { createInitialState as createInitialLandingPageState } from "../states/LandingPageState";
-
-const combineReducers = (slices) => (state, action) =>
-  Object.keys(slices).reduce(
-    (acc, prop) => ({
-      ...acc,
-      [prop]: slices[prop](acc[prop], action),
-    }),
-    state,
-  );
-
-const getInitialState = () => {
-  return {
-    reducer: createInitialState(),
-    downloadParamFileReducer: createInitialDownloadParamFileState(),
-    editPageReducer: createInitialEditPageState(),
-    headerReducer: createInitialHeaderState(),
-    informationReducer: createInitialInformationState(),
-    inputFileSelectionReducer: createInitialInputFileSelectionState(),
-    installationParameterReducer: createInitialInstallationParameterState(),
-    networkAddressReducer: createInitialNetworkAddressState(),
-    networkDeviceReducer: createInitialNetworkDeviceState(),
-    summaryReducer: createInitialSummaryState(),
-    introReducer: createInitialIntroState(),
-    landingPageReducer: createInitialLandingPageState(),
-  };
-};
-const rootReducer = combineReducers({
-  reducer,
-  downloadParamFileReducer,
-  editPageReducer,
-  headerReducer,
-  informationReducer,
-  inputFileSelectionReducer,
-  installationParameterReducer,
-  networkAddressReducer,
-  networkDeviceReducer,
-  summaryReducer,
-  introReducer,
-  landingPageReducer,
-});
 
 const ApplicationContextProvider = ({ value, children }) => {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, createInitialState());
 
-  // eslint-disable-next-line no-unused-vars
-  const [rootState, rootDispatch] = useReducer(rootReducer, getInitialState());
-
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialState(),
+      nextInitialState: createInitialState(true),
     });
   };
 
@@ -481,46 +415,71 @@ const ApplicationContextProvider = ({ value, children }) => {
 
   const panelConfigArray = getPanelConfigArray();
 
-  const resetToInitialState = () => {
+  const resetToInitialState = useCallback(() => {
     pruneSettings(getLocalStorageKeys(state));
 
-    rootDispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: getInitialState(),
-    });
+    updateResetToInitialState();
 
     updateSteps(DEFAULT_STEPS);
     if (!state.isEditing) {
       updateUseStateFromLocalStorage(false);
     }
-  };
+  }, [
+    state,
+    pruneSettings,
+    getLocalStorageKeys,
+    updateResetToInitialState,
+    updateSteps,
+    updateUseStateFromLocalStorage,
+  ]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateState,
+      updateStep,
+      updateNextStep,
+      updateCurrentHelpStep,
+      updateParamFileContent,
+      updateModified,
+      updateShowLegalNotification,
+      updateCanRenderStep,
+      updateUseStateFromLocalStorage,
+      updateIsDirty,
+      updateIsEditing,
+      updateSteps,
+      updateIsDisabled,
+      resetToInitialState,
+      config: {
+        panelConfig: panelConfigArray,
+        helpPanelConfig: getHelpPanelConfig({ step: state.step }),
+      },
+    }),
+    [
+      value,
+      state,
+      updateState,
+      updateStep,
+      updateNextStep,
+      updateCurrentHelpStep,
+      updateParamFileContent,
+      updateModified,
+      updateShowLegalNotification,
+      updateCanRenderStep,
+      updateUseStateFromLocalStorage,
+      updateIsDirty,
+      updateIsEditing,
+      updateSteps,
+      updateIsDisabled,
+      resetToInitialState,
+      panelConfigArray,
+      getHelpPanelConfig,
+    ],
+  );
 
   return (
-    <ApplicationContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updateState,
-        updateStep,
-        updateNextStep,
-        updateCurrentHelpStep,
-        updateParamFileContent,
-        updateModified,
-        updateShowLegalNotification,
-        updateCanRenderStep,
-        updateUseStateFromLocalStorage,
-        updateIsDirty,
-        updateIsEditing,
-        updateSteps,
-        updateIsDisabled,
-        resetToInitialState,
-        config: {
-          panelConfig: panelConfigArray,
-          helpPanelConfig: getHelpPanelConfig({ step: state.step }),
-        },
-      }}
-    >
+    <ApplicationContext.Provider value={getContextValue()}>
       {children}
     </ApplicationContext.Provider>
   );

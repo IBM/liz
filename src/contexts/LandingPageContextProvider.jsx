@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import landingPageReducer from "../reducers/LandingPageReducer";
 import { createInitialState as createInitialLandingPageState } from "../states/LandingPageState";
@@ -27,7 +27,7 @@ const LandingPageContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialLandingPageState(),
+      nextInitialState: createInitialLandingPageState(true),
     });
   };
 
@@ -71,19 +71,35 @@ const LandingPageContextProvider = ({ value, children }) => {
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateParmfileCardIsExpanded,
+      updateRequirementsCardIsExpanded,
+      updateNextStepsCardIsExpanded,
+      updateRequirementsCardHasBeenReviewed,
+      updateNextStepsCardHasBeenReviewed,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updateParmfileCardIsExpanded,
+      updateRequirementsCardIsExpanded,
+      updateNextStepsCardIsExpanded,
+      updateRequirementsCardHasBeenReviewed,
+      updateNextStepsCardHasBeenReviewed,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <LandingPageContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updateParmfileCardIsExpanded,
-        updateRequirementsCardIsExpanded,
-        updateNextStepsCardIsExpanded,
-        updateRequirementsCardHasBeenReviewed,
-        updateNextStepsCardHasBeenReviewed,
-      }}
-    >
+    <LandingPageContext.Provider value={getContextValue()}>
       {children}
     </LandingPageContext.Provider>
   );

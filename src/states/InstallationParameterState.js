@@ -10,7 +10,7 @@ import {
 } from "../util/local-storage-constants";
 import { DEFAULT_STRING_OBJECT } from "../util/constants";
 
-const createInitialState = () => {
+const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS),
   );
@@ -30,7 +30,7 @@ const createInitialState = () => {
     origin: STATE_ORIGIN_DEFAULT,
   };
 
-  if (initialState) {
+  if (initialState && !skipLocalStorageUsage) {
     return initialState;
   }
 

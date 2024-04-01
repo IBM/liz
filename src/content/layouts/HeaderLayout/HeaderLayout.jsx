@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Header,
@@ -22,32 +22,59 @@ import { Help, LinuxAlt } from "@carbon/icons-react";
 import { SidePanel } from "@carbon/ibm-products";
 import About from "../../../components/About";
 import HelpContent from "../../../components/InstallerHeader";
-import { ApplicationContext, HeaderContext } from "../../../contexts";
 import {
-  pruneSettings,
-  getLocalStorageKeys,
-} from "../../../util/local-storage-util";
+  ApplicationContext,
+  DownloadParamFileContext,
+  EditPageContext,
+  HeaderContext,
+  InformationContext,
+  InputFileSelectionContext,
+  InstallationParameterContext,
+  IntroContext,
+  LandingPageContext,
+  NetworkAddressContext,
+  NetworkDeviceContext,
+  SummaryContext,
+} from "../../../contexts";
 import "./_header-layout.scss";
 
 const HeaderLayout = () => {
   const { t } = useTranslation();
-  const {
-    state: globalState,
-    config,
-    resetToInitialState,
-  } = React.useContext(ApplicationContext);
+  const { config, resetToInitialState: globalResetToInitialState } =
+    useContext(ApplicationContext);
+  const { resetToInitialState: downloadParamFileResetToInitialState } =
+    useContext(DownloadParamFileContext);
+  const { resetToInitialState: editPageResetToInitialState } =
+    useContext(EditPageContext);
   const {
     state,
     closeNotification,
     showNotification: onShowNotification,
     updateIsHelpPanelExpanded,
     updateShowConfirmationModal,
-  } = React.useContext(HeaderContext);
+    resetToInitialState: headerResetToInitialState,
+  } = useContext(HeaderContext);
+  const { resetToInitialState: informationResetToInitialState } =
+    useContext(InformationContext);
+  const { resetToInitialState: inputFileSelectionResetToInitialState } =
+    useContext(InputFileSelectionContext);
+  const { resetToInitialState: installationParameterResetToInitialState } =
+    useContext(InstallationParameterContext);
+  const { resetToInitialState: introResetToInitialState } =
+    useContext(IntroContext);
+  const { resetToInitialState: landingPageResetToInitialState } =
+    useContext(LandingPageContext);
+  const { resetToInitialState: networkAddressResetToInitialState } = useContext(
+    NetworkAddressContext,
+  );
+  const { resetToInitialState: networkDeviceResetToInitialState } =
+    useContext(NetworkDeviceContext);
+  const { resetToInitialState: summaryResetToInitialState } =
+    useContext(SummaryContext);
   const { helpPanelConfig } = config;
 
   const showNotification = state.showNotification;
   const isHelpPanelExpanded = state.isHelpPanelExpanded;
-  const localStorageKeys = getLocalStorageKeys(globalState);
 
   const hasParams = helpPanelConfig.params
     ? Object.keys(helpPanelConfig.params).length > 0
@@ -70,8 +97,18 @@ const HeaderLayout = () => {
     : {};
 
   const localPruneSettings = () => {
-    pruneSettings(localStorageKeys);
-    resetToInitialState();
+    globalResetToInitialState();
+    downloadParamFileResetToInitialState();
+    editPageResetToInitialState();
+    headerResetToInitialState();
+    informationResetToInitialState();
+    inputFileSelectionResetToInitialState();
+    installationParameterResetToInitialState();
+    introResetToInitialState();
+    landingPageResetToInitialState();
+    networkAddressResetToInitialState();
+    networkDeviceResetToInitialState();
+    summaryResetToInitialState();
     closeNotification(true);
   };
 

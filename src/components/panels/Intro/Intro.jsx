@@ -4,7 +4,12 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+} from "react";
 import { useTranslation } from "react-i18next";
 import {
   Layer,
@@ -20,7 +25,20 @@ import {
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
 } from "../../../util/local-storage-constants";
-import { ApplicationContext, IntroContext } from "../../../contexts";
+import {
+  ApplicationContext,
+  DownloadParamFileContext,
+  EditPageContext,
+  HeaderContext,
+  InformationContext,
+  InputFileSelectionContext,
+  InstallationParameterContext,
+  IntroContext,
+  LandingPageContext,
+  NetworkAddressContext,
+  NetworkDeviceContext,
+  SummaryContext,
+} from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import "./_intro.scss";
@@ -31,14 +49,50 @@ const Intro = forwardRef(function Intro(props, ref) {
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
-    resetToInitialState,
-  } = React.useContext(ApplicationContext);
-  const { state, updatePurgeParmfileSettings } = React.useContext(IntroContext);
+    resetToInitialState: globalResetToInitialState,
+  } = useContext(ApplicationContext);
+  const { resetToInitialState: downloadParamFileResetToInitialState } =
+    useContext(DownloadParamFileContext);
+  const { resetToInitialState: editPageResetToInitialState } =
+    useContext(EditPageContext);
+  const { resetToInitialState: headerResetToInitialState } =
+    useContext(HeaderContext);
+  const { resetToInitialState: informationResetToInitialState } =
+    useContext(InformationContext);
+  const { resetToInitialState: inputFileSelectionResetToInitialState } =
+    useContext(InputFileSelectionContext);
+  const { resetToInitialState: installationParameterResetToInitialState } =
+    useContext(InstallationParameterContext);
+  const {
+    state,
+    updatePurgeParmfileSettings,
+    resetToInitialState: introResetToInitialState,
+  } = useContext(IntroContext);
+  const { resetToInitialState: landingPageResetToInitialState } =
+    useContext(LandingPageContext);
+  const { resetToInitialState: networkAddressResetToInitialState } = useContext(
+    NetworkAddressContext,
+  );
+  const { resetToInitialState: networkDeviceResetToInitialState } =
+    useContext(NetworkDeviceContext);
+  const { resetToInitialState: summaryResetToInitialState } =
+    useContext(SummaryContext);
   const { t } = useTranslation();
   const publicRef = {
     pruneSettings: () => {
       if (purgeParmfileSettings) {
-        resetToInitialState();
+        globalResetToInitialState();
+        downloadParamFileResetToInitialState();
+        editPageResetToInitialState();
+        headerResetToInitialState();
+        informationResetToInitialState();
+        inputFileSelectionResetToInitialState();
+        installationParameterResetToInitialState();
+        introResetToInitialState();
+        landingPageResetToInitialState();
+        networkAddressResetToInitialState();
+        networkDeviceResetToInitialState();
+        summaryResetToInitialState();
       }
     },
     persistState: () => {

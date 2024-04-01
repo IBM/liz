@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import downloadParamFileReducer from "../reducers/DownloadParamFileReducer";
 import { createInitialState as createInitialDownloadParamFileState } from "../states/DownloadParamFileState";
@@ -24,7 +24,7 @@ const DownloadParamFileContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialDownloadParamFileState(),
+      nextInitialState: createInitialDownloadParamFileState(true),
     });
   };
 
@@ -49,17 +49,31 @@ const DownloadParamFileContextProvider = ({ value, children }) => {
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updatParamFileCopied,
+      updateModified,
+      updateParamFileContent,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updatParamFileCopied,
+      updateModified,
+      updateParamFileContent,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <DownloadParamFileContext.Provider
-      value={{
-        ...value,
-        state,
-        updatParamFileCopied,
-        updateModified,
-        updateParamFileContent,
-        updateResetToInitialState,
-      }}
-    >
+    <DownloadParamFileContext.Provider value={getContextValue()}>
       {children}
     </DownloadParamFileContext.Provider>
   );

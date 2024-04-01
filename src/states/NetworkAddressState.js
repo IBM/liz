@@ -10,7 +10,7 @@ import {
 } from "../util/local-storage-constants";
 import { DEFAULT_STRING_OBJECT, ADDRESS_TYPE_IPV4 } from "../util/constants";
 
-const createInitialState = () => {
+const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS),
   );
@@ -48,7 +48,7 @@ const createInitialState = () => {
     origin: STATE_ORIGIN_DEFAULT,
   };
 
-  if (initialState) {
+  if (initialState && !skipLocalStorageUsage) {
     return initialState;
   }
 

@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import networkAddressReducer from "../reducers/NetworkAddressReducer";
 import { createInitialState as createInitialNetworkAddressState } from "../states/NetworkAddressState";
@@ -42,7 +42,7 @@ const NetworkAddressContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialNetworkAddressState(),
+      nextInitialState: createInitialNetworkAddressState(true),
     });
   };
 
@@ -168,25 +168,47 @@ const NetworkAddressContextProvider = ({ value, children }) => {
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateNetmask,
+      updateIpv4Cidr,
+      updateIpv6Cidr,
+      updateBinary,
+      updateAddressType,
+      updateIpv4Address,
+      updateIpv6Address,
+      updateGatewayAddress,
+      updateNameserverAddress,
+      updateHostName,
+      updateDomainSearchPath,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updateNetmask,
+      updateIpv4Cidr,
+      updateIpv6Cidr,
+      updateBinary,
+      updateAddressType,
+      updateIpv4Address,
+      updateIpv6Address,
+      updateGatewayAddress,
+      updateNameserverAddress,
+      updateHostName,
+      updateDomainSearchPath,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <NetworkAddressContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updateNetmask,
-        updateIpv4Cidr,
-        updateIpv6Cidr,
-        updateBinary,
-        updateAddressType,
-        updateIpv4Address,
-        updateIpv6Address,
-        updateGatewayAddress,
-        updateNameserverAddress,
-        updateHostName,
-        updateDomainSearchPath,
-      }}
-    >
+    <NetworkAddressContext.Provider value={getContextValue()}>
       {children}
     </NetworkAddressContext.Provider>
   );

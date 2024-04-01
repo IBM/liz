@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import informationReducer from "../reducers/InformationReducer";
 import { createInitialState as createInitialInformationState } from "../states/InformationState";
@@ -19,19 +19,25 @@ const InformationContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialInformationState(),
+      nextInitialState: createInitialInformationState(true),
     });
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      resetToInitialState,
+    }),
+    [value, state, resetToInitialState],
+  );
+
   return (
-    <InformationContext.Provider
-      value={{
-        ...value,
-        state,
-        dispatch,
-        updateResetToInitialState,
-      }}
-    >
+    <InformationContext.Provider value={getContextValue()}>
       {children}
     </InformationContext.Provider>
   );

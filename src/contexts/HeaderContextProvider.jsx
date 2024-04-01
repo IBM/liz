@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import headerReducer from "../reducers/HeaderReducer";
 import { createInitialState as createInitialHeaderState } from "../states/HeaderState";
@@ -24,7 +24,7 @@ const HeaderContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialHeaderState(),
+      nextInitialState: createInitialHeaderState(true),
     });
   };
 
@@ -72,18 +72,33 @@ const HeaderContextProvider = ({ value, children }) => {
     return updateShowNotification(false);
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateShowConfirmationModal,
+      updateIsHelpPanelExpanded,
+      showNotification,
+      closeNotification,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updateShowConfirmationModal,
+      updateIsHelpPanelExpanded,
+      showNotification,
+      closeNotification,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <HeaderContext.Provider
-      value={{
-        ...value,
-        state,
-        updateShowConfirmationModal,
-        updateResetToInitialState,
-        updateIsHelpPanelExpanded,
-        showNotification,
-        closeNotification,
-      }}
-    >
+    <HeaderContext.Provider value={getContextValue()}>
       {children}
     </HeaderContext.Provider>
   );

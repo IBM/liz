@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import installationParameterReducer from "../reducers/InstallationParameterReducer";
 import { createInitialState as createInitialInstallationParameterState } from "../states/InstallationParameterState";
@@ -29,7 +29,7 @@ const InstallationParameterContextProvider = ({ value, children }) => {
   const updateResetToInitialState = () => {
     dispatch({
       type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialInstallationParameterState(),
+      nextInitialState: createInitialInstallationParameterState(true),
     });
   };
 
@@ -119,21 +119,39 @@ const InstallationParameterContextProvider = ({ value, children }) => {
     return false;
   };
 
+  const resetToInitialState = useCallback(() => {
+    updateResetToInitialState();
+  }, [state, updateResetToInitialState]);
+
+  const getContextValue = useCallback(
+    () => ({
+      ...value,
+      state,
+      updateUseSsh,
+      updateUseVnc,
+      updateInstallationAddress,
+      updateUserName,
+      updatePassword,
+      updateVncPassword,
+      updateSshPassword,
+      resetToInitialState,
+    }),
+    [
+      value,
+      state,
+      updateUseSsh,
+      updateUseVnc,
+      updateInstallationAddress,
+      updateUserName,
+      updatePassword,
+      updateVncPassword,
+      updateSshPassword,
+      resetToInitialState,
+    ],
+  );
+
   return (
-    <InstallationParameterContext.Provider
-      value={{
-        ...value,
-        state,
-        updateResetToInitialState,
-        updateUseSsh,
-        updateUseVnc,
-        updateInstallationAddress,
-        updateUserName,
-        updatePassword,
-        updateVncPassword,
-        updateSshPassword,
-      }}
-    >
+    <InstallationParameterContext.Provider value={getContextValue()}>
       {children}
     </InstallationParameterContext.Provider>
   );
