@@ -42,7 +42,11 @@ import {
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
 } from "../../../util/local-storage-constants";
-import { ApplicationContext, NetworkAddressContext } from "../../../contexts";
+import {
+  ApplicationContext,
+  NetworkAddressContext,
+  DownloadParamFileContext,
+} from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import {
   isIpv4NetworkAddressValid,
@@ -55,10 +59,14 @@ import "./_network-address.scss";
 const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
   const {
     state: globalState,
+    updateModified: globalUpdateModified,
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
   } = React.useContext(ApplicationContext);
+  const { updateModified, updateParamFileContent } = React.useContext(
+    DownloadParamFileContext,
+  );
   const {
     state,
     updateNetmask,
@@ -549,7 +557,12 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData();
+        resetParamFileTextAreaData({
+          updateParamFileContent,
+          globalUpdateModified,
+          updateModified,
+          state: globalState,
+        });
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}

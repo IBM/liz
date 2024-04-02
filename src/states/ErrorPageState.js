@@ -5,19 +5,15 @@
  */
 
 import {
-  LOCAL_STORAGE_KEY_APP_HEADER,
+  LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
   STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_KEY_APP_HEADER),
+    localStorage.getItem(LOCAL_STORAGE_KEY_APP_ERROR_PAGE),
   );
   const defaultState = {
-    isHelpPanelExpanded: true,
-    needsManualNavigationConfirmation: false,
-    showNotification: false,
-    showConfirmationModal: false,
     origin: STATE_ORIGIN_DEFAULT,
   };
 

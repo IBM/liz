@@ -41,7 +41,11 @@ import {
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
 } from "../../../util/local-storage-constants";
-import { ApplicationContext, NetworkDeviceContext } from "../../../contexts";
+import {
+  ApplicationContext,
+  NetworkDeviceContext,
+  DownloadParamFileContext,
+} from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import DeviceSettings from "./components/DeviceSettings";
@@ -50,10 +54,14 @@ import "./_network-device.scss";
 const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
   const {
     state: globalState,
+    updateModified: globalUpdateModified,
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
   } = React.useContext(ApplicationContext);
+  const { updateModified, updateParamFileContent } = React.useContext(
+    DownloadParamFileContext,
+  );
   const {
     state,
     updateSelectedDeviceType,
@@ -753,7 +761,12 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData();
+        resetParamFileTextAreaData({
+          updateParamFileContent,
+          globalUpdateModified,
+          updateModified,
+          state: globalState,
+        });
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}

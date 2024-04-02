@@ -7,9 +7,10 @@
 const PathConstants = {
   HOME: "/",
   EDIT: "/edit",
-  EXPANDED_REQUIREMENTS_CARD: "/expanded-requirements-card",
-  EXPANDED_PARMFILE_CARD: "/expanded-parmfile-card",
-  EXPANDED_NEXTSTEPS_CARD: "/expanded-nextsteps-card",
+  EXPANDED_REQUIREMENTS_CARD: "/expand/requirements-card",
+  EXPANDED_PARMFILE_CARD: "/expand/parmfile-card",
+  EXPANDED_NEXTSTEPS_CARD: "/expand/nextsteps-card",
+  EXPANDED_CARD_WITH_ROUTER_PARM: "/expand/:cardId",
 };
 
 export default PathConstants;

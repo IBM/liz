@@ -11,13 +11,14 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useHref } from "react-router-dom";
 import {
   InlineNotification,
   Layer,
   FlexGrid,
   Row,
   Column,
+  Link,
 } from "@carbon/react";
 import { PageHeader, CreateFullPage } from "@carbon/ibm-products";
 import {
@@ -26,18 +27,28 @@ import {
   LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
 } from "../../../util/local-storage-constants";
 import { DEFAULT_PARAM_FILE_NAME } from "../../../util/constants";
-import { EditPageContext, ApplicationContext } from "../../../contexts";
+import {
+  EditPageContext,
+  ApplicationContext,
+  HeaderContext,
+} from "../../../contexts";
 import { parmfileCardIsExpanded } from "../../../util/local-storage-util";
 import {
   saveParamFileContent,
   getParamFileContents,
 } from "../../../util/param-file-util";
+import PathConstants from "../../../util/path-constants";
 import { getSteps, getInlineNotification } from "../../../uiUtil/panel-util";
 import "./_edit-page.scss";
 
 const EditPage = forwardRef(function EditPage(props, ref) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const expandedParmfileCardHref = useHref(
+    PathConstants.EXPANDED_PARMFILE_CARD,
+  );
+  const homePageHref = useHref(PathConstants.HOME);
+  const editPageHref = useHref(PathConstants.EDIT);
   const { state } = useContext(EditPageContext);
   const {
     state: globalState,
@@ -47,6 +58,8 @@ const EditPage = forwardRef(function EditPage(props, ref) {
     updateShowLegalNotification,
     updateIsEditing,
   } = useContext(ApplicationContext);
+  const { state: headerState, updateNeedsManualNavigationConfirmation } =
+    useContext(HeaderContext);
   const { panelConfig } = config;
   const publicRef = {
     persistState: () => {
@@ -117,6 +130,19 @@ const EditPage = forwardRef(function EditPage(props, ref) {
     ? submitButtonModify
     : submitButtonCreate;
 
+  const labelForHomeLink = !headerState.needsManualNavigationConfirmation ? (
+    <Link
+      className="liz__edit-page__link-cursor"
+      onClick={() => {
+        updateNeedsManualNavigationConfirmation(true);
+      }}
+    >
+      {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+    </Link>
+  ) : (
+    t("pageHeader.breadcrumbs.home", { ns: "common" })
+  );
+
   const pageHeaderMarkup = (
     <PageHeader
       className="liz__edit-page__page-header"
@@ -136,12 +162,15 @@ const EditPage = forwardRef(function EditPage(props, ref) {
       })}
       breadcrumbs={[
         {
-          href: `${import.meta.env.VITE_URL_PATH_PREFIX}${parmfileCardIsExpanded() ? "#/expanded-parmfile-card" : "#"}`,
+          href: parmfileCardIsExpanded()
+            ? expandedParmfileCardHref
+            : homePageHref,
           key: "breadcrumb-01",
-          label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+          label: labelForHomeLink,
+          title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
         },
         {
-          href: `${import.meta.env.VITE_URL_PATH_PREFIX}#/edit/`,
+          href: editPageHref,
           isCurrentPage: true,
           key: "breadcrumb-02",
           label: t("pageHeader.breadcrumbs.composeParmfile", {
@@ -197,7 +226,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
       onClose={() => {
         updateIsEditing(false);
         navigate(
-          `${parmfileCardIsExpanded() ? "/expanded-parmfile-card" : "/"}`,
+          `${parmfileCardIsExpanded() ? PathConstants.EXPANDED_PARMFILE_CARD : PathConstants.HOME}`,
         );
       }}
       onRequestSubmit={createParamFile}

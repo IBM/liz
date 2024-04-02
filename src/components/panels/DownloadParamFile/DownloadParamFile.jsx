@@ -6,7 +6,6 @@
 
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
 import {
   Layer,
   InlineNotification,
@@ -32,19 +31,22 @@ import {
   DownloadParamFileContext,
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
-import { saveParamFileContent } from "../../../util/param-file-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import {
+  saveParamFileContent,
+  stateToParamFile,
+} from "../../../util/param-file-util";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
-  const { stateToParamFile } = props;
   const {
     state: globalState,
+    updateModified: globalUpdateModified,
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
   } = React.useContext(ApplicationContext);
   const { t } = useTranslation();
-
   const {
     state,
     updatParamFileCopied,
@@ -164,13 +166,6 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
     return false;
   };
 
-  const resetParamFileTextAreaData = () => {
-    const localParamFileContentValue = stateToParamFile(globalState);
-
-    updateParamFileContent(localParamFileContentValue.data);
-    updateModified(false);
-  };
-
   const notificationMarkup = (
     <InlineNotification
       hideCloseButton
@@ -204,7 +199,14 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
             >
               You may&nbsp;
               <Link
-                onClick={resetParamFileTextAreaData}
+                onClick={() => {
+                  resetParamFileTextAreaData({
+                    updateParamFileContent,
+                    globalUpdateModified,
+                    updateModified,
+                    state: globalState,
+                  });
+                }}
                 className="download-param-file_modified-data-message-link-anchor"
               >
                 reset
@@ -227,7 +229,14 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
               : paramFileContent.data
           }
           copyContents={updateCopied}
-          resetContents={resetParamFileTextAreaData}
+          resetContents={() => {
+            resetParamFileTextAreaData({
+              updateParamFileContent,
+              globalUpdateModified,
+              updateModified,
+              state: globalState,
+            });
+          }}
           downloadContents={saveParamFileContentProxy}
           onChange={(localParamFileContent) => {
             const localParamFileContentValue =
@@ -325,9 +334,5 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
 
   return markup;
 });
-
-DownloadParamFile.propTypes = {
-  stateToParamFile: PropTypes.func.isRequired,
-};
 
 export default DownloadParamFile;

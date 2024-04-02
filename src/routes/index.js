@@ -6,13 +6,10 @@
 // import React from "react"
 import loadable from "@loadable/component";
 import PathConstants from "../util/path-constants";
-import { renderRoutes } from "./generate-routes";
+import { renderRoutes, renderRoutesForCreateBrowser } from "./generate-routes";
 
 // Layouts
-import { MainLayout, EditLayout } from "../content/layouts";
-
-// Pages
-// import { LandingPage, EditPage } from "../content/pages";
+import { MainLayout, EditLayout, ErrorLayout } from "../content/layouts";
 
 const LandingPage = loadable(() => import("../content/pages"), {
   resolveComponent: (components) => components.LandingPage,
@@ -22,57 +19,49 @@ const EditPage = loadable(() => import("../content/pages"), {
   resolveComponent: (components) => components.EditPage,
 });
 
+const ErrorPage = loadable(() => import("../content/pages"), {
+  resolveComponent: (components) => components.ErrorPage,
+});
+
 export const routes = [
   {
-    layout: EditLayout,
+    layout: ErrorLayout,
+    errorElement: {
+      layout: ErrorLayout,
+      page: ErrorPage,
+    },
     routes: [
       {
-        name: "edit",
-        title: "Edit page",
-        // component: React.lazy(() => import("../content/pages/EditPage")),
-        component: EditPage,
-        path: PathConstants.EDIT,
-      },
-    ],
-  },
-  {
-    layout: MainLayout,
-    routes: [
-      {
-        name: "landing",
-        title: "Landing page",
-        // component: React.lazy(() => import("../content/pages/LandingPage")),
-        component: LandingPage,
-        path: PathConstants.HOME,
-      },
-      {
-        name: "cards",
-        title: "Cards",
-        hasSiderLink: true,
+        layout: EditLayout,
         routes: [
           {
-            name: "expanded-requirements-card",
-            title: "Expanded requirements card",
-            hasSiderLink: true,
-            // component: React.lazy(() => import("../content/pages/LandingPage")),
+            name: "edit",
+            title: "Edit page",
+            component: EditPage,
+            path: PathConstants.EDIT,
+          },
+        ],
+      },
+      {
+        layout: MainLayout,
+        routes: [
+          {
+            name: "landing",
+            title: "Landing page",
             component: LandingPage,
-            path: PathConstants.EXPANDED_REQUIREMENTS_CARD,
+            path: PathConstants.HOME,
           },
           {
-            name: "expanded-parmfile-card",
-            title: "Expanded parmfile card",
-            hasSiderLink: true,
-            // component: React.lazy(() => import("../content/pages/LandingPage")),
-            component: LandingPage,
-            path: PathConstants.EXPANDED_PARMFILE_CARD,
-          },
-          {
-            name: "expanded-nextsteps-card",
-            title: "Expanded next steps card",
-            hasSiderLink: true,
-            // component: React.lazy(() => import("../content/pages/LandingPage")),
-            component: LandingPage,
-            path: PathConstants.EXPANDED_NEXTSTEPS_CARD,
+            name: "cards",
+            title: "Cards",
+            routes: [
+              {
+                name: "expanded-card",
+                title: "Expanded card",
+                component: LandingPage,
+                path: PathConstants.EXPANDED_CARD_WITH_ROUTER_PARM,
+              },
+            ],
           },
         ],
       },
@@ -81,3 +70,4 @@ export const routes = [
 ];
 
 export const Routes = renderRoutes(routes);
+export const CreateBrowserRoutes = renderRoutesForCreateBrowser(routes)();

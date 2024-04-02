@@ -6,7 +6,6 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter as Router } from "react-router-dom";
 import { pkg } from "@carbon/ibm-products";
 import i18Init from "./i18n";
 import App from "./App";
@@ -17,8 +16,6 @@ i18Init();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Router basename="/">
-      <App />
-    </Router>
+    <App />
   </React.StrictMode>,
 );

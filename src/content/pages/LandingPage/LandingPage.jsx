@@ -11,7 +11,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useHref } from "react-router-dom";
 import {
   Button,
   InlineNotification,
@@ -50,12 +50,23 @@ import {
   hasParamFile,
 } from "../../../util/param-file-util";
 import { getInlineNotification } from "../../../uiUtil/panel-util";
+import PathConstants from "../../../util/path-constants";
 import { LandingPageContext, ApplicationContext } from "../../../contexts";
 import { SystemRequirements, Parmfile, NextSteps } from "./components";
 import "./_landing-page.scss";
 
 const LandingPage = forwardRef(function LandingPage(props, ref) {
   const { t } = useTranslation();
+  const expandedRequirementsCardHref = useHref(
+    PathConstants.EXPANDED_REQUIREMENTS_CARD,
+  );
+  const expandedParmfileCardHref = useHref(
+    PathConstants.EXPANDED_PARMFILE_CARD,
+  );
+  const expandedNextStepsCardHref = useHref(
+    PathConstants.EXPANDED_NEXTSTEPS_CARD,
+  );
+  const homePageHref = useHref(PathConstants.HOME);
   const navigate = useNavigate();
   const {
     state,
@@ -87,12 +98,17 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     updateStep(9);
     if (
       window.location.hash &&
-      window.location.hash === "#/expanded-requirements-card"
+      window.location.hash === `#${PathConstants.EXPANDED_REQUIREMENTS_CARD}`
     ) {
       updateRequirementsCardIsExpanded(true);
     } else if (
       window.location.hash &&
-      window.location.hash === "#/expanded-nextsteps-card"
+      window.location.hash === `#${PathConstants.EXPANDED_NEXTSTEPS_CARD}`
+    ) {
+      updateNextStepsCardIsExpanded(true);
+    } else if (
+      window.location.hash &&
+      window.location.hash === `#${PathConstants.EXPANDED_PARMFILE_CARD}`
     ) {
       updateNextStepsCardIsExpanded(true);
     }
@@ -121,58 +137,117 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     : false;
 
   const getBreadcrumbs = () => {
-    const breadcrumbs = [
-      {
-        href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
-        isCurrentPage: true,
-        key: "breadcrumb-01",
-        label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
-      },
-    ];
+    let breadcrumbs;
 
     if (state.requirementsCardIsExpanded) {
-      breadcrumbs.push({
-        href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
-        isCurrentPage: true,
-        key: "breadcrumb-02",
-        label: t("panel.information.requirementsHeader", {
-          ns: "panels",
-        }),
-      });
-      breadcrumbs[0].isCurrentPage = false;
-      breadcrumbs[0].title = t("pageHeader.breadcrumbs.home", { ns: "common" });
-      breadcrumbs[0].label = (
-        <Link
-          href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
-          onClick={() => {
-            updateRequirementsCardIsExpanded(false);
-          }}
-        >
-          {t("pageHeader.breadcrumbs.home", { ns: "common" })}
-        </Link>
-      );
+      breadcrumbs = [
+        {
+          href: homePageHref,
+          isCurrentPage: false,
+          key: "breadcrumb-01",
+          title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+          label: (
+            <Link
+              href={homePageHref}
+              onClick={() => {
+                updateRequirementsCardIsExpanded(false);
+              }}
+            >
+              {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+            </Link>
+          ),
+        },
+        {
+          href: expandedRequirementsCardHref,
+          isCurrentPage: true,
+          key: "breadcrumb-02",
+          label: t("panel.information.requirementsHeader", {
+            ns: "panels",
+          }),
+          title: t("panel.information.requirementsHeader", {
+            ns: "panels",
+          }),
+        },
+      ];
+    } else if (state.parmfileCardIsExpanded) {
+      breadcrumbs = [
+        {
+          href: homePageHref,
+          isCurrentPage: false,
+          key: "breadcrumb-01",
+          title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+          label: (
+            <Link
+              href={homePageHref}
+              onClick={() => {
+                updateRequirementsCardIsExpanded(false);
+              }}
+            >
+              {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+            </Link>
+          ),
+        },
+        {
+          href: expandedParmfileCardHref,
+          isCurrentPage: true,
+          key: "breadcrumb-02",
+          label: getTitleForParamFileCard(),
+          title: getTitleForParamFileCard(),
+        },
+      ];
     } else if (state.nextStepsCardIsExpanded) {
-      breadcrumbs.push({
-        href: `${import.meta.env.VITE_URL_PATH_PREFIX}#`,
-        isCurrentPage: true,
-        key: "breadcrumb-03",
-        label: t("modalHeading.showNextStepsInformation"),
-      });
-      breadcrumbs[0].isCurrentPage = false;
-      breadcrumbs[0].title = t("pageHeader.breadcrumbs.home", { ns: "common" });
-      breadcrumbs[0].label = (
-        <Link
-          href={`${import.meta.env.VITE_URL_PATH_PREFIX}#`}
-          onClick={() => {
-            updateNextStepsCardIsExpanded(false);
-          }}
-        >
-          {t("pageHeader.breadcrumbs.home", { ns: "common" })}
-        </Link>
-      );
+      breadcrumbs = [
+        {
+          href: homePageHref,
+          isCurrentPage: false,
+          key: "breadcrumb-01",
+          title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+          label: (
+            <Link
+              href={homePageHref}
+              onClick={() => {
+                updateRequirementsCardIsExpanded(false);
+              }}
+            >
+              {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+            </Link>
+          ),
+        },
+        {
+          href: expandedNextStepsCardHref,
+          isCurrentPage: true,
+          key: "breadcrumb-02",
+          label: t("modalHeading.showNextStepsInformation"),
+          title: t("modalHeading.showNextStepsInformation"),
+        },
+      ];
+    } else {
+      breadcrumbs = [
+        {
+          href: homePageHref,
+          isCurrentPage: true,
+          key: "breadcrumb-01",
+          title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+          label: (
+            <Link href={homePageHref} onClick={function noRefCheck() {}}>
+              {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+            </Link>
+          ),
+        },
+      ];
     }
 
     return breadcrumbs;
+  };
+
+  const getTitleForParamFileCard = () => {
+    let title = "";
+
+    hasParamFile()
+      ? (title = t("editPage.pageHeader.subtitle.modify"))
+      : (title = t("editPage.pageHeader.subtitle.new"));
+
+    return title;
   };
 
   const pageHeaderMarkup = (
@@ -267,40 +342,40 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
 
   const collapseParmfileCard = () => {
     updateParmfileCardIsExpanded(false);
-    navigate("/");
+    navigate(PathConstants.HOME);
   };
 
   const collapseRequirementsCard = () => {
     updateRequirementsCardIsExpanded(false);
     updateRequirementsCardHasBeenReviewed(true);
-    navigate("/");
+    navigate(PathConstants.HOME);
   };
 
   const collapseNextStepsCard = () => {
     updateNextStepsCardIsExpanded(false);
     updateNextStepsCardHasBeenReviewed(true);
-    navigate("/");
+    navigate(PathConstants.HOME);
   };
 
   const expandParmfileCard = () => {
     updateRequirementsCardIsExpanded(false);
     updateParmfileCardIsExpanded(true);
     updateNextStepsCardIsExpanded(false);
-    navigate("/expanded-parmfile-card");
+    navigate(PathConstants.EXPANDED_PARMFILE_CARD);
   };
 
   const expandRequirementsCard = () => {
     updateRequirementsCardIsExpanded(true);
     updateParmfileCardIsExpanded(false);
     updateNextStepsCardIsExpanded(false);
-    navigate("/expanded-requirements-card");
+    navigate(PathConstants.EXPANDED_REQUIREMENTS_CARD);
   };
 
   const expandNextStepsCard = () => {
     updateRequirementsCardIsExpanded(false);
     updateParmfileCardIsExpanded(false);
     updateNextStepsCardIsExpanded(true);
-    navigate("/expanded-nextsteps-card");
+    navigate(PathConstants.expandNextStepsCard);
   };
 
   const requirementsCardMarkup = (
@@ -413,16 +488,6 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       : (text = "");
 
     return text;
-  };
-
-  const getTitleForParamFileCard = () => {
-    let title = "";
-
-    hasParamFile()
-      ? (title = t("editPage.pageHeader.subtitle.modify"))
-      : (title = t("editPage.pageHeader.subtitle.new"));
-
-    return title;
   };
 
   const hasInvalidSteps = () => {

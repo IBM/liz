@@ -5,6 +5,7 @@
  */
 
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Header,
@@ -36,10 +37,13 @@ import {
   NetworkDeviceContext,
   SummaryContext,
 } from "../../../contexts";
+import PathConstants from "../../../util/path-constants";
+import { parmfileCardIsExpanded } from "../../../util/local-storage-util";
 import "./_header-layout.scss";
 
 const HeaderLayout = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { config, resetToInitialState: globalResetToInitialState } =
     useContext(ApplicationContext);
   const { resetToInitialState: downloadParamFileResetToInitialState } =
@@ -52,6 +56,7 @@ const HeaderLayout = () => {
     showNotification: onShowNotification,
     updateIsHelpPanelExpanded,
     updateShowConfirmationModal,
+    updateNeedsManualNavigationConfirmation,
     resetToInitialState: headerResetToInitialState,
   } = useContext(HeaderContext);
   const { resetToInitialState: informationResetToInitialState } =
@@ -117,27 +122,57 @@ const HeaderLayout = () => {
   };
 
   const modalMarkup = (
-    <ComposedModal
-      preventCloseOnClickOutside
-      open={state.showConfirmationModal}
-    >
-      <ModalHeader
-        label={t("modalLabel.manageSettings")}
-        title={t("modalHeading.localStorageHasBeenPrunedConfirmation")}
-      />
-      <ModalBody>
-        <div>{t("modalBody.localStorageHasBeenPrunedConfirmation")}</div>
-      </ModalBody>
-      <ModalFooter
-        onRequestClose={() => {
-          updateShowConfirmationModal(false);
-        }}
-        onRequestSubmit={() => {
-          updateShowConfirmationModal(false);
-        }}
-        primaryButtonText={t("btnLabel.OK", { ns: "common" })}
-      />
-    </ComposedModal>
+    <>
+      <ComposedModal
+        preventCloseOnClickOutside
+        open={state.showConfirmationModal}
+      >
+        <ModalHeader
+          label={t("modalLabel.manageSettings")}
+          title={t("modalHeading.localStorageHasBeenPrunedConfirmation")}
+        />
+        <ModalBody>
+          <div>{t("modalBody.localStorageHasBeenPrunedConfirmation")}</div>
+        </ModalBody>
+        <ModalFooter
+          onRequestClose={() => {
+            updateShowConfirmationModal(false);
+          }}
+          onRequestSubmit={() => {
+            updateShowConfirmationModal(false);
+          }}
+          primaryButtonText={t("btnLabel.OK", { ns: "common" })}
+        />
+      </ComposedModal>
+      <ComposedModal
+        preventCloseOnClickOutside
+        open={state.needsManualNavigationConfirmation}
+      >
+        <ModalHeader
+          label={t("editPage.createFullPage.modalLabel")}
+          title={t("editPage.createFullPage.modalTitle")}
+        />
+        <ModalBody>
+          <div>{t("editPage.createFullPage.modalDescription")}</div>
+        </ModalBody>
+        <ModalFooter
+          danger
+          onRequestClose={() => {
+            updateNeedsManualNavigationConfirmation(false);
+          }}
+          onRequestSubmit={() => {
+            updateNeedsManualNavigationConfirmation(false);
+            navigate(
+              `${parmfileCardIsExpanded() ? PathConstants.EXPANDED_PARMFILE_CARD : PathConstants.HOME}`,
+            );
+          }}
+          primaryButtonText={t("editPage.createFullPage.modalDangerButtonText")}
+          secondaryButtonText={t(
+            "editPage.createFullPage.modalSecondaryButtonText",
+          )}
+        />
+      </ComposedModal>
+    </>
   );
 
   return (

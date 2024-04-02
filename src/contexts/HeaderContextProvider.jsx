@@ -12,6 +12,7 @@ import {
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
+  ACTION_UPDATE_NEEDS_MANUAL_NAVIGATION_CONFIRMATION,
 } from "../util/reducer-action-constants";
 import { HeaderContext } from "./index";
 
@@ -49,6 +50,13 @@ const HeaderContextProvider = ({ value, children }) => {
     });
   };
 
+  const updateNeedsManualNavigationConfirmation = (flag) => {
+    dispatch({
+      type: ACTION_UPDATE_NEEDS_MANUAL_NAVIGATION_CONFIRMATION,
+      nextNeedsManualNavigationConfirmation: flag,
+    });
+  };
+
   const showNotification = (callback) => {
     if (callback) {
       if (state.showNotification) {
@@ -80,6 +88,7 @@ const HeaderContextProvider = ({ value, children }) => {
     () => ({
       ...value,
       state,
+      updateNeedsManualNavigationConfirmation,
       updateShowConfirmationModal,
       updateIsHelpPanelExpanded,
       showNotification,
@@ -89,6 +98,7 @@ const HeaderContextProvider = ({ value, children }) => {
     [
       value,
       state,
+      updateNeedsManualNavigationConfirmation,
       updateShowConfirmationModal,
       updateIsHelpPanelExpanded,
       showNotification,

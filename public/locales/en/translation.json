@@ -59,5 +59,10 @@
   "editPage.createFullPage.modalDangerButtonText": "Cancel parmfile creation",
   "editPage.createFullPage.modalDescription": "If you cancel, the information you have entered won't be saved.",
   "editPage.createFullPage.modalSecondaryButtonText": "Return to form",
-  "editPage.createFullPage.modalTitle": "Are you sure you want to cancel?"
+  "editPage.createFullPage.modalTitle": "Are you sure you want to cancel?",
+  "editPage.createFullPage.modalLabel": "Confirmation required",
+  "errorPage.headerTitle": "An error occurred.",
+  "errorPage.label.statusCode": "Status code",
+  "errorPage.detailsLabel": "Error details",
+  "errorPage.dataPlaceholderString": "none"
 }

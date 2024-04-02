@@ -32,6 +32,7 @@ import {
 import {
   ApplicationContext,
   InstallationParameterContext,
+  DownloadParamFileContext,
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
@@ -43,10 +44,14 @@ const InstallationParameters = forwardRef(
   function InstallationParameters(props, ref) {
     const {
       state: globalState,
+      updateModified: globalUpdateModified,
       updateNextStep,
       updateIsDirty,
       updateIsDisabled,
     } = React.useContext(ApplicationContext);
+    const { updateModified, updateParamFileContent } = React.useContext(
+      DownloadParamFileContext,
+    );
     const { t } = useTranslation();
     const {
       state,
@@ -651,7 +656,12 @@ const InstallationParameters = forwardRef(
         aria-label="closes notification"
         kind="info"
         onActionButtonClick={() => {
-          resetParamFileTextAreaData();
+          resetParamFileTextAreaData({
+            updateParamFileContent,
+            globalUpdateModified,
+            updateModified,
+            state: globalState,
+          });
         }}
         onClose={function noRefCheck() {}}
         onCloseButtonClick={function noRefCheck() {}}

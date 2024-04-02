@@ -23,6 +23,7 @@ import { DISTRIBUTION_LIST, VERSION_LIST } from "../../../util/constants";
 import {
   ApplicationContext,
   InputFileSelectionContext,
+  DownloadParamFileContext,
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
@@ -31,10 +32,14 @@ import "./_input-file-selection.scss";
 const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
   const {
     state: globalState,
+    updateModified: globalUpdateModified,
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
   } = React.useContext(ApplicationContext);
+  const { updateModified, updateParamFileContent } = React.useContext(
+    DownloadParamFileContext,
+  );
   const { t } = useTranslation();
   const {
     state,
@@ -117,7 +122,12 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData();
+        resetParamFileTextAreaData({
+          updateParamFileContent,
+          globalUpdateModified,
+          updateModified,
+          state: globalState,
+        });
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}

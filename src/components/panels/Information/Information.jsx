@@ -21,7 +21,11 @@ import {
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
 } from "../../../util/local-storage-constants";
-import { ApplicationContext, InformationContext } from "../../../contexts";
+import {
+  ApplicationContext,
+  InformationContext,
+  DownloadParamFileContext,
+} from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import "./_information.scss";
@@ -29,10 +33,14 @@ import "./_information.scss";
 const Information = forwardRef(function Information(props, ref) {
   const {
     state: globalState,
+    updateModified: globalUpdateModified,
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
   } = React.useContext(ApplicationContext);
+  const { updateModified, updateParamFileContent } = React.useContext(
+    DownloadParamFileContext,
+  );
   const { state } = React.useContext(InformationContext);
   const { t } = useTranslation();
   const { distribution, systemRequirements } = props;
@@ -104,7 +112,12 @@ const Information = forwardRef(function Information(props, ref) {
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData();
+        resetParamFileTextAreaData({
+          updateParamFileContent,
+          globalUpdateModified,
+          updateModified,
+          state: globalState,
+        });
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}

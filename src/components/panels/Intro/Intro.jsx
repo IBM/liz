@@ -46,13 +46,17 @@ import "./_intro.scss";
 const Intro = forwardRef(function Intro(props, ref) {
   const {
     state: globalState,
+    updateModified: globalUpdateModified,
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
     resetToInitialState: globalResetToInitialState,
   } = useContext(ApplicationContext);
-  const { resetToInitialState: downloadParamFileResetToInitialState } =
-    useContext(DownloadParamFileContext);
+  const {
+    resetToInitialState: downloadParamFileResetToInitialState,
+    updateModified,
+    updateParamFileContent,
+  } = useContext(DownloadParamFileContext);
   const { resetToInitialState: editPageResetToInitialState } =
     useContext(EditPageContext);
   const { resetToInitialState: headerResetToInitialState } =
@@ -155,7 +159,12 @@ const Intro = forwardRef(function Intro(props, ref) {
       aria-label="closes notification"
       kind="info"
       onActionButtonClick={() => {
-        resetParamFileTextAreaData();
+        resetParamFileTextAreaData({
+          updateParamFileContent,
+          globalUpdateModified,
+          updateModified,
+          state: globalState,
+        });
       }}
       onClose={function noRefCheck() {}}
       onCloseButtonClick={function noRefCheck() {}}

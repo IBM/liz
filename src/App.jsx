@@ -5,7 +5,8 @@
  */
 
 import React from "react";
-import { Routes } from "./routes";
+import { createHashRouter, RouterProvider } from "react-router-dom";
+import { CreateBrowserRoutes } from "./routes";
 import {
   ApplicationContextProvider,
   HeaderContextProvider,
@@ -22,6 +23,8 @@ import {
 } from "./contexts";
 import "./App.scss";
 
+const router = createHashRouter(CreateBrowserRoutes);
+
 const App = () => {
   return (
     <ApplicationContextProvider>
@@ -36,7 +39,7 @@ const App = () => {
                       <NetworkAddressContextProvider>
                         <NetworkDeviceContextProvider>
                           <SummaryContextProvider>
-                            <Routes />
+                            <RouterProvider router={router} />
                           </SummaryContextProvider>
                         </NetworkDeviceContextProvider>
                       </NetworkAddressContextProvider>

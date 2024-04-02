@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React, { useRef, useContext } from "react";
+import React, { useRef } from "react";
 import { CreateFullPageStep } from "@carbon/ibm-products";
 import {
   Information as InformationHelp,
@@ -40,7 +40,6 @@ import {
   PANEL_LANDING_PAGE,
 } from "../util/panel-constants";
 import { LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION } from "../util/local-storage-constants";
-import { ApplicationContext, DownloadParamFileContext } from "../contexts";
 
 const getHelpPanel = ({ forPanel, params }) => {
   switch (forPanel) {
@@ -70,12 +69,7 @@ const getHelpPanel = ({ forPanel, params }) => {
 const getPanel = (panel, panelConfig, panelRef) => {
   switch (panel) {
     case PANEL_DOWNLOAD_PARAM_FILE:
-      return (
-        <DownloadParamFile
-          stateToParamFile={panelConfig.params.stateToParamFile}
-          ref={panelRef}
-        />
-      );
+      return <DownloadParamFile ref={panelRef} />;
     case PANEL_INFORMATION:
       return (
         <Information
@@ -101,12 +95,7 @@ const getPanel = (panel, panelConfig, panelRef) => {
     case PANEL_SUMMARY:
       return <Summary ref={panelRef} />;
     case PANEL_INTRO:
-      return (
-        <Intro
-          localStorageKeys={panelConfig.params.localStorageKeys}
-          ref={panelRef}
-        />
-      );
+      return <Intro ref={panelRef} />;
     default:
       return <>{null}</>;
   }
@@ -200,15 +189,14 @@ const getStep = ({ panel, panelConfig, updateStep, updateNextStep }) => {
   return getStepMarkup();
 };
 
-const resetParamFileTextAreaData = () => {
-  const { state, updateModified: globalUpdateModified } =
-    useContext(ApplicationContext);
-  const { updateParamFileContent, updateModified } = useContext(
-    DownloadParamFileContext,
-  );
+const resetParamFileTextAreaData = ({
+  updateParamFileContent,
+  globalUpdateModified,
+  updateModified,
+  state,
+}) => {
   const localParamFileContentValue = stateToParamFile(state);
 
-  updateParamFileContent(localParamFileContentValue);
   updateParamFileContent(localParamFileContentValue);
   globalUpdateModified(false);
   updateModified(false);

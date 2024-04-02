@@ -21,9 +21,13 @@
       react.$spacing-04
   );
   width: 100%;
-  background: react.$layer-02;
+  background: react.$layer-03;
 
   .liz__edit-page__page-header {
+    .liz__edit-page__link-cursor {
+      cursor: pointer;
+    }
+
     .cds--grid {
       margin-inline: inherit;
     }
@@ -51,6 +55,10 @@
   background: react.$layer-02;
 
   .liz__edit-page__page-header {
+    .liz__edit-page__link-cursor {
+      cursor: pointer;
+    }
+
     .cds--grid {
       margin-inline: inherit;
     }

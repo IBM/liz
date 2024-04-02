@@ -13,6 +13,7 @@ import InformationContextProvider from "./InformationContextProvider";
 import InputFileSelectionContextProvider from "./InputFileSelectionContextProvider";
 import InstallationParameterContextProvider from "./InstallationParameterContextProvider";
 import EditPageContextProvider from "./EditPageContextProvider";
+import ErrorPageContextProvider from "./ErrorPageContextProvider";
 import IntroContextProvider from "./IntroContextProvider";
 import NetworkAddressContextProvider from "./NetworkAddressContextProvider";
 import NetworkDeviceContextProvider from "./NetworkDeviceContextProvider";
@@ -31,6 +32,10 @@ const LandingPageContext = createContext({
   dispatch: null,
 });
 const EditPageContext = createContext({
+  state: null,
+  dispatch: null,
+});
+const ErrorPageContext = createContext({
   state: null,
   dispatch: null,
 });
@@ -74,6 +79,8 @@ export {
   HeaderContextProvider,
   EditPageContext,
   EditPageContextProvider,
+  ErrorPageContext,
+  ErrorPageContextProvider,
   LandingPageContext,
   LandingPageContextProvider,
   DownloadParamFileContext,

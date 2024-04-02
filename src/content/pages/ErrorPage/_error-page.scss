@@ -1,0 +1,74 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2024
+ */
+
+@use "@carbon/react" with (
+  $font-path: "@ibm/plex"
+);
+
+.liz__error-page__legal-banner {
+  &.cds--inline-notification {
+    max-width: 100%;
+  }
+}
+
+.liz__error-page__root-layer__with-legal-banner {
+  height: calc(100% - react.$spacing-09);
+  width: 100%;
+  background: react.$layer-01;
+}
+
+.liz__error-page__root-layer__wo-legal-banner {
+  height: 100%;
+  width: 100%;
+  background: react.$layer-01;
+}
+
+.liz__error-page__grid {
+  padding: 0;
+  margin-left: 0;
+  max-width: 100% !important;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .liz__error-page__payload {
+    .liz__error-page__payload-icon {
+      display: flex;
+      justify-content: center;
+    }
+
+    .liz__error-page__payload-message {
+      @include react.type-style("heading-05");
+
+      display: flex;
+      justify-content: center;
+      padding: 0 0 react.$spacing-08 0;
+    }
+
+    .liz__error-page__payload-message-status {
+      @include react.type-style("body-02");
+
+      padding: 0 0 react.$spacing-02 0;
+    }
+
+    .liz__error-page__payload-accordion {
+      padding: react.$spacing-04 0 0 0;
+
+      .liz__error-page__payload-error-stack {
+        padding: react.$spacing-02 0 0 0;
+      }
+
+      .liz__error-page__payload-message-status,
+      .liz__error-page__payload-error-message {
+        @include react.type-style("body-02");
+
+        padding: 0 0 react.$spacing-02 0;
+      }
+    }
+  }
+}

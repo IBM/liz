@@ -36,7 +36,6 @@ import {
 } from "../util/reducer-action-constants";
 import { ADDRESS_TYPE_IPV4, DEFAULT_STEPS } from "../util/constants";
 import { getLocalStorageKeys, pruneSettings } from "../util/local-storage-util";
-import { stateToParamFile } from "../util/param-file-util";
 import { ApplicationContext } from ".";
 
 import reducer from "../reducers/AppReducer";
@@ -347,7 +346,6 @@ const ApplicationContextProvider = ({ value, children }) => {
         config = {
           panel: PANEL_DOWNLOAD_PARAM_FILE,
           params: {
-            stateToParamFile,
             disableSubmit: !state.steps.downloadParamFile.complete,
             invalid: state.steps.downloadParamFile.invalid,
             title: t("leftNavigation.progressStep.downloadParamFile.label"),
