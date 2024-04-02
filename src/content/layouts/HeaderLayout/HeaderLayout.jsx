@@ -148,6 +148,9 @@ const HeaderLayout = () => {
       <ComposedModal
         preventCloseOnClickOutside
         open={state.needsManualNavigationConfirmation}
+        onRequestClose={() => {
+          updateNeedsManualNavigationConfirmation(false);
+        }}
       >
         <ModalHeader
           label={t("editPage.createFullPage.modalLabel")}
