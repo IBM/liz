@@ -110,7 +110,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       window.location.hash &&
       window.location.hash === `#${PathConstants.EXPANDED_PARMFILE_CARD}`
     ) {
-      updateNextStepsCardIsExpanded(true);
+      updateParmfileCardIsExpanded(true);
     }
   }, []);
 

@@ -5,7 +5,7 @@
  */
 
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useHref } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Header,
@@ -43,6 +43,7 @@ import "./_header-layout.scss";
 
 const HeaderLayout = () => {
   const { t } = useTranslation();
+  const homePageHref = useHref(PathConstants.HOME);
   const navigate = useNavigate();
   const { config, resetToInitialState: globalResetToInitialState } =
     useContext(ApplicationContext);
@@ -188,7 +189,7 @@ const HeaderLayout = () => {
             )}
             <Header aria-label={t("header.productName", { ns: "common" })}>
               <SkipToContent />
-              <HeaderName href="/#" prefix="">
+              <HeaderName href={homePageHref} prefix="">
                 {t("header.productName", { ns: "common" })}
               </HeaderName>
               <HeaderGlobalBar>
