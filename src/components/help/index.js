@@ -13,6 +13,7 @@ import DownloadParamFile from "./DownloadParamFile";
 import Summary from "./Summary";
 import Intro from "./Intro";
 import LandingPage from "./LandingPage";
+import ErrorPage from "./ErrorPage";
 
 export {
   Information,
@@ -24,4 +25,5 @@ export {
   Summary,
   Intro,
   LandingPage,
+  ErrorPage,
 };

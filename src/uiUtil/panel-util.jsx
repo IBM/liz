@@ -16,6 +16,7 @@ import {
   Intro as IntroHelp,
   DownloadParamFile as DownloadParamFileHelp,
   LandingPage as LandingPageHelp,
+  ErrorPage as ErrorPageHelp,
 } from "../components/help";
 import {
   Information,
@@ -38,6 +39,7 @@ import {
   PANEL_SUMMARY,
   PANEL_INTRO,
   PANEL_LANDING_PAGE,
+  PANEL_ERROR_PAGE,
 } from "../util/panel-constants";
 import { LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION } from "../util/local-storage-constants";
 
@@ -61,6 +63,8 @@ const getHelpPanel = ({ forPanel, params }) => {
       return <IntroHelp {...params} />;
     case PANEL_LANDING_PAGE:
       return <LandingPageHelp {...params} />;
+    case PANEL_ERROR_PAGE:
+      return <ErrorPageHelp {...params} />;
     default:
       return null;
   }

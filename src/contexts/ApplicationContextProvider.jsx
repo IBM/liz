@@ -16,6 +16,7 @@ import {
   PANEL_SUMMARY,
   PANEL_INTRO,
   PANEL_LANDING_PAGE,
+  PANEL_ERROR_PAGE,
   PANEL_UNKNOWN,
 } from "../util/panel-constants";
 import {
@@ -230,6 +231,16 @@ const ApplicationContextProvider = ({ value, children }) => {
       case 10:
         config = {
           forPanel: PANEL_INTRO,
+          params: {
+            hasMultipleSteps: false,
+            currentHelpStep: state.helpStep,
+            updateCurrentHelpStep,
+          },
+        };
+        break;
+      case 11:
+        config = {
+          forPanel: PANEL_ERROR_PAGE,
           params: {
             hasMultipleSteps: false,
             currentHelpStep: state.helpStep,

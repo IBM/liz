@@ -13,6 +13,7 @@ const PANEL_NETWORK_DEVICE = "networkDevice";
 const PANEL_SUMMARY = "summary";
 const PANEL_INTRO = "intro";
 const PANEL_LANDING_PAGE = "landingPage";
+const PANEL_ERROR_PAGE = "errorPage";
 const PANEL_UNKNOWN = "unknown";
 
 export {
@@ -25,5 +26,6 @@ export {
   PANEL_SUMMARY,
   PANEL_INTRO,
   PANEL_LANDING_PAGE,
+  PANEL_ERROR_PAGE,
   PANEL_UNKNOWN,
 };

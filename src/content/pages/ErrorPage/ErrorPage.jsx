@@ -36,10 +36,13 @@ import "./_error-page.scss";
 const ErrorPage = forwardRef(function ErrorPage(props, ref) {
   const { t } = useTranslation();
   const error = useRouteError();
-  const { updateShowLegalNotification } = useContext(ApplicationContext);
+  const { updateShowLegalNotification, updateStep } =
+    useContext(ApplicationContext);
   const { state, updateConfig } = useContext(ErrorPageContext);
   const publicRef = {
     persistState: () => {
+      updateStep(11);
+
       localStorage.setItem(
         LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
         JSON.stringify({
