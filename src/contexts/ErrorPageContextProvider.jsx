@@ -7,7 +7,10 @@ import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import errorPageReducer from "../reducers/ErrorPageReducer";
 import { createInitialState as createInitialErrorPageState } from "../states/ErrorPageState";
-import { ACTION_RESET_TO_INITIAL_STATE } from "../util/reducer-action-constants";
+import {
+  ACTION_RESET_TO_INITIAL_STATE,
+  ACTION_UPDATE_APP_CONFIG,
+} from "../util/reducer-action-constants";
 import { ErrorPageContext } from "./index";
 
 const ErrorPageContextProvider = ({ value, children }) => {
@@ -23,6 +26,13 @@ const ErrorPageContextProvider = ({ value, children }) => {
     });
   };
 
+  const updateConfig = (config) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_CONFIG,
+      nextAppConfig: config,
+    });
+  };
+
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();
   }, [state, updateResetToInitialState]);
@@ -31,9 +41,10 @@ const ErrorPageContextProvider = ({ value, children }) => {
     () => ({
       ...value,
       state,
+      updateConfig,
       resetToInitialState,
     }),
-    [value, state, resetToInitialState],
+    [value, state, updateConfig, resetToInitialState],
   );
 
   return (

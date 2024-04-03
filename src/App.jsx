@@ -12,6 +12,7 @@ import {
   HeaderContextProvider,
   LandingPageContextProvider,
   EditPageContextProvider,
+  ErrorPageContextProvider,
   DownloadParamFileContextProvider,
   InformationContextProvider,
   InputFileSelectionContextProvider,
@@ -39,7 +40,9 @@ const App = () => {
                       <NetworkAddressContextProvider>
                         <NetworkDeviceContextProvider>
                           <SummaryContextProvider>
-                            <RouterProvider router={router} />
+                            <ErrorPageContextProvider>
+                              <RouterProvider router={router} />
+                            </ErrorPageContextProvider>
                           </SummaryContextProvider>
                         </NetworkDeviceContextProvider>
                       </NetworkAddressContextProvider>

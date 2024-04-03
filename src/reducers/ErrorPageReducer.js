@@ -6,11 +6,17 @@
 
 import {
   ACTION_UPDATE_NOP,
+  ACTION_UPDATE_APP_CONFIG,
   ACTION_RESET_TO_INITIAL_STATE,
 } from "../util/reducer-action-constants";
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case ACTION_UPDATE_APP_CONFIG:
+      return {
+        ...state,
+        appConfig: action.nextAppConfig,
+      };
     case ACTION_RESET_TO_INITIAL_STATE:
       // for combined states the state is prefixed by the reducer name
       return action.nextInitialState.editPageReducer || action.nextInitialState;

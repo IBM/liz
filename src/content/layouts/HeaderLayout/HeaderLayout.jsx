@@ -77,7 +77,9 @@ const HeaderLayout = () => {
     useContext(NetworkDeviceContext);
   const { resetToInitialState: summaryResetToInitialState } =
     useContext(SummaryContext);
-  const { helpPanelConfig } = config;
+  const { helpPanelConfig } = config || {
+    helpPanelConfig: {},
+  };
 
   const showNotification = state.showNotification;
   const isHelpPanelExpanded = state.isHelpPanelExpanded;

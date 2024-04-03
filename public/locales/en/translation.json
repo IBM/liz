@@ -63,6 +63,8 @@
   "editPage.createFullPage.modalLabel": "Confirmation required",
   "errorPage.headerTitle": "An error occurred.",
   "errorPage.label.statusCode": "Status code",
+  "errorPage.label.statusMessage": "Status message",
+  "errorPage.label.errorMessage": "Error code",
   "errorPage.detailsLabel": "Error details",
   "errorPage.dataPlaceholderString": "none"
 }

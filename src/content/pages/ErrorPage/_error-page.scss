@@ -54,6 +54,14 @@
       @include react.type-style("body-02");
 
       padding: 0 0 react.$spacing-02 0;
+
+      .liz__error-page__payload-message-status-key {
+        margin: 0 react.$spacing-03 0 0;
+      }
+
+      .liz__error-page__payload-message-status-value {
+        @include react.font-weight("semibold");
+      }
     }
 
     .liz__error-page__payload-accordion {
@@ -68,6 +76,24 @@
         @include react.type-style("body-02");
 
         padding: 0 0 react.$spacing-02 0;
+
+        .liz__error-page__payload-message-status-key {
+          margin: 0 react.$spacing-03 0 0;
+        }
+
+        .liz__error-page__payload-message-status-value {
+          @include react.font-weight("semibold");
+        }
+      }
+    }
+
+    .liz__error-page__support-icons {
+      padding: react.$spacing-10 0 0 0;
+      display: flex;
+      justify-content: center;
+
+      a {
+        margin: react.$spacing-04;
       }
     }
   }

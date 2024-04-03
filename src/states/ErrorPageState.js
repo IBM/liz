@@ -14,6 +14,7 @@ const createInitialState = (skipLocalStorageUsage = false) => {
     localStorage.getItem(LOCAL_STORAGE_KEY_APP_ERROR_PAGE),
   );
   const defaultState = {
+    appConfig: {},
     origin: STATE_ORIGIN_DEFAULT,
   };
 
