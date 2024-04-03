@@ -42,7 +42,15 @@
       justify-content: center;
     }
 
-    .liz__error-page__payload-message {
+    .liz__error-page__payload-message-one {
+      @include react.type-style("heading-07");
+
+      display: flex;
+      justify-content: center;
+      padding: 0 0 react.$spacing-08 0;
+    }
+
+    .liz__error-page__payload-message-two {
       @include react.type-style("heading-05");
 
       display: flex;

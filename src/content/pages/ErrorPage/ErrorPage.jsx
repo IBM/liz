@@ -122,8 +122,11 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                 <div className="liz__error-page__payload-icon">
                   <Linux size="64" />
                 </div>
-                <div className="liz__error-page__payload-message">
-                  {t("errorPage.headerTitle")}
+                <div className="liz__error-page__payload-message-one">
+                  {t("errorPage.headerTitleOne")}
+                </div>
+                <div className="liz__error-page__payload-message-two">
+                  {t("errorPage.headerTitleTwo")}
                 </div>
                 <div className="liz__error-page__payload-message-status">
                   {errorStatus !== t("errorPage.dataPlaceholderString") && (

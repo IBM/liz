@@ -7,7 +7,11 @@ import React, { useReducer, useCallback } from "react";
 import PropTypes from "prop-types";
 import editPageReducer from "../reducers/EditPageReducer";
 import { createInitialState as createInitialEditPageState } from "../states/EditPageState";
-import { ACTION_RESET_TO_INITIAL_STATE } from "../util/reducer-action-constants";
+import {
+  ACTION_RESET_TO_INITIAL_STATE,
+  ACTION_UPDATE_APP_HAS_TABS,
+  ACTION_UPDATE_APP_TABS,
+} from "../util/reducer-action-constants";
 import { EditPageContext } from "./index";
 
 const EditPageContextProvider = ({ value, children }) => {
@@ -23,6 +27,30 @@ const EditPageContextProvider = ({ value, children }) => {
     });
   };
 
+  const updateHasTabs = (flag) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_HAS_TABS,
+      nextHasTabs: flag,
+    });
+  };
+
+  const updateTabs = (tabs) => {
+    dispatch({
+      type: ACTION_UPDATE_APP_TABS,
+      nextTabs: tabs,
+    });
+  };
+
+  const addTabs = (tabs) => {
+    updateHasTabs(true);
+    updateTabs(tabs);
+  };
+
+  const removeTabs = () => {
+    updateHasTabs(false);
+    updateTabs(undefined);
+  };
+
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();
   }, [state, updateResetToInitialState]);
@@ -31,9 +59,21 @@ const EditPageContextProvider = ({ value, children }) => {
     () => ({
       ...value,
       state,
+      addTabs,
+      removeTabs,
+      updateHasTabs,
+      updateTabs,
       resetToInitialState,
     }),
-    [value, state, resetToInitialState],
+    [
+      value,
+      state,
+      addTabs,
+      removeTabs,
+      updateHasTabs,
+      updateTabs,
+      resetToInitialState,
+    ],
   );
 
   return (

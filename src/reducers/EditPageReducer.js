@@ -7,10 +7,22 @@
 import {
   ACTION_UPDATE_NOP,
   ACTION_RESET_TO_INITIAL_STATE,
+  ACTION_UPDATE_APP_HAS_TABS,
+  ACTION_UPDATE_APP_TABS,
 } from "../util/reducer-action-constants";
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case ACTION_UPDATE_APP_TABS:
+      return {
+        ...state,
+        tabs: action.nextTabs,
+      };
+    case ACTION_UPDATE_APP_HAS_TABS:
+      return {
+        ...state,
+        hasTabs: action.nextHasTabs,
+      };
     case ACTION_RESET_TO_INITIAL_STATE:
       // for combined states the state is prefixed by the reducer name
       return action.nextInitialState.editPageReducer || action.nextInitialState;

@@ -14,6 +14,8 @@ const createInitialState = (skipLocalStorageUsage = false) => {
     localStorage.getItem(LOCAL_STORAGE_KEY_APP_EDIT_PAGE),
   );
   const defaultState = {
+    hasTabs: false,
+    tabs: undefined,
     origin: STATE_ORIGIN_DEFAULT,
   };
 

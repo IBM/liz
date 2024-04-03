@@ -108,6 +108,9 @@ const EditPage = forwardRef(function EditPage(props, ref) {
     }
   };
 
+  const hasTabs = state.hasTabs;
+  const tabs = state.tabs;
+
   const inlineNotification = getInlineNotification(
     t("legalNotice.headerLabel"),
     t("legalNotice.contentLabel"),
@@ -145,6 +148,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
 
   const pageHeaderMarkup = (
     <PageHeader
+      navigation={hasTabs ? tabs : null}
       className="liz__edit-page__page-header"
       actionBarOverflowAriaLabel={t("pageHeader.actionBarOverflowAriaLabel", {
         ns: "common",
