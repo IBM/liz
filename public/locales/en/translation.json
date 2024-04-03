@@ -62,7 +62,7 @@
   "editPage.createFullPage.modalTitle": "Are you sure you want to cancel?",
   "editPage.createFullPage.modalLabel": "Confirmation required",
   "errorPage.headerTitleOne": "Oooops!",
-  "errorPage.headerTitleTwo": "Somthing's wrong here...",
+  "errorPage.headerTitleTwo": "Something's wrong here...",
   "errorPage.label.statusCode": "Status code",
   "errorPage.label.statusMessage": "Status message",
   "errorPage.label.errorMessage": "Error code",
