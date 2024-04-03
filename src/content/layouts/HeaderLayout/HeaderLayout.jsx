@@ -148,7 +148,7 @@ const HeaderLayout = () => {
       <ComposedModal
         preventCloseOnClickOutside
         open={state.needsManualNavigationConfirmation}
-        onRequestClose={() => {
+        onClose={() => {
           updateNeedsManualNavigationConfirmation(false);
         }}
       >
