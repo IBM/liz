@@ -33,3 +33,24 @@
     }
   }
 }
+
+.next-steps__formatted-code {
+  @include react.type-style("code-01");
+
+  border-radius: react.$spacing-04;
+  background: react.$layer-01;
+  padding: react.$spacing-02 react.$spacing-03 react.$spacing-02
+    react.$spacing-03;
+}
+
+.next-steps_para_bottom {
+  padding-bottom: react.$spacing-06;
+}
+
+.next-steps_para {
+  padding: react.$spacing-06 0 react.$spacing-06 0;
+}
+
+.next-steps__accordion {
+  padding: react.$spacing-06;
+}

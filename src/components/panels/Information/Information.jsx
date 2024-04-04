@@ -244,11 +244,11 @@ Information.propTypes = {
     version: PropTypes.string.isRequired,
   }).isRequired,
   systemRequirements: PropTypes.shape({
-    diskSize: PropTypes.number.isRequired,
-    memorySize: PropTypes.number.isRequired,
-    machineLevel: PropTypes.string.isRequired,
-    docLink: PropTypes.string.isRequired,
-  }).isRequired,
+    diskSize: PropTypes.number,
+    memorySize: PropTypes.number,
+    machineLevel: PropTypes.string,
+    docLink: PropTypes.string,
+  }),
 };
 
 export default Information;

@@ -104,7 +104,7 @@ const NextSteps = ({
 
   const vncInstructionsMarkup = (
     <>
-      <div className="next-steps_para">
+      <div className="next-steps_para_bottom">
         {t("panel.nextSteps.explanation2", { ns: "panels" })}
       </div>
       <UnorderedList>
@@ -119,7 +119,7 @@ const NextSteps = ({
             getLabel(
               "",
               t("showInformationLabel", { ns: "common" }),
-              getContent("The network address was not yet provided."),
+              getContent(t("landingPage.expressiveCard.missingHostName")),
             )}
           {networkAddress && (
             <span
@@ -177,7 +177,7 @@ const NextSteps = ({
             getLabel(
               "",
               t("showInformationLabel", { ns: "common" }),
-              getContent("The network address was not yet provided."),
+              getContent(t("landingPage.expressiveCard.missingHostName")),
             )}
           {networkAddress && (
             <span
@@ -253,7 +253,9 @@ const NextSteps = ({
             &nbsp;view for the mainframe containing the LPAR or DPM partition.
           </Trans>
         </ListItem>
-        <Accordion className="next-steps__accordion">
+      </UnorderedList>
+      <div className="next-steps__accordion">
+        <Accordion>
           <AccordionItem
             title={t("panel.nextSteps.listItem14", { ns: "panels" })}
           >
@@ -322,7 +324,7 @@ const NextSteps = ({
             </UnorderedList>
           </AccordionItem>
         </Accordion>
-      </UnorderedList>
+      </div>
       {useVnc && vncInstructionsMarkup}
       {useSsh && sshInstructionsMarkup}
       {remoteAccessConfigIsMissing && missingRemoteAccessNotification}

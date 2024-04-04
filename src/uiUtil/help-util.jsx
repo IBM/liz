@@ -21,12 +21,8 @@ const getContent = (value) => {
 const getLabel = (label, buttonLabel, content) => {
   return (
     <>
-      <ToggletipLabel>{label}</ToggletipLabel>
-      <Toggletip
-        autoAlign
-        className="ui-component__info-icon"
-        align="right-bottom"
-      >
+      {label && <ToggletipLabel>{label}</ToggletipLabel>}
+      <Toggletip className="ui-component__info-icon ">
         <ToggletipButton label={buttonLabel}>
           <Information />
         </ToggletipButton>
