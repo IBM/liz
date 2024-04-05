@@ -355,7 +355,11 @@ const InstallationParameters = forwardRef(
             const computedUrlValue = computeInstallationAddress(urlValue);
             // while editing we don't update the validity but set it to true
             // cause we don't want to have the form validation logic kick in.
-            updateInstallationAddress(urlValue, computedUrlValue, true);
+            updateInstallationAddress({
+              address: urlValue,
+              computedAddress: computedUrlValue,
+              valid: true,
+            });
           }}
           onBlur={(url) => {
             if (paramFileHasBeenModifiedFromState) return;
@@ -363,11 +367,11 @@ const InstallationParameters = forwardRef(
             const urlValue = url && url.target ? url.target.value : "";
             const computedUrlValue = computeInstallationAddress(urlValue);
             const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-            updateInstallationAddress(
-              urlValue,
-              computedUrlValue,
-              urlValueIsValid,
-            );
+            updateInstallationAddress({
+              address: urlValue,
+              computedAddress: computedUrlValue,
+              valid: urlValueIsValid,
+            });
           }}
         />
         {ipAddressVersionMissmatchExists() && ipVersionMissmatchNotification}
@@ -433,12 +437,15 @@ const InstallationParameters = forwardRef(
               : "";
             // while editing we don't update the validity but set it to true
             // cause we don't want to have the form validation logic kick in.
-            updateUserName(userNameValue, true);
-            updateInstallationAddress(
-              state?.installationAddress?.value ?? "",
-              computedUrlValue,
-              true,
-            );
+            updateUserName({
+              userName: userNameValue,
+              valid: true,
+            });
+            updateInstallationAddress({
+              address: state?.installationAddress?.value ?? "",
+              computedAddress: computedUrlValue,
+              valid: true,
+            });
           }}
           onBlur={(userName) => {
             if (paramFileHasBeenModifiedFromState) return;
@@ -452,12 +459,15 @@ const InstallationParameters = forwardRef(
                 )
               : "";
             const userNameValueIsValid = isUserNameInputValid(userNameValue);
-            updateUserName(userNameValue, userNameValueIsValid);
-            updateInstallationAddress(
-              state?.installationAddress?.value ?? "",
-              computedUrlValue,
-              true,
-            );
+            updateUserName({
+              userName: userNameValue,
+              valid: userNameValueIsValid,
+            });
+            updateInstallationAddress({
+              address: state?.installationAddress?.value ?? "",
+              computedAddress: computedUrlValue,
+              valid: true,
+            });
           }}
         />
       </div>
@@ -497,12 +507,15 @@ const InstallationParameters = forwardRef(
               : "";
             // while editing we don't update the validity but set it to true
             // cause we don't want to have the form validation logic kick in.
-            updatePassword(passwordValue, true);
-            updateInstallationAddress(
-              state?.installationAddress?.value ?? "",
-              computedUrlValue,
-              true,
-            );
+            updatePassword({
+              password: passwordValue,
+              valid: true,
+            });
+            updateInstallationAddress({
+              address: state?.installationAddress?.value ?? "",
+              computedAddress: computedUrlValue,
+              valid: true,
+            });
           }}
           onBlur={(password) => {
             if (paramFileHasBeenModifiedFromState) return;
@@ -517,12 +530,15 @@ const InstallationParameters = forwardRef(
                 )
               : "";
             const passwordValueIsValid = isPasswordInputValid(passwordValue);
-            updatePassword(passwordValue, passwordValueIsValid);
-            updateInstallationAddress(
-              state?.installationAddress?.value ?? "",
-              computedUrlValue,
-              true,
-            );
+            updatePassword({
+              password: passwordValue,
+              valid: passwordValueIsValid,
+            });
+            updateInstallationAddress({
+              address: state?.installationAddress?.value ?? "",
+              computedAddress: computedUrlValue,
+              valid: true,
+            });
           }}
         />
       </div>

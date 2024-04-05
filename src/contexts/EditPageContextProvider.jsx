@@ -20,36 +20,51 @@ const EditPageContextProvider = ({ value, children }) => {
     createInitialEditPageState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialEditPageState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialEditPageState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateHasTabs = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_HAS_TABS,
-      nextHasTabs: flag,
-    });
-  };
+  const updateHasTabs = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_HAS_TABS,
+        nextHasTabs: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateTabs = (tabs) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_TABS,
-      nextTabs: tabs,
-    });
-  };
+  const updateTabs = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_TABS,
+        nextTabs: updates,
+      });
+    },
+    [status, dispatch],
+  );
 
-  const addTabs = (tabs) => {
-    updateHasTabs(true);
-    updateTabs(tabs);
-  };
+  const addTabs = useCallback(
+    (updates) => {
+      updateHasTabs(true);
+      updateTabs(updates);
+    },
+    [state, dispatch, updateHasTabs, updateTabs],
+  );
 
-  const removeTabs = () => {
-    updateHasTabs(false);
-    updateTabs(undefined);
-  };
+  const removeTabs = useCallback(
+    (updates) => {
+      updateHasTabs(false);
+      updateTabs(undefined);
+    },
+    [state, updateHasTabs, updateHasTabs, updateTabs],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

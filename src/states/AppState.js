@@ -9,7 +9,6 @@ import {
   LOCAL_STORAGE_KEY_APP,
   STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
-import { hasLocalStorageState } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_APP));
@@ -22,14 +21,14 @@ const createInitialState = (skipLocalStorageUsage = false) => {
     isDirty: false,
     isEditing: false,
     canRenderStep: true,
-    useStateFromLocalStorage: hasLocalStorageState(),
+    useStateFromLocalStorage: false,
     origin: STATE_ORIGIN_DEFAULT,
   };
 
   if (initialState && !skipLocalStorageUsage) {
     return {
       ...initialState,
-      useStateFromLocalStorage: hasLocalStorageState(),
+      useStateFromLocalStorage: true,
     };
   }
 

@@ -21,33 +21,42 @@ const DownloadParamFileContextProvider = ({ value, children }) => {
     createInitialDownloadParamFileState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialDownloadParamFileState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialDownloadParamFileState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updatParamFileCopied = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_PARAM_FILE_COPIED,
-      nextParamFileContentCopied: flag,
-    });
-  };
+  const updatParamFileCopied = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_PARAM_FILE_COPIED,
+        nextParamFileContentCopied: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateModified = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_PARAM_FILE_MODIFIED,
-      nextParamFileContentModified: flag,
-    });
-  };
+  const updateModified = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_PARAM_FILE_MODIFIED,
+        nextParamFileContentModified: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateParamFileContent = (paramFileContent) => {
+  const updateParamFileContent = useCallback((updates) => {
     dispatch({
       type: ACTION_UPDATE_PARAM_FILE_CONTENT,
-      nextParamFileContent: paramFileContent,
+      nextParamFileContent: updates,
     });
-  };
+  });
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

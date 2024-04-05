@@ -94,10 +94,13 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
 
   const errorStatus = error?.status ?? t("errorPage.dataPlaceholderString");
   const errorData = error?.data ?? t("errorPage.dataPlaceholderString");
-  const errorDetailsMessage =
-    error?.error?.message ?? t("errorPage.dataPlaceholderString");
-  const errorDetailsStack =
-    error?.error?.stack ?? t("errorPage.dataPlaceholderString");
+  const hasErrorInsideError = typeof error.error === "object";
+  const errorDetailsMessage = hasErrorInsideError
+    ? error?.error?.message ?? t("errorPage.dataPlaceholderString")
+    : error?.message ?? t("errorPage.dataPlaceholderString");
+  const errorDetailsStack = hasErrorInsideError
+    ? error?.error?.stack ?? t("errorPage.dataPlaceholderString")
+    : error?.stack ?? t("errorPage.dataPlaceholderString");
 
   const appConfig = state.appConfig;
   const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
@@ -158,14 +161,16 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                     t("errorPage.dataPlaceholderString") && (
                     <Accordion>
                       <AccordionItem title={t("errorPage.detailsLabel")}>
-                        <div className="liz__error-page__payload-error-message">
-                          <span className="liz__error-page__payload-message-status-key">
-                            {t("errorPage.label.errorMessage")}:
-                          </span>
-                          <span className="liz__error-page__payload-message-status-value">
-                            {errorDetailsMessage}
-                          </span>
-                        </div>
+                        {errorDetailsMessage && (
+                          <div className="liz__error-page__payload-error-message">
+                            <span className="liz__error-page__payload-message-status-key">
+                              {t("errorPage.label.errorMessage")}:
+                            </span>
+                            <span className="liz__error-page__payload-message-status-value">
+                              {errorDetailsMessage}
+                            </span>
+                          </div>
+                        )}
                         <div className="liz__error-page__payload-error-stack">
                           <CodeSnippet
                             type="multi"

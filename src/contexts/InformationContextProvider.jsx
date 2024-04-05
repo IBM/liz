@@ -16,12 +16,15 @@ const InformationContextProvider = ({ value, children }) => {
     createInitialInformationState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialInformationState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialInformationState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

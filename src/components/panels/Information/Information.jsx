@@ -4,7 +4,12 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useContext,
+  useImperativeHandle,
+} from "react";
 import { useTranslation, Trans } from "react-i18next";
 import PropTypes from "prop-types";
 import {
@@ -37,11 +42,11 @@ const Information = forwardRef(function Information(props, ref) {
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
-  } = React.useContext(ApplicationContext);
-  const { updateModified, updateParamFileContent } = React.useContext(
+  } = useContext(ApplicationContext);
+  const { updateModified, updateParamFileContent } = useContext(
     DownloadParamFileContext,
   );
-  const { state } = React.useContext(InformationContext);
+  const { state } = useContext(InformationContext);
   const { t } = useTranslation();
   const { distribution, systemRequirements } = props;
   const publicRef = {

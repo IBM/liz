@@ -57,6 +57,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
     updateNextStep,
     updateShowLegalNotification,
     updateIsEditing,
+    updateUseStateFromLocalStorage,
   } = useContext(ApplicationContext);
   const { state: headerState, updateNeedsManualNavigationConfirmation } =
     useContext(HeaderContext);
@@ -229,6 +230,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
       nextButtonText={t("btnLabel.Next", { ns: "common" })}
       onClose={() => {
         updateIsEditing(false);
+        updateUseStateFromLocalStorage(true);
         navigate(
           `${parmfileCardIsExpanded() ? PathConstants.EXPANDED_PARMFILE_CARD : PathConstants.HOME}`,
         );

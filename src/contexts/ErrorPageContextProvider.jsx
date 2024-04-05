@@ -19,19 +19,25 @@ const ErrorPageContextProvider = ({ value, children }) => {
     createInitialErrorPageState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialErrorPageState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialErrorPageState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateConfig = (config) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_CONFIG,
-      nextAppConfig: config,
-    });
-  };
+  const updateConfig = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_CONFIG,
+        nextAppConfig: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

@@ -24,52 +24,70 @@ const LandingPageContextProvider = ({ value, children }) => {
     createInitialLandingPageState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialLandingPageState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialLandingPageState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateParmfileCardIsExpanded = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_PARMFILE_CARD_IS_EXPANDED,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextParmfileCardIsExpanded: flag,
-    });
-  };
+  const updateParmfileCardIsExpanded = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_PARMFILE_CARD_IS_EXPANDED,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextParmfileCardIsExpanded: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateRequirementsCardIsExpanded = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_REQUIREMENTS_CARD_IS_EXPANDED,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextRequirementsCardIsExpanded: flag,
-    });
-  };
+  const updateRequirementsCardIsExpanded = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_REQUIREMENTS_CARD_IS_EXPANDED,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextRequirementsCardIsExpanded: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateNextStepsCardIsExpanded = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_NEXT_STEPS_CARD_IS_EXPANDED,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextNextStepsCardIsExpanded: flag,
-    });
-  };
+  const updateNextStepsCardIsExpanded = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NEXT_STEPS_CARD_IS_EXPANDED,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextNextStepsCardIsExpanded: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateRequirementsCardHasBeenReviewed = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_REQUIREMENTS_CARD_HAS_BEEN_REVIEWED,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextRequirementsCardHasBeenReviewed: flag,
-    });
-  };
+  const updateRequirementsCardHasBeenReviewed = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_REQUIREMENTS_CARD_HAS_BEEN_REVIEWED,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextRequirementsCardHasBeenReviewed: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateNextStepsCardHasBeenReviewed = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_NEXT_STEPS_CARD_HAS_BEEN_REVIEWED,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextNextStepsCardHasBeenReviewed: flag,
-    });
-  };
+  const updateNextStepsCardHasBeenReviewed = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NEXT_STEPS_CARD_HAS_BEEN_REVIEWED,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextNextStepsCardHasBeenReviewed: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

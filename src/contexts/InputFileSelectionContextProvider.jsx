@@ -21,28 +21,37 @@ const InputFileSelectionContextProvider = ({ value, children }) => {
     createInitialInputFileSelectionState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialInputFileSelectionState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialInputFileSelectionState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateSelectedDistributionName = (selectedDistributionName) => {
-    dispatch({
-      type: ACTION_UPDATE_DISTRIBUTION_NAME,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextSelectedDistributionName: selectedDistributionName,
-    });
-  };
+  const updateSelectedDistributionName = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_DISTRIBUTION_NAME,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextSelectedDistributionName: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateSelectedDistributionVersion = (selectedDistributionVersion) => {
-    dispatch({
-      type: ACTION_UPDATE_DISTRIBUTION_VERSION,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextSelectedDistributionVersion: selectedDistributionVersion,
-    });
-  };
+  const updateSelectedDistributionVersion = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_DISTRIBUTION_VERSION,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextSelectedDistributionVersion: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

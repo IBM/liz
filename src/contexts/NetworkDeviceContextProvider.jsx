@@ -29,111 +29,152 @@ const NetworkDeviceContextProvider = ({ value, children }) => {
     createInitialNetworkDeviceState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialNetworkDeviceState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialNetworkDeviceState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateSelectedDeviceType = (selectedDeviceType) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_TYPE,
-      nextSelectedDeviceType: selectedDeviceType,
-    });
-  };
+  const updateSelectedDeviceType = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_TYPE,
+        nextSelectedDeviceType: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateUseVlan = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_USE_VLAN,
-      nextUseVlan: flag,
-    });
-  };
+  const updateUseVlan = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_USE_VLAN,
+        nextUseVlan: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateReadChannelId = (readChannelId, computedReadChannelId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_READ_CHANNEL_ID,
-      nextReadChannelId: {
-        value: readChannelId,
-        computed: computedReadChannelId,
-        valid,
-      },
-    });
-  };
+  const updateReadChannelId = useCallback(
+    (updates) => {
+      const { value, computed, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_READ_CHANNEL_ID,
+        nextReadChannelId: {
+          value,
+          computed,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateWriteChannelId = (
-    writeChannelId,
-    computedWriteChannelId,
-    valid,
-  ) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_WRITE_CHANNEL_ID,
-      nextWriteChannelId: {
-        value: writeChannelId,
-        computed: computedWriteChannelId,
-        valid,
-      },
-    });
-  };
+  const updateWriteChannelId = useCallback(
+    (updates) => {
+      const { value, computed, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_WRITE_CHANNEL_ID,
+        nextWriteChannelId: {
+          value,
+          computed,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateDataChannelId = (dataChannelId, computedDataChannelId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_DATA_CHANNEL_ID,
-      nextDataChannelId: {
-        value: dataChannelId,
-        computed: computedDataChannelId,
-        valid,
-      },
-    });
-  };
+  const updateDataChannelId = useCallback(
+    (updates) => {
+      const { value, computed, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_DATA_CHANNEL_ID,
+        nextDataChannelId: {
+          value,
+          computed,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateLayer = (layer) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_LAYER,
-      nextLayer: layer,
-    });
-  };
+  const updateLayer = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_LAYER,
+        nextLayer: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateUseMultiPort = (useMultiPort) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT,
-      nextUseMultiPort: useMultiPort,
-    });
-  };
+  const updateUseMultiPort = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_USE_MULTIPORT,
+        nextUseMultiPort: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updatePortNo = (portNo) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_PORT_NO,
-      nextPortNo: portNo,
-    });
-  };
+  const updatePortNo = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_PORT_NO,
+        nextPortNo: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updatePciFunctionId = (pciFunctionId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID,
-      nextPciFunctionId: {
-        value: pciFunctionId,
-        valid,
-      },
-    });
-  };
+  const updatePciFunctionId = useCallback(
+    (updates) => {
+      const { value, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_PCI_FUNCTION_ID,
+        nextPciFunctionId: {
+          value,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateUserIdentifier = (userIdentifier, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER,
-      nextUserIdentifier: {
-        value: userIdentifier,
-        valid,
-      },
-    });
-  };
+  const updateUserIdentifier = useCallback(
+    (updates) => {
+      const { value, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_USER_IDENTIFIER,
+        nextUserIdentifier: {
+          value,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateVlanId = (vlanId, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_NETWORK_DEVICE_VLAN_ID,
-      nextVlanId: { value: vlanId, valid },
-    });
-  };
+  const updateVlanId = useCallback(
+    (updates) => {
+      const { value, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_NETWORK_DEVICE_VLAN_ID,
+        nextVlanId: {
+          value,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

@@ -81,8 +81,8 @@ const HeaderLayout = () => {
     helpPanelConfig: {},
   };
 
-  const showNotification = state.showNotification;
-  const isHelpPanelExpanded = state.isHelpPanelExpanded;
+  const showNotification = state?.showNotification ?? false;
+  const isHelpPanelExpanded = state?.isHelpPanelExpanded ?? false;
 
   const hasParams = helpPanelConfig.params
     ? Object.keys(helpPanelConfig.params).length > 0

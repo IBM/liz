@@ -21,28 +21,37 @@ const SummaryContextProvider = ({ value, children }) => {
     createInitialSummaryState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialSummaryState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialSummaryState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateDownloadParmfile = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextDownloadParmfile: flag,
-    });
-  };
+  const updateDownloadParmfile = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextDownloadParmfile: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateDownloadParmfileName = (name) => {
-    dispatch({
-      type: ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE_NAME,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextDownloadParmfileName: name,
-    });
-  };
+  const updateDownloadParmfileName = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_SUMMARY_DOWNLOAD_PARMFILE_NAME,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextDownloadParmfileName: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

@@ -46,103 +46,145 @@ const ApplicationContextProvider = ({ value, children }) => {
   const { t } = useTranslation();
   const [state, dispatch] = useReducer(reducer, createInitialState());
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateState = (state) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_STATE,
-      nextState: state,
-    });
-  };
+  const updateState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_STATE,
+        nextState: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateStep = (step) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_STEP,
-      nextStep: step,
-    });
-  };
+  const updateStep = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_STEP,
+        nextStep: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateCurrentHelpStep = (step) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_HELP_STEP,
-      nextHelpStep: step,
-    });
-  };
+  const updateCurrentHelpStep = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_HELP_STEP,
+        nextHelpStep: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateNextStep = (nextStep) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_NEXT_STEP,
-      nextNextStep: nextStep,
-    });
-  };
+  const updateNextStep = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_NEXT_STEP,
+        nextNextStep: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateParamFileContent = (paramFileContent) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
-      nextParamFileContent: paramFileContent,
-    });
-  };
+  const updateParamFileContent = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
+        nextParamFileContent: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateModified = (updateModified) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
-      nextParamFileContentModified: updateModified,
-    });
-  };
+  const updateModified = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
+        nextParamFileContentModified: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateShowLegalNotification = (showLegalNotification) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
-      nextShowLegalNotification: showLegalNotification,
-    });
-  };
+  const updateShowLegalNotification = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
+        nextShowLegalNotification: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateCanRenderStep = (canRenderStep) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_CAN_RENDER_STEP,
-      nextCanRenderStep: canRenderStep,
-    });
-  };
+  const updateCanRenderStep = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_CAN_RENDER_STEP,
+        nextCanRenderStep: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateUseStateFromLocalStorage = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
-      nextUseStateFromLocalStorage: flag,
-    });
-  };
+  const updateUseStateFromLocalStorage = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
+        nextUseStateFromLocalStorage: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateIsDirty = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_IS_DIRTY,
-      nextIsDirty: flag,
-    });
-  };
+  const updateIsDirty = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_IS_DIRTY,
+        nextIsDirty: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateIsEditing = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_IS_EDITING,
-      nextIsEditing: false,
-    });
-  };
+  const updateIsEditing = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_IS_EDITING,
+        nextIsEditing: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateSteps = (steps) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_STEPS,
-      nextSteps: steps,
-    });
-  };
+  const updateSteps = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_STEPS,
+        nextSteps: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateIsDisabled = (steps) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_IS_DISABLED,
-      nextSteps: steps,
-    });
-  };
+  const updateIsDisabled = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_IS_DISABLED,
+        nextSteps: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const getHelpPanelConfig = ({ step }) => {
     let config;
@@ -392,7 +434,7 @@ const ApplicationContextProvider = ({ value, children }) => {
             title: t("modalHeading.useExistingSettingsPrompt"),
             subtitle: t("modalBody.useExistingSettingsPrompt"),
             index: state.steps.intro.index,
-            includeStep: state.useStateFromLocalStorage,
+            includeStep: state.isEditing && state.useStateFromLocalStorage,
             introStep: true,
           },
         };

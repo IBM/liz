@@ -22,63 +22,84 @@ const HeaderContextProvider = ({ value, children }) => {
     createInitialHeaderState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialHeaderState(true),
-    });
-  };
-
-  const updateIsHelpPanelExpanded = (isHelpPanelExpanded) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
-      nextIsHelpPanelExpanded: isHelpPanelExpanded,
-    });
-  };
-
-  const updateShowNotification = (showNotification) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_SHOW_NOTIFICATION,
-      nextShowNotification: showNotification,
-    });
-  };
-
-  const updateShowConfirmationModal = (showConfirmationModal) => {
-    dispatch({
-      type: ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
-      nextShowConfirmationModal: showConfirmationModal,
-    });
-  };
-
-  const updateNeedsManualNavigationConfirmation = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_NEEDS_MANUAL_NAVIGATION_CONFIRMATION,
-      nextNeedsManualNavigationConfirmation: flag,
-    });
-  };
-
-  const showNotification = (callback) => {
-    if (callback) {
-      if (state.showNotification) {
-        updateShowNotification(false);
-        return callback();
-      }
-      updateShowNotification(true);
-      return callback();
-    }
-    return state.showNotification
-      ? updateShowNotification(false)
-      : updateShowNotification(true);
-  };
-
-  const closeNotification = (settingsWereDeleted) => {
-    if (settingsWereDeleted && typeof settingsWereDeleted === "boolean") {
-      showNotification(() => {
-        return updateShowConfirmationModal(true);
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialHeaderState(true),
       });
-    }
-    return updateShowNotification(false);
-  };
+    },
+    [state, dispatch],
+  );
+
+  const updateIsHelpPanelExpanded = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
+        nextIsHelpPanelExpanded: updates,
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateShowNotification = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_SHOW_NOTIFICATION,
+        nextShowNotification: updates,
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateShowConfirmationModal = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
+        nextShowConfirmationModal: updates,
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateNeedsManualNavigationConfirmation = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_NEEDS_MANUAL_NAVIGATION_CONFIRMATION,
+        nextNeedsManualNavigationConfirmation: updates,
+      });
+    },
+    [state, dispatch],
+  );
+
+  const showNotification = useCallback(
+    (updates) => {
+      if (updates) {
+        if (state.showNotification) {
+          updateShowNotification(false);
+          return updates();
+        }
+        updateShowNotification(true);
+        return updates();
+      }
+      return state.showNotification
+        ? updateShowNotification(false)
+        : updateShowNotification(true);
+    },
+    [state, dispatch, updateShowNotification],
+  );
+
+  const closeNotification = useCallback(
+    (updates) => {
+      if (updates && typeof updates === "boolean") {
+        showNotification(() => {
+          return updateShowConfirmationModal(true);
+        });
+      }
+      return updateShowNotification(false);
+    },
+    [state, showNotification, updateShowConfirmationModal],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

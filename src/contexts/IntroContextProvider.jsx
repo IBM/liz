@@ -17,20 +17,26 @@ import { IntroContext } from "./index";
 const IntroContextProvider = ({ value, children }) => {
   const [state, dispatch] = useReducer(introReducer, createInitialIntroState());
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialIntroState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialIntroState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updatePurgeParmfileSettings = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_INTRO_PURGE_PARMFILE_SETTINGS,
-      nextOrigin: STATE_ORIGIN_USER,
-      nextPurgeParmfileSettings: flag,
-    });
-  };
+  const updatePurgeParmfileSettings = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_INTRO_PURGE_PARMFILE_SETTINGS,
+        nextOrigin: STATE_ORIGIN_USER,
+        nextPurgeParmfileSettings: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

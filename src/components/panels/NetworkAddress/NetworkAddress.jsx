@@ -228,33 +228,74 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     propertyIsComputed = false,
   }) => {
     if (propertyName === UPDATE_FUNCTION__IPV4_ADDRESS) {
-      updateIpv4Address(propertyValue, propertyIsValid);
+      updateIpv4Address({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV4_PREFIX) {
-      updateIpv4Cidr(propertyValue, propertyIsValid, propertyIsComputed);
+      updateIpv4Cidr({
+        value: propertyValue,
+        valid: propertyIsValid,
+        computed: propertyIsComputed,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV4_NETMASK) {
-      updateNetmask(propertyValue, propertyIsValid, propertyIsComputed);
+      updateNetmask({
+        value: propertyValue,
+        valid: propertyIsValid,
+        computed: propertyIsComputed,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV4_BINARY) {
       updateBinary(propertyValue);
     } else if (propertyName === UPDATE_FUNCTION__IPV4_GATEWAY) {
-      updateGatewayAddress(propertyValue, propertyIsValid);
+      updateGatewayAddress({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV4_NAMESERVER) {
-      updateNameserverAddress(propertyValue, propertyIsValid);
+      updateNameserverAddress({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV4_HOSTNAME) {
-      updateHostName(propertyValue, propertyIsValid);
+      updateHostName({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH) {
-      updateDomainSearchPath(propertyValue, propertyIsValid);
+      updateDomainSearchPath({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV6_ADDRESS) {
-      updateIpv6Address(propertyValue, propertyIsValid);
+      updateIpv6Address({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV6_PREFIX) {
-      updateIpv6Cidr(propertyValue, propertyIsValid);
+      updateIpv6Cidr({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV6_GATEWAY) {
-      updateGatewayAddress(propertyValue, propertyIsValid);
+      updateGatewayAddress({
+        value: propertyValue,
+        propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV6_NAMESERVER) {
-      updateNameserverAddress(propertyValue, propertyIsValid);
+      updateNameserverAddress({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV6_HOSTNAME) {
-      updateHostName(propertyValue, propertyIsValid);
+      updateHostName({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH) {
-      updateDomainSearchPath(propertyValue, propertyIsValid);
+      updateDomainSearchPath({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (UPDATE_FUNCTION__UNKNOWN) {
       console.log("Unknown property name passed to update proxy function.");
     }

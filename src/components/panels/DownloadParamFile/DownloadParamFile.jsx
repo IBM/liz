@@ -4,7 +4,12 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useContext,
+  useImperativeHandle,
+} from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
   Layer,
@@ -45,14 +50,14 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
-  } = React.useContext(ApplicationContext);
+  } = useContext(ApplicationContext);
   const { t } = useTranslation();
   const {
     state,
     updatParamFileCopied,
     updateModified,
     updateParamFileContent,
-  } = React.useContext(DownloadParamFileContext);
+  } = useContext(DownloadParamFileContext);
   const distributionName =
     globalState.steps.inputFileSelection.distributionName ??
     RHEL_DISTRIBUTION_ID;

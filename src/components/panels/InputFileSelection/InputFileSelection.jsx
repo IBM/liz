@@ -4,7 +4,12 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useContext,
+  useImperativeHandle,
+} from "react";
 import { useTranslation } from "react-i18next";
 import {
   Dropdown,
@@ -36,8 +41,8 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
     updateNextStep,
     updateIsDirty,
     updateIsDisabled,
-  } = React.useContext(ApplicationContext);
-  const { updateModified, updateParamFileContent } = React.useContext(
+  } = useContext(ApplicationContext);
+  const { updateModified, updateParamFileContent } = useContext(
     DownloadParamFileContext,
   );
   const { t } = useTranslation();
@@ -45,7 +50,7 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
     state,
     updateSelectedDistributionName,
     updateSelectedDistributionVersion,
-  } = React.useContext(InputFileSelectionContext);
+  } = useContext(InputFileSelectionContext);
   const publicRef = {
     persistState: () => {
       isComplete((error, isComplete) => {

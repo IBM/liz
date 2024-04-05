@@ -26,83 +26,35 @@ const InstallationParameterContextProvider = ({ value, children }) => {
     createInitialInstallationParameterState(),
   );
 
-  const updateResetToInitialState = () => {
-    dispatch({
-      type: ACTION_RESET_TO_INITIAL_STATE,
-      nextInitialState: createInitialInstallationParameterState(true),
-    });
-  };
+  const updateResetToInitialState = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_RESET_TO_INITIAL_STATE,
+        nextInitialState: createInitialInstallationParameterState(true),
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateUseSsh = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_INSTALLATION_PARAM_USE_SSH,
-      nextUseSsh: flag,
-    });
-  };
+  const updateUseSsh = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_USE_SSH,
+        nextUseSsh: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
-  const updateUseVnc = (flag) => {
-    dispatch({
-      type: ACTION_UPDATE_INSTALLATION_PARAM_USE_VNC,
-      nextUseVnc: flag,
-    });
-  };
-
-  const updateInstallationAddress = (address, computedAddress, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_INSTALLATION_PARAM_ADDRESS,
-      nextInstallationAddress: {
-        value: address,
-        computed: computedAddress,
-        valid,
-      },
-      nextUserAndPwdAreDisabled:
-        !address ||
-        address.length === 0 ||
-        installationAddressContainsUidOrPwd(address),
-      nextUserName: {
-        value: "",
-        valid: true,
-      },
-      nextPassword: {
-        value: "",
-        valid: true,
-      },
-    });
-  };
-
-  const updateUserName = (userName, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
-      nextUserName: {
-        value: userName,
-        valid,
-      },
-    });
-  };
-
-  const updatePassword = (password, valid) => {
-    dispatch({
-      type: ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
-      nextPassword: {
-        value: password,
-        valid,
-      },
-    });
-  };
-
-  const updateVncPassword = (password) => {
-    dispatch({
-      type: ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
-      nextVncPassword: password,
-    });
-  };
-
-  const updateSshPassword = (password) => {
-    dispatch({
-      type: ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD,
-      nextSshPassword: password,
-    });
-  };
+  const updateUseVnc = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_USE_VNC,
+        nextUseVnc: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const installationAddressContainsUidOrPwd = (address) => {
     if (address && address.length > 0) {
@@ -118,6 +70,81 @@ const InstallationParameterContextProvider = ({ value, children }) => {
     }
     return false;
   };
+
+  const updateInstallationAddress = useCallback(
+    (updates) => {
+      const { address, computedAddress, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_ADDRESS,
+        nextInstallationAddress: {
+          value: address,
+          computed: computedAddress,
+          valid,
+        },
+        nextUserAndPwdAreDisabled:
+          !address ||
+          address.length === 0 ||
+          installationAddressContainsUidOrPwd(address),
+        nextUserName: {
+          value: "",
+          valid: true,
+        },
+        nextPassword: {
+          value: "",
+          valid: true,
+        },
+      });
+    },
+    [state, dispatch, installationAddressContainsUidOrPwd],
+  );
+
+  const updateUserName = useCallback(
+    (updates) => {
+      const { userName, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_USERNAME,
+        nextUserName: {
+          value: userName,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updatePassword = useCallback(
+    (updates) => {
+      const { password, valid } = updates;
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_PASSWORD,
+        nextPassword: {
+          value: password,
+          valid,
+        },
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateVncPassword = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_VNC_PASSWORD,
+        nextVncPassword: updates,
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateSshPassword = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_INSTALLATION_PARAM_SSH_PASSWORD,
+        nextSshPassword: updates,
+      });
+    },
+    [state, dispatch],
+  );
 
   const resetToInitialState = useCallback(() => {
     updateResetToInitialState();

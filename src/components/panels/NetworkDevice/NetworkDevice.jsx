@@ -244,11 +244,20 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     if (propertyName === UPDATE_FUNCTION__SELECT_DEVICE_TYPE) {
       updateSelectedDeviceType(propertyValue);
     } else if (propertyName === UPDATE_FUNCTION__READ_CHANNEL_ID) {
-      updateReadChannelId(propertyValue, propertyIsValid);
+      updateReadChannelId({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__WRITE_CHANNEL_ID) {
-      updateWriteChannelId(propertyValue, propertyIsValid);
+      updateWriteChannelId({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__DATA_CHANNEL_ID) {
-      updateDataChannelId(propertyValue, propertyIsValid);
+      updateDataChannelId({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__LAYER) {
       updateLayer(propertyValue);
     } else if (propertyName === UPDATE_FUNCTION__USE_MULTIPORT) {
@@ -256,9 +265,15 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     } else if (propertyName === UPDATE_FUNCTION__PORT_NO) {
       updatePortNo(propertyValue);
     } else if (propertyName === UPDATE_FUNCTION__PCI_FUNCTION_ID) {
-      updatePciFunctionId(propertyValue, propertyIsValid);
+      updatePciFunctionId({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     } else if (propertyName === UPDATE_FUNCTION__USER_IDENTIFIER) {
-      updateUserIdentifier(propertyValue, propertyIsValid);
+      updateUserIdentifier({
+        value: propertyValue,
+        valid: propertyIsValid,
+      });
     }
   };
 
@@ -592,7 +607,10 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             if (paramFileHasBeenModifiedFromState) return;
 
             const vlanIdValue = value;
-            updateVlanId(vlanIdValue, true);
+            updateVlanId({
+              value: vlanIdValue,
+              valid: true,
+            });
           }}
           onBlur={(vlanId) => {
             if (paramFileHasBeenModifiedFromState) return;
@@ -602,7 +620,10 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                 ? vlanId.target.value
                 : "";
             const vlanIdIsValid = isVlanIdValid(vlanIdValue);
-            updateVlanId(vlanIdValue, vlanIdIsValid);
+            updateVlanId({
+              value: vlanIdValue,
+              valid: vlanIdIsValid,
+            });
           }}
         />
       )}
@@ -636,11 +657,11 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               const computedReadChannelIdValue = toChannelSegments(
                 readChannelIdValue.toLowerCase(),
               ).join(".");
-              updateReadChannelId(
-                readChannelIdValue,
-                computedReadChannelIdValue,
-                true,
-              );
+              updateReadChannelId({
+                value: readChannelIdValue,
+                computed: computedReadChannelIdValue,
+                valid: true,
+              });
             }}
             onBlur={(readChannelId) => {
               if (paramFileHasBeenModifiedFromState) return;
@@ -651,11 +672,11 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const readChannelIdIsValid =
                 isReadChannelIdValid(readChannelIdValue);
-              updateReadChannelId(
-                readChannelIdValue,
-                computedReadChannelIdValue,
-                readChannelIdIsValid,
-              );
+              updateReadChannelId({
+                value: readChannelIdValue,
+                computed: computedReadChannelIdValue,
+                valid: readChannelIdIsValid,
+              });
             }}
           />
           <TextInput
@@ -680,11 +701,11 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               const computedWriteChannelIdValue = toChannelSegments(
                 writeChannelIdValue.toLowerCase(),
               ).join(".");
-              updateWriteChannelId(
-                writeChannelIdValue,
-                computedWriteChannelIdValue,
-                true,
-              );
+              updateWriteChannelId({
+                value: writeChannelIdValue,
+                computed: computedWriteChannelIdValue,
+                valid: true,
+              });
             }}
             onBlur={(writeChannelId) => {
               if (paramFileHasBeenModifiedFromState) return;
@@ -695,11 +716,11 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const writeChannelIdIsValid =
                 isWriteChannelIdValid(writeChannelIdValue);
-              updateWriteChannelId(
-                writeChannelIdValue,
-                computedWriteChannelIdValue,
-                writeChannelIdIsValid,
-              );
+              updateWriteChannelId({
+                value: writeChannelIdValue,
+                computed: computedWriteChannelIdValue,
+                valid: writeChannelIdIsValid,
+              });
             }}
           />
           <TextInput
@@ -724,11 +745,11 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               const computedDataChannelIdValue = toChannelSegments(
                 dataChannelIdValue.toLowerCase(),
               ).join(".");
-              updateDataChannelId(
-                dataChannelIdValue,
-                computedDataChannelIdValue,
-                true,
-              );
+              updateDataChannelId({
+                value: dataChannelIdValue,
+                computed: computedDataChannelIdValue,
+                valid: true,
+              });
             }}
             onBlur={(dataChannelId) => {
               if (paramFileHasBeenModifiedFromState) return;
@@ -739,11 +760,11 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const dataChannelIdIsValid =
                 isDataChannelIdValid(dataChannelIdValue);
-              updateDataChannelId(
-                dataChannelIdValue,
-                computedDataChannelIdValue,
-                dataChannelIdIsValid,
-              );
+              updateDataChannelId({
+                value: dataChannelIdValue,
+                computed: computedDataChannelIdValue,
+                valid: dataChannelIdIsValid,
+              });
             }}
           />
         </>
