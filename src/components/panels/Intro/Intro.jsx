@@ -49,7 +49,9 @@ const Intro = forwardRef(function Intro(props, ref) {
     updateModified: globalUpdateModified,
     updateNextStep,
     updateIsDirty,
+    updateIncludeIntroStep,
     updateIsDisabled,
+    updateIsEditing,
     resetToInitialState: globalResetToInitialState,
   } = useContext(ApplicationContext);
   const {
@@ -97,6 +99,11 @@ const Intro = forwardRef(function Intro(props, ref) {
         networkAddressResetToInitialState();
         networkDeviceResetToInitialState();
         summaryResetToInitialState();
+        updateIsEditing(true);
+
+        if (panelHasBeenIncluded) {
+          updateIncludeIntroStep(true);
+        }
       }
     },
     persistState: () => {
@@ -135,6 +142,8 @@ const Intro = forwardRef(function Intro(props, ref) {
   const paramFileHasBeenModifiedFromState =
     globalState?.steps.downloadParamFile?.modified ?? false;
   const purgeParmfileSettings = state.purgeParmfileSettings;
+  const panelHasBeenIncluded =
+    (globalState?.isEditing && globalState?.useStateFromLocalStorage) ?? false;
 
   const parmfilePurgeNotificationMarkup = (
     <InlineNotification

@@ -17,8 +17,8 @@ import {
   ACTION_UPDATE_APP_IS_DIRTY,
   ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_IS_DISABLED,
-  ACTION_UPDATE_APP_CAN_RENDER_STEP,
   ACTION_RESET_TO_INITIAL_STATE,
+  ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
 } from "../util/reducer-action-constants";
 import { LOCAL_STORAGE_KEY_APP } from "../util/local-storage-constants";
 import { persistToLocalStorage } from "../util/local-storage-util";
@@ -56,6 +56,13 @@ const reducer = (state, action) => {
       };
       persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
+    case ACTION_UPDATE_APP_INCLUDE_INTRO_STEP:
+      updatedState = {
+        ...state,
+        includeIntroStep: action.nextIncludeIntroStep,
+      };
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
+      return updatedState;
     case ACTION_UPDATE_APP_PARAM_FILE_CONTENT:
       updatedState = {
         ...state,
@@ -89,13 +96,6 @@ const reducer = (state, action) => {
       };
       persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
       return updatedState;
-    case ACTION_UPDATE_APP_CAN_RENDER_STEP:
-      updatedState = {
-        ...state,
-        canRenderStep: action.nextCanRenderStep,
-      };
-      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
-      return updatedState;
     case ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE:
       updatedState = {
         ...state,
@@ -124,7 +124,6 @@ const reducer = (state, action) => {
         steps: action.nextSteps,
       };
       persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState);
-      console.log(updatedState);
       return updatedState;
   }
 

@@ -45,8 +45,13 @@ const HeaderLayout = () => {
   const { t } = useTranslation();
   const homePageHref = useHref(PathConstants.HOME);
   const navigate = useNavigate();
-  const { config, resetToInitialState: globalResetToInitialState } =
-    useContext(ApplicationContext);
+  const {
+    state: globalState,
+    config,
+    resetToInitialState: globalResetToInitialState,
+    updateIsEditing,
+    updateIncludeIntroStep,
+  } = useContext(ApplicationContext);
   const { resetToInitialState: downloadParamFileResetToInitialState } =
     useContext(DownloadParamFileContext);
   const { resetToInitialState: editPageResetToInitialState } =
@@ -83,6 +88,12 @@ const HeaderLayout = () => {
 
   const showNotification = state?.showNotification ?? false;
   const isHelpPanelExpanded = state?.isHelpPanelExpanded ?? false;
+  const showConfirmationModal = state?.showConfirmationModal ?? false;
+  const needsManualNavigationConfirmation =
+    state?.needsManualNavigationConfirmation ?? false;
+  const wasEditing = globalState?.isEditing ?? false;
+  const introPanelHasBeenIncluded =
+    (wasEditing && globalState?.useStateFromLocalStorage) ?? false;
 
   const hasParams = helpPanelConfig.params
     ? Object.keys(helpPanelConfig.params).length > 0
@@ -118,6 +129,13 @@ const HeaderLayout = () => {
     networkDeviceResetToInitialState();
     summaryResetToInitialState();
     closeNotification(true);
+
+    if (wasEditing) {
+      updateIsEditing(true);
+    }
+    if (introPanelHasBeenIncluded) {
+      updateIncludeIntroStep(true);
+    }
   };
 
   const updateExpanded = (expanded) => {
@@ -126,10 +144,7 @@ const HeaderLayout = () => {
 
   const modalMarkup = (
     <>
-      <ComposedModal
-        preventCloseOnClickOutside
-        open={state.showConfirmationModal}
-      >
+      <ComposedModal preventCloseOnClickOutside open={showConfirmationModal}>
         <ModalHeader
           label={t("modalLabel.manageSettings")}
           title={t("modalHeading.localStorageHasBeenPrunedConfirmation")}
@@ -149,7 +164,7 @@ const HeaderLayout = () => {
       </ComposedModal>
       <ComposedModal
         preventCloseOnClickOutside
-        open={state.needsManualNavigationConfirmation}
+        open={needsManualNavigationConfirmation}
         onClose={() => {
           updateNeedsManualNavigationConfirmation(false);
         }}
@@ -181,61 +196,87 @@ const HeaderLayout = () => {
     </>
   );
 
+  const aboutMenuMarkup = (
+    <>
+      {showNotification && (
+        <About
+          closeNotification={closeNotification}
+          pruneSettings={localPruneSettings}
+        />
+      )}
+    </>
+  );
+
+  const showHideSidePanel = () => {
+    return isHelpPanelExpanded ? hideSidePanel() : showSidePanel();
+  };
+
+  const showSidePanel = () => {
+    updateExpanded(true);
+  };
+
+  const hideSidePanel = () => {
+    updateExpanded(false);
+  };
+
+  const sidePanelMarkup = (
+    <SidePanel
+      animateTitle
+      slideIn
+      preventCloseOnClickOutside
+      closeIconDescription={t("btnLabel.Close", { ns: "common" })}
+      className="liz__installer-header_help-sidepanel-component"
+      id="liz__installer-header_help-sidepanel-component"
+      key="liz__installer-header_help-sidepanel-component"
+      open={isHelpPanelExpanded}
+      onRequestClose={hideSidePanel}
+      title={t("rightNavigation.header")}
+      subtitle=""
+      selectorPageContent="#liz__page-content"
+      {...sidePanelProps}
+    >
+      <HelpContent helpPanelConfig={helpPanelConfig} />
+    </SidePanel>
+  );
+
+  const headerContainerMarkup = (
+    <HeaderContainer
+      render={({ isSideNavExpanded, onClickSideNavExpand }) => (
+        <Header aria-label={t("header.productName", { ns: "common" })}>
+          <SkipToContent />
+          <HeaderName href={homePageHref} prefix="">
+            {t("header.productName", { ns: "common" })}
+          </HeaderName>
+          <HeaderGlobalBar>
+            <HeaderGlobalAction
+              aria-label={t("header.button.help", { ns: "common" })}
+              key="liz__installer-header_global-action__help"
+              id="liz__installer-header_global-action__help"
+              onClick={showHideSidePanel}
+            >
+              <Help size="24" />
+            </HeaderGlobalAction>
+            <HeaderGlobalAction
+              aria-label={t("header.button.profileSettings")}
+              key="liz__installer-header_global-action__profile"
+              id="liz__installer-header_global-action__profile"
+              onClick={() => {
+                return onShowNotification();
+              }}
+            >
+              <LinuxAlt size="24" />
+            </HeaderGlobalAction>
+          </HeaderGlobalBar>
+          {sidePanelMarkup}
+        </Header>
+      )}
+    />
+  );
+
   return (
     <>
-      <HeaderContainer
-        render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-          <>
-            {showNotification && (
-              <About
-                closeNotification={closeNotification}
-                pruneSettings={localPruneSettings}
-              />
-            )}
-            <Header aria-label={t("header.productName", { ns: "common" })}>
-              <SkipToContent />
-              <HeaderName href={homePageHref} prefix="">
-                {t("header.productName", { ns: "common" })}
-              </HeaderName>
-              <HeaderGlobalBar>
-                <HeaderGlobalAction
-                  aria-label={t("header.button.help", { ns: "common" })}
-                  onClick={() => {
-                    return isHelpPanelExpanded
-                      ? updateExpanded(false)
-                      : updateExpanded(true);
-                  }}
-                >
-                  <Help size="24" />
-                </HeaderGlobalAction>
-                <HeaderGlobalAction
-                  aria-label={t("header.button.profileSettings")}
-                  onClick={() => {
-                    return onShowNotification();
-                  }}
-                >
-                  <LinuxAlt size="24" />
-                </HeaderGlobalAction>
-              </HeaderGlobalBar>
-              <SidePanel
-                animateTitle
-                slideIn
-                preventCloseOnClickOutside
-                closeIconDescription={t("btnLabel.Close", { ns: "common" })}
-                className="liz__installer-header_help-sidepanel-component"
-                open={isHelpPanelExpanded}
-                onRequestClose={() => updateExpanded(false)}
-                title={t("rightNavigation.header")}
-                subtitle=""
-                selectorPageContent="#liz__page-content"
-                {...sidePanelProps}
-              >
-                <HelpContent helpPanelConfig={helpPanelConfig} />
-              </SidePanel>
-            </Header>
-          </>
-        )}
-      />
+      {aboutMenuMarkup}
+      {headerContainerMarkup}
       {modalMarkup}
     </>
   );

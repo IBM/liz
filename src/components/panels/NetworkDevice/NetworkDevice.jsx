@@ -641,6 +641,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ns: "panels",
             })}
             id="network-device_read-channel-input"
+            key="network-device_read-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={!readChannelIdIsValid}
             labelText={t("panel.networkDevice.readChannelTextLabel", {

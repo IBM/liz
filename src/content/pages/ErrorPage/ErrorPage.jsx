@@ -102,7 +102,7 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
     ? error?.error?.stack ?? t("errorPage.dataPlaceholderString")
     : error?.stack ?? t("errorPage.dataPlaceholderString");
 
-  const appConfig = state.appConfig;
+  const appConfig = state?.appConfig ?? {};
   const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
   const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? "";
 

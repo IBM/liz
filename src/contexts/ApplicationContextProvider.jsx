@@ -28,12 +28,12 @@ import {
   ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
   ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
   ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
-  ACTION_UPDATE_APP_CAN_RENDER_STEP,
   ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
   ACTION_UPDATE_APP_IS_DIRTY,
   ACTION_UPDATE_APP_IS_EDITING,
   ACTION_UPDATE_APP_STEPS,
   ACTION_UPDATE_APP_IS_DISABLED,
+  ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
 } from "../util/reducer-action-constants";
 import { ADDRESS_TYPE_IPV4, DEFAULT_STEPS } from "../util/constants";
 import { getLocalStorageKeys, pruneSettings } from "../util/local-storage-util";
@@ -96,6 +96,16 @@ const ApplicationContextProvider = ({ value, children }) => {
     [state, dispatch],
   );
 
+  const updateIncludeIntroStep = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
+        nextIncludeIntroStep: updates,
+      });
+    },
+    [state, dispatch],
+  );
+
   const updateParamFileContent = useCallback(
     (updates) => {
       dispatch({
@@ -121,16 +131,6 @@ const ApplicationContextProvider = ({ value, children }) => {
       dispatch({
         type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
         nextShowLegalNotification: updates,
-      });
-    },
-    [state, dispatch],
-  );
-
-  const updateCanRenderStep = useCallback(
-    (updates) => {
-      dispatch({
-        type: ACTION_UPDATE_APP_CAN_RENDER_STEP,
-        nextCanRenderStep: updates,
       });
     },
     [state, dispatch],
@@ -434,7 +434,9 @@ const ApplicationContextProvider = ({ value, children }) => {
             title: t("modalHeading.useExistingSettingsPrompt"),
             subtitle: t("modalBody.useExistingSettingsPrompt"),
             index: state.steps.intro.index,
-            includeStep: state.isEditing && state.useStateFromLocalStorage,
+            includeStep:
+              (state.isEditing && state.useStateFromLocalStorage) ||
+              state.includeIntroStep,
             introStep: true,
           },
         };
@@ -492,10 +494,10 @@ const ApplicationContextProvider = ({ value, children }) => {
       updateStep,
       updateNextStep,
       updateCurrentHelpStep,
+      updateIncludeIntroStep,
       updateParamFileContent,
       updateModified,
       updateShowLegalNotification,
-      updateCanRenderStep,
       updateUseStateFromLocalStorage,
       updateIsDirty,
       updateIsEditing,
@@ -514,10 +516,10 @@ const ApplicationContextProvider = ({ value, children }) => {
       updateStep,
       updateNextStep,
       updateCurrentHelpStep,
+      updateIncludeIntroStep,
       updateParamFileContent,
       updateModified,
       updateShowLegalNotification,
-      updateCanRenderStep,
       updateUseStateFromLocalStorage,
       updateIsDirty,
       updateIsEditing,

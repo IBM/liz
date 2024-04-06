@@ -21,6 +21,7 @@ const createInitialState = (skipLocalStorageUsage = false) => {
     isDirty: false,
     isEditing: false,
     canRenderStep: true,
+    includeIntroStep: false,
     useStateFromLocalStorage: false,
     origin: STATE_ORIGIN_DEFAULT,
   };
