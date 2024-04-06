@@ -620,10 +620,12 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                 ? vlanId.target.value
                 : "";
             const vlanIdIsValid = isVlanIdValid(vlanIdValue);
-            updateVlanId({
-              value: vlanIdValue,
-              valid: vlanIdIsValid,
-            });
+            if (!vlanIdIsValid) {
+              updateVlanId({
+                value: vlanIdValue,
+                valid: vlanIdIsValid,
+              });
+            }
           }}
         />
       )}
@@ -673,11 +675,13 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const readChannelIdIsValid =
                 isReadChannelIdValid(readChannelIdValue);
-              updateReadChannelId({
-                value: readChannelIdValue,
-                computed: computedReadChannelIdValue,
-                valid: readChannelIdIsValid,
-              });
+              if (!readChannelIdIsValid) {
+                updateReadChannelId({
+                  value: readChannelIdValue,
+                  computed: computedReadChannelIdValue,
+                  valid: readChannelIdIsValid,
+                });
+              }
             }}
           />
           <TextInput
@@ -686,6 +690,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ns: "panels",
             })}
             id="network-device_write-channel-input"
+            key="network-device_write-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={!writeChannelIdIsValid}
             labelText={t("panel.networkDevice.writeChannelTextLabel", {
@@ -717,11 +722,13 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const writeChannelIdIsValid =
                 isWriteChannelIdValid(writeChannelIdValue);
-              updateWriteChannelId({
-                value: writeChannelIdValue,
-                computed: computedWriteChannelIdValue,
-                valid: writeChannelIdIsValid,
-              });
+              if (!writeChannelIdIsValid) {
+                updateWriteChannelId({
+                  value: writeChannelIdValue,
+                  computed: computedWriteChannelIdValue,
+                  valid: writeChannelIdIsValid,
+                });
+              }
             }}
           />
           <TextInput
@@ -730,6 +737,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ns: "panels",
             })}
             id="network-device_data-channel-input"
+            key="network-device_data-channel-input"
             invalidText={t("invalidTextLabel", { ns: "common" })}
             invalid={!dataChannelIdIsValid}
             labelText={t("panel.networkDevice.dataChannelTextLabel", {
@@ -761,11 +769,13 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const dataChannelIdIsValid =
                 isDataChannelIdValid(dataChannelIdValue);
-              updateDataChannelId({
-                value: dataChannelIdValue,
-                computed: computedDataChannelIdValue,
-                valid: dataChannelIdIsValid,
-              });
+              if (!dataChannelIdIsValid) {
+                updateDataChannelId({
+                  value: dataChannelIdValue,
+                  computed: computedDataChannelIdValue,
+                  valid: dataChannelIdIsValid,
+                });
+              }
             }}
           />
         </>

@@ -279,7 +279,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     } else if (propertyName === UPDATE_FUNCTION__IPV6_GATEWAY) {
       updateGatewayAddress({
         value: propertyValue,
-        propertyIsValid,
+        valid: propertyIsValid,
       });
     } else if (propertyName === UPDATE_FUNCTION__IPV6_NAMESERVER) {
       updateNameserverAddress({

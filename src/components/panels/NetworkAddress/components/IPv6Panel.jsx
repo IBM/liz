@@ -48,6 +48,7 @@ const IPv6Panel = ({
       <TextInput
         readOnly={readOnly}
         id="network-address_ipv6-input"
+        key="network-address_ipv6-input"
         invalid={
           state && state.ipv6 && state.ipv6.ipv6Address
             ? !state.ipv6.ipv6Address.valid
@@ -92,11 +93,13 @@ const IPv6Panel = ({
               : "";
           const localAddressValueIsValid =
             isIpv6NetworkAddressValid(localAddressValue);
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV6_ADDRESS,
-            propertyValue: localAddressValue,
-            propertyIsValid: localAddressValueIsValid,
-          });
+          if (!localAddressValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV6_ADDRESS,
+              propertyValue: localAddressValue,
+              propertyIsValid: localAddressValueIsValid,
+            });
+          }
         }}
       />
       <NumberInput
@@ -105,6 +108,7 @@ const IPv6Panel = ({
         max={128}
         readOnly={readOnly}
         id="network-address_ipv6-prefix"
+        key="network-address_ipv6-prefix"
         invalid={
           state && state.ipv6 && state.ipv6.ipv6Cidr
             ? !state.ipv6.ipv6Cidr.valid
@@ -150,12 +154,13 @@ const IPv6Panel = ({
             ADDRESS_TYPE_IPV6,
             localCidrValue,
           );
-
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV6_PREFIX,
-            propertyValue: localCidrValue,
-            propertyIsValid: localCidrValueIsValid,
-          });
+          if (!localCidrValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV6_PREFIX,
+              propertyValue: localCidrValue,
+              propertyIsValid: localCidrValueIsValid,
+            });
+          }
         }}
       />
     </div>
@@ -166,6 +171,7 @@ const IPv6Panel = ({
       <TextInput
         readOnly={readOnly}
         id="network-address_gateway-input"
+        key="network-address_gateway-input"
         invalid={
           state && state.ipv6 && state.ipv6.gatewayIpAddress
             ? !state.ipv6.gatewayIpAddress.valid
@@ -213,16 +219,19 @@ const IPv6Panel = ({
           const localGatewayIpAddressValueIsValid = isIpv6NetworkAddressValid(
             localGatewayIpAddressValue,
           );
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV6_GATEWAY,
-            propertyValue: localGatewayIpAddressValue,
-            propertyIsValid: localGatewayIpAddressValueIsValid,
-          });
+          if (!localGatewayIpAddressValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV6_GATEWAY,
+              propertyValue: localGatewayIpAddressValue,
+              propertyIsValid: localGatewayIpAddressValueIsValid,
+            });
+          }
         }}
       />
       <TextInput
         readOnly={readOnly}
         id="network-address_nameserver-input"
+        key="network-address_nameserver-input"
         invalid={
           state && state.ipv6 && state.ipv6.nameserverIpAddress
             ? !state.ipv6.nameserverIpAddress.valid
@@ -269,16 +278,19 @@ const IPv6Panel = ({
               : "";
           const localNameserverIpAddressValueIsValid =
             isIpv6NetworkAddressValid(localNameserverIpAddressValue);
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV6_NAMESERVER,
-            propertyValue: localNameserverIpAddressValue,
-            propertyIsValid: localNameserverIpAddressValueIsValid,
-          });
+          if (!localNameserverIpAddressValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV6_NAMESERVER,
+              propertyValue: localNameserverIpAddressValue,
+              propertyIsValid: localNameserverIpAddressValueIsValid,
+            });
+          }
         }}
       />
       <TextInput
         readOnly={readOnly}
         id="network-address_hostname-input"
+        key="network-address_hostname-input"
         invalid={
           state && state.ipv6 && state.ipv6.hostName
             ? !state.ipv6.hostName.valid
@@ -319,17 +331,20 @@ const IPv6Panel = ({
               : "";
           const localHostNameValueIsValid =
             isHostnameValid(localHostNameValue) && !isIP(localHostNameValue);
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV6_HOSTNAME,
-            propertyValue: localHostNameValue,
-            propertyIsValid: localHostNameValueIsValid,
-          });
+          if (!localHostNameValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV6_HOSTNAME,
+              propertyValue: localHostNameValue,
+              propertyIsValid: localHostNameValueIsValid,
+            });
+          }
         }}
       />
       {requiresDomainSearchName && (
         <TextInput
           readOnly={readOnly}
           id="network-address_domain-search-path-input"
+          key="network-address_domain-search-path-input"
           invalid={
             state && state.ipv6 && state.ipv6.domainSearchPath
               ? !state.ipv6.domainSearchPath.valid
@@ -379,11 +394,13 @@ const IPv6Panel = ({
             const localDomainSearchPathValueIsValid =
               isDomainSearchPathValid(localDomainSearchPathValue) &&
               !isIP(localDomainSearchPathValue);
-            updateFunction({
-              propertyName: UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH,
-              propertyValue: localDomainSearchPathValue,
-              propertyIsValid: localDomainSearchPathValueIsValid,
-            });
+            if (!localDomainSearchPathValueIsValid) {
+              updateFunction({
+                propertyName: UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH,
+                propertyValue: localDomainSearchPathValue,
+                propertyIsValid: localDomainSearchPathValueIsValid,
+              });
+            }
           }}
         />
       )}

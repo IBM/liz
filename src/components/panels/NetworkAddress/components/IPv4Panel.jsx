@@ -53,6 +53,7 @@ const IPv4Panel = ({
       <TextInput
         readOnly={readOnly}
         id="network-address_ipv4-input"
+        key="network-address_ipv4-input"
         invalidText={t("invalidTextLabel", { ns: "common" })}
         invalid={
           state && state.ipv4 && state.ipv4.ipv4Address
@@ -97,11 +98,13 @@ const IPv4Panel = ({
               : "";
           const localAddressValueIsValid =
             isIpv4NetworkAddressValid(localAddressValue);
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV4_ADDRESS,
-            propertyValue: localAddressValue,
-            propertyIsValid: localAddressValueIsValid,
-          });
+          if (!localAddressValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_ADDRESS,
+              propertyValue: localAddressValue,
+              propertyIsValid: localAddressValueIsValid,
+            });
+          }
         }}
       />
       <NumberInput
@@ -110,6 +113,7 @@ const IPv4Panel = ({
         max={32}
         readOnly={readOnly}
         id="network-address_ipv4-prefix"
+        key="network-address_ipv4-prefix"
         invalid={
           state && state.ipv4 && state.ipv4.ipv4Cidr
             ? !state.ipv4.ipv4Cidr.valid
@@ -181,30 +185,33 @@ const IPv4Panel = ({
             localCidrValue,
           );
 
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV4_PREFIX,
-            propertyValue: localCidrValue,
-            propertyIsValid: localCidrValueIsValid,
-            propertyIsComputed: false,
-          });
+          if (!localCidrValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_PREFIX,
+              propertyValue: localCidrValue,
+              propertyIsValid: localCidrValueIsValid,
+              propertyIsComputed: false,
+            });
 
-          if (localCidrValueIsValid && parsed) {
-            updateFunction({
-              propertyName: UPDATE_FUNCTION__IPV4_NETMASK,
-              propertyValue: parsed,
-              propertyIsValid: true,
-              propertyIsComputed: true,
-            });
-            updateFunction({
-              propertyName: UPDATE_FUNCTION__IPV4_BINARY,
-              propertyValue: netmaskToBinary(parsed),
-            });
+            if (localCidrValueIsValid && parsed) {
+              updateFunction({
+                propertyName: UPDATE_FUNCTION__IPV4_NETMASK,
+                propertyValue: parsed,
+                propertyIsValid: true,
+                propertyIsComputed: true,
+              });
+              updateFunction({
+                propertyName: UPDATE_FUNCTION__IPV4_BINARY,
+                propertyValue: netmaskToBinary(parsed),
+              });
+            }
           }
         }}
       />
       <TextInput
         readOnly={readOnly}
         id="network-address_ipv4-netmask"
+        key="network-address_ipv4-netmask"
         invalid={
           state && state.ipv4 && state.ipv4.netmask
             ? !state.ipv4.netmask.valid
@@ -255,30 +262,33 @@ const IPv4Panel = ({
           const localNetmaskValueIsValid =
             isIpv4NetworkAddressValid(localNetmaskValue);
 
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV4_NETMASK,
-            propertyValue: localNetmaskValue,
-            propertyIsValid: localNetmaskValueIsValid,
-            propertyIsComputed: false,
-          });
+          if (!localNetmaskValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_NETMASK,
+              propertyValue: localNetmaskValue,
+              propertyIsValid: localNetmaskValueIsValid,
+              propertyIsComputed: false,
+            });
 
-          if (localNetmaskValueIsValid && parsed) {
-            updateFunction({
-              propertyName: UPDATE_FUNCTION__IPV4_PREFIX,
-              propertyValue: parsed,
-              propertyIsValid: true,
-              propertyIsComputed: true,
-            });
-            updateFunction({
-              propertyName: UPDATE_FUNCTION__IPV4_BINARY,
-              propertyValue: netmaskToBinary(localNetmaskValue),
-            });
+            if (localNetmaskValueIsValid && parsed) {
+              updateFunction({
+                propertyName: UPDATE_FUNCTION__IPV4_PREFIX,
+                propertyValue: parsed,
+                propertyIsValid: true,
+                propertyIsComputed: true,
+              });
+              updateFunction({
+                propertyName: UPDATE_FUNCTION__IPV4_BINARY,
+                propertyValue: netmaskToBinary(localNetmaskValue),
+              });
+            }
           }
         }}
       />
       <TextInput
         readOnly
         id="network-address_ipv4-binary"
+        key="network-address_ipv4-binary"
         invalidText={t("invalidTextLabel", { ns: "common" })}
         labelText={t("panel.networkAddress.networkAddressBinaryIPv4TextLabel", {
           ns: "panels",
@@ -297,6 +307,7 @@ const IPv4Panel = ({
       <TextInput
         readOnly={readOnly}
         id="network-address_gateway-input"
+        key="network-address_gateway-input"
         invalid={
           state && state.ipv4 && state.ipv4.gatewayIpAddress
             ? !state.ipv4.gatewayIpAddress.valid
@@ -344,16 +355,19 @@ const IPv4Panel = ({
           const localGatewayIpAddressValueIsValid = isIpv4NetworkAddressValid(
             localGatewayIpAddressValue,
           );
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV4_GATEWAY,
-            propertyValue: localGatewayIpAddressValue,
-            propertyIsValid: localGatewayIpAddressValueIsValid,
-          });
+          if (!localGatewayIpAddressValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_GATEWAY,
+              propertyValue: localGatewayIpAddressValue,
+              propertyIsValid: localGatewayIpAddressValueIsValid,
+            });
+          }
         }}
       />
       <TextInput
         readOnly={readOnly}
         id="network-address_nameserver-input"
+        key="network-address_nameserver-input"
         invalid={
           state && state.ipv4 && state.ipv4.nameserverIpAddress
             ? !state.ipv4.nameserverIpAddress.valid
@@ -400,16 +414,19 @@ const IPv4Panel = ({
               : "";
           const localNameserverIpAddressValueIsValid =
             isIpv4NetworkAddressValid(localNameserverIpAddressValue);
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV4_NAMESERVER,
-            propertyValue: localNameserverIpAddressValue,
-            propertyIsValid: localNameserverIpAddressValueIsValid,
-          });
+          if (!localNameserverIpAddressValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_NAMESERVER,
+              propertyValue: localNameserverIpAddressValue,
+              propertyIsValid: localNameserverIpAddressValueIsValid,
+            });
+          }
         }}
       />
       <TextInput
         readOnly={readOnly}
         id="network-address_hostname-input"
+        key="network-address_hostname-input"
         invalid={
           state && state.ipv4 && state.ipv4.hostName
             ? !state.ipv4.hostName.valid
@@ -450,17 +467,20 @@ const IPv4Panel = ({
               : "";
           const localHostNameValueIsValid =
             isHostnameValid(localHostNameValue) && !isIP(localHostNameValue);
-          updateFunction({
-            propertyName: UPDATE_FUNCTION__IPV4_HOSTNAME,
-            propertyValue: localHostNameValue,
-            propertyIsValid: localHostNameValueIsValid,
-          });
+          if (!localHostNameValueIsValid) {
+            updateFunction({
+              propertyName: UPDATE_FUNCTION__IPV4_HOSTNAME,
+              propertyValue: localHostNameValue,
+              propertyIsValid: localHostNameValueIsValid,
+            });
+          }
         }}
       />
       {requiresDomainSearchName && (
         <TextInput
           readOnly={readOnly}
           id="network-address_domain-search-path-input"
+          key="network-address_domain-search-path-input"
           invalid={
             state && state.ipv4 && state.ipv4.domainSearchPath
               ? !state.ipv4.domainSearchPath.valid
@@ -510,11 +530,13 @@ const IPv4Panel = ({
             const localDomainSearchPathValueIsValid =
               isDomainSearchPathValid(localDomainSearchPathValue) &&
               !isIP(localDomainSearchPathValue);
-            updateFunction({
-              propertyName: UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH,
-              propertyValue: localDomainSearchPathValue,
-              propertyIsValid: localDomainSearchPathValueIsValid,
-            });
+            if (!localDomainSearchPathValueIsValid) {
+              updateFunction({
+                propertyName: UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH,
+                propertyValue: localDomainSearchPathValue,
+                propertyIsValid: localDomainSearchPathValueIsValid,
+              });
+            }
           }}
         />
       )}

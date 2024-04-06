@@ -327,6 +327,7 @@ const InstallationParameters = forwardRef(
           readOnly={paramFileHasBeenModifiedFromState}
           type="url"
           id="installation-address-input"
+          key="installation-address-input"
           invalid={
             state.installationAddress ? !state.installationAddress.valid : false
           }
@@ -367,11 +368,13 @@ const InstallationParameters = forwardRef(
             const urlValue = url && url.target ? url.target.value : "";
             const computedUrlValue = computeInstallationAddress(urlValue);
             const urlValueIsValid = isInstallationAddressInputValid(urlValue);
-            updateInstallationAddress({
-              address: urlValue,
-              computedAddress: computedUrlValue,
-              valid: urlValueIsValid,
-            });
+            if (!urlValueIsValid) {
+              updateInstallationAddress({
+                address: urlValue,
+                computedAddress: computedUrlValue,
+                valid: urlValueIsValid,
+              });
+            }
           }}
         />
         {ipAddressVersionMissmatchExists() && ipVersionMissmatchNotification}
@@ -389,6 +392,7 @@ const InstallationParameters = forwardRef(
             },
           )}
           id="computed-installation-address-input"
+          key="computed-installation-address-input"
           labelText={t(
             "panel.installationParameter.computedInstallationAddressTextLabel",
             { ns: "panels" },
@@ -414,6 +418,7 @@ const InstallationParameters = forwardRef(
             ns: "panels",
           })}
           id="username-input"
+          key="username-input"
           invalid={state && state.userName ? !state.userName.valid : false}
           invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={t("panel.installationParameter.usernameTextLabel", {
@@ -459,15 +464,17 @@ const InstallationParameters = forwardRef(
                 )
               : "";
             const userNameValueIsValid = isUserNameInputValid(userNameValue);
-            updateUserName({
-              userName: userNameValue,
-              valid: userNameValueIsValid,
-            });
-            updateInstallationAddress({
-              address: state?.installationAddress?.value ?? "",
-              computedAddress: computedUrlValue,
-              valid: true,
-            });
+            if (!userNameValueIsValid) {
+              updateUserName({
+                userName: userNameValue,
+                valid: userNameValueIsValid,
+              });
+              updateInstallationAddress({
+                address: state?.installationAddress?.value ?? "",
+                computedAddress: computedUrlValue,
+                valid: true,
+              });
+            }
           }}
         />
       </div>
@@ -483,6 +490,7 @@ const InstallationParameters = forwardRef(
             ns: "panels",
           })}
           id="password-input"
+          key="password-input"
           invalid={state && state.password ? !state.password.valid : false}
           invalidText={t("invalidTextLabel", { ns: "common" })}
           labelText={t("panel.installationParameter.passwordTextLabel", {
@@ -530,15 +538,17 @@ const InstallationParameters = forwardRef(
                 )
               : "";
             const passwordValueIsValid = isPasswordInputValid(passwordValue);
-            updatePassword({
-              password: passwordValue,
-              valid: passwordValueIsValid,
-            });
-            updateInstallationAddress({
-              address: state?.installationAddress?.value ?? "",
-              computedAddress: computedUrlValue,
-              valid: true,
-            });
+            if (!passwordValueIsValid) {
+              updatePassword({
+                password: passwordValue,
+                valid: passwordValueIsValid,
+              });
+              updateInstallationAddress({
+                address: state?.installationAddress?.value ?? "",
+                computedAddress: computedUrlValue,
+                valid: true,
+              });
+            }
           }}
         />
       </div>
@@ -592,11 +602,10 @@ const InstallationParameters = forwardRef(
               );
             }}
             onBlur={(password) => {
-              if (paramFileHasBeenModifiedFromState) return;
-
-              updateVncPassword(
-                password && password.target ? password.target.value : "",
-              );
+              // if (paramFileHasBeenModifiedFromState) return;
+              // updateVncPassword(
+              //   password && password.target ? password.target.value : "",
+              // );
             }}
           />
         )}
@@ -651,11 +660,10 @@ const InstallationParameters = forwardRef(
               );
             }}
             onBlur={(password) => {
-              if (paramFileHasBeenModifiedFromState) return;
-
-              updateSshPassword(
-                password && password.target ? password.target.value : "",
-              );
+              // if (paramFileHasBeenModifiedFromState) return;
+              // updateSshPassword(
+              //   password && password.target ? password.target.value : "",
+              // );
             }}
           />
         )}

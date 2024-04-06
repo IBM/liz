@@ -189,6 +189,7 @@ const DeviceSettings = ({
             <TextInput
               readOnly={readOnly}
               id="pci-function-input"
+              key="pci-function-input"
               invalidText={t("invalidTextLabel", { ns: "common" })}
               invalid={
                 state && state.pciFunctionId
@@ -231,16 +232,19 @@ const DeviceSettings = ({
                     : "";
                 const pciFunctionIdIsValid =
                   isPciFunctionIdValid(pciFunctionIdValue);
-                updateFunction(
-                  UPDATE_FUNCTION__PCI_FUNCTION_ID,
-                  pciFunctionIdValue,
-                  pciFunctionIdIsValid,
-                );
+                if (!pciFunctionIdIsValid) {
+                  updateFunction(
+                    UPDATE_FUNCTION__PCI_FUNCTION_ID,
+                    pciFunctionIdValue,
+                    pciFunctionIdIsValid,
+                  );
+                }
               }}
             />
             <TextInput
               readOnly={readOnly}
               id="user-identifier-input"
+              key="user-identifier-input"
               invalidText={t("invalidTextLabel", { ns: "common" })}
               invalid={
                 state && state.userIdentifier
@@ -283,11 +287,13 @@ const DeviceSettings = ({
                     : "";
                 const userIdentifierIsValid =
                   isUserIdentifierValid(userIdentifierValue);
-                updateFunction(
-                  UPDATE_FUNCTION__USER_IDENTIFIER,
-                  userIdentifierValue,
-                  userIdentifierIsValid,
-                );
+                if (!userIdentifierIsValid) {
+                  updateFunction(
+                    UPDATE_FUNCTION__USER_IDENTIFIER,
+                    userIdentifierValue,
+                    userIdentifierIsValid,
+                  );
+                }
               }}
             />
           </div>
