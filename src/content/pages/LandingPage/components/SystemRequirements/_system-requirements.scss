@@ -7,3 +7,7 @@
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
+
+.liz__system-requirements_intro {
+  padding-bottom: react.$spacing-06;
+}

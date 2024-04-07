@@ -14,7 +14,7 @@ const SystemRequirements = () => {
 
   const systemRequirementInformation = (
     <>
-      <div className="hint_intro">
+      <div className="liz__system-requirements_intro">
         {t("panel.hint.explanation", { ns: "panels" })}
       </div>
       <UnorderedList>
