@@ -100,18 +100,21 @@ const DEVICE_TYPE_LIST = [
   },
 ];
 
+const MAJORITY_STABLE = "majorityStable";
+const MAJORITY_EXPERIMENTAL = "majorityExperimental";
+
 const RHEL_DISTRIBUTION_ID = "rhel";
 const RHEL_DISTRIBUTION_LABEL = "Red Hat Enterprise Linux";
 const RHEL_V9_VERSION_ID = "version-9.x";
 const RHEL_V9_VERSION_LABEL = "9.x";
 
 const SLES_DISTRIBUTION_ID = "sles";
-const SLES_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server";
+const SLES_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server (experimental)";
 const SLES_V15_VERSION_ID = "version-15";
 const SLES_V15_VERSION_LABEL = "15 SP5";
 
 const UBUNTU_DISTRIBUTION_ID = "ubuntu";
-const UBUNTU_DISTRIBUTION_LABEL = "Ubuntu Server";
+const UBUNTU_DISTRIBUTION_LABEL = "Ubuntu Server (experimental)";
 const UBUNTU_V20_VERSION_ID = "version-20";
 const UBUNTU_V20_VERSION_LABEL = "20.04.6 LTS";
 const UBUNTU_V22_VERSION_ID = "version-22";
@@ -121,14 +124,17 @@ const DISTRIBUTION_LIST = [
   {
     id: RHEL_DISTRIBUTION_ID,
     label: RHEL_DISTRIBUTION_LABEL,
+    majority: MAJORITY_STABLE,
   },
   {
     id: SLES_DISTRIBUTION_ID,
     label: SLES_DISTRIBUTION_LABEL,
+    majority: MAJORITY_EXPERIMENTAL,
   },
   {
     id: UBUNTU_DISTRIBUTION_ID,
     label: UBUNTU_DISTRIBUTION_LABEL,
+    majority: MAJORITY_EXPERIMENTAL,
   },
 ];
 const VERSION_LIST = {
@@ -319,6 +325,8 @@ export {
   DEVICE_TYPE_ROCE,
   PORT_NUMBER_ZERO,
   PORT_NUMBER_ONE,
+  MAJORITY_STABLE,
+  MAJORITY_EXPERIMENTAL,
   UPDATE_FUNCTION__UNKNOWN,
   UPDATE_FUNCTION__IPV4_ADDRESS,
   UPDATE_FUNCTION__IPV4_PREFIX,

@@ -56,9 +56,21 @@
       padding: 0;
     }
 
-    .cds--dropdown__wrapper,
-    .cds--form-item {
-      padding: 0 0 react.$spacing-07 0;
+    .input-file-selection__dropdown-content-stable {
+      .cds--dropdown__wrapper,
+      .cds--form-item {
+        padding: 0 0 react.$spacing-07 0;
+      }
+    }
+
+    .input-file-selection__dropdown-content-experimental {
+      .input-file-selection__distribution-dropdown {
+        padding: 0 0 react.$spacing-02 0;
+      }
+
+      .input-file-selection__version-dropdown {
+        padding: 0 0 react.$spacing-07 0;
+      }
     }
   }
 }
@@ -66,4 +78,8 @@
 .input-file-selection_parmfile-purge-banner {
   margin: 0 0 react.$spacing-07 0;
   max-width: 100% !important;
+}
+
+.input-file-selection__experimental-notification {
+  margin: react.$spacing-04 0 react.$spacing-07 0;
 }

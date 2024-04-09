@@ -36,7 +36,7 @@
   "leftNavigation.progressStep.nextSteps.secondaryLabel": "Review your next steps for installing Linux.",
   "leftNavigation.progressStep.summary.label": "Summary",
   "leftNavigation.progressStep.summary.secondaryLabel": "The parameter file has been composed. Set the Download parameter file toggle to yes and click Create or Modify to download the file.",
-  "header.button.profileSettings": "Profile Settings",
+  "header.button.profileSettings": "About",
   "rightNavigation.header": "Help & Documentation",
   "dialog.about.headerLabel": "About this app",
   "dialog.about.buildDateLabel": "Build date: <1>{{buildDate}}</1>",

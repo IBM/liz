@@ -18,13 +18,18 @@ import {
   Column,
   Layer,
   ActionableNotification,
+  InlineNotification,
 } from "@carbon/react";
 import {
   STATE_ORIGIN_USER,
   STATE_ORIGIN_STORAGE,
   LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
 } from "../../../util/local-storage-constants";
-import { DISTRIBUTION_LIST, VERSION_LIST } from "../../../util/constants";
+import {
+  MAJORITY_EXPERIMENTAL,
+  DISTRIBUTION_LIST,
+  VERSION_LIST,
+} from "../../../util/constants";
 import {
   ApplicationContext,
   InputFileSelectionContext,
@@ -102,6 +107,11 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
 
   const paramFileHasBeenModifiedFromState =
     globalState?.steps.downloadParamFile?.modified ?? false;
+  const majority = state?.selectedDistributionName?.majority;
+  const dropdownContentStyle =
+    majority === MAJORITY_EXPERIMENTAL
+      ? "input-file-selection__dropdown-content-experimental"
+      : "input-file-selection__dropdown-content-stable";
 
   const isComplete = (callback) => {
     if (
@@ -144,6 +154,25 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
     />
   );
 
+  const experimentalNotificationMarkup = (
+    <InlineNotification
+      hideCloseButton
+      lowContrast
+      kind="info"
+      className="input-file-selection__experimental-notification"
+      onClose={function noRefCheck() {}}
+      onCloseButtonClick={function noRefCheck() {}}
+      statusIconDescription="notification"
+      subtitle={t(
+        "panel.inputFileSelection.experimentalNotificationMarkupSubtitle",
+        { ns: "panels" },
+      )}
+      title={t("panel.inputFileSelection.experimentalNotificationMarkupTitle", {
+        ns: "panels",
+      })}
+    />
+  );
+
   const gridContentsMarkupRowOne = (
     <>
       {/* <div className="input-file-selection__heading">edgedancer9487</div> */}
@@ -162,8 +191,9 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
   );
   const gridContentsMarkupRowThreeColumnOne = (
     <div>
-      <div className="input-file-selection__contentRowDropdowns">
+      <div className={dropdownContentStyle}>
         <Dropdown
+          className="input-file-selection__distribution-dropdown"
           readOnly={paramFileHasBeenModifiedFromState}
           aria-label={t(
             "panel.inputFileSelection.chooseDistributionFromeTemplateShort",
@@ -191,8 +221,10 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
           }}
           selectedItem={state.selectedDistributionName}
         />
+        {majority === MAJORITY_EXPERIMENTAL && experimentalNotificationMarkup}
         {Object.keys(state.selectedDistributionName).length > 0 && (
           <Dropdown
+            className="input-file-selection__version-dropdown"
             readOnly={paramFileHasBeenModifiedFromState}
             aria-label={t(
               "panel.inputFileSelection.chooseVersionFromeTemplateShort",

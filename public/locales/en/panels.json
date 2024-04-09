@@ -6,6 +6,8 @@
   "panel.inputFileSelection.chooseDistributionFromeTemplateShort": "Select a distribution",
   "panel.inputFileSelection.chooseVersionFromeTemplateShort": "Select a version",
   "panel.inputFileSelection.hostOS": "Select the Linux distribution",
+  "panel.inputFileSelection.experimentalNotificationMarkupTitle": "Experimental feature.",
+  "panel.inputFileSelection.experimentalNotificationMarkupSubtitle": "The feature selected is considered experimental. Parameter files generated may not work as expected.",
   "panel.information.requirementsHeader": "Review system requirements",
   "panel.information.requirementsExplanation": "These are the minimum system requirements for installing the target Linux distribution \"{{ distributionName }}\" with version \"{{ distributionVersion }}\".",
   "panel.information.table.nameOsLabel": "Linux distribution",
