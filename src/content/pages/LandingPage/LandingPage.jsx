@@ -179,7 +179,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
             <Link
               href={homePageHref}
               onClick={() => {
-                updateRequirementsCardIsExpanded(false);
+                updateParmfileCardIsExpanded(false);
               }}
             >
               {t("pageHeader.breadcrumbs.home", { ns: "common" })}
@@ -205,7 +205,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
             <Link
               href={homePageHref}
               onClick={() => {
-                updateRequirementsCardIsExpanded(false);
+                updateNextStepsCardIsExpanded(false);
               }}
             >
               {t("pageHeader.breadcrumbs.home", { ns: "common" })}
@@ -584,7 +584,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
           secondaryButtonText={getSecondaryButtonTextForParamFileCard()}
           onSecondaryButtonClick={saveParamFileContentProxy}
           secondaryButtonIcon={DocumentDownload}
-          secondaryButtonKind="ghost"
+          secondaryButtonKind="secondary"
           title={titleForParmfileCard}
           titleSize="large"
           className="liz__landing-page__expressive-card"
