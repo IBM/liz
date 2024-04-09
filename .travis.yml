@@ -55,7 +55,7 @@ after_success:
   - license-checker-rseidelsohn --production --markdown --excludePackages liz >> liz.wiki/Open-Source-Production-Dependencies.md
   - cd liz.wiki
   - git remote add origin-wiki https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git > /dev/null 2>&1
-  - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md
+  - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md OSS-Licensing-\&-Legal-Stuff.md
   - git commit -m "update dependencies"
   - git pull --rebase
   - git push --quiet --set-upstream origin-wiki master
