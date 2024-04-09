@@ -26,7 +26,6 @@ import {
   CollapseAll,
   Add,
   Edit,
-  Linux,
   Subtract,
   Warning,
   CheckmarkOutline,
@@ -304,40 +303,10 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
       ? t("btnLabel.Close", { ns: "common" })
       : t("btnLabel.ReviewInformation", { ns: "common" });
 
-  const classNameForRequirementsCardTitle =
-    state.requirementsCardHasBeenReviewed
-      ? "liz__landing-page__page-header__productive-card-title__complete-icon"
-      : "liz__landing-page__page-header__productive-card-title__incomplete-icon";
-  const titleForRequirementsCard = state.requirementsCardHasBeenReviewed ? (
-    <>
-      <span className="liz__landing-page__page-header__productive-card-title__text">
-        {t("panel.information.requirementsHeader", { ns: "panels" })}
-      </span>
-      <Button
-        hasIconOnly
-        className={classNameForRequirementsCardTitle}
-        size="sm"
-        kind="ghost"
-        iconDescription={t("leftNavigation.descriptionForCompleteStep")}
-        onClick={function noRefCheck() {}}
-        renderIcon={CheckmarkOutline}
-      />
-    </>
-  ) : (
-    <>
-      <span className="liz__landing-page__page-header__productive-card-title__text">
-        {t("panel.information.requirementsHeader", { ns: "panels" })}
-      </span>
-      <Button
-        hasIconOnly
-        className={classNameForRequirementsCardTitle}
-        size="sm"
-        kind="ghost"
-        iconDescription={t("leftNavigation.descriptionForIncompleteStep")}
-        onClick={function noRefCheck() {}}
-        renderIcon={Incomplete}
-      />
-    </>
+  const titleForRequirementsCard = (
+    <span className="liz__landing-page__page-header__productive-card-title__text">
+      {t("panel.information.requirementsHeader", { ns: "panels" })}
+    </span>
   );
 
   const collapseParmfileCard = () => {
@@ -440,7 +409,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
 
   const getActionIconsForParmfileCard = () => {
     if (hasParamFile() && hasDistributionName && hasDistributionVersion) {
-      const iconMarkup = () => <Linux size={20} />;
+      const iconMarkup = () => <Popup size={16} />;
       return [
         {
           id: "liz__landing-page__expressive-card_show-distribution-info",
@@ -642,39 +611,10 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     </>
   );
 
-  const classNameForNextStepsCardTitle = state.nextStepsCardHasBeenReviewed
-    ? "liz__landing-page__page-header__productive-card-title__complete-icon"
-    : "liz__landing-page__page-header__productive-card-title__incomplete-icon";
-  const titleForNextStepsCard = state.nextStepsCardHasBeenReviewed ? (
-    <>
-      <span className="liz__landing-page__page-header__productive-card-title__text">
-        {t("modalHeading.showNextStepsInformation")}
-      </span>
-      <Button
-        hasIconOnly
-        className={classNameForNextStepsCardTitle}
-        size="sm"
-        kind="ghost"
-        iconDescription={t("leftNavigation.descriptionForCompleteStep")}
-        onClick={function noRefCheck() {}}
-        renderIcon={CheckmarkOutline}
-      />
-    </>
-  ) : (
-    <>
-      <span className="liz__landing-page__page-header__productive-card-title__text">
-        {t("modalHeading.showNextStepsInformation")}
-      </span>
-      <Button
-        hasIconOnly
-        className={classNameForNextStepsCardTitle}
-        size="sm"
-        kind="ghost"
-        iconDescription={t("leftNavigation.descriptionForIncompleteStep")}
-        onClick={function noRefCheck() {}}
-        renderIcon={Incomplete}
-      />
-    </>
+  const titleForNextStepsCard = (
+    <span className="liz__landing-page__page-header__productive-card-title__text">
+      {t("modalHeading.showNextStepsInformation")}
+    </span>
   );
 
   const useSsh = globalState.steps.installationParameters.ssh.enabled;

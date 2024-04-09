@@ -129,11 +129,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
   const titleModify = t("editPage.pageHeader.title.modify");
   const title = hasLocalStorageState ? titleModify : titleNew;
 
-  const submitButtonCreate = t("btnLabel.Create", { ns: "common" });
-  const submitButtonModify = t("btnLabel.Modify", { ns: "common" });
-  const submitButton = hasLocalStorageState
-    ? submitButtonModify
-    : submitButtonCreate;
+  const submitButton = t("btnLabel.Finish", { ns: "common" });
 
   const labelForHomeLink = !headerState.needsManualNavigationConfirmation ? (
     <Link
