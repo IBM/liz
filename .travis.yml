@@ -27,8 +27,11 @@ after_success:
   - git clone https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git
   - echo "# Lines of code needed for the implementation" > liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
   - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
-  - echo "`git ls-files src/**/*.js src/**/*.jsx src/**/*.scss public/**/*.json | xargs wc -l`" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+  - echo "~~~" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+  - echo "git ls-files src/**/*.js src/**/*.jsx src/**/*.scss public/**/*.json | xargs wc -l" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+  - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
   - git ls-files src/**/*.js src/**/*.jsx src/**/*.scss public/**/*.json | xargs wc -l >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+  - echo "~~~" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
   - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
   - echo "# OSS License Compatibility" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
   - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
