@@ -42,6 +42,7 @@ import {
   PANEL_ERROR_PAGE,
 } from "../util/panel-constants";
 import { LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION } from "../util/local-storage-constants";
+import { getItem, setItem } from "../util/local-storage-util";
 
 const getHelpPanel = ({ forPanel, params }) => {
   switch (forPanel) {
@@ -207,9 +208,7 @@ const resetParamFileTextAreaData = ({
 };
 
 const getInlineNotification = (headerLabel, contentLabel) => {
-  const inlineNotification = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION),
-  );
+  const inlineNotification = getItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION);
   const defaultInlineNotification = {
     show: true,
     kind: "warning",
@@ -220,7 +219,7 @@ const getInlineNotification = (headerLabel, contentLabel) => {
   if (inlineNotification) {
     return inlineNotification;
   }
-  localStorage.setItem(
+  setItem(
     LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
     JSON.stringify(defaultInlineNotification),
   );

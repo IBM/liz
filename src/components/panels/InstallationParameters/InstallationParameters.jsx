@@ -36,6 +36,7 @@ import {
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import { encryptItem } from "../../../util/local-storage-util";
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
@@ -144,7 +145,7 @@ const InstallationParameters = forwardRef(
           updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
         });
 
-        localStorage.setItem(
+        encryptItem(
           LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
           JSON.stringify({
             ...state,

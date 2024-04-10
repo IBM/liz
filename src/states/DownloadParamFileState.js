@@ -8,11 +8,10 @@ import {
   LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
   STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
+import { getItem } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
-  const initialState = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE),
-  );
+  const initialState = getItem(LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE);
   const defaultState = {
     paramFileContentCopied: false,
     paramFileContentModified: false,

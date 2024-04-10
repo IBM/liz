@@ -33,6 +33,7 @@ import {
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import { setItem } from "../../../util/local-storage-util";
 import "./_information.scss";
 
 const Information = forwardRef(function Information(props, ref) {
@@ -69,7 +70,7 @@ const Information = forwardRef(function Information(props, ref) {
       updateIsDirty(true);
       updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_INFORMATION,
         JSON.stringify({
           ...state,

@@ -9,10 +9,11 @@ import {
   STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
 import { DEFAULT_STRING_OBJECT } from "../util/constants";
+import { decryptItem } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
-  const initialState = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS),
+  const initialState = decryptItem(
+    LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   );
   const defaultState = {
     useSsh: false,

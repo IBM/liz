@@ -110,11 +110,14 @@ const About = ({ closeNotification, pruneSettings }) => {
       id="about-dialog__about-menu"
       className="about-dialog__about-menu"
       ref={wrapperRef}
+      role="menu"
+      aria-label={t("header.button.profileSettings")}
       onBlur={closeNotification}
     >
       <li
         id="about-dialog__about-title"
         className="about-dialog__about__title-section"
+        role="none"
       >
         <div className="about-dialog__about__linux-icon">
           <div>
@@ -135,7 +138,7 @@ const About = ({ closeNotification, pruneSettings }) => {
           </div>
         </div>
       </li>
-      <li>
+      <li id="about-dialog__about-build-info" role="none">
         <div className="about-dialog__about-build-info">
           <div className={buildDateCopyClass}>
             <span>
@@ -169,7 +172,7 @@ const About = ({ closeNotification, pruneSettings }) => {
           </div>
         </div>
       </li>
-      <li className="about-dialog__about-kissues-button-container">
+      <li className="about-dialog__about-kissues-button-container" role="none">
         <Button
           kind="ghost"
           data-title="report"
@@ -177,11 +180,12 @@ const About = ({ closeNotification, pruneSettings }) => {
           href={knownIssuesUrl}
           target="_blank"
           className="about-dialog__about-kissues-button"
+          role="menuitem"
         >
           <span>{t("dialog.about.knownIssuesLabel")}</span>
         </Button>
       </li>
-      <li className="about-dialog__about-report-button-container">
+      <li className="about-dialog__about-report-button-container" role="none">
         <Button
           kind="ghost"
           data-title="report"
@@ -189,11 +193,12 @@ const About = ({ closeNotification, pruneSettings }) => {
           href={bugTrackerUrl}
           target="_blank"
           className="about-dialog__about-report-button"
+          role="menuitem"
         >
           <span>{t("dialog.about.reportIssueLabel")}</span>
         </Button>
       </li>
-      <li className="about-dialog__about-prune-button-container">
+      <li className="about-dialog__about-prune-button-container" role="none">
         <Button
           kind="ghost"
           data-title="prune"

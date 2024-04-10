@@ -37,6 +37,7 @@ import {
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import { setItem } from "../../../util/local-storage-util";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
@@ -92,7 +93,7 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
         }
       });
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
         JSON.stringify({
           ...state,

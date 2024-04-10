@@ -4,6 +4,8 @@
  * (C) Copyright IBM Corp. 2024
  */
 
+import ls from "localstorage-slim";
+
 import {
   LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
   LOCAL_STORAGE_KEY_APP_SUMMARY,
@@ -21,97 +23,116 @@ import {
   STATE_ORIGIN_STORAGE,
 } from "./local-storage-constants";
 
+const encryptItem = (key, item) => {
+  ls.set(key, item, { encrypt: true });
+};
+
+const decryptItem = (key) => {
+  const item = ls.get(key, { decrypt: true });
+
+  if (typeof item === "string") {
+    return JSON.parse(item);
+  } else if (typeof item === "object") {
+    return item;
+  }
+  return undefined;
+};
+
+const setItem = (key, item) => {
+  ls.set(key, item, { encrypt: false });
+};
+
+const getItem = (key) => {
+  const item = ls.get(key);
+
+  if (typeof item === "string") {
+    return JSON.parse(item);
+  } else if (typeof item === "object") {
+    return item;
+  }
+  return undefined;
+};
+
+const removeItem = (key) => {
+  return ls.remove(key);
+};
+
 const getLocalStorageContentsForDownloadParamFileStep = () => {
-  const downloadParamFileString = localStorage.getItem(
+  const downloadParamFileString = getItem(
     LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
   );
   const downloadParamFile =
-    typeof downloadParamFileString === "string"
-      ? JSON.parse(downloadParamFileString)
-      : {};
+    typeof downloadParamFileString === "object" ? downloadParamFileString : {};
 
   return downloadParamFile;
 };
 
 const getLocalStorageContentsForInformationStep = () => {
-  const informationString = localStorage.getItem(
-    LOCAL_STORAGE_KEY_APP_INFORMATION,
-  );
+  const informationString = getItem(LOCAL_STORAGE_KEY_APP_INFORMATION);
   const information =
-    typeof informationString === "string" ? JSON.parse(informationString) : {};
+    typeof informationString === "object" ? informationString : {};
 
   return information;
 };
 
 const getLocalStorageContentsForInputFileSelectionStep = () => {
-  const inputFileSelectionString = localStorage.getItem(
+  const inputFileSelectionString = getItem(
     LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
   );
   const inputFileSelection =
-    typeof inputFileSelectionString === "string"
-      ? JSON.parse(inputFileSelectionString)
+    typeof inputFileSelectionString === "object"
+      ? inputFileSelectionString
       : {};
 
   return inputFileSelection;
 };
 
 const getLocalStorageContentsForInstallationParameterStep = () => {
-  const installationParameterString = localStorage.getItem(
+  const installationParameterString = decryptItem(
     LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
   );
   const installationParameter =
-    typeof installationParameterString === "string"
-      ? JSON.parse(installationParameterString)
+    typeof installationParameterString === "object"
+      ? installationParameterString
       : {};
 
   return installationParameter;
 };
 
 const getLocalStorageContentsForIntroStep = () => {
-  const introString = localStorage.getItem(LOCAL_STORAGE_KEY_APP_INTRO);
-  const intro = typeof introString === "string" ? JSON.parse(introString) : {};
+  const introString = getItem(LOCAL_STORAGE_KEY_APP_INTRO);
+  const intro = typeof introString === "object" ? introString : {};
 
   return intro;
 };
 
 const getLocalStorageContentsForNetworkAddressStep = () => {
-  const networkAddressString = localStorage.getItem(
-    LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
-  );
+  const networkAddressString = getItem(LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS);
   const networkAddress =
-    typeof networkAddressString === "string"
-      ? JSON.parse(networkAddressString)
-      : {};
+    typeof networkAddressString === "object" ? networkAddressString : {};
 
   return networkAddress;
 };
 
 const getLocalStorageContentsForNetworkDeviceStep = () => {
-  const networkDeviceString = localStorage.getItem(
-    LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
-  );
+  const networkDeviceString = getItem(LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE);
   const networkDevice =
-    typeof networkDeviceString === "string"
-      ? JSON.parse(networkDeviceString)
-      : {};
+    typeof networkDeviceString === "object" ? networkDeviceString : {};
 
   return networkDevice;
 };
 
 const getLocalStorageContentsForSummaryStep = () => {
-  const summaryString = localStorage.getItem(LOCAL_STORAGE_KEY_APP_SUMMARY);
-  const summary =
-    typeof summaryString === "string" ? JSON.parse(summaryString) : {};
+  const summaryString = getItem(LOCAL_STORAGE_KEY_APP_SUMMARY);
+  const summary = typeof summaryString === "object" ? summaryString : {};
 
   return summary;
 };
 
 const getLocalStorageContentsForLandingPage = () => {
-  const landingPageString = localStorage.getItem(
-    LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
-  );
+  const landingPageString = getItem(LOCAL_STORAGE_KEY_APP_LANDING_PAGE);
   const landingPage =
-    typeof landingPageString === "string" ? JSON.parse(landingPageString) : {};
+    typeof landingPageString === "object" ? landingPageString : {};
 
   return landingPage;
 };
@@ -177,13 +198,13 @@ const pruneSettings = (localStorageKeys) => {
   if (localStorageKeys) {
     let i;
     for (i = 0; i < localStorageKeys.length; i++) {
-      localStorage.removeItem(localStorageKeys[i]);
+      removeItem(localStorageKeys[i]);
     }
-    localStorage.removeItem(LOCAL_STORAGE_KEY_APP);
-    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_LANDING_PAGE);
-    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_EDIT_PAGE);
-    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_HEADER);
-    localStorage.removeItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION);
+    removeItem(LOCAL_STORAGE_KEY_APP);
+    removeItem(LOCAL_STORAGE_KEY_APP_LANDING_PAGE);
+    removeItem(LOCAL_STORAGE_KEY_APP_EDIT_PAGE);
+    removeItem(LOCAL_STORAGE_KEY_APP_HEADER);
+    removeItem(LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION);
   }
 };
 
@@ -200,17 +221,32 @@ const getLocalStorageKeys = (state) => {
   return localStorageKeys;
 };
 
-const persistToLocalStorage = (key, state) => {
-  localStorage.setItem(
-    key,
-    JSON.stringify({
-      ...state,
-      origin: STATE_ORIGIN_STORAGE,
-    }),
-  );
+const persistToLocalStorage = (key, state, encrypt = false) => {
+  if (encrypt) {
+    encryptItem(
+      key,
+      JSON.stringify({
+        ...state,
+        origin: STATE_ORIGIN_STORAGE,
+      }),
+    );
+  } else {
+    setItem(
+      key,
+      JSON.stringify({
+        ...state,
+        origin: STATE_ORIGIN_STORAGE,
+      }),
+    );
+  }
 };
 
 export {
+  encryptItem,
+  decryptItem,
+  setItem,
+  getItem,
+  removeItem,
   pruneSettings,
   hasLocalStorageState,
   getLocalStorageKeys,

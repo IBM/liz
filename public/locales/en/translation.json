@@ -68,5 +68,6 @@
   "errorPage.label.statusMessage": "Status message",
   "errorPage.label.errorMessage": "Error code",
   "errorPage.detailsLabel": "Error details",
-  "errorPage.dataPlaceholderString": "none"
+  "errorPage.dataPlaceholderString": "none",
+  "headerLayout.skiptToMainContentText": "Skip to main content"
 }

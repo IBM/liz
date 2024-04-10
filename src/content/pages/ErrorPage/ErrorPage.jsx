@@ -31,6 +31,7 @@ import {
 } from "../../../util/local-storage-constants";
 import { ErrorPageContext, ApplicationContext } from "../../../contexts";
 import { getInlineNotification } from "../../../uiUtil/panel-util";
+import { setItem } from "../../../util/local-storage-util";
 import "./_error-page.scss";
 
 const ErrorPage = forwardRef(function ErrorPage(props, ref) {
@@ -43,7 +44,7 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
     persistState: () => {
       updateStep(11);
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
         JSON.stringify({
           ...state,
@@ -74,7 +75,7 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
     localInlineNotification.show = false;
 
     updateShowLegalNotification(false);
-    localStorage.setItem(
+    setItem(
       LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
       JSON.stringify(localInlineNotification),
     );

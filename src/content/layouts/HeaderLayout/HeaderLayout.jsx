@@ -44,6 +44,7 @@ import "./_header-layout.scss";
 const HeaderLayout = () => {
   const { t } = useTranslation();
   const homePageHref = useHref(PathConstants.HOME);
+  const mainContentHref = useHref(PathConstants.MAIN_CONTENT);
   const navigate = useNavigate();
   const {
     state: globalState,
@@ -243,13 +244,17 @@ const HeaderLayout = () => {
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
         <Header aria-label={t("header.productName", { ns: "common" })}>
-          <SkipToContent />
+          <SkipToContent href={mainContentHref}>
+            {t("headerLayout.skiptToMainContentText")}
+          </SkipToContent>
           <HeaderName href={homePageHref} prefix="">
             {t("header.productName", { ns: "common" })}
           </HeaderName>
           <HeaderGlobalBar>
             <HeaderGlobalAction
               aria-label={t("header.button.help", { ns: "common" })}
+              aria-haspopup="true"
+              aria-expanded={isHelpPanelExpanded}
               key="liz__installer-header_global-action__help"
               id="liz__installer-header_global-action__help"
               onClick={showHideSidePanel}
@@ -258,6 +263,9 @@ const HeaderLayout = () => {
             </HeaderGlobalAction>
             <HeaderGlobalAction
               aria-label={t("header.button.profileSettings")}
+              aria-haspopup="true"
+              aria-expanded={showNotification}
+              aria-controls="about-dialog__about-menu"
               key="liz__installer-header_global-action__profile"
               id="liz__installer-header_global-action__profile"
               onClick={() => {

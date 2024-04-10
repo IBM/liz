@@ -8,11 +8,10 @@ import {
   LOCAL_STORAGE_KEY_APP_HEADER,
   STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
+import { getItem } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
-  const initialState = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_KEY_APP_HEADER),
-  );
+  const initialState = getItem(LOCAL_STORAGE_KEY_APP_HEADER);
   const defaultState = {
     isHelpPanelExpanded: true,
     needsManualNavigationConfirmation: false,

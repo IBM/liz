@@ -41,6 +41,7 @@ import {
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import { setItem } from "../../../util/local-storage-util";
 import "./_intro.scss";
 
 const Intro = forwardRef(function Intro(props, ref) {
@@ -126,7 +127,7 @@ const Intro = forwardRef(function Intro(props, ref) {
       updateIsDirty(true);
       updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_INTRO,
         JSON.stringify({
           ...state,

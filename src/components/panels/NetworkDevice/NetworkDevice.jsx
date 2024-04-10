@@ -49,6 +49,7 @@ import {
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import DeviceSettings from "./components/DeviceSettings";
+import { setItem } from "../../../util/local-storage-util";
 import "./_network-device.scss";
 
 const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
@@ -214,7 +215,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
         updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
       });
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
         JSON.stringify({
           ...state,

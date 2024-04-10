@@ -14,11 +14,10 @@ import {
   DEFAULT_NUMBER_OBJECT,
   DEFAULT_STRING_OBJECT,
 } from "../util/constants";
+import { getItem } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
-  const initialState = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE),
-  );
+  const initialState = getItem(LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE);
   const defaultState = {
     selectedDeviceType: DEVICE_TYPE_OSA,
     readChannelId: DEFAULT_COMPUTED_STRING_OBJECT,

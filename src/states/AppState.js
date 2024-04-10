@@ -9,9 +9,10 @@ import {
   LOCAL_STORAGE_KEY_APP,
   STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
+import { decryptItem } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
-  const initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_APP));
+  const initialState = decryptItem(LOCAL_STORAGE_KEY_APP);
   const defaultState = {
     step: 0,
     helpStep: 0,

@@ -14,6 +14,7 @@ import {
 } from "../../../util/local-storage-constants";
 import { ApplicationContext, SummaryContext } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { setItem } from "../../../util/local-storage-util";
 import "./_summary.scss";
 
 const Summary = forwardRef(function Summary(props, ref) {
@@ -48,7 +49,7 @@ const Summary = forwardRef(function Summary(props, ref) {
       updateIsDirty(true);
       updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_SUMMARY,
         JSON.stringify({
           ...state,

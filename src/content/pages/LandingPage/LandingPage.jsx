@@ -52,6 +52,7 @@ import { getInlineNotification } from "../../../uiUtil/panel-util";
 import PathConstants from "../../../util/path-constants";
 import { LandingPageContext, ApplicationContext } from "../../../contexts";
 import { SystemRequirements, Parmfile, NextSteps } from "./components";
+import { setItem } from "../../../util/local-storage-util";
 import "./_landing-page.scss";
 
 const LandingPage = forwardRef(function LandingPage(props, ref) {
@@ -83,7 +84,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
   } = useContext(ApplicationContext);
   const publicRef = {
     persistState: () => {
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
         JSON.stringify({
           ...state,
@@ -121,7 +122,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     localInlineNotification.show = false;
 
     updateShowLegalNotification(false);
-    localStorage.setItem(
+    setItem(
       LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
       JSON.stringify(localInlineNotification),
     );

@@ -32,7 +32,10 @@ import {
   ApplicationContext,
   HeaderContext,
 } from "../../../contexts";
-import { parmfileCardIsExpanded } from "../../../util/local-storage-util";
+import {
+  parmfileCardIsExpanded,
+  setItem,
+} from "../../../util/local-storage-util";
 import {
   saveParamFileContent,
   getParamFileContents,
@@ -65,7 +68,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
   const { panelConfig } = config;
   const publicRef = {
     persistState: () => {
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_EDIT_PAGE,
         JSON.stringify({
           ...state,
@@ -85,7 +88,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
     localInlineNotification.show = false;
 
     updateShowLegalNotification(false);
-    localStorage.setItem(
+    setItem(
       LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
       JSON.stringify(localInlineNotification),
     );

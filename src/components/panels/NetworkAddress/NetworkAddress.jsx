@@ -54,6 +54,7 @@ import {
 } from "../../../util/network-address-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import { IPv4Panel, IPv6Panel } from "./components";
+import { setItem } from "../../../util/local-storage-util";
 import "./_network-address.scss";
 
 const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
@@ -192,7 +193,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
         updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
       });
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_NETWORK_ADDRESS,
         JSON.stringify({
           ...state,

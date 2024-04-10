@@ -41,6 +41,7 @@ import {
   saveParamFileContent,
   stateToParamFile,
 } from "../../../util/param-file-util";
+import { setItem } from "../../../util/local-storage-util";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
@@ -127,7 +128,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
       });
 
-      localStorage.setItem(
+      setItem(
         LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE,
         JSON.stringify({
           ...state,
