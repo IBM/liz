@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "engines": {
-    "node": "20.12.1",
+    "node": "20.12.2",
     "npm": "10.5.1"
   },
   "scripts": {
