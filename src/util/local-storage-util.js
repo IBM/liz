@@ -139,27 +139,27 @@ const getLocalStorageContentsForLandingPage = () => {
 
 const nextStepsCardHasBeenReviewed = () => {
   const landingPage = getLocalStorageContentsForLandingPage();
-  return landingPage.nextStepsCardHasBeenReviewed;
+  return landingPage?.nextStepsCardHasBeenReviewed ?? false;
 };
 
 const nextStepsCardIsExpanded = () => {
   const landingPage = getLocalStorageContentsForLandingPage();
-  return landingPage.nextStepsCardIsExpanded;
+  return landingPage?.nextStepsCardIsExpanded ?? false;
 };
 
 const parmfileCardIsExpanded = () => {
   const landingPage = getLocalStorageContentsForLandingPage();
-  return landingPage.parmfileCardIsExpanded;
+  return landingPage?.parmfileCardIsExpanded ?? false;
 };
 
 const requirementsCardHasBeenReviewed = () => {
   const landingPage = getLocalStorageContentsForLandingPage();
-  return landingPage.requirementsCardHasBeenReviewed;
+  return landingPage?.requirementsCardHasBeenReviewed ?? false;
 };
 
 const requirementsCardIsExpanded = () => {
   const landingPage = getLocalStorageContentsForLandingPage();
-  return landingPage.requirementsCardIsExpanded;
+  return landingPage?.requirementsCardIsExpanded ?? false;
 };
 
 const hasLocalStorageState = () => {

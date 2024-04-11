@@ -4,16 +4,18 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useContext, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button } from "@carbon/react";
 import { Checkmark, Close, Copy, LinuxAlt } from "@carbon/icons-react";
+import { ApplicationContext } from "../../contexts";
 import "./_about.scss";
 
 const About = ({ closeNotification, pruneSettings }) => {
   const { t } = useTranslation();
+  const { state: globalState } = useContext(ApplicationContext);
 
   const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
   const [commitHashHasBeenCopied, setCommitHashHasBeenCopied] = useState(false);
@@ -198,17 +200,19 @@ const About = ({ closeNotification, pruneSettings }) => {
           <span>{t("dialog.about.reportIssueLabel")}</span>
         </Button>
       </li>
-      <li className="about-dialog__about-prune-button-container" role="none">
-        <Button
-          kind="ghost"
-          data-title="prune"
-          id="about-dialog__about-prune-button"
-          onClick={pruneSettings}
-          className="about-dialog__about-prune-button"
-        >
-          <span>{t("dialog.about.pruneSettingsLabel")}</span>
-        </Button>
-      </li>
+      {!globalState.isEditing && (
+        <li className="about-dialog__about-prune-button-container" role="none">
+          <Button
+            kind="ghost"
+            data-title="prune"
+            id="about-dialog__about-prune-button"
+            onClick={pruneSettings}
+            className="about-dialog__about-prune-button"
+          >
+            <span>{t("dialog.about.pruneSettingsLabel")}</span>
+          </Button>
+        </li>
+      )}
     </ul>
   );
 };

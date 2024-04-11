@@ -8,8 +8,25 @@ import loadable from "@loadable/component";
 import PathConstants from "../util/path-constants";
 import { renderRoutes, renderRoutesForCreateBrowser } from "./generate-routes";
 
-// Layouts
-import { MainLayout, EditLayout, ErrorLayout } from "../content/layouts";
+/*
+ * Layouts
+ */
+
+const MainLayout = loadable(() => import("../content/layouts"), {
+  resolveComponent: (components) => components.MainLayout,
+});
+
+const EditLayout = loadable(() => import("../content/layouts"), {
+  resolveComponent: (components) => components.EditLayout,
+});
+
+const ErrorLayout = loadable(() => import("../content/layouts"), {
+  resolveComponent: (components) => components.ErrorLayout,
+});
+
+/*
+ * Pages
+ */
 
 const LandingPage = loadable(() => import("../content/pages"), {
   resolveComponent: (components) => components.LandingPage,
