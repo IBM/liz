@@ -8,6 +8,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { pkg } from "@carbon/ibm-products";
 import i18Init from "./i18n";
+import { ApplicationContextProvider } from "./contexts";
 import App from "./App";
 import "./index.scss";
 
@@ -16,6 +17,8 @@ i18Init();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <ApplicationContextProvider>
+      <App />
+    </ApplicationContextProvider>
   </React.StrictMode>,
 );

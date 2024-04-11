@@ -14,6 +14,7 @@ import { decryptItem } from "../util/local-storage-util";
 const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = decryptItem(LOCAL_STORAGE_KEY_APP);
   const defaultState = {
+    theme: "white",
     step: 0,
     helpStep: 0,
     nextStep: 0,

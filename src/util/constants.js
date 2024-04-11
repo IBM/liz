@@ -196,6 +196,10 @@ const TEARSHEET_TAB_CONTENT_DPM = "tabContentDPM";
 
 const DEFAULT_PARAM_FILE_NAME = `parmfile__${nanoid()}.txt`;
 
+const DEFAULT_THEME = "white";
+const DARK_THEME = "g100";
+const LIGHT_THEME = DEFAULT_THEME;
+
 const DEFAULT_STEPS = {
   inputFileSelection: {
     distributionName: RHEL_DISTRIBUTION_ID,
@@ -306,6 +310,9 @@ const DEFAULT_STEPS = {
 
 export {
   PRESETS,
+  DARK_THEME,
+  LIGHT_THEME,
+  DEFAULT_THEME,
   DEFAULT_STEPS,
   DEFAULT_PARAM_FILE_NAME,
   TEARSHEET_TAB_CONTENT_CLASSIC_MODE,

@@ -4,11 +4,12 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
+import { GlobalTheme } from "@carbon/react";
 import { CreateBrowserRoutes } from "./routes";
 import {
-  ApplicationContextProvider,
+  ApplicationContext,
   HeaderContextProvider,
   LandingPageContextProvider,
   EditPageContextProvider,
@@ -22,39 +23,48 @@ import {
   NetworkDeviceContextProvider,
   SummaryContextProvider,
 } from "./contexts";
+import { DEFAULT_THEME } from "./util/constants";
 import "./App.scss";
 
 const router = createHashRouter(CreateBrowserRoutes);
 
 const App = () => {
+  const { state } = useContext(ApplicationContext);
+
+  const theme = state?.theme ?? DEFAULT_THEME;
+
+  useEffect(() => {
+    document.documentElement.dataset.carbonTheme = theme;
+  }, [state]);
+
   return (
-    <ApplicationContextProvider>
-      <HeaderContextProvider>
-        <LandingPageContextProvider>
-          <EditPageContextProvider>
-            <DownloadParamFileContextProvider>
-              <InformationContextProvider>
-                <InputFileSelectionContextProvider>
-                  <InstallationParameterContextProvider>
-                    <IntroContextProvider>
-                      <NetworkAddressContextProvider>
-                        <NetworkDeviceContextProvider>
-                          <SummaryContextProvider>
-                            <ErrorPageContextProvider>
+    <HeaderContextProvider>
+      <LandingPageContextProvider>
+        <EditPageContextProvider>
+          <DownloadParamFileContextProvider>
+            <InformationContextProvider>
+              <InputFileSelectionContextProvider>
+                <InstallationParameterContextProvider>
+                  <IntroContextProvider>
+                    <NetworkAddressContextProvider>
+                      <NetworkDeviceContextProvider>
+                        <SummaryContextProvider>
+                          <ErrorPageContextProvider>
+                            <GlobalTheme theme={theme}>
                               <RouterProvider router={router} />
-                            </ErrorPageContextProvider>
-                          </SummaryContextProvider>
-                        </NetworkDeviceContextProvider>
-                      </NetworkAddressContextProvider>
-                    </IntroContextProvider>
-                  </InstallationParameterContextProvider>
-                </InputFileSelectionContextProvider>
-              </InformationContextProvider>
-            </DownloadParamFileContextProvider>
-          </EditPageContextProvider>
-        </LandingPageContextProvider>
-      </HeaderContextProvider>
-    </ApplicationContextProvider>
+                            </GlobalTheme>
+                          </ErrorPageContextProvider>
+                        </SummaryContextProvider>
+                      </NetworkDeviceContextProvider>
+                    </NetworkAddressContextProvider>
+                  </IntroContextProvider>
+                </InstallationParameterContextProvider>
+              </InputFileSelectionContextProvider>
+            </InformationContextProvider>
+          </DownloadParamFileContextProvider>
+        </EditPageContextProvider>
+      </LandingPageContextProvider>
+    </HeaderContextProvider>
   );
 };
 

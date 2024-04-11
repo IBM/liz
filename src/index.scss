@@ -10,6 +10,14 @@
 
 @use "@carbon/ibm-products/css/index";
 
+:root[data-carbon-theme="g10"] {
+  @include react.theme(react.$white);
+}
+
+:root[data-carbon-theme="g100"] {
+  @include react.theme(react.$g100);
+}
+
 body,
 html,
 #root {

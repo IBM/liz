@@ -20,6 +20,7 @@ import {
   PANEL_UNKNOWN,
 } from "../util/panel-constants";
 import {
+  ACTION_UPDATE_APP_THEME,
   ACTION_UPDATE_APP_STATE,
   ACTION_UPDATE_APP_STEP,
   ACTION_UPDATE_APP_HELP_STEP,
@@ -51,6 +52,16 @@ const ApplicationContextProvider = ({ value, children }) => {
       dispatch({
         type: ACTION_RESET_TO_INITIAL_STATE,
         nextInitialState: createInitialState(true),
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateTheme = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_THEME,
+        nextTheme: updates,
       });
     },
     [state, dispatch],
@@ -490,6 +501,7 @@ const ApplicationContextProvider = ({ value, children }) => {
     () => ({
       ...value,
       state,
+      updateTheme,
       updateState,
       updateStep,
       updateNextStep,
@@ -512,6 +524,7 @@ const ApplicationContextProvider = ({ value, children }) => {
     [
       value,
       state,
+      updateTheme,
       updateState,
       updateStep,
       updateNextStep,

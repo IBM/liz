@@ -8,14 +8,15 @@ import React, { useRef, useEffect, useContext, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Button } from "@carbon/react";
+import { Button, Toggle } from "@carbon/react";
 import { Checkmark, Close, Copy, LinuxAlt } from "@carbon/icons-react";
 import { ApplicationContext } from "../../contexts";
+import { LIGHT_THEME, DARK_THEME } from "../../util/constants";
 import "./_about.scss";
 
 const About = ({ closeNotification, pruneSettings }) => {
   const { t } = useTranslation();
-  const { state: globalState } = useContext(ApplicationContext);
+  const { state: globalState, updateTheme } = useContext(ApplicationContext);
 
   const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
   const [commitHashHasBeenCopied, setCommitHashHasBeenCopied] = useState(false);
@@ -69,6 +70,8 @@ const About = ({ closeNotification, pruneSettings }) => {
   const commitHashLong = appConfig?.config?.commitHashLong ?? "";
   const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
   const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? "";
+  const theme = globalState?.theme ?? LIGHT_THEME;
+  const useLightTheme = theme === LIGHT_THEME;
 
   const buildDateCopyIcon = buildDateBeenCopied ? (
     <Checkmark size="20" />
@@ -170,6 +173,28 @@ const About = ({ closeNotification, pruneSettings }) => {
               >
                 {commitHashCopyIcon}
               </CopyToClipboard>
+            </span>
+          </div>
+          <div className="about-dialog__about-build-info__theme">
+            <span id="about-dialog__theme-toggle-label">
+              {t("dialog.about.themeLabel")}:
+            </span>
+            <span>
+              <Toggle
+                size="sm"
+                aria-labelledby="about-dialog__theme-toggle-label"
+                labelA={t("dialog.about.darkThemeLabel")}
+                labelB={t("dialog.about.lightThemeLabel")}
+                id="about-dialog__theme-toggle"
+                toggled={useLightTheme}
+                onToggle={() => {
+                  if (useLightTheme) {
+                    updateTheme(DARK_THEME);
+                  } else {
+                    updateTheme(LIGHT_THEME);
+                  }
+                }}
+              />
             </span>
           </div>
         </div>
