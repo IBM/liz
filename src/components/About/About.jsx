@@ -90,6 +90,7 @@ const About = ({ closeNotification, pruneSettings }) => {
   const commitHashCopyClass = commitHashHasBeenCopied
     ? "about-dialog__about-build-info__commit-hash__copied"
     : "about-dialog__about-build-info__commit-hash";
+  const toggleElementId = "about-dialog__theme-toggle";
 
   const useOutsideAlerter = (ref) => {
     useEffect(() => {
@@ -107,6 +108,18 @@ const About = ({ closeNotification, pruneSettings }) => {
     }, [ref]);
   };
 
+  const handleOnBlur = (event) => {
+    const onBlurTarget = event.target;
+
+    // the toggle seems to be lossing its focuse once
+    // the theme changes thus the manual chack below.
+    if (onBlurTarget.id !== toggleElementId) {
+      closeNotification();
+    } else {
+      onBlurTarget.focus();
+    }
+  };
+
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
 
@@ -117,7 +130,7 @@ const About = ({ closeNotification, pruneSettings }) => {
       ref={wrapperRef}
       role="menu"
       aria-label={t("header.button.profileSettings")}
-      onBlur={closeNotification}
+      onBlur={handleOnBlur}
     >
       <li
         id="about-dialog__about-title"
