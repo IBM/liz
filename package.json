@@ -72,7 +72,7 @@
     "@storybook/cli": "7.6.17",
     "@storybook/node-logger": "7.6.17",
     "@storybook/react": "7.6.17",
-    "@testing-library/react": "14.3.0",
+    "@testing-library/react": "14.3.1",
     "@types/jest": "29.5.12",
     "@types/react": "18.2.77",
     "@types/react-dom": "18.2.25",
