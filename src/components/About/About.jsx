@@ -16,7 +16,11 @@ import "./_about.scss";
 
 const About = ({ closeNotification, pruneSettings }) => {
   const { t } = useTranslation();
-  const { state: globalState, updateTheme } = useContext(ApplicationContext);
+  const {
+    state: globalState,
+    updateTheme,
+    updateUseOperatingSystemTheme,
+  } = useContext(ApplicationContext);
 
   const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
   const [commitHashHasBeenCopied, setCommitHashHasBeenCopied] = useState(false);
@@ -72,6 +76,7 @@ const About = ({ closeNotification, pruneSettings }) => {
   const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? "";
   const theme = globalState?.theme ?? LIGHT_THEME;
   const useLightTheme = theme === LIGHT_THEME;
+  const useOperatingSystemTheme = globalState?.useOperatingSystemTheme ?? false;
 
   const buildDateCopyIcon = buildDateBeenCopied ? (
     <Checkmark size="20" />
@@ -90,7 +95,10 @@ const About = ({ closeNotification, pruneSettings }) => {
   const commitHashCopyClass = commitHashHasBeenCopied
     ? "about-dialog__about-build-info__commit-hash__copied"
     : "about-dialog__about-build-info__commit-hash";
-  const toggleElementId = "about-dialog__theme-toggle";
+  const toggleElementId = [
+    "about-dialog__theme-toggle",
+    "about-dialog__theme-from-os-toggle",
+  ];
 
   const useOutsideAlerter = (ref) => {
     useEffect(() => {
@@ -113,10 +121,8 @@ const About = ({ closeNotification, pruneSettings }) => {
 
     // the toggle seems to be lossing its focuse once
     // the theme changes thus the manual chack below.
-    if (onBlurTarget.id !== toggleElementId) {
+    if (toggleElementId.indexOf(onBlurTarget.id) < 0) {
       closeNotification();
-    } else {
-      onBlurTarget.focus();
     }
   };
 
@@ -195,6 +201,7 @@ const About = ({ closeNotification, pruneSettings }) => {
             <span>
               <Toggle
                 size="sm"
+                readOnly={useOperatingSystemTheme}
                 aria-labelledby="about-dialog__theme-toggle-label"
                 labelA={t("dialog.about.darkThemeLabel")}
                 labelB={t("dialog.about.lightThemeLabel")}
@@ -205,6 +212,28 @@ const About = ({ closeNotification, pruneSettings }) => {
                     updateTheme(DARK_THEME);
                   } else {
                     updateTheme(LIGHT_THEME);
+                  }
+                }}
+              />
+            </span>
+          </div>
+          <div className="about-dialog__about-build-info__theme">
+            <span id="about-dialog__theme-from-os-toggle-label">
+              {t("dialog.about.themeFromOsLabel")}:
+            </span>
+            <span>
+              <Toggle
+                size="sm"
+                aria-labelledby="about-dialog__theme-from-os-toggle-label"
+                labelA={t("btnLabel.No", { ns: "common" })}
+                labelB={t("btnLabel.Yes", { ns: "common" })}
+                id="about-dialog__theme-from-os-toggle"
+                toggled={useOperatingSystemTheme}
+                onToggle={() => {
+                  if (useOperatingSystemTheme) {
+                    updateUseOperatingSystemTheme(false);
+                  } else {
+                    updateUseOperatingSystemTheme(true);
                   }
                 }}
               />

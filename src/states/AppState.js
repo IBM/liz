@@ -15,6 +15,7 @@ const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = decryptItem(LOCAL_STORAGE_KEY_APP);
   const defaultState = {
     theme: "white",
+    useOperatingSystemTheme: false,
     step: 0,
     helpStep: 0,
     nextStep: 0,

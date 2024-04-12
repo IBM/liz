@@ -200,6 +200,9 @@ const DEFAULT_THEME = "white";
 const DARK_THEME = "g100";
 const LIGHT_THEME = DEFAULT_THEME;
 
+const OS_DARK_THEME = "dark";
+const OS_LIGHT_THEME = "light";
+
 const DEFAULT_STEPS = {
   inputFileSelection: {
     distributionName: RHEL_DISTRIBUTION_ID,
@@ -313,6 +316,8 @@ export {
   DARK_THEME,
   LIGHT_THEME,
   DEFAULT_THEME,
+  OS_DARK_THEME,
+  OS_LIGHT_THEME,
   DEFAULT_STEPS,
   DEFAULT_PARAM_FILE_NAME,
   TEARSHEET_TAB_CONTENT_CLASSIC_MODE,

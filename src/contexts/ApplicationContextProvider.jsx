@@ -35,6 +35,7 @@ import {
   ACTION_UPDATE_APP_STEPS,
   ACTION_UPDATE_APP_IS_DISABLED,
   ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
+  ACTION_UPDATE_APP_USE_OS_THEME,
 } from "../util/reducer-action-constants";
 import { ADDRESS_TYPE_IPV4, DEFAULT_STEPS } from "../util/constants";
 import { getLocalStorageKeys, pruneSettings } from "../util/local-storage-util";
@@ -52,6 +53,16 @@ const ApplicationContextProvider = ({ value, children }) => {
       dispatch({
         type: ACTION_RESET_TO_INITIAL_STATE,
         nextInitialState: createInitialState(true),
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateUseOperatingSystemTheme = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_USE_OS_THEME,
+        nextUseOperatingSystemTheme: updates,
       });
     },
     [state, dispatch],
@@ -511,6 +522,7 @@ const ApplicationContextProvider = ({ value, children }) => {
       updateModified,
       updateShowLegalNotification,
       updateUseStateFromLocalStorage,
+      updateUseOperatingSystemTheme,
       updateIsDirty,
       updateIsEditing,
       updateSteps,
@@ -534,6 +546,7 @@ const ApplicationContextProvider = ({ value, children }) => {
       updateModified,
       updateShowLegalNotification,
       updateUseStateFromLocalStorage,
+      updateUseOperatingSystemTheme,
       updateIsDirty,
       updateIsEditing,
       updateSteps,

@@ -20,6 +20,7 @@ import {
   ACTION_RESET_TO_INITIAL_STATE,
   ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
   ACTION_UPDATE_APP_THEME,
+  ACTION_UPDATE_APP_USE_OS_THEME,
 } from "../util/reducer-action-constants";
 import { LOCAL_STORAGE_KEY_APP } from "../util/local-storage-constants";
 import { persistToLocalStorage } from "../util/local-storage-util";
@@ -28,6 +29,13 @@ const reducer = (state, action) => {
   let updatedState = {};
 
   switch (action.type) {
+    case ACTION_UPDATE_APP_USE_OS_THEME:
+      updatedState = {
+        ...state,
+        useOperatingSystemTheme: action.nextUseOperatingSystemTheme,
+      };
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+      return updatedState;
     case ACTION_UPDATE_APP_THEME:
       updatedState = {
         ...state,
