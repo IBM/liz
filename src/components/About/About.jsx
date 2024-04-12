@@ -230,9 +230,21 @@ const About = ({ closeNotification, pruneSettings }) => {
                 id="about-dialog__theme-from-os-toggle"
                 toggled={useOperatingSystemTheme}
                 onToggle={() => {
+                  const dataset = document.documentElement.dataset;
+                  const osThemeUsesDarkMode =
+                    window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches;
+                  const osThemeUsesLightMode =
+                    window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: light)").matches;
+
                   if (useOperatingSystemTheme) {
+                    dataset.useOperatingSystemTheme = "false";
                     updateUseOperatingSystemTheme(false);
                   } else {
+                    osThemeUsesDarkMode && updateTheme(DARK_THEME);
+                    osThemeUsesLightMode && updateTheme(LIGHT_THEME);
+                    dataset.useOperatingSystemTheme = "true";
                     updateUseOperatingSystemTheme(true);
                   }
                 }}

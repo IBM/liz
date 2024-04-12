@@ -40,22 +40,20 @@ const App = () => {
   const theme = state?.theme ?? DEFAULT_THEME;
   const useOperatingSystemTheme = state?.useOperatingSystemTheme ?? false;
 
-  const osThemeUsesDarkMode =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const osThemeUsesLightMode =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: light)").matches;
-
   useEffect(() => {
     document.documentElement.dataset.carbonTheme = theme;
-  }, [state]);
 
-  useEffect(() => {
-    return window
+    if (!document.documentElement.dataset.useOperatingSystemTheme) {
+      document.documentElement.dataset.useOperatingSystemTheme = `${useOperatingSystemTheme}`;
+    }
+
+    window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (e) => {
-        if (useOperatingSystemTheme) {
+        if (
+          document.documentElement.dataset.useOperatingSystemTheme &&
+          document.documentElement.dataset.useOperatingSystemTheme === "true"
+        ) {
           const newColorScheme = e.matches ? OS_DARK_THEME : OS_LIGHT_THEME;
           switch (newColorScheme) {
             case OS_DARK_THEME:
@@ -69,12 +67,13 @@ const App = () => {
           }
         }
       });
-  }, [
-    state,
-    osThemeUsesDarkMode,
-    osThemeUsesLightMode,
-    useOperatingSystemTheme,
-  ]);
+
+    return () => {
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", (e) => {});
+    };
+  }, [state]);
 
   return (
     <HeaderContextProvider>
