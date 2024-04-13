@@ -125,6 +125,63 @@ const About = ({ closeNotification, pruneSettings }) => {
     }
   };
 
+  const handleTabElementOnBlur = (event) => {
+    const currentTarget = event.currentTarget;
+    const relatedTarget = event.relatedTarget;
+
+    currentTarget?.setAttribute("tabindex", "-1");
+    relatedTarget?.setAttribute("tabindex", "0");
+    relatedTarget?.focus();
+  };
+
+  const handleTabElementOnKayDown = (event) => {
+    event.stopPropagation();
+
+    const target = event.target;
+    const menu = document.getElementById("about-dialog__about-menu");
+
+    if (
+      target.dataset &&
+      target.dataset.a11yPrevious &&
+      target.dataset.a11yNext &&
+      menu.dataset &&
+      menu.dataset.a11yFirst &&
+      menu.dataset.a11yLast
+    ) {
+      const previous = document.getElementById(target.dataset.a11yPrevious);
+      const next = document.getElementById(target.dataset.a11yNext);
+      const first = document.getElementById(menu.dataset.a11yFirst);
+      const last = document.getElementById(menu.dataset.a11yLast);
+
+      switch (event.code) {
+        case "ArrowUp":
+          event.preventDefault();
+          target?.setAttribute("tabindex", "-1");
+          previous?.setAttribute("tabindex", "0");
+          previous?.focus();
+          break;
+        case "ArrowDown":
+          event.preventDefault();
+          target?.setAttribute("tabindex", "-1");
+          next?.setAttribute("tabindex", "0");
+          next?.focus();
+          break;
+        case "End":
+          event.preventDefault();
+          target?.setAttribute("tabindex", "-1");
+          last?.setAttribute("tabindex", "0");
+          last?.focus();
+          break;
+        case "Home":
+          event.preventDefault();
+          target?.setAttribute("tabindex", "-1");
+          first?.setAttribute("tabindex", "0");
+          first?.focus();
+          break;
+      }
+    }
+  };
+
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
 
@@ -138,6 +195,8 @@ const About = ({ closeNotification, pruneSettings }) => {
       aria-orientation="vertical"
       aria-label={t("header.button.profileSettings")}
       onBlur={handleOnBlur}
+      data-a11y-first="about-dialog__close-button"
+      data-a11y-last="about-dialog__about-prune-button"
     >
       <li
         id="about-dialog__about-title"
@@ -176,8 +235,12 @@ const About = ({ closeNotification, pruneSettings }) => {
                 id="about-dialog__close-button"
                 iconDescription={t("btnLabel.Close", { ns: "common" })}
                 onClick={closeNotification}
+                onBlur={handleTabElementOnBlur}
+                onKeyDown={handleTabElementOnKayDown}
                 renderIcon={Close}
                 tooltipPosition="left"
+                data-a11y-previous="about-dialog__about-prune-button"
+                data-a11y-next="about-dialog__copy-button__build-date"
               />
             </div>
           </div>
@@ -211,7 +274,11 @@ const About = ({ closeNotification, pruneSettings }) => {
                   id="about-dialog__copy-button__build-date"
                   iconDescription={t("btnLabel.Copy", { ns: "common" })}
                   onClick={function noRefCheck() {}}
+                  onBlur={handleTabElementOnBlur}
+                  onKeyDown={handleTabElementOnKayDown}
                   renderIcon={buildDateCopyIcon}
+                  data-a11y-previous="about-dialog__close-button"
+                  data-a11y-next="about-dialog__copy-button__commit-hash"
                 />
               </CopyToClipboard>
             </div>
@@ -234,7 +301,11 @@ const About = ({ closeNotification, pruneSettings }) => {
                   id="about-dialog__copy-button__commit-hash"
                   iconDescription={t("btnLabel.Copy", { ns: "common" })}
                   onClick={function noRefCheck() {}}
+                  onBlur={handleTabElementOnBlur}
+                  onKeyDown={handleTabElementOnKayDown}
                   renderIcon={commitHashCopyIcon}
+                  data-a11y-previous="about-dialog__copy-button__build-date"
+                  data-a11y-next="about-dialog__theme-toggle"
                 />
               </CopyToClipboard>
             </div>
@@ -262,6 +333,10 @@ const About = ({ closeNotification, pruneSettings }) => {
                     updateTheme(LIGHT_THEME);
                   }
                 }}
+                onBlur={handleTabElementOnBlur}
+                onKeyDown={handleTabElementOnKayDown}
+                data-a11y-previous="about-dialog__copy-button__commit-hash"
+                data-a11y-next="about-dialog__theme-from-os-toggle"
               />
             </div>
           </div>
@@ -299,6 +374,10 @@ const About = ({ closeNotification, pruneSettings }) => {
                     updateUseOperatingSystemTheme(true);
                   }
                 }}
+                onBlur={handleTabElementOnBlur}
+                onKeyDown={handleTabElementOnKayDown}
+                data-a11y-previous="about-dialog__theme-toggle"
+                data-a11y-next="about-dialog__about-kissues-button"
               />
             </div>
           </div>
@@ -313,6 +392,10 @@ const About = ({ closeNotification, pruneSettings }) => {
           target="_blank"
           className="about-dialog__about-kissues-button"
           role="menuitem"
+          onBlur={handleTabElementOnBlur}
+          onKeyDown={handleTabElementOnKayDown}
+          data-a11y-previous="about-dialog__theme-from-os-toggle"
+          data-a11y-next="about-dialog__about-report-button"
         >
           <span>{t("dialog.about.knownIssuesLabel")}</span>
         </Button>
@@ -326,6 +409,10 @@ const About = ({ closeNotification, pruneSettings }) => {
           target="_blank"
           className="about-dialog__about-report-button"
           role="menuitem"
+          onBlur={handleTabElementOnBlur}
+          onKeyDown={handleTabElementOnKayDown}
+          data-a11y-previous="about-dialog__about-kissues-button"
+          data-a11y-next="about-dialog__about-prune-button"
         >
           <span>{t("dialog.about.reportIssueLabel")}</span>
         </Button>
@@ -337,7 +424,11 @@ const About = ({ closeNotification, pruneSettings }) => {
             data-title="prune"
             id="about-dialog__about-prune-button"
             onClick={pruneSettings}
+            onBlur={handleTabElementOnBlur}
+            onKeyDown={handleTabElementOnKayDown}
             className="about-dialog__about-prune-button"
+            data-a11y-previous="about-dialog__about-report-button"
+            data-a11y-next="about-dialog__close-button"
           >
             <span>{t("dialog.about.pruneSettingsLabel")}</span>
           </Button>
