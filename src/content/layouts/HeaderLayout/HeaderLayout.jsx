@@ -244,7 +244,7 @@ const HeaderLayout = () => {
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
         <Header aria-label={t("header.productName", { ns: "common" })}>
-          <SkipToContent href={mainContentHref}>
+          <SkipToContent href={mainContentHref} id="liz__skip-to-content">
             {t("headerLayout.skiptToMainContentText")}
           </SkipToContent>
           <HeaderName href={homePageHref} prefix="">

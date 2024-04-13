@@ -78,16 +78,8 @@ const About = ({ closeNotification, pruneSettings }) => {
   const useLightTheme = theme === LIGHT_THEME;
   const useOperatingSystemTheme = globalState?.useOperatingSystemTheme ?? false;
 
-  const buildDateCopyIcon = buildDateBeenCopied ? (
-    <Checkmark size="20" />
-  ) : (
-    <Copy size="20" />
-  );
-  const commitHashCopyIcon = commitHashHasBeenCopied ? (
-    <Checkmark size="20" />
-  ) : (
-    <Copy size="20" />
-  );
+  const buildDateCopyIcon = buildDateBeenCopied ? Checkmark : Copy;
+  const commitHashCopyIcon = commitHashHasBeenCopied ? Checkmark : Copy;
 
   const buildDateCopyClass = buildDateBeenCopied
     ? "about-dialog__about-build-info__date__copied"
@@ -95,10 +87,6 @@ const About = ({ closeNotification, pruneSettings }) => {
   const commitHashCopyClass = commitHashHasBeenCopied
     ? "about-dialog__about-build-info__commit-hash__copied"
     : "about-dialog__about-build-info__commit-hash";
-  const toggleElementId = [
-    "about-dialog__theme-toggle",
-    "about-dialog__theme-from-os-toggle",
-  ];
 
   const useOutsideAlerter = (ref) => {
     useEffect(() => {
@@ -117,12 +105,23 @@ const About = ({ closeNotification, pruneSettings }) => {
   };
 
   const handleOnBlur = (event) => {
-    const onBlurTarget = event.target;
+    const targetId = event?.target?.id ?? "";
+    const relatedTargetId = event?.relatedTarget?.id ?? "";
 
-    // the toggle seems to be lossing its focuse once
-    // the theme changes thus the manual chack below.
-    if (toggleElementId.indexOf(onBlurTarget.id) < 0) {
-      closeNotification();
+    if (targetId === "about-dialog__about-menu" && !relatedTargetId) {
+      return closeNotification();
+    } else if (
+      !globalState.isEditing &&
+      targetId === "about-dialog__about-prune-button" &&
+      relatedTargetId === "liz__skip-to-content"
+    ) {
+      return closeNotification();
+    } else if (
+      globalState.isEditing &&
+      targetId === "about-dialog__about-report-button" &&
+      relatedTargetId === "liz__skip-to-content"
+    ) {
+      return closeNotification();
     }
   };
 
@@ -131,74 +130,123 @@ const About = ({ closeNotification, pruneSettings }) => {
 
   return (
     <ul
+      tabIndex="0"
       id="about-dialog__about-menu"
       className="about-dialog__about-menu"
       ref={wrapperRef}
       role="menu"
+      aria-orientation="vertical"
       aria-label={t("header.button.profileSettings")}
       onBlur={handleOnBlur}
     >
       <li
         id="about-dialog__about-title"
         className="about-dialog__about__title-section"
+        aria-owns="about-dialog__about__title-section-group"
         role="none"
       >
-        <div className="about-dialog__about__linux-icon">
-          <div>
-            <LinuxAlt size="48" />
+        <div
+          className="about-dialog__about__title-section-group"
+          id="about-dialog__about__title-section-group"
+          role="group"
+        >
+          <div className="about-dialog__about__linux-icon">
+            <div role="presentation">
+              <LinuxAlt size="48" />
+            </div>
           </div>
-        </div>
-        <div className="about-dialog__about__info-section">
-          <div title="About">{t("dialog.about.headerLabel")}</div>
-          <div title={t("header.productName", { ns: "common" })}>
-            {t("header.productName", { ns: "common" })}
-          </div>
-          <div
-            title={t("btnLabel.Close", { ns: "common" })}
-            className="about-dialog__about__info-section__icon"
-            onClick={closeNotification}
-          >
-            <Close size="16" />
+          <div className="about-dialog__about__info-section">
+            <div
+              title={t("dialog.about.headerLabel")}
+              className="about-dialog__about__info-section__app-title"
+            >
+              {t("dialog.about.headerLabel")}
+            </div>
+            <div
+              title={t("header.productName", { ns: "common" })}
+              className="about-dialog__about__info-section__app-subtitle"
+            >
+              {t("header.productName", { ns: "common" })}
+            </div>
+            <div className="about-dialog__about__info-section__icon">
+              <Button
+                hasIconOnly
+                size="sm"
+                kind="ghost"
+                id="about-dialog__close-button"
+                iconDescription={t("btnLabel.Close", { ns: "common" })}
+                onClick={closeNotification}
+                renderIcon={Close}
+                tooltipPosition="left"
+              />
+            </div>
           </div>
         </div>
       </li>
-      <li id="about-dialog__about-build-info" role="none">
-        <div className="about-dialog__about-build-info">
+      <li
+        id="about-dialog__about-build-info"
+        role="none"
+        aria-owns="about-dialog__about-build-info-group"
+      >
+        <div
+          className="about-dialog__about-build-info"
+          id="about-dialog__about-build-info-group"
+          role="group"
+        >
           <div className={buildDateCopyClass}>
-            <span>
+            <div className="about-dialog__about-build-info__date__left-column">
               <Trans i18nKey="dialog.about.buildDateLabel">
                 Build date: <code>{{ buildDate }}</code>
               </Trans>
-            </span>
-            <span title={t("btnLabel.Copy", { ns: "common" })}>
+            </div>
+            <div className="about-dialog__about-build-info__date__right-column">
               <CopyToClipboard
                 text={buildDate}
                 onCopy={() => updateCopied(COPY_TYPE_BUILD_DATE)}
               >
-                {buildDateCopyIcon}
+                <Button
+                  hasIconOnly
+                  size="sm"
+                  kind="ghost"
+                  id="about-dialog__copy-button__build-date"
+                  iconDescription={t("btnLabel.Copy", { ns: "common" })}
+                  onClick={function noRefCheck() {}}
+                  renderIcon={buildDateCopyIcon}
+                />
               </CopyToClipboard>
-            </span>
+            </div>
           </div>
           <div className={commitHashCopyClass}>
-            <span>
+            <div className="about-dialog__about-build-info__hash__left-column">
               <Trans i18nKey="dialog.about.commitHashLabel">
                 Commit hash: <code>{{ commitHashShort }}</code>
               </Trans>
-            </span>
-            <span title={t("btnLabel.Copy", { ns: "common" })}>
+            </div>
+            <div className="about-dialog__about-build-info__hash__right-column">
               <CopyToClipboard
                 text={commitHashLong}
                 onCopy={() => updateCopied(COPY_TYPE_COMMIT_HASH)}
               >
-                {commitHashCopyIcon}
+                <Button
+                  hasIconOnly
+                  size="sm"
+                  kind="ghost"
+                  id="about-dialog__copy-button__commit-hash"
+                  iconDescription={t("btnLabel.Copy", { ns: "common" })}
+                  onClick={function noRefCheck() {}}
+                  renderIcon={commitHashCopyIcon}
+                />
               </CopyToClipboard>
-            </span>
+            </div>
           </div>
           <div className="about-dialog__about-build-info__theme">
-            <span id="about-dialog__theme-toggle-label">
+            <div
+              id="about-dialog__theme-toggle-label"
+              className="about-dialog__about-build-info__theme__left-column"
+            >
               {t("dialog.about.themeLabel")}:
-            </span>
-            <span>
+            </div>
+            <div className="about-dialog__about-build-info__theme__right-column">
               <Toggle
                 size="sm"
                 readOnly={useOperatingSystemTheme}
@@ -215,13 +263,16 @@ const About = ({ closeNotification, pruneSettings }) => {
                   }
                 }}
               />
-            </span>
+            </div>
           </div>
           <div className="about-dialog__about-build-info__theme">
-            <span id="about-dialog__theme-from-os-toggle-label">
+            <div
+              id="about-dialog__theme-from-os-toggle-label"
+              className="about-dialog__about-build-info__theme__leftcolumn"
+            >
               {t("dialog.about.themeFromOsLabel")}:
-            </span>
-            <span>
+            </div>
+            <div className="about-dialog__about-build-info__theme__right-column">
               <Toggle
                 size="sm"
                 aria-labelledby="about-dialog__theme-from-os-toggle-label"
@@ -249,7 +300,7 @@ const About = ({ closeNotification, pruneSettings }) => {
                   }
                 }}
               />
-            </span>
+            </div>
           </div>
         </div>
       </li>

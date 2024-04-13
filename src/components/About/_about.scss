@@ -1,14 +1,18 @@
 /*
  * liz - Installation assistant for Linux on IBM Z
  *
- * (C) Copyright IBM Corp. 2023
+ * (C) Copyright IBM Corp. 2023, 2024
  */
 @use "@carbon/react" with (
   $font-path: "@ibm/plex"
 );
 
 .about-dialog__about-menu {
-  z-index: 10000;
+  // the carbon <header /> component
+  // has a z-index of 8000 where the
+  // Carbon for IBM Products <SidePanel />
+  // component has z z-index of 9000.
+  z-index: 9500;
   position: absolute;
   top: react.$spacing-09;
   border: 0;
@@ -20,8 +24,11 @@
   width: calc(3 * react.$spacing-11);
   right: 0;
   min-width: calc(6 * react.$spacing-10);
-  background: react.$background;
+  background: react.$layer-01;
   color: react.$background-inverse;
+  border-left: 1px solid react.$border-subtle-02;
+  border-bottom: 1px solid react.$border-subtle-02;
+  box-shadow: 0 0.125rem 0.25rem react.$overlay;
 
   .about-dialog__about__title-section {
     @include react.type-style("body-compact-01");
@@ -52,26 +59,20 @@
 
       .about-dialog__about__info-section__icon {
         position: absolute;
-        cursor: pointer;
         right: 0;
         top: 0;
-        padding: react.$spacing-03;
-
-        &:hover {
-          background: react.$background-hover;
-        }
 
         > svg {
           vertical-align: middle;
         }
       }
 
-      :first-of-type {
+      .about-dialog__about__info-section__app-title {
         @include react.type-style("heading-03");
         @include react.font-weight("semibold");
       }
 
-      :not(:first-of-type) {
+      .about-dialog__about__info-section__app-subtitle {
         @include react.type-style("heading-01");
       }
     }
@@ -84,52 +85,55 @@
 
     .about-dialog__about-build-info__commit-hash__copied,
     .about-dialog__about-build-info__date__copied {
-      padding-bottom: react.$spacing-02;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
 
       code {
         @include react.type-style("code-01");
       }
 
-      :first-of-type {
-        margin-right: react.$spacing-03;
-      }
-
-      :last-of-type {
-        vertical-align: bottom;
+      .about-dialog__about-build-info__date__right-column,
+      .about-dialog__about-build-info__hash__right-column {
+        margin-left: react.$spacing-03;
 
         svg {
-          padding: react.$spacing-01;
           fill: react.$support-success;
         }
+      }
+
+      .about-dialog__about-build-info__date__left-column,
+      .about-dialog__about-build-info__date__right-column,
+      .about-dialog__about-build-info__hash__left-column,
+      .about-dialog__about-build-info__hash__right-column {
+        text-align: right;
       }
     }
 
     .about-dialog__about-build-info__commit-hash,
     .about-dialog__about-build-info__date,
     .about-dialog__about-build-info__theme {
-      padding-bottom: react.$spacing-02;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
 
       code {
         @include react.type-style("code-01");
       }
 
-      :first-of-type {
-        margin-right: react.$spacing-03;
+      .about-dialog__about-build-info__date__right-column,
+      .about-dialog__about-build-info__hash__right-column,
+      .about-dialog__about-build-info__theme__right-column {
+        margin-left: react.$spacing-03;
       }
 
-      :last-of-type {
-        vertical-align: bottom;
-        cursor: pointer;
-
-        svg {
-          padding: react.$spacing-01;
-        }
-
-        &:hover {
-          svg {
-            background: react.$background-hover;
-          }
-        }
+      .about-dialog__about-build-info__date__left-column,
+      .about-dialog__about-build-info__date__right-column,
+      .about-dialog__about-build-info__hash__left-column,
+      .about-dialog__about-build-info__hash__right-colum,
+      .about-dialog__about-build-info__theme__left-column,
+      .about-dialog__about-build-info__theme__right-column {
+        text-align: right;
       }
     }
   }
@@ -147,7 +151,7 @@
 .about-dialog__about-prune-button-container,
 .about-dialog__about-report-button-container,
 .about-dialog__about-kissues-button-container {
-  background: react.$background;
+  background: react.$layer-01;
 
   .about-dialog__about-report-button,
   .about-dialog__about-prune-button,
