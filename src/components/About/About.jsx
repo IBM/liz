@@ -126,11 +126,8 @@ const About = ({ closeNotification, pruneSettings }) => {
   };
 
   const handleTabElementOnBlur = (event) => {
-    const currentTarget = event.currentTarget;
     const relatedTarget = event.relatedTarget;
 
-    currentTarget?.setAttribute("tabindex", "-1");
-    relatedTarget?.setAttribute("tabindex", "0");
     relatedTarget?.focus();
   };
 
@@ -156,26 +153,18 @@ const About = ({ closeNotification, pruneSettings }) => {
       switch (event.code) {
         case "ArrowUp":
           event.preventDefault();
-          target?.setAttribute("tabindex", "-1");
-          previous?.setAttribute("tabindex", "0");
           previous?.focus();
           break;
         case "ArrowDown":
           event.preventDefault();
-          target?.setAttribute("tabindex", "-1");
-          next?.setAttribute("tabindex", "0");
           next?.focus();
           break;
         case "End":
           event.preventDefault();
-          target?.setAttribute("tabindex", "-1");
-          last?.setAttribute("tabindex", "0");
           last?.focus();
           break;
         case "Home":
           event.preventDefault();
-          target?.setAttribute("tabindex", "-1");
-          first?.setAttribute("tabindex", "0");
           first?.focus();
           break;
       }
