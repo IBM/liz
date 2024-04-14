@@ -212,7 +212,11 @@ const About = ({ closeNotification, pruneSettings }) => {
       aria-label={t("header.button.profileSettings")}
       onBlur={handleOnBlur}
       data-a11y-first="about-dialog__close-button"
-      data-a11y-last="about-dialog__about-prune-button"
+      data-a11y-last={
+        !globalState.isEditing
+          ? "about-dialog__about-prune-button"
+          : "about-dialog__about-report-button"
+      }
     >
       <li
         id="about-dialog__about-title"
@@ -255,7 +259,11 @@ const About = ({ closeNotification, pruneSettings }) => {
                 onKeyDown={handleTabElementOnKayDown}
                 renderIcon={Close}
                 tooltipPosition="left"
-                data-a11y-previous="about-dialog__about-prune-button"
+                data-a11y-previous={
+                  !globalState.isEditing
+                    ? "about-dialog__about-prune-button"
+                    : "about-dialog__about-report-button"
+                }
                 data-a11y-next="about-dialog__copy-button__build-date"
               />
             </div>
@@ -446,7 +454,11 @@ const About = ({ closeNotification, pruneSettings }) => {
           onBlur={handleTabElementOnBlur}
           onKeyDown={handleTabElementOnKayDown}
           data-a11y-previous="about-dialog__about-kissues-button"
-          data-a11y-next="about-dialog__about-prune-button"
+          data-a11y-next={
+            !globalState.isEditing
+              ? "about-dialog__about-prune-button"
+              : "about-dialog__close-button"
+          }
           renderIcon={Launch}
           iconDescription={t("dialog.about.reportIssueLabel")}
           {...externalLinkReportIssueAriaProps}
