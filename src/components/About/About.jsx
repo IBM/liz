@@ -12,6 +12,13 @@ import { Button, Toggle } from "@carbon/react";
 import { Checkmark, Close, Copy, LinuxAlt, Launch } from "@carbon/icons-react";
 import { ApplicationContext } from "../../contexts";
 import { LIGHT_THEME, DARK_THEME } from "../../util/constants";
+import {
+  ARROW_KEY_DOWN_EVENT,
+  ARROW_KEY_UP_EVENT,
+  HOME_KEY_EVENT,
+  END_KEY_EVENT,
+  ESCAPE_KEY_EVENT,
+} from "../../util/event-handler-constants";
 import "./_about.scss";
 
 const About = ({ closeNotification, pruneSettings }) => {
@@ -152,13 +159,22 @@ const About = ({ closeNotification, pruneSettings }) => {
     }
   };
 
+  const handleOnKeyDown = (event) => {
+    switch (event.code) {
+      case ESCAPE_KEY_EVENT:
+        event.preventDefault();
+        closeNotification();
+        break;
+    }
+  };
+
   const handleTabElementOnBlur = (event) => {
     const relatedTarget = event.relatedTarget;
 
     relatedTarget?.focus();
   };
 
-  const handleTabElementOnKayDown = (event) => {
+  const handleTabElementOnKeyDown = (event) => {
     event.stopPropagation();
 
     const target = event.target;
@@ -178,21 +194,25 @@ const About = ({ closeNotification, pruneSettings }) => {
       const last = document.getElementById(menu.dataset.a11yLast);
 
       switch (event.code) {
-        case "ArrowUp":
+        case ARROW_KEY_UP_EVENT:
           event.preventDefault();
           previous?.focus();
           break;
-        case "ArrowDown":
+        case ARROW_KEY_DOWN_EVENT:
           event.preventDefault();
           next?.focus();
           break;
-        case "End":
+        case END_KEY_EVENT:
           event.preventDefault();
           last?.focus();
           break;
-        case "Home":
+        case HOME_KEY_EVENT:
           event.preventDefault();
           first?.focus();
+          break;
+        case ESCAPE_KEY_EVENT:
+          event.preventDefault();
+          closeNotification();
           break;
       }
     }
@@ -211,6 +231,7 @@ const About = ({ closeNotification, pruneSettings }) => {
       aria-orientation="vertical"
       aria-label={t("header.button.profileSettings")}
       onBlur={handleOnBlur}
+      onKeyDown={handleOnKeyDown}
       data-a11y-first="about-dialog__close-button"
       data-a11y-last={
         !globalState.isEditing
@@ -256,7 +277,7 @@ const About = ({ closeNotification, pruneSettings }) => {
                 iconDescription={t("btnLabel.Close", { ns: "common" })}
                 onClick={closeNotification}
                 onBlur={handleTabElementOnBlur}
-                onKeyDown={handleTabElementOnKayDown}
+                onKeyDown={handleTabElementOnKeyDown}
                 renderIcon={Close}
                 tooltipPosition="left"
                 data-a11y-previous={
@@ -300,7 +321,7 @@ const About = ({ closeNotification, pruneSettings }) => {
                   iconDescription={t("btnLabel.Copy", { ns: "common" })}
                   onClick={function noRefCheck() {}}
                   onBlur={handleTabElementOnBlur}
-                  onKeyDown={handleTabElementOnKayDown}
+                  onKeyDown={handleTabElementOnKeyDown}
                   renderIcon={buildDateCopyIcon}
                   role="menuitemcheckbox"
                   data-a11y-previous="about-dialog__close-button"
@@ -330,7 +351,7 @@ const About = ({ closeNotification, pruneSettings }) => {
                   iconDescription={t("btnLabel.Copy", { ns: "common" })}
                   onClick={function noRefCheck() {}}
                   onBlur={handleTabElementOnBlur}
-                  onKeyDown={handleTabElementOnKayDown}
+                  onKeyDown={handleTabElementOnKeyDown}
                   renderIcon={commitHashCopyIcon}
                   role="menuitemcheckbox"
                   data-a11y-previous="about-dialog__copy-button__build-date"
@@ -364,7 +385,7 @@ const About = ({ closeNotification, pruneSettings }) => {
                   }
                 }}
                 onBlur={handleTabElementOnBlur}
-                onKeyDown={handleTabElementOnKayDown}
+                onKeyDown={handleTabElementOnKeyDown}
                 data-a11y-previous="about-dialog__copy-button__commit-hash"
                 data-a11y-next="about-dialog__theme-from-os-toggle"
                 role="menuitemradio"
@@ -407,7 +428,7 @@ const About = ({ closeNotification, pruneSettings }) => {
                   }
                 }}
                 onBlur={handleTabElementOnBlur}
-                onKeyDown={handleTabElementOnKayDown}
+                onKeyDown={handleTabElementOnKeyDown}
                 data-a11y-previous="about-dialog__theme-toggle"
                 data-a11y-next="about-dialog__about-kissues-button"
                 role="menuitemradio"
@@ -426,7 +447,7 @@ const About = ({ closeNotification, pruneSettings }) => {
           className="about-dialog__about-kissues-button"
           role="menuitem"
           onBlur={handleTabElementOnBlur}
-          onKeyDown={handleTabElementOnKayDown}
+          onKeyDown={handleTabElementOnKeyDown}
           data-a11y-previous="about-dialog__theme-from-os-toggle"
           data-a11y-next="about-dialog__about-report-button"
           renderIcon={Launch}
@@ -452,7 +473,7 @@ const About = ({ closeNotification, pruneSettings }) => {
           className="about-dialog__about-report-button"
           role="menuitem"
           onBlur={handleTabElementOnBlur}
-          onKeyDown={handleTabElementOnKayDown}
+          onKeyDown={handleTabElementOnKeyDown}
           data-a11y-previous="about-dialog__about-kissues-button"
           data-a11y-next={
             !globalState.isEditing
@@ -480,7 +501,7 @@ const About = ({ closeNotification, pruneSettings }) => {
             id="about-dialog__about-prune-button"
             onClick={pruneSettings}
             onBlur={handleTabElementOnBlur}
-            onKeyDown={handleTabElementOnKayDown}
+            onKeyDown={handleTabElementOnKeyDown}
             className="about-dialog__about-prune-button"
             data-a11y-previous="about-dialog__about-report-button"
             data-a11y-next="about-dialog__close-button"
