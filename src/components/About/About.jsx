@@ -153,6 +153,11 @@ const About = forwardRef(function About(props, ref) {
     if (targetId === "about-dialog__about-menu" && !relatedTargetId) {
       return closeNotification();
     } else if (
+      targetId === "about-dialog__about-menu" &&
+      relatedTargetId === "liz__installer-header_global-action__profile"
+    ) {
+      return closeNotification();
+    } else if (
       !globalState.isEditing &&
       targetId === "about-dialog__about-prune-button" &&
       relatedTargetId === "liz__skip-to-content"
@@ -183,10 +188,6 @@ const About = forwardRef(function About(props, ref) {
   };
 
   const handleTabElementOnKeyDown = (event) => {
-    if (event.code && event.code === TAB_KEY_EVENT) {
-      return;
-    }
-
     event.stopPropagation();
 
     const target = event.target;
@@ -205,7 +206,23 @@ const About = forwardRef(function About(props, ref) {
       const first = document.getElementById(menu.dataset.a11yFirst);
       const last = document.getElementById(menu.dataset.a11yLast);
 
+      const skipToContent = document.getElementById("liz__skip-to-content");
+
       switch (event.code) {
+        case TAB_KEY_EVENT:
+          if (
+            !event.shiftKey &&
+            target.id === "about-dialog__about-prune-button"
+          ) {
+            skipToContent?.focus();
+          } else if (
+            !event.shiftKey &&
+            globalState.isEditing &&
+            target.id === "about-dialog__about-report-button"
+          ) {
+            skipToContent?.focus();
+          }
+          break;
         case ARROW_KEY_UP_EVENT:
           event.preventDefault();
           previous?.focus();
