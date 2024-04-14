@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React, { useContext, useRef, useEffect } from "react";
+import React, { useContext, useCallback } from "react";
 import { useNavigate, useHref } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -87,13 +87,11 @@ const HeaderLayout = () => {
     helpPanelConfig: {},
   };
 
-  const aboutMenuRef = useRef(null);
-
-  useEffect(() => {
-    if (aboutMenuRef.current) {
-      aboutMenuRef.current.focus();
+  const aboutMenuRef = useCallback((inputElement) => {
+    if (inputElement) {
+      inputElement.focus();
     }
-  }, [aboutMenuRef.current]);
+  }, []);
 
   const showNotification = state?.showNotification ?? false;
   const isHelpPanelExpanded = state?.isHelpPanelExpanded ?? false;
