@@ -199,12 +199,10 @@ const HeaderLayout = () => {
 
   const aboutMenuMarkup = (
     <>
-      {showNotification && (
-        <About
-          closeNotification={closeNotification}
-          pruneSettings={localPruneSettings}
-        />
-      )}
+      <About
+        closeNotification={closeNotification}
+        pruneSettings={localPruneSettings}
+      />
     </>
   );
   const aboutMenuButtonProps = showNotification

@@ -275,7 +275,8 @@ const About = ({ closeNotification, pruneSettings }) => {
           <div className={buildDateCopyClass}>
             <div className="about-dialog__about-build-info__date__left-column">
               <Trans i18nKey="dialog.about.buildDateLabel">
-                Build date: <code role="presentation">{{ buildDate }}</code>
+                <span>Build date:</span>
+                <code role="presentation">{{ buildDate }}</code>
               </Trans>
             </div>
             <div className="about-dialog__about-build-info__date__right-column">
@@ -304,7 +305,7 @@ const About = ({ closeNotification, pruneSettings }) => {
           <div className={commitHashCopyClass}>
             <div className="about-dialog__about-build-info__hash__left-column">
               <Trans i18nKey="dialog.about.commitHashLabel">
-                Commit hash:{" "}
+                <span>Commit hash:</span>
                 <code role="presentation">{{ commitHashShort }}</code>
               </Trans>
             </div>
