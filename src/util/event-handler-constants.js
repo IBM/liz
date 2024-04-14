@@ -11,6 +11,8 @@ const ARROW_KEY_RIGHT_EVENT = "ArrowRight";
 const HOME_KEY_EVENT = "Home";
 const END_KEY_EVENT = "End";
 const ESCAPE_KEY_EVENT = "Escape";
+const ENTER_KEY_EVENT = "Enter";
+const TAB_KEY_EVENT = "Tab";
 
 export {
   ARROW_KEY_DOWN_EVENT,
@@ -20,4 +22,6 @@ export {
   HOME_KEY_EVENT,
   END_KEY_EVENT,
   ESCAPE_KEY_EVENT,
+  ENTER_KEY_EVENT,
+  TAB_KEY_EVENT,
 };

@@ -4,7 +4,13 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useRef, useEffect, useContext, useState } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useContext,
+  useState,
+  forwardRef,
+} from "react";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -18,11 +24,13 @@ import {
   HOME_KEY_EVENT,
   END_KEY_EVENT,
   ESCAPE_KEY_EVENT,
+  TAB_KEY_EVENT,
 } from "../../util/event-handler-constants";
 import "./_about.scss";
 
-const About = ({ closeNotification, pruneSettings }) => {
+const About = forwardRef(function About(props, ref) {
   const { t } = useTranslation();
+  const { closeNotification, pruneSettings } = props;
   const {
     state: globalState,
     updateTheme,
@@ -175,6 +183,10 @@ const About = ({ closeNotification, pruneSettings }) => {
   };
 
   const handleTabElementOnKeyDown = (event) => {
+    if (event.code && event.code === TAB_KEY_EVENT) {
+      return;
+    }
+
     event.stopPropagation();
 
     const target = event.target;
@@ -270,6 +282,7 @@ const About = ({ closeNotification, pruneSettings }) => {
             </div>
             <div className="about-dialog__about__info-section__icon">
               <Button
+                ref={ref}
                 hasIconOnly
                 size="sm"
                 kind="ghost"
@@ -512,7 +525,7 @@ const About = ({ closeNotification, pruneSettings }) => {
       )}
     </ul>
   );
-};
+});
 
 About.propTypes = {
   closeNotification: PropTypes.func.isRequired,

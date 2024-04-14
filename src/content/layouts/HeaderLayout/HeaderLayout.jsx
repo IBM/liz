@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { useNavigate, useHref } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -86,6 +86,14 @@ const HeaderLayout = () => {
   const { helpPanelConfig } = config || {
     helpPanelConfig: {},
   };
+
+  const aboutMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (aboutMenuRef.current) {
+      aboutMenuRef.current.focus();
+    }
+  }, [aboutMenuRef.current]);
 
   const showNotification = state?.showNotification ?? false;
   const isHelpPanelExpanded = state?.isHelpPanelExpanded ?? false;
@@ -198,15 +206,13 @@ const HeaderLayout = () => {
   );
 
   const aboutMenuMarkup = (
-    <>
-      {showNotification && (
-        <About
-          closeNotification={closeNotification}
-          pruneSettings={localPruneSettings}
-        />
-      )}
-    </>
+    <About
+      ref={aboutMenuRef}
+      closeNotification={closeNotification}
+      pruneSettings={localPruneSettings}
+    />
   );
+
   const aboutMenuButtonProps = showNotification
     ? {
         "aria-controls": "about-dialog__about-menu",
@@ -279,7 +285,7 @@ const HeaderLayout = () => {
             >
               <LinuxAlt size="24" />
             </HeaderGlobalAction>
-            {aboutMenuMarkup}
+            {showNotification && aboutMenuMarkup}
           </HeaderGlobalBar>
           {sidePanelMarkup}
         </Header>
