@@ -196,10 +196,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
         <Dropdown
           className="input-file-selection__distribution-dropdown"
           readOnly={paramFileHasBeenModifiedFromState}
-          aria-label={t(
-            "panel.inputFileSelection.chooseDistributionFromeTemplateShort",
-            { ns: "panels" },
-          )}
           id="distribution-selection"
           items={DISTRIBUTION_LIST}
           titleText={t(
@@ -227,10 +223,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
           <Dropdown
             className="input-file-selection__version-dropdown"
             readOnly={paramFileHasBeenModifiedFromState}
-            aria-label={t(
-              "panel.inputFileSelection.chooseVersionFromeTemplateShort",
-              { ns: "panels" },
-            )}
             id="version-selection"
             items={VERSION_LIST[state.selectedDistributionName.id]}
             titleText={t(

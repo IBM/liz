@@ -48,6 +48,7 @@
   "dialog.about.darkThemeLabel": "Dark",
   "dialog.about.lightThemeLabel": "Light",
   "dialog.about.themeFromOsLabel": "Use operating system theme",
+  "dialog.about.externalLinkHint": "Opens in a new window",
   "landingPage.pageHeader.subtitle": "Start paving the road for a successful installation journey",
   "landingPage.pageHeader.title": "Linux on IBM Z installation",
   "landingPage.expressiveCard.tool.paraNew": "Start composing a new parameter file by providing the required input information.",

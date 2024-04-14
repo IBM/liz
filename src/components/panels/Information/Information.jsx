@@ -153,12 +153,12 @@ const Information = forwardRef(function Information(props, ref) {
       >
         <div
           className="flex-table row"
-          id="display-iformation__table-header-row"
-          role="rowgroup"
+          id="display-iformation__table-header-row_one"
+          role="row"
         >
           <div
             className="flex-row"
-            id="display-iformation__table-header-row__distribution"
+            id="display-iformation__table-header-row__distribution__memory"
             role="columnheader"
           >
             {t("panel.information.table.memoryLabel", { ns: "panels" })}
@@ -173,12 +173,12 @@ const Information = forwardRef(function Information(props, ref) {
         </div>
         <div
           className="flex-table row"
-          id="display-iformation__table-header-row"
-          role="rowgroup"
+          id="display-iformation__table-header-row_two"
+          role="row"
         >
           <div
             className="flex-row"
-            id="display-iformation__table-header-row__distribution"
+            id="display-iformation__table-header-row__distribution__disk-space"
             role="columnheader"
           >
             {t("panel.information.table.diskLabel", { ns: "panels" })}
@@ -193,12 +193,12 @@ const Information = forwardRef(function Information(props, ref) {
         </div>
         <div
           className="flex-table row"
-          id="display-iformation__table-header-row"
-          role="rowgroup"
+          id="display-iformation__table-header-row_three"
+          role="row"
         >
           <div
             className="flex-row"
-            id="display-iformation__table-header-row__distribution"
+            id="display-iformation__table-header-row__distribution__machine-level"
             role="columnheader"
           >
             {t("panel.information.table.machineLevelLabel", { ns: "panels" })}
@@ -211,15 +211,6 @@ const Information = forwardRef(function Information(props, ref) {
             {machineLevel}
           </div>
         </div>
-        {/*
-        <div className="flex-table row" id="display-iformation__table-header-row" role="rowgroup">
-          <div className="flex-row" id="display-iformation__table-header-row__status" role="columnheader">Status</div>
-          <div className="flex-row" id="display-iformation__table-content-row__status" role="cell">
-            <span className="isoIcon icon"><IsoFilled size="24" /></span>
-            <span className="isoIcon label">ISO inserted</span>
-          </div>
-        </div>
-        */}
       </div>
       <div className="information_heading_alt">
         {t("panel.information.informationHeader", { ns: "panels" })}

@@ -9,7 +9,7 @@ import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button, Toggle } from "@carbon/react";
-import { Checkmark, Close, Copy, LinuxAlt } from "@carbon/icons-react";
+import { Checkmark, Close, Copy, LinuxAlt, Launch } from "@carbon/icons-react";
 import { ApplicationContext } from "../../contexts";
 import { LIGHT_THEME, DARK_THEME } from "../../util/constants";
 import "./_about.scss";
@@ -87,6 +87,33 @@ const About = ({ closeNotification, pruneSettings }) => {
   const commitHashCopyClass = commitHashHasBeenCopied
     ? "about-dialog__about-build-info__commit-hash__copied"
     : "about-dialog__about-build-info__commit-hash";
+  const buildDateCopyAriaProps = buildDateBeenCopied
+    ? {
+        "aria-checked": "true",
+      }
+    : {
+        "aria-checked": "false",
+      };
+  const commitHashCopyAriaProps = commitHashHasBeenCopied
+    ? {
+        "aria-checked": "true",
+      }
+    : {
+        "aria-checked": "false",
+      };
+  const externalLinkKnownIssueAriaProps = {
+    "aria-describedby": "about-dialog__about-external-link-hint__kissues",
+  };
+  const externalLinkReportIssueAriaProps = {
+    "aria-describedby": "about-dialog__about-external-link-hint__rissues",
+  };
+  const useLightThemeAriaProps = useOperatingSystemTheme
+    ? {
+        "aria-readonly": "true",
+      }
+    : {
+        "aria-readonly": "false",
+      };
 
   const useOutsideAlerter = (ref) => {
     useEffect(() => {
@@ -248,7 +275,7 @@ const About = ({ closeNotification, pruneSettings }) => {
           <div className={buildDateCopyClass}>
             <div className="about-dialog__about-build-info__date__left-column">
               <Trans i18nKey="dialog.about.buildDateLabel">
-                Build date: <code>{{ buildDate }}</code>
+                Build date: <code role="presentation">{{ buildDate }}</code>
               </Trans>
             </div>
             <div className="about-dialog__about-build-info__date__right-column">
@@ -266,8 +293,10 @@ const About = ({ closeNotification, pruneSettings }) => {
                   onBlur={handleTabElementOnBlur}
                   onKeyDown={handleTabElementOnKayDown}
                   renderIcon={buildDateCopyIcon}
+                  role="menuitemcheckbox"
                   data-a11y-previous="about-dialog__close-button"
                   data-a11y-next="about-dialog__copy-button__commit-hash"
+                  {...buildDateCopyAriaProps}
                 />
               </CopyToClipboard>
             </div>
@@ -275,7 +304,8 @@ const About = ({ closeNotification, pruneSettings }) => {
           <div className={commitHashCopyClass}>
             <div className="about-dialog__about-build-info__hash__left-column">
               <Trans i18nKey="dialog.about.commitHashLabel">
-                Commit hash: <code>{{ commitHashShort }}</code>
+                Commit hash:{" "}
+                <code role="presentation">{{ commitHashShort }}</code>
               </Trans>
             </div>
             <div className="about-dialog__about-build-info__hash__right-column">
@@ -293,8 +323,10 @@ const About = ({ closeNotification, pruneSettings }) => {
                   onBlur={handleTabElementOnBlur}
                   onKeyDown={handleTabElementOnKayDown}
                   renderIcon={commitHashCopyIcon}
+                  role="menuitemcheckbox"
                   data-a11y-previous="about-dialog__copy-button__build-date"
                   data-a11y-next="about-dialog__theme-toggle"
+                  {...commitHashCopyAriaProps}
                 />
               </CopyToClipboard>
             </div>
@@ -326,6 +358,8 @@ const About = ({ closeNotification, pruneSettings }) => {
                 onKeyDown={handleTabElementOnKayDown}
                 data-a11y-previous="about-dialog__copy-button__commit-hash"
                 data-a11y-next="about-dialog__theme-from-os-toggle"
+                role="menuitemradio"
+                {...useLightThemeAriaProps}
               />
             </div>
           </div>
@@ -367,6 +401,7 @@ const About = ({ closeNotification, pruneSettings }) => {
                 onKeyDown={handleTabElementOnKayDown}
                 data-a11y-previous="about-dialog__theme-toggle"
                 data-a11y-next="about-dialog__about-kissues-button"
+                role="menuitemradio"
               />
             </div>
           </div>
@@ -385,8 +420,17 @@ const About = ({ closeNotification, pruneSettings }) => {
           onKeyDown={handleTabElementOnKayDown}
           data-a11y-previous="about-dialog__theme-from-os-toggle"
           data-a11y-next="about-dialog__about-report-button"
+          renderIcon={Launch}
+          iconDescription={t("dialog.about.knownIssuesLabel")}
+          {...externalLinkKnownIssueAriaProps}
         >
           <span>{t("dialog.about.knownIssuesLabel")}</span>
+          <span
+            className="about-dialog__about-external-link-hint"
+            id="about-dialog__about-external-link-hint__kissues"
+          >
+            {t("dialog.about.externalLinkHint")}
+          </span>
         </Button>
       </li>
       <li className="about-dialog__about-report-button-container" role="none">
@@ -402,8 +446,17 @@ const About = ({ closeNotification, pruneSettings }) => {
           onKeyDown={handleTabElementOnKayDown}
           data-a11y-previous="about-dialog__about-kissues-button"
           data-a11y-next="about-dialog__about-prune-button"
+          renderIcon={Launch}
+          iconDescription={t("dialog.about.reportIssueLabel")}
+          {...externalLinkReportIssueAriaProps}
         >
           <span>{t("dialog.about.reportIssueLabel")}</span>
+          <span
+            className="about-dialog__about-external-link-hint"
+            id="about-dialog__about-external-link-hint__rissues"
+          >
+            {t("dialog.about.externalLinkHint")}
+          </span>
         </Button>
       </li>
       {!globalState.isEditing && (

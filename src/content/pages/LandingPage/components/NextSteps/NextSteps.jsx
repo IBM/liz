@@ -14,6 +14,7 @@ import {
   InlineNotification,
   Accordion,
   AccordionItem,
+  Button,
 } from "@carbon/react";
 import { Checkmark, Copy } from "@carbon/icons-react";
 import { getLabel, getContent } from "../../../../../uiUtil/help-util";
@@ -76,21 +77,9 @@ const NextSteps = ({
     "[host-IP-address]";
   const remoteAccessConfigIsMissing = !useSsh && !useVnc;
 
-  const vncHostCopyIcon = vncHostHasBeenCopied ? (
-    <Checkmark size="20" />
-  ) : (
-    <Copy size="20" />
-  );
-  const vncPasswordCopyIcon = vncPasswordHasBeenCopied ? (
-    <Checkmark size="20" />
-  ) : (
-    <Copy size="20" />
-  );
-  const sshHostCopyIcon = sshHostHasBeenCopied ? (
-    <Checkmark size="20" />
-  ) : (
-    <Copy size="20" />
-  );
+  const vncHostCopyIcon = vncHostHasBeenCopied ? Checkmark : Copy;
+  const vncPasswordCopyIcon = vncPasswordHasBeenCopied ? Checkmark : Copy;
+  const sshHostCopyIcon = sshHostHasBeenCopied ? Checkmark : Copy;
 
   const vncHostCopyClass = vncHostHasBeenCopied
     ? "next-steps_copy-button_copied"
@@ -101,6 +90,27 @@ const NextSteps = ({
   const sshHostCopyClass = sshHostHasBeenCopied
     ? "next-steps_copy-button_copied"
     : "next-steps_copy-button";
+  const vncHostCopyAriaProps = vncHostHasBeenCopied
+    ? {
+        "aria-checked": "true",
+      }
+    : {
+        "aria-checked": "true",
+      };
+  const vncPasswordCopyAriaProps = vncPasswordHasBeenCopied
+    ? {
+        "aria-checked": "true",
+      }
+    : {
+        "aria-checked": "true",
+      };
+  const sshHostCopyAriaProps = sshHostHasBeenCopied
+    ? {
+        "aria-checked": "true",
+      }
+    : {
+        "aria-checked": "true",
+      };
 
   const vncInstructionsMarkup = (
     <>
@@ -122,15 +132,21 @@ const NextSteps = ({
               getContent(t("landingPage.expressiveCard.missingHostName")),
             )}
           {networkAddress && (
-            <span
-              className={vncHostCopyClass}
-              title={t("btnLabel.Copy", { ns: "common" })}
-            >
+            <span className={vncHostCopyClass}>
               <CopyToClipboard
                 text={networkAddressForListItem}
                 onCopy={() => updateCopied(COPY_TYPE_VNC_HOST)}
               >
-                {vncHostCopyIcon}
+                <Button
+                  role="checkbox"
+                  hasIconOnly
+                  size="sm"
+                  kind="ghost"
+                  iconDescription={t("btnLabel.Copy", { ns: "common" })}
+                  onClick={function noRefCheck() {}}
+                  renderIcon={vncHostCopyIcon}
+                  {...vncHostCopyAriaProps}
+                />
               </CopyToClipboard>
             </span>
           )}
@@ -143,15 +159,21 @@ const NextSteps = ({
                 {{ vncPassword }}
               </code>
             </Trans>
-            <span
-              className={vncPasswordCopyClass}
-              title={t("btnLabel.Copy", { ns: "common" })}
-            >
+            <span className={vncPasswordCopyClass}>
               <CopyToClipboard
                 text={vncPassword}
                 onCopy={() => updateCopied(COPY_TYPE_VNC_PASSWORD)}
               >
-                {vncPasswordCopyIcon}
+                <Button
+                  role="checkbox"
+                  hasIconOnly
+                  size="sm"
+                  kind="ghost"
+                  iconDescription={t("btnLabel.Copy", { ns: "common" })}
+                  onClick={function noRefCheck() {}}
+                  renderIcon={vncPasswordCopyIcon}
+                  {...vncPasswordCopyAriaProps}
+                />
               </CopyToClipboard>
             </span>
           </ListItem>
@@ -180,15 +202,21 @@ const NextSteps = ({
               getContent(t("landingPage.expressiveCard.missingHostName")),
             )}
           {networkAddress && (
-            <span
-              className={sshHostCopyClass}
-              title={t("btnLabel.Copy", { ns: "common" })}
-            >
+            <span className={sshHostCopyClass}>
               <CopyToClipboard
                 text={`installer@${networkAddressForListItem}`}
                 onCopy={() => updateCopied(COPY_TYPE_SSH_HOST)}
               >
-                {sshHostCopyIcon}
+                <Button
+                  role="checkbox"
+                  hasIconOnly
+                  size="sm"
+                  kind="ghost"
+                  iconDescription={t("btnLabel.Copy", { ns: "common" })}
+                  onClick={function noRefCheck() {}}
+                  renderIcon={sshHostCopyIcon}
+                  {...sshHostCopyAriaProps}
+                />
               </CopyToClipboard>
             </span>
           )}

@@ -86,6 +86,7 @@ const ParamFileTextArea = ({
       enableCounter
       maxCount={860}
       labelText={label.text}
+      aria-label={label.text}
       helperText={label.content}
       className={textAreaClasses}
       rows={10}

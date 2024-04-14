@@ -142,10 +142,18 @@
 .about-dialog__about-report-button-container {
   border-top: react.$spacing-01 solid react.$background-inverse;
   border-bottom: react.$spacing-01 solid react.$background-inverse;
+
+  .about-dialog__about-external-link-hint {
+    display: none;
+  }
 }
 
 .about-dialog__about-kissues-button-container {
   border-top: react.$spacing-01 solid react.$background-inverse;
+
+  .about-dialog__about-external-link-hint {
+    display: none;
+  }
 }
 
 .about-dialog__about-prune-button-container,

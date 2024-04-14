@@ -486,7 +486,7 @@ const InstallationParameters = forwardRef(
         <PasswordInput
           readOnly={paramFileHasBeenModifiedFromState}
           disabled={state?.userAndPwdAreDisabled ?? true}
-          autoComplete="true"
+          autoComplete="on"
           helperText={t("panel.installationParameter.passwordHelp", {
             ns: "panels",
           })}
@@ -579,7 +579,7 @@ const InstallationParameters = forwardRef(
         {useVncToggled && (
           <PasswordInput
             readOnly={paramFileHasBeenModifiedFromState}
-            autoComplete="true"
+            autoComplete="on"
             helperText={t("panel.installationParameter.vncPasswordHelp", {
               ns: "panels",
             })}
@@ -637,7 +637,7 @@ const InstallationParameters = forwardRef(
         {useSshToggled && requiresSshPassword && (
           <PasswordInput
             readOnly={paramFileHasBeenModifiedFromState}
-            autoComplete="true"
+            autoComplete="on"
             helperText={t("panel.installationParameter.sshPasswordHelp", {
               ns: "panels",
             })}

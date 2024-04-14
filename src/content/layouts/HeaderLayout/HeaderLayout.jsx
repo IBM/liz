@@ -207,6 +207,11 @@ const HeaderLayout = () => {
       )}
     </>
   );
+  const aboutMenuButtonProps = showNotification
+    ? {
+        "aria-controls": "about-dialog__about-menu",
+      }
+    : {};
 
   const showHideSidePanel = () => {
     return isHelpPanelExpanded ? hideSidePanel() : showSidePanel();
@@ -265,15 +270,16 @@ const HeaderLayout = () => {
               aria-label={t("header.button.profileSettings")}
               aria-haspopup="true"
               aria-expanded={showNotification}
-              aria-controls="about-dialog__about-menu"
               key="liz__installer-header_global-action__profile"
               id="liz__installer-header_global-action__profile"
               onClick={() => {
                 return onShowNotification();
               }}
+              {...aboutMenuButtonProps}
             >
               <LinuxAlt size="24" />
             </HeaderGlobalAction>
+            {aboutMenuMarkup}
           </HeaderGlobalBar>
           {sidePanelMarkup}
         </Header>
@@ -283,7 +289,6 @@ const HeaderLayout = () => {
 
   return (
     <>
-      {aboutMenuMarkup}
       {headerContainerMarkup}
       {modalMarkup}
     </>
