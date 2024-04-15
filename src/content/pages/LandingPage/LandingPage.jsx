@@ -345,7 +345,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
     updateRequirementsCardIsExpanded(false);
     updateParmfileCardIsExpanded(false);
     updateNextStepsCardIsExpanded(true);
-    navigate(PathConstants.expandNextStepsCard);
+    navigate(PathConstants.EXPANDED_NEXTSTEPS_CARD);
   };
 
   const requirementsCardMarkup = (
