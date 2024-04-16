@@ -523,23 +523,22 @@ const About = forwardRef(function About(props, ref) {
           </span>
         </Button>
       </li>
-      {!globalState.isEditing && (
-        <li className="about-dialog__about-prune-button-container" role="none">
-          <Button
-            kind="ghost"
-            data-title="prune"
-            id="about-dialog__about-prune-button"
-            onClick={pruneSettings}
-            onBlur={handleTabElementOnBlur}
-            onKeyDown={handleTabElementOnKeyDown}
-            className="about-dialog__about-prune-button"
-            data-a11y-previous="about-dialog__about-report-button"
-            data-a11y-next="about-dialog__close-button"
-          >
-            <span>{t("dialog.about.pruneSettingsLabel")}</span>
-          </Button>
-        </li>
-      )}
+      <li className="about-dialog__about-prune-button-container" role="none">
+        <Button
+          disabled={globalState.isEditing}
+          kind="ghost"
+          data-title="prune"
+          id="about-dialog__about-prune-button"
+          onClick={pruneSettings}
+          onBlur={handleTabElementOnBlur}
+          onKeyDown={handleTabElementOnKeyDown}
+          className="about-dialog__about-prune-button"
+          data-a11y-previous="about-dialog__about-report-button"
+          data-a11y-next="about-dialog__close-button"
+        >
+          <span>{t("dialog.about.pruneSettingsLabel")}</span>
+        </Button>
+      </li>
     </ul>
   );
 });
