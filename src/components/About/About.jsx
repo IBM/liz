@@ -14,7 +14,7 @@ import React, {
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Button, Toggle } from "@carbon/react";
+import { Button, Toggle, Tooltip } from "@carbon/react";
 import { Checkmark, Close, Copy, LinuxAlt, Launch } from "@carbon/icons-react";
 import { ApplicationContext } from "../../contexts";
 import { LIGHT_THEME, DARK_THEME } from "../../util/constants";
@@ -249,6 +249,31 @@ const About = forwardRef(function About(props, ref) {
 
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
+
+  const pruneButtonMarkup = (
+    <Button
+      disabled={globalState.isEditing}
+      kind="ghost"
+      data-title="prune"
+      id="about-dialog__about-prune-button"
+      onClick={pruneSettings}
+      onBlur={handleTabElementOnBlur}
+      onKeyDown={handleTabElementOnKeyDown}
+      className="about-dialog__about-prune-button"
+      data-a11y-previous="about-dialog__about-report-button"
+      data-a11y-next="about-dialog__close-button"
+    >
+      <span>{t("dialog.about.pruneSettingsLabel")}</span>
+    </Button>
+  );
+
+  const pruneButtonTooltipMarkup = globalState.isEditing ? (
+    <Tooltip align="top" label={t("dialog.about.pruneSettingsTooltip")}>
+      {pruneButtonMarkup}
+    </Tooltip>
+  ) : (
+    pruneButtonMarkup
+  );
 
   return (
     <ul
@@ -524,20 +549,7 @@ const About = forwardRef(function About(props, ref) {
         </Button>
       </li>
       <li className="about-dialog__about-prune-button-container" role="none">
-        <Button
-          disabled={globalState.isEditing}
-          kind="ghost"
-          data-title="prune"
-          id="about-dialog__about-prune-button"
-          onClick={pruneSettings}
-          onBlur={handleTabElementOnBlur}
-          onKeyDown={handleTabElementOnKeyDown}
-          className="about-dialog__about-prune-button"
-          data-a11y-previous="about-dialog__about-report-button"
-          data-a11y-next="about-dialog__close-button"
-        >
-          <span>{t("dialog.about.pruneSettingsLabel")}</span>
-        </Button>
+        {pruneButtonTooltipMarkup}
       </li>
     </ul>
   );
