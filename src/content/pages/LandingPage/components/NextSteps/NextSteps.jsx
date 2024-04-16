@@ -290,9 +290,11 @@ const NextSteps = ({
             <UnorderedList>
               <ListItem>
                 <Trans i18nKey="panel.nextSteps.listItem8" ns="panels">
-                  Select the task&nbsp;
+                  Select the&nbsp;
+                  <code className="next-steps__formatted-code">Recovery</code>
+                  &nbsp;-&gt;&nbsp;
                   <code className="next-steps__formatted-code">
-                    Recovery -&gt; Load from Removable Media or Server
+                    Load from Removable Media or Server
                   </code>
                   .
                 </Trans>
@@ -305,9 +307,25 @@ const NextSteps = ({
                 </Trans>
               </ListItem>
               <ListItem>
+                <Trans i18nKey="panel.nextSteps.listItem23" ns="panels">
+                  Specify the path to the directory containing the&nbsp;
+                  <code className="next-steps__formatted-code">
+                    generic.ins
+                  </code>
+                  file, then select&nbsp;
+                  <code className="next-steps__formatted-code">OK</code>.
+                </Trans>
+              </ListItem>
+              <ListItem>
                 <Trans i18nKey="panel.nextSteps.listItem17" ns="panels">
-                  Select&nbsp;
-                  <code className="next-steps__formatted-code">Ok</code>.
+                  From the list of found&nbsp;
+                  <code className="next-steps__formatted-code">.ins</code>&nbsp;
+                  files select the&nbsp;
+                  <code className="next-steps__formatted-code">
+                    generic.ins
+                  </code>
+                  &nbsp; file ,then select&nbsp;
+                  <code className="next-steps__formatted-code">OK</code>.
                 </Trans>
               </ListItem>
             </UnorderedList>
@@ -320,9 +338,10 @@ const NextSteps = ({
                 <Trans i18nKey="panel.nextSteps.listItem19" ns="panels">
                   Select the task&nbsp;
                   <code className="next-steps__formatted-code">
-                    Partition details -&gt; Boot
+                    Partition details
                   </code>
-                  .
+                  &nbsp; -&gt;&nbsp;
+                  <code className="next-steps__formatted-code">Boot</code>. .
                 </Trans>
               </ListItem>
               <ListItem>
@@ -336,7 +355,11 @@ const NextSteps = ({
               </ListItem>
               <ListItem>
                 <Trans i18nKey="panel.nextSteps.listItem21" ns="panels">
-                  Specify the path to the generic.ins file or use the&nbsp;
+                  Specify the path to the&nbsp;
+                  <code className="next-steps__formatted-code">
+                    generic.ins
+                  </code>
+                  file or use the&nbsp;
                   <code className="next-steps__formatted-code">Browse</code>
                   &nbsp;button to locate it.
                 </Trans>
