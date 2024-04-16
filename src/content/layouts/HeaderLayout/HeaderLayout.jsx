@@ -52,6 +52,7 @@ const HeaderLayout = () => {
     resetToInitialState: globalResetToInitialState,
     updateIsEditing,
     updateIncludeIntroStep,
+    updateUseStateFromLocalStorage,
   } = useContext(ApplicationContext);
   const { resetToInitialState: downloadParamFileResetToInitialState } =
     useContext(DownloadParamFileContext);
@@ -189,6 +190,9 @@ const HeaderLayout = () => {
             updateNeedsManualNavigationConfirmation(false);
           }}
           onRequestSubmit={() => {
+            updateIsEditing(false);
+            updateIncludeIntroStep(false);
+            updateUseStateFromLocalStorage(true);
             updateNeedsManualNavigationConfirmation(false);
             navigate(
               `${parmfileCardIsExpanded() ? PathConstants.EXPANDED_PARMFILE_CARD : PathConstants.HOME}`,
