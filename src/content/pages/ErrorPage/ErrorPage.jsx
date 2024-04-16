@@ -24,6 +24,7 @@ import {
   IconButton,
 } from "@carbon/react";
 import { Linux, Debug, Report } from "@carbon/icons-react";
+import { getUserAgent } from "universal-user-agent";
 import {
   STATE_ORIGIN_STORAGE,
   LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
@@ -106,6 +107,42 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
   const appConfig = state?.appConfig ?? {};
   const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
   const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? "";
+
+  const userAgent = getUserAgent();
+
+  const issueTemplate = `
+  **Describe the bug**
+  A clear and concise description of what the bug is.
+
+  ***Error Details***
+  ${t("errorPage.label.statusCode")}: ${errorStatus}
+  ${t("errorPage.label.statusMessage")}: ${errorData}
+  ${t("errorPage.label.errorMessage")}: ${errorDetailsMessage}
+
+  ***Error Stack***
+  ${errorDetailsStack}
+  
+  **To Reproduce**
+  Steps to reproduce the behavior:
+  1. Go to '...'
+  2. Click on '....'
+  3. Scroll down to '....'
+  4. See error
+  
+  **Expected behaviour**
+  A clear and concise description of what you expected to happen.
+  
+  **Screenshots**
+  If applicable, add screenshots to help explain your problem.
+  
+  **Desktop (please complete the following information):**
+   - ${userAgent}
+  
+  **Additional context**
+  Add any other context about the problem here.
+`;
+
+  const newIssueUrl = `${bugTrackerUrl}/new?title=&body=${encodeURIComponent(issueTemplate)}`;
 
   return (
     <>
@@ -198,7 +235,7 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                     kind="ghost"
                     label={t("dialog.about.reportIssueLabel")}
                     id="liz__error-page__report-button"
-                    href={bugTrackerUrl}
+                    href={newIssueUrl}
                     target="_blank"
                   >
                     <Debug size="24" />

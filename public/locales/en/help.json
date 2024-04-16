@@ -21,6 +21,6 @@
   "helpPanelHeader.intro": "Use existing settings",
   "helpPanelContents.landingPage": "Review the available system requirement information prior to creating parameter files. A parameter file that has been created in a previous session can either be modified or discarded in supported to create a separate parameter file from scratch.\n\nParameter files from a previous session if any can be downloaded using the appropriate button on the \"Start composing\" card.",
   "helpPanelHeader.landingPage": "Getting started",
-  "helpPanelContents.errorPage": "First review the known issues page, then submit an issue if you cannot find a solution.\n\nBoth the known issues page and the submit issue page are linked on the error page. The links can also be found under the Linux penguin icon on the About this app menu.\n\nWhen submitting an issue, remember that the browser console might contain relevant information to include.",
+  "helpPanelContents.errorPage": "First review the known issues page, then submit an issue if you cannot find a solution.\n\nBoth the known issues page and the submit issue page are linked on the error page.\n\nNote: The link on the error page to submit a new issue will pre populate the issue to be created with the data available on the error page.\n\nThe links can also be found under the Linux penguin icon on the About this app menu.\n\nWhen submitting an issue, remember that the browser console might contain relevant information to include.",
   "helpPanelHeader.errorPage": "What to do next"
 }
