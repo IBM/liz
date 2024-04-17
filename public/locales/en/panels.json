@@ -154,7 +154,7 @@
   "panel.nextSteps.listItem16": "Select <1>FTP server</1> and enter server host name, user name, and password",
   "panel.nextSteps.listItem17": "From the list of found <1>.ins</1> files select the <1>generic.ins</1> file, then select <1>OK</1>",
   "panel.nextSteps.listItem18": "For partitions managed by DPM:",
-  "panel.nextSteps.listItem19": "Select task <1>Partition details</1> task -> <1>Boot</1>",
+  "panel.nextSteps.listItem19": "Select the <1>Partition details</1> task -> <1>Boot</1>",
   "panel.nextSteps.listItem20": "Select <1>Boot from -> FTP server</1> and enter the server host name, user name, and password",
   "panel.nextSteps.listItem21": "Specify the path to the <1>generic.ins</1> file or use the <1>Browse</1> button to locate it",
   "panel.nextSteps.listItem22": "Select <1>Apply</1>, then <1>Start</1>",
