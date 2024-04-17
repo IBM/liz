@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@carbon/colors": "11.21.0",
-    "@carbon/ibm-products": "2.34.0",
+    "@carbon/ibm-products": "2.35.0",
     "@carbon/layout": "11.21.0",
     "@carbon/react": "1.55.0",
     "@carbon/styles": "1.55.0",
