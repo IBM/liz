@@ -93,6 +93,7 @@ const IPv6Panel = ({
               : "";
           const localAddressValueIsValid =
             isIpv6NetworkAddressValid(localAddressValue);
+
           if (!localAddressValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV6_ADDRESS,
@@ -154,6 +155,7 @@ const IPv6Panel = ({
             ADDRESS_TYPE_IPV6,
             localCidrValue,
           );
+
           if (!localCidrValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV6_PREFIX,
@@ -219,6 +221,7 @@ const IPv6Panel = ({
           const localGatewayIpAddressValueIsValid = isIpv6NetworkAddressValid(
             localGatewayIpAddressValue,
           );
+
           if (!localGatewayIpAddressValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV6_GATEWAY,
@@ -278,6 +281,7 @@ const IPv6Panel = ({
               : "";
           const localNameserverIpAddressValueIsValid =
             isIpv6NetworkAddressValid(localNameserverIpAddressValue);
+
           if (!localNameserverIpAddressValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV6_NAMESERVER,
@@ -331,6 +335,7 @@ const IPv6Panel = ({
               : "";
           const localHostNameValueIsValid =
             isHostnameValid(localHostNameValue) && !isIP(localHostNameValue);
+
           if (!localHostNameValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV6_HOSTNAME,
@@ -394,6 +399,7 @@ const IPv6Panel = ({
             const localDomainSearchPathValueIsValid =
               isDomainSearchPathValid(localDomainSearchPathValue) &&
               !isIP(localDomainSearchPathValue);
+
             if (!localDomainSearchPathValueIsValid) {
               updateFunction({
                 propertyName: UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH,

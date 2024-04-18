@@ -18,6 +18,8 @@ const ParamFileTextArea = ({
   resetContents,
   downloadContents,
   onChange,
+  onBlur,
+  onFocus,
   allowCopy,
   allowReset,
   allowDownload,
@@ -84,6 +86,7 @@ const ParamFileTextArea = ({
   const textAreaMarkup = (
     <TextArea
       enableCounter
+      id="liz__param-file-text-area"
       maxCount={860}
       labelText={label.text}
       aria-label={label.text}
@@ -92,6 +95,8 @@ const ParamFileTextArea = ({
       rows={10}
       value={contents}
       onChange={onChange}
+      onBlur={onBlur}
+      onFocus={onFocus}
     ></TextArea>
   );
 
@@ -109,6 +114,8 @@ ParamFileTextArea.propTypes = {
   resetContents: PropTypes.func,
   downloadContents: PropTypes.func,
   onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
   allowCopy: PropTypes.bool,
   allowReset: PropTypes.bool,
   allowDownload: PropTypes.bool,

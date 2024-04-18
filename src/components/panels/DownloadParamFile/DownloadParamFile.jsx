@@ -251,6 +251,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
               localParamFileContent.target.value
                 ? localParamFileContent.target.value
                 : "";
+
             updateParamFileContent(localParamFileContentValue);
             if (localParamFileContentValue === paramFileContent.data) {
               updateModified(false);

@@ -98,6 +98,7 @@ const IPv4Panel = ({
               : "";
           const localAddressValueIsValid =
             isIpv4NetworkAddressValid(localAddressValue);
+
           if (!localAddressValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV4_ADDRESS,
@@ -355,6 +356,7 @@ const IPv4Panel = ({
           const localGatewayIpAddressValueIsValid = isIpv4NetworkAddressValid(
             localGatewayIpAddressValue,
           );
+
           if (!localGatewayIpAddressValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV4_GATEWAY,
@@ -414,6 +416,7 @@ const IPv4Panel = ({
               : "";
           const localNameserverIpAddressValueIsValid =
             isIpv4NetworkAddressValid(localNameserverIpAddressValue);
+
           if (!localNameserverIpAddressValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV4_NAMESERVER,
@@ -467,6 +470,7 @@ const IPv4Panel = ({
               : "";
           const localHostNameValueIsValid =
             isHostnameValid(localHostNameValue) && !isIP(localHostNameValue);
+
           if (!localHostNameValueIsValid) {
             updateFunction({
               propertyName: UPDATE_FUNCTION__IPV4_HOSTNAME,
@@ -530,6 +534,7 @@ const IPv4Panel = ({
             const localDomainSearchPathValueIsValid =
               isDomainSearchPathValid(localDomainSearchPathValue) &&
               !isIP(localDomainSearchPathValue);
+
             if (!localDomainSearchPathValueIsValid) {
               updateFunction({
                 propertyName: UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH,

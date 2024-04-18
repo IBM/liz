@@ -369,6 +369,7 @@ const InstallationParameters = forwardRef(
             const urlValue = url && url.target ? url.target.value : "";
             const computedUrlValue = computeInstallationAddress(urlValue);
             const urlValueIsValid = isInstallationAddressInputValid(urlValue);
+
             if (!urlValueIsValid) {
               updateInstallationAddress({
                 address: urlValue,
@@ -465,6 +466,7 @@ const InstallationParameters = forwardRef(
                 )
               : "";
             const userNameValueIsValid = isUserNameInputValid(userNameValue);
+
             if (!userNameValueIsValid) {
               updateUserName({
                 userName: userNameValue,
@@ -539,6 +541,7 @@ const InstallationParameters = forwardRef(
                 )
               : "";
             const passwordValueIsValid = isPasswordInputValid(passwordValue);
+
             if (!passwordValueIsValid) {
               updatePassword({
                 password: passwordValue,

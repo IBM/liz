@@ -560,6 +560,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     </div>
   );
 
+  const vlanToggleId = "network-device_vlan-id-input";
   const gridContentsMarkupRowTwoColumnOne = (
     <div className="network-device_column-left">
       <DeviceSettings
@@ -594,7 +595,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
           min={1}
           max={4094}
           readOnly={paramFileHasBeenModifiedFromState}
-          id="network-device_vlan-id-input"
+          id={vlanToggleId}
           invalidText={t("invalidTextLabel", { ns: "common" })}
           invalid={!vlanIdIsValid}
           label={t("panel.networkDevice.vlanIdTextLabel", { ns: "panels" })}
@@ -621,6 +622,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                 ? vlanId.target.value
                 : "";
             const vlanIdIsValid = isVlanIdValid(vlanIdValue);
+
             if (!vlanIdIsValid) {
               updateVlanId({
                 value: vlanIdValue,
@@ -676,6 +678,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const readChannelIdIsValid =
                 isReadChannelIdValid(readChannelIdValue);
+
               if (!readChannelIdIsValid) {
                 updateReadChannelId({
                   value: readChannelIdValue,
@@ -723,6 +726,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const writeChannelIdIsValid =
                 isWriteChannelIdValid(writeChannelIdValue);
+
               if (!writeChannelIdIsValid) {
                 updateWriteChannelId({
                   value: writeChannelIdValue,
@@ -770,6 +774,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
               ).join(".");
               const dataChannelIdIsValid =
                 isDataChannelIdValid(dataChannelIdValue);
+
               if (!dataChannelIdIsValid) {
                 updateDataChannelId({
                   value: dataChannelIdValue,

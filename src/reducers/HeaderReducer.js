@@ -10,6 +10,7 @@ import {
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
+  ACTION_UPDATE_APP_HELP_PANEL_SELECTOR_PRIMARY_FOCUS,
   ACTION_UPDATE_NEEDS_MANUAL_NAVIGATION_CONFIRMATION,
 } from "../util/reducer-action-constants";
 import { LOCAL_STORAGE_KEY_APP_HEADER } from "../util/local-storage-constants";
@@ -19,6 +20,13 @@ const reducer = (state, action) => {
   let updatedState = {};
 
   switch (action.type) {
+    case ACTION_UPDATE_APP_HELP_PANEL_SELECTOR_PRIMARY_FOCUS:
+      updatedState = {
+        ...state,
+        selectorPrimaryFocus: action.nextSelectorPrimaryFocus,
+      };
+      persistToLocalStorage(LOCAL_STORAGE_KEY_APP_HEADER, updatedState);
+      return updatedState;
     case ACTION_UPDATE_APP_HELP_PANEL_EXPANDED:
       updatedState = {
         ...state,

@@ -232,6 +232,7 @@ const DeviceSettings = ({
                     : "";
                 const pciFunctionIdIsValid =
                   isPciFunctionIdValid(pciFunctionIdValue);
+
                 if (!pciFunctionIdIsValid) {
                   updateFunction(
                     UPDATE_FUNCTION__PCI_FUNCTION_ID,
@@ -270,6 +271,7 @@ const DeviceSettings = ({
                   userIdentifier.target.value
                     ? userIdentifier.target.value
                     : "";
+
                 updateFunction(
                   UPDATE_FUNCTION__USER_IDENTIFIER,
                   userIdentifierValue,
@@ -287,6 +289,7 @@ const DeviceSettings = ({
                     : "";
                 const userIdentifierIsValid =
                   isUserIdentifierValid(userIdentifierValue);
+
                 if (!userIdentifierIsValid) {
                   updateFunction(
                     UPDATE_FUNCTION__USER_IDENTIFIER,

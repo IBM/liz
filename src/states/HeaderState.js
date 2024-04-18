@@ -14,6 +14,7 @@ const createInitialState = (skipLocalStorageUsage = false) => {
   const initialState = getItem(LOCAL_STORAGE_KEY_APP_HEADER);
   const defaultState = {
     isHelpPanelExpanded: true,
+    selectorPrimaryFocus: "",
     needsManualNavigationConfirmation: false,
     showNotification: false,
     showConfirmationModal: false,

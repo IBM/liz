@@ -96,6 +96,8 @@ const HeaderLayout = () => {
 
   const showNotification = state?.showNotification ?? false;
   const isHelpPanelExpanded = state?.isHelpPanelExpanded ?? false;
+  const selectorPrimaryFocus = state?.selectorPrimaryFocus ?? "";
+  const hasSelectorPrimaryFocus = selectorPrimaryFocus.length > 0;
   const showConfirmationModal = state?.showConfirmationModal ?? false;
   const needsManualNavigationConfirmation =
     state?.needsManualNavigationConfirmation ?? false;
@@ -116,12 +118,23 @@ const HeaderLayout = () => {
     ? helpPanelConfig.params.updateCurrentHelpStep
     : null;
 
-  const sidePanelProps = hasMultipleSteps
-    ? {
-        currentStep: currentHelpStep,
-        onNavigationBack: () => updateCurrentHelpStep(currentHelpStep - 1),
-      }
-    : {};
+  const getSidePanelProps = () => {
+    const sidePanelProps = hasMultipleSteps
+      ? {
+          currentStep: currentHelpStep,
+          onNavigationBack: () => updateCurrentHelpStep(currentHelpStep - 1),
+        }
+      : {};
+
+    if (hasSelectorPrimaryFocus) {
+      return {
+        ...sidePanelProps,
+        selectorPrimaryFocus,
+      };
+    }
+
+    return sidePanelProps;
+  };
 
   const localPruneSettings = () => {
     globalResetToInitialState();
@@ -247,7 +260,7 @@ const HeaderLayout = () => {
       title={t("rightNavigation.header")}
       subtitle=""
       selectorPageContent="#liz__page-content"
-      {...sidePanelProps}
+      {...getSidePanelProps()}
     >
       <HelpContent helpPanelConfig={helpPanelConfig} />
     </SidePanel>
@@ -270,7 +283,10 @@ const HeaderLayout = () => {
               aria-expanded={isHelpPanelExpanded}
               key="liz__installer-header_global-action__help"
               id="liz__installer-header_global-action__help"
-              onClick={showHideSidePanel}
+              onClick={() => {
+                showHideSidePanel();
+                state.showNotification && onShowNotification();
+              }}
             >
               <Help size="24" />
             </HeaderGlobalAction>
@@ -281,7 +297,8 @@ const HeaderLayout = () => {
               key="liz__installer-header_global-action__profile"
               id="liz__installer-header_global-action__profile"
               onClick={() => {
-                return onShowNotification();
+                isHelpPanelExpanded && showHideSidePanel();
+                onShowNotification();
               }}
               {...aboutMenuButtonProps}
             >
@@ -289,7 +306,6 @@ const HeaderLayout = () => {
             </HeaderGlobalAction>
             {showNotification && aboutMenuMarkup}
           </HeaderGlobalBar>
-          {sidePanelMarkup}
         </Header>
       )}
     />
@@ -298,6 +314,7 @@ const HeaderLayout = () => {
   return (
     <>
       {headerContainerMarkup}
+      {sidePanelMarkup}
       {modalMarkup}
     </>
   );

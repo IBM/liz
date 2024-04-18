@@ -12,6 +12,7 @@ import {
   ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
   ACTION_UPDATE_APP_SHOW_NOTIFICATION,
   ACTION_UPDATE_APP_SHOW_CONFIRMATION_MODAL,
+  ACTION_UPDATE_APP_HELP_PANEL_SELECTOR_PRIMARY_FOCUS,
   ACTION_UPDATE_NEEDS_MANUAL_NAVIGATION_CONFIRMATION,
 } from "../util/reducer-action-constants";
 import { HeaderContext } from "./index";
@@ -37,6 +38,16 @@ const HeaderContextProvider = ({ value, children }) => {
       dispatch({
         type: ACTION_UPDATE_APP_HELP_PANEL_EXPANDED,
         nextIsHelpPanelExpanded: updates,
+      });
+    },
+    [state, dispatch],
+  );
+
+  const updateSelectorPrimaryFocus = useCallback(
+    (updates) => {
+      dispatch({
+        type: ACTION_UPDATE_APP_HELP_PANEL_SELECTOR_PRIMARY_FOCUS,
+        nextSelectorPrimaryFocus: updates,
       });
     },
     [state, dispatch],
@@ -112,6 +123,7 @@ const HeaderContextProvider = ({ value, children }) => {
       updateNeedsManualNavigationConfirmation,
       updateShowConfirmationModal,
       updateIsHelpPanelExpanded,
+      updateSelectorPrimaryFocus,
       showNotification,
       closeNotification,
       resetToInitialState,
@@ -122,6 +134,7 @@ const HeaderContextProvider = ({ value, children }) => {
       updateNeedsManualNavigationConfirmation,
       updateShowConfirmationModal,
       updateIsHelpPanelExpanded,
+      updateSelectorPrimaryFocus,
       showNotification,
       closeNotification,
       resetToInitialState,
