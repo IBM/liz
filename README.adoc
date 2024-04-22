@@ -1,4 +1,4 @@
-= Linux Installer on Z assistant
+= Installation assistant for Linux on IBM Z
 Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 :toc: macro
 :source-highlighter: pygments
@@ -13,7 +13,7 @@ Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 
 
 
-_Linux Installer on Z assistant that is supposed to be run on GitHub Pages._
+_Installation assistant for Linux on IBM Z that is supposed to be run on GitHub Pages._
 
 toc::[]
 
@@ -29,4 +29,4 @@ A list of known issues is maintained at https://github.ibm.com/linuxonz/liz/wiki
 
 == Overview
 
-The Linux Installer on Z assistant (Stage 1) is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process.
+The Installation assistant for Linux on IBM Z (Stage 1) is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process.
