@@ -63,7 +63,7 @@ Please create separate pull requests for each logical enhancement, new feature,
 or fix.
 
 Before you submit your code please consider our recommendations in the
-[CODINGSTYLE](CODINGSTYLE.md) document.
+CODINGSTYLE.md[CODINGSTYLE] document.
 
 == GitHub workflow for contributions
 
@@ -76,7 +76,7 @@ In the examples below we use this fictive identity:
 === Setup GitHub and local git
 
 1. Create a fork of this repository by clicking the `Fork` button on the top
-   right of the [s390-tools](https://github.com/ibm-s390-linux/s390-tools)
+   right of the https://github.com/IBM/liz[liz]
    main page
 
 2. Clone your forked repository to your local development system
@@ -88,7 +88,7 @@ In the examples below we use this fictive identity:
    liz repository on GitHub
    ....
    $ cd liz
-   ~/liz $ git remote add upstream https://github.com/ibm-s390-linux/liz.git
+   ~/liz $ git remote add upstream https://github.com/IBM/liz.git
    ....
 
 4. Verify your remotes
@@ -96,8 +96,8 @@ In the examples below we use this fictive identity:
    ~/liz $ git remote -v
    origin  https://github.com/random-developer/liz.git (fetch)
    origin  https://github.com/random-developer/liz.git (push)
-   upstream        https://github.com/ibm-s390-linux/liz.git (fetch)
-   upstream        https://github.com/ibm-s390-linux/liz.git (push)
+   upstream        https://github.com/IBM/liz.git (fetch)
+   upstream        https://github.com/IBM/liz.git (push)
    ....
    You now have two remotes: The "origin" remote points to your fork
    and the "upstream" remote to the official liz repository.
@@ -143,22 +143,12 @@ In the examples below we use this fictive identity:
    Signed-off-by: Random Developer <random@developer.example.com>
    ....
 
-5. Use the [checkpatch] tool to validate your commits
-   ....
-   ~/liz $ checkpatch.pl --no-tree --git master..HEAD
-   ....
-
-   Interpret the checkpatch messages wisely - e.g. the 80 character rule can be
-   ignored for printf format strings.
-
-   [checkpatch]: https://github.com/torvalds/linux/blob/master/scripts/checkpatch.pl
-
-6. Push the changes to your fork of the repository
+5. Push the changes to your fork of the repository
    ....
    ~/liz $ git push origin contrib-doc-pr
    ....
 
-7. Go to the GitHub website of your liz fork and create a pull request
+6. Go to the GitHub website of your liz fork and create a pull request
    for your branch "contrib-doc-pr"
 
 === Update a pull request during review
