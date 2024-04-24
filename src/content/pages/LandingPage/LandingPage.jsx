@@ -299,10 +299,14 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
   const hideNextStepsCard =
     state.parmfileCardIsExpanded || state.requirementsCardIsExpanded;
 
-  const productiveCardPrimaryButtonText =
+  const requirementsCardPrimaryButtonText =
     hideRequirementsCard || hideNextStepsCard
       ? t("btnLabel.Close", { ns: "common" })
       : t("btnLabel.ReviewInformation", { ns: "common" });
+  const nextStepsCardPrimaryButtonText =
+    hideRequirementsCard || hideNextStepsCard
+      ? t("btnLabel.Close", { ns: "common" })
+      : t("btnLabel.NextSteps", { ns: "common" });
 
   const titleForRequirementsCard = (
     <span className="liz__landing-page__page-header__productive-card-title__text">
@@ -362,7 +366,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
             }
           }}
           primaryButtonIcon={state.requirementsCardIsExpanded ? Subtract : Add}
-          primaryButtonText={productiveCardPrimaryButtonText}
+          primaryButtonText={requirementsCardPrimaryButtonText}
           title={titleForRequirementsCard}
           titleSize="large"
           className="liz__landing-page__expressive-card"
@@ -639,7 +643,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         <ExpressiveCard
           label={t("panel.nextSteps.header", { ns: "panels" })}
           mediaRatio={null}
-          primaryButtonText={productiveCardPrimaryButtonText}
+          primaryButtonText={nextStepsCardPrimaryButtonText}
           primaryButtonIcon={state.nextStepsCardIsExpanded ? Subtract : Add}
           onPrimaryButtonClick={() => {
             if (state.nextStepsCardIsExpanded) {
