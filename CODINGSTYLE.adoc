@@ -1,0 +1,19 @@
+= Coding guidelines for liz
+Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
+:toc: macro
+:source-highlighter: pygments
+
+_How to format code if contributing to liz_
+
+== Overview
+
+For liz the preferred language is JavaScript. We additionally consider migrating
+the code base of the liz repo to TypeScript.
+
+The coding style is based on the https://prettier.io/[Prettier Opinionated Code Formatter].
+
+== Automatic Code Formatting
+
+As mentioned earlier code formatting is governed using Prettier. It will analyze
+code contributions during each commit and adjust the code style accordingly as
+specified in the link:.prettierrc.json[.prettierrc.json] configuration file.
