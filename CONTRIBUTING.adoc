@@ -63,7 +63,7 @@ Please create separate pull requests for each logical enhancement, new feature,
 or fix.
 
 Before you submit your code please consider our recommendations in the
-CODINGSTYLE.md[CODINGSTYLE] document.
+link:CODINGSTYLE.md[CODINGSTYLE] document.
 
 == GitHub workflow for contributions
 
