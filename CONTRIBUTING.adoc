@@ -8,7 +8,7 @@ _How to contribute to Installation assistant for Linux on IBM Z._
 == License
 
 All contributions have to be submitted under the MIT license. See also
-the [LICENSE](LICENSE) file.
+the link:LICENSE[LICENSE] file.
 
 == Developer's Certificate of Origin and Signed-off-by
 
