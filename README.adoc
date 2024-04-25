@@ -30,3 +30,19 @@ A list of known issues is maintained at https://github.ibm.com/linuxonz/liz/wiki
 == Overview
 
 The Installation assistant for Linux on IBM Z (Stage 1) is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process.
+
+The application implements a parameter file generation feature for which there's no competitor. Linux distributions as mentioned provide both installer technology based on traditional GUI toolkits (GTK/KDE) and those that are web based and thus run in the browser.
+
+For the latter these type of installer lack the specific s390 feature set we thus intend to provide to significantly ease the installation journey for Linux on IBM Z and thus drive customers towards IBM Z due to the simplification approach the contribution provides.
+
+The line-item feature allows to provide a self-service approach by having the application deployed and hosted on a standard HTTP server without the need to install it locally something of which we anticipate that it will reduce involving IBM support for instances where the customer could be using the line-item feature isntead to accomplish the task of installing Linux on a s390 system.
+
+== Governance
+
+This repository contains the following files. They are provide to govern the contribution and development process accordingly.
+
+* link:CONTRIBUTING.adoc[CONTRIBUTING]: Contribution guidelines
+* link:LICENSE[LICENSE]: The MIT license that applies to this package
+* link:CHANGELOG[CHANGELOG]: The history of s390-tools versions
+* link:AUTHORS[AUTHORS]: A list of all authors of the s390-tools package
+* link:CODINGSTYLE.adoc[CODINGSTYLE]: Recommendations for writing s390-tools code
