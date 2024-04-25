@@ -46,3 +46,17 @@ This repository contains the following files. They are provide to govern the con
 * link:CHANGELOG[CHANGELOG]: The history of s390-tools versions
 * link:AUTHORS[AUTHORS]: A list of all authors of the s390-tools package
 * link:CODINGSTYLE.adoc[CODINGSTYLE]: Recommendations for writing s390-tools code
+
+== Testing
+
+=== Unit Testing
+
+Automated testing is currently unavailable. It is planned to provide test automation for unit tests based on https://jestjs.io/[Jest] and https://vitest.dev/[Vitest], 
+
+=== Functional Verification
+
+Functional verification testing (FVT) currently is a manual test. There are https://github.ibm.com/linuxonz/liz/wiki/Functional-Verification-Testing[test buckets] available that can be used to manually regression test the application workflow.
+
+=== Accessibility Testing
+
+Accessibility testing needs to be done manually. The https://www.ibm.com/able/toolkit/[IBM Equal Access Toolkit] provides a browser plug-in to analyze each page according to particular accessibility rules it is using. There are https://github.ibm.com/linuxonz/liz/wiki/Accessibility-Verification-Testing[instructions] available how to install and use this plug-in.
