@@ -35,7 +35,7 @@
         "@carbon/ibm-products": "2.35.0",
         "@carbon/layout": "11.21.0",
         "@carbon/react": "1.55.0",
-        "@carbon/styles": "1.55.0",
+        "@carbon/styles": "1.56.0",
         "@carbon/themes": "11.34.0",
         "@carbon/type": "11.26.0",
         "@loadable/component": "5.16.4",
