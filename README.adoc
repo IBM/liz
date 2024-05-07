@@ -22,7 +22,7 @@ toc::[]
 
 == Quickstart
 
-If you are looking for the Installation assistant for Linux on IBM Z application itself please click on the `run` button at the top of the page next to the build button. Alternatively to clicking the button the application is available at https://pages.github.ibm.com/linuxonz/liz/[this location]. In cases where you are instead interested in the sources of the app you might consider continue reading to familiarize yourself with the code base.
+If you are looking for the Installation assistant for Linux on IBM Z application itself please click on the `run` button at the top of the page next to the `build` button. Alternatively to clicking the button the application is available at https://pages.github.ibm.com/linuxonz/liz/[this location]. In cases where you are instead interested in the sources of the app you might consider continue reading to familiarize yourself with the code base.
 
 == Known issues
 
