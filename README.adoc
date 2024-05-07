@@ -47,6 +47,23 @@ This repository contains the following files. They are provide to govern the con
 * link:AUTHORS[AUTHORS]: A list of all authors of the s390-tools package
 * link:CODINGSTYLE.adoc[CODINGSTYLE]: Recommendations for writing s390-tools code
 
+== Repository layout
+
+The repository is structured the following way.
+
+1. `public` - localized strings and config files that are used by the app.
+2. `src` - source files. Mainly JavaScript or JSX code.
+
+=== Source folder layout
+
+1. `components` - contains UI components as used by the app.
+2. `content` - contains page content such as the landing and edit page.
+3. `contexts` - contains contexts that gets instantiated via `createContext` and used by the various components.
+4. `reducers` - contains reducers that manage the state for the various components.
+5. `routes` - contains code to establish and manage the routes for the various pages.
+6. `states` - contains the states for the various components.
+7. `uiUtil`, `util` - utility functions.
+
 == Testing
 
 === Unit Testing
