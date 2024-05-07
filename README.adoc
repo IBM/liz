@@ -3,6 +3,8 @@ Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 :toc: macro
 :source-highlighter: pygments
 
+_Installation assistant for Linux on IBM Z, a modern web application that is supposed to be run on GitHub Pages._
+
 ++++
 <p align="center">
   <a href="https://v3.travis.ibm.com/linuxonz/liz" target="_blank">
@@ -13,10 +15,6 @@ Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
   </a>
 </p>
 ++++
-
-
-
-_Installation assistant for Linux on IBM Z that is supposed to be run on GitHub Pages._
 
 toc::[]
 
