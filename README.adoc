@@ -43,9 +43,9 @@ This repository contains the following files. They are provide to govern the con
 
 * link:CONTRIBUTING.adoc[CONTRIBUTING]: Contribution guidelines
 * link:LICENSE[LICENSE]: The MIT license that applies to this package
-* link:CHANGELOG[CHANGELOG]: The history of s390-tools versions
-* link:AUTHORS[AUTHORS]: A list of all authors of the s390-tools package
-* link:CODINGSTYLE.adoc[CODINGSTYLE]: Recommendations for writing s390-tools code
+* link:CHANGELOG[CHANGELOG]: The history of liz versions
+* link:AUTHORS[AUTHORS]: A list of all authors of the liz package
+* link:CODINGSTYLE.adoc[CODINGSTYLE]: Recommendations for writing liz code
 
 == Repository layout
 
