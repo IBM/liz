@@ -22,7 +22,7 @@ toc::[]
 
 == Quickstart
 
-If you are looking for the deployed Installation assistant for Linux on IBM Z application itself please click on the `run` button at the top of the page next to the `build` button. Alternatively to clicking the button the application is available at https://pages.github.ibm.com/linuxonz/liz/[this location]. In cases where you are instead interested in the sources of the application you might consider continue reading to familiarize yourself with the code base.
+If you are looking for the deployed *Installation assistant for Linux on IBM Z* application itself please click on the `run` button at the top of the page next to the `build` button. Alternatively to clicking the button the application is available at https://pages.github.ibm.com/linuxonz/liz/[this location]. In cases where you are instead interested in the sources of the application you might consider continue reading to familiarize yourself with the code base.
 
 == Known issues
 
@@ -30,7 +30,7 @@ A list of known issues is maintained at https://github.ibm.com/linuxonz/liz/wiki
 
 == Overview
 
-The Installation assistant for Linux on IBM Z is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process for Linux on s390 systems.
+The *Installation assistant for Linux on IBM Z* is supposed to be build and deployed to a GitHub Pages instance. There it will be served as a web application. It is supposed to streamline the workflow of creating a so called parameter file that would ease and thus automate the installation process for Linux on s390 systems.
 
 The application implements a parameter file generation feature for which there's no competitor. Linux distributions as mentioned provide both installer technology based on traditional GUI toolkits (GTK/KDE) and those that are web based and thus run in the browser.
 
