@@ -13,6 +13,12 @@ _Installation assistant for Linux on IBM Z, a modern web application that is int
   <a href="https://pages.github.ibm.com/linuxonz/liz/" target="_blank">
     <img alt="Run Installation assistant for Linux on IBM Z" src="https://img.shields.io/badge/run-Installation_assistant_for_Linux_on_IBM_Z-blue" />
   </a>
+  <a href="https://github.ibm.com/linuxonz/liz/blob/main/LICENSE" target="_blank">
+    <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue" />
+  </a>
+  <a href="https://github.ibm.com/linuxonz/liz/blob/main/CONTRIBUTING.adoc" target="_blank">
+    <img alt="MIT License" src="https://img.shields.io/badge/PRs-welcome-green" />
+  </a>
 </p>
 ++++
 
