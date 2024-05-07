@@ -5,7 +5,7 @@ Author: Daniel S. Haischt <daniel.haischt@de.ibm.com>
 
 ++++
 <p align="center">
-  <a href="https://travis.ibm.com/linuxonz/liz" target="_blank">
+  <a href="https://v3.travis.ibm.com/linuxonz/liz" target="_blank">
     <img alt="Travis" src="https://v3.travis.ibm.com/linuxonz/liz.svg?token=sTwrf5YsyjBkhBTKWnZE&branch=main">
   </a>
   <a href="https://pages.github.ibm.com/linuxonz/liz/" target="_blank">
