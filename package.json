@@ -37,7 +37,7 @@
         "@carbon/react": "1.57.0",
         "@carbon/styles": "1.57.0",
         "@carbon/themes": "11.35.0",
-        "@carbon/type": "11.26.0",
+        "@carbon/type": "11.27.0",
         "@loadable/component": "5.16.4",
         "i18next": "23.11.3",
         "i18next-browser-languagedetector": "7.2.1",
