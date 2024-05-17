@@ -41,7 +41,7 @@
         "@loadable/component": "5.16.4",
         "i18next": "23.11.4",
         "i18next-browser-languagedetector": "7.2.1",
-        "i18next-http-backend": "2.5.1",
+        "i18next-http-backend": "2.5.2",
         "i18next-pseudo": "2.2.1",
         "is-ip": "5.0.1",
         "is-url-superb": "6.1.0",
