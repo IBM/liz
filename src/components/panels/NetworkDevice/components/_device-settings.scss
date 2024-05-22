@@ -4,28 +4,32 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-@use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+@use '@carbon/react' with (
+    $font-path: '@ibm/plex'
 );
 
 .device-settings_grid {
-  &.cds--grid {
-    padding-inline: react.$spacing-05;
-  }
+    &.cds--grid {
+        padding-inline: react.$spacing-05;
+    }
 
-  .cds--col {
-    padding: 0;
-  }
+    .cds--col {
+        padding: 0;
+    }
 }
 
 .device-settings_grid-column-left {
-  .device-settings_toggle-label-nowrap {
-    white-space: pre;
-  }
+    .device-settings_toggle-label-nowrap {
+        white-space: pre;
+    }
 }
 
 .device-settings_grid-column-right {
-  .device-settings_toggle-label-nowrap {
-    white-space: pre;
-  }
+    .device-settings_toggle-label-nowrap {
+        white-space: pre;
+    }
+}
+
+.device-settings_roce-helper-banner {
+    margin-bottom: react.$spacing-05;
 }
