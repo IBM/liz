@@ -53,7 +53,7 @@
     "panel.networkDevice.layerTwoToggleTextLabelA": "Layer 3",
     "panel.networkDevice.layerTwoToggleTextLabelB": "Layer 2  ",
     "panel.networkDevice.layerTwoToggleHelp": "Select 1 for Layer 2 (ethernet) mode, or 0 for Layer 3 (IP) mode.",
-    "panel.networkDevice.multiPortToggleTextLabel": "Use multiple ports per CHPID",
+    "panel.networkDevice.multiPortToggleTextLabel": "Use multi-port CHPID",
     "panel.networkDevice.portNumberToggleTextLabel": "Port number",
     "panel.networkDevice.portNumberToggleHelp": "For adapters with multiple ports per CHPID, select port 0 or 1.",
     "panel.networkDevice.fidTextLabel": "PCI function ID (FID)",
