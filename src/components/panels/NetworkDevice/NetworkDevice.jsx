@@ -704,6 +704,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                         key="network-device_read-channel-input"
                         invalidText={t('invalidTextLabel', { ns: 'common' })}
                         invalid={!readChannelIdIsValid}
+                        maxLength={16}
                         labelText={t(
                             'panel.networkDevice.readChannelTextLabel',
                             {
@@ -762,6 +763,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                         key="network-device_write-channel-input"
                         invalidText={t('invalidTextLabel', { ns: 'common' })}
                         invalid={!writeChannelIdIsValid}
+                        maxLength={16}
                         labelText={t(
                             'panel.networkDevice.writeChannelTextLabel',
                             {
@@ -820,6 +822,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                         key="network-device_data-channel-input"
                         invalidText={t('invalidTextLabel', { ns: 'common' })}
                         invalid={!dataChannelIdIsValid}
+                        maxLength={16}
                         labelText={t(
                             'panel.networkDevice.dataChannelTextLabel',
                             {

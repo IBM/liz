@@ -255,6 +255,7 @@ const DeviceSettings = ({
                                     ? !state.pciFunctionId.valid
                                     : false
                             }
+                            maxLength={16}
                             labelText={roceLabelHasOptionalTag(
                                 'userIdentifier',
                                 t('panel.networkDevice.fidTextLabel', {
@@ -322,6 +323,7 @@ const DeviceSettings = ({
                                     ? !state.userIdentifier.valid
                                     : false
                             }
+                            maxLength={16}
                             labelText={roceLabelHasOptionalTag(
                                 'pciFunctionId',
                                 t('panel.networkDevice.uidTextLabel', {
