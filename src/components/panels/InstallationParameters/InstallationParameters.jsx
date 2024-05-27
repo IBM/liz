@@ -41,6 +41,7 @@ import { encryptItem } from '../../../util/local-storage-util'
 import './_installation-parameters.scss'
 
 const SUPPORTED_PROTOCOLS = ['http', 'https', 'ftp']
+const PWD_REGEXP = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/
 
 const InstallationParameters = forwardRef(
     function InstallationParameters(props, ref) {
@@ -176,7 +177,11 @@ const InstallationParameters = forwardRef(
         const isPasswordInputValid = (password) => {
             // The password is optional, if it is a zero length string
             // mark it as a valid value.
-            if (typeof password === 'string' && password.length >= 0) {
+            if (
+                typeof password === 'string' &&
+                password.length >= 0 &&
+                PWD_REGEXP.test(password)
+            ) {
                 return true
             }
             return false
@@ -313,9 +318,13 @@ const InstallationParameters = forwardRef(
                 state.installationAddress.value.length > 0
             ) {
                 isComplete = true
-                isValid = isInstallationAddressInputValid(
-                    state.installationAddress.value
-                )
+                isValid =
+                    isInstallationAddressInputValid(
+                        state.installationAddress.value
+                    ) &&
+                    state.password.valid &&
+                    state.vncPassword.valid &&
+                    state.sshPassword.valid
             }
 
             if (isComplete && isValid) {
@@ -681,6 +690,11 @@ const InstallationParameters = forwardRef(
                             }
                         )}
                         id="vnc-password-input"
+                        invalid={
+                            state && state.vncPassword
+                                ? !state.vncPassword.valid
+                                : false
+                        }
                         invalidText={t('invalidTextLabel', { ns: 'common' })}
                         maxLength={64}
                         labelText={t(
@@ -695,21 +709,32 @@ const InstallationParameters = forwardRef(
                                 ns: 'panels',
                             }
                         )}
-                        value={state.vncPassword ? state.vncPassword : ''}
+                        value={state.vncPassword ? state.vncPassword.value : ''}
                         onChange={(password) => {
                             if (paramFileHasBeenModifiedFromState) return
 
-                            updateVncPassword(
+                            const passwordValue =
                                 password && password.target
                                     ? password.target.value
                                     : ''
-                            )
+
+                            updateVncPassword({
+                                password: passwordValue,
+                                valid: true,
+                            })
                         }}
                         onBlur={(password) => {
-                            // if (paramFileHasBeenModifiedFromState) return;
-                            // updateVncPassword(
-                            //   password && password.target ? password.target.value : "",
-                            // );
+                            const passwordValue =
+                                password && password.target
+                                    ? password.target.value
+                                    : ''
+                            const passwordValueIsValid =
+                                isPasswordInputValid(passwordValue)
+
+                            updateVncPassword({
+                                password: passwordValue,
+                                valid: passwordValueIsValid,
+                            })
                         }}
                     />
                 )}
@@ -751,6 +776,11 @@ const InstallationParameters = forwardRef(
                             }
                         )}
                         id="ssh-password-input"
+                        invalid={
+                            state && state.sshPassword
+                                ? !state.sshPassword.valid
+                                : false
+                        }
                         invalidText={t('invalidTextLabel', { ns: 'common' })}
                         maxLength={64}
                         labelText={t(
@@ -765,21 +795,32 @@ const InstallationParameters = forwardRef(
                                 ns: 'panels',
                             }
                         )}
-                        value={state.sshPassword ? state.sshPassword : ''}
+                        value={state.sshPassword ? state.sshPassword.value : ''}
                         onChange={(password) => {
                             if (paramFileHasBeenModifiedFromState) return
 
-                            updateSshPassword(
+                            const passwordValue =
                                 password && password.target
                                     ? password.target.value
                                     : ''
-                            )
+
+                            updateSshPassword({
+                                password: passwordValue,
+                                valid: true,
+                            })
                         }}
                         onBlur={(password) => {
-                            // if (paramFileHasBeenModifiedFromState) return;
-                            // updateSshPassword(
-                            //   password && password.target ? password.target.value : "",
-                            // );
+                            const passwordValue =
+                                password && password.target
+                                    ? password.target.value
+                                    : ''
+                            const passwordValueIsValid =
+                                isPasswordInputValid(passwordValue)
+
+                            updateSshPassword({
+                                password: passwordValue,
+                                valid: passwordValueIsValid,
+                            })
                         }}
                     />
                 )}
