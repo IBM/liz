@@ -177,14 +177,10 @@ const InstallationParameters = forwardRef(
         const isPasswordInputValid = (password) => {
             // The password is optional, if it is a zero length string
             // mark it as a valid value.
-            if (
-                typeof password === 'string' &&
-                password.length >= 0 &&
-                PWD_REGEXP.test(password)
-            ) {
+            if (typeof password === 'string' && password.length === 0) {
                 return true
             }
-            return false
+            return PWD_REGEXP.test(password)
         }
 
         const urlUsesSupportedProtocols = (url) => {
