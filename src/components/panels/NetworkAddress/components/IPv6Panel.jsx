@@ -55,7 +55,7 @@ const IPv6Panel = ({
                         : false
                 }
                 invalidText={t('invalidTextLabel', { ns: 'common' })}
-                maxLength={24}
+                maxLength={64}
                 labelText={t(
                     'panel.networkAddress.networkAddressIPv6TextLabel',
                     {
@@ -196,7 +196,7 @@ const IPv6Panel = ({
                         : false
                 }
                 invalidText={t('invalidTextLabel', { ns: 'common' })}
-                maxLength={24}
+                maxLength={64}
                 labelText={t('panel.networkAddress.gatewayAddressTextLabel', {
                     ns: 'panels',
                 })}
@@ -257,7 +257,7 @@ const IPv6Panel = ({
                         : false
                 }
                 invalidText={t('invalidTextLabel', { ns: 'common' })}
-                maxLength={24}
+                maxLength={64}
                 labelText={t(
                     'panel.networkAddress.nameserverAddressTextLabel',
                     {
