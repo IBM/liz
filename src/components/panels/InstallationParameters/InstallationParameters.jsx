@@ -259,10 +259,20 @@ const InstallationParameters = forwardRef(
             return ''
         }
 
-        const computeInstallationAddress = (url = '', uid = '', pwd = '') => {
+        const computeInstallationAddress = ({
+            url = '',
+            uid = '',
+            pwd = '',
+            clearUid = false,
+            clearPwd = false,
+        }) => {
             const address = url || (state?.installationAddress?.value ?? '')
-            const userName = uid || (state?.userName?.value ?? '')
-            const password = pwd || (state?.password?.value ?? '')
+            const userName = clearUid
+                ? ''
+                : uid || (state?.userName?.value ?? '')
+            const password = clearPwd
+                ? ''
+                : pwd || (state?.password?.value ?? '')
 
             if (address && address.length > 0) {
                 const installationAddressUrl = toUrl(address)
@@ -410,8 +420,9 @@ const InstallationParameters = forwardRef(
 
                         const urlValue =
                             url && url.target ? url.target.value : ''
-                        const computedUrlValue =
-                            computeInstallationAddress(urlValue)
+                        const computedUrlValue = computeInstallationAddress({
+                            url: urlValue,
+                        })
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
                         updateInstallationAddress({
@@ -425,8 +436,9 @@ const InstallationParameters = forwardRef(
 
                         const urlValue =
                             url && url.target ? url.target.value : ''
-                        const computedUrlValue =
-                            computeInstallationAddress(urlValue)
+                        const computedUrlValue = computeInstallationAddress({
+                            url: urlValue,
+                        })
                         const urlValueIsValid =
                             isInstallationAddressInputValid(urlValue)
 
@@ -511,10 +523,11 @@ const InstallationParameters = forwardRef(
                                 ? userName.target.value
                                 : ''
                         const computedUrlValue = state.installationAddress
-                            ? computeInstallationAddress(
-                                  state.installationAddress.value,
-                                  userNameValue
-                              )
+                            ? computeInstallationAddress({
+                                  url: state.installationAddress.value,
+                                  uid: userNameValue,
+                                  clearUid: userNameValue.length === 0,
+                              })
                             : ''
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
@@ -536,10 +549,11 @@ const InstallationParameters = forwardRef(
                                 ? userName.target.value
                                 : ''
                         const computedUrlValue = state.installationAddress
-                            ? computeInstallationAddress(
-                                  state.installationAddress.value,
-                                  userNameValue
-                              )
+                            ? computeInstallationAddress({
+                                  url: state.installationAddress.value,
+                                  uid: userNameValue,
+                                  clearUid: userNameValue.length === 0,
+                              })
                             : ''
                         const userNameValueIsValid =
                             isUserNameInputValid(userNameValue)
@@ -599,11 +613,16 @@ const InstallationParameters = forwardRef(
                                 ? password.target.value
                                 : ''
                         const computedUrlValue = state.installationAddress
-                            ? computeInstallationAddress(
-                                  state.installationAddress.value,
-                                  state?.userName?.value ?? '',
-                                  passwordValue
-                              )
+                            ? computeInstallationAddress({
+                                  url: state.installationAddress.value,
+                                  uid: state?.userName?.value ?? '',
+                                  clearUid:
+                                      typeof state.userName.value !==
+                                          'string' ||
+                                      state.userName.value.length === 0,
+                                  pwd: passwordValue,
+                                  clearPwd: passwordValue.length === 0,
+                              })
                             : ''
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
@@ -625,11 +644,16 @@ const InstallationParameters = forwardRef(
                                 ? password.target.value
                                 : ''
                         const computedUrlValue = state.installationAddress
-                            ? computeInstallationAddress(
-                                  state.installationAddress.value,
-                                  state?.userName?.value ?? '',
-                                  passwordValue
-                              )
+                            ? computeInstallationAddress({
+                                  url: state.installationAddress.value,
+                                  uid: state?.userName?.value ?? '',
+                                  clearUid:
+                                      typeof state.userName.value !==
+                                          'string' ||
+                                      state.userName.value.length === 0,
+                                  pwd: passwordValue,
+                                  clearPwd: passwordValue.length === 0,
+                              })
                             : ''
                         const passwordValueIsValid =
                             isPasswordInputValid(passwordValue)
