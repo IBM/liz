@@ -92,10 +92,10 @@ const SYSTEM_REQUIREMENTS = {
             'https://documentation.suse.com/sles/15-SP5/single-html/SLES-deployment/#sec-zseries-requirements',
     },
     ubuntu: {
-        memorySize: 3,
-        diskSize: 10,
-        machineLevel: 'IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II',
-        docLink: 'https://some.ubuntu.domain/some/path/to/documentation',
+        memorySize: 1,
+        diskSize: 5,
+        machineLevel: 'IBM z13s/z13, IBM LinuxONE Rockhopper/Emperor',
+        docLink: 'https://ubuntu.com/server/docs/system-requirements',
     },
 }
 
