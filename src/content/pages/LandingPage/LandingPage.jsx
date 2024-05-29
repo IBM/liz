@@ -673,7 +673,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         useVnc,
         networkAddress,
         addressType: globalState.steps.networkAddress.addressType,
-        vncPassword,
+        vncPassword: vncPassword.value,
         sshUsername,
     }
 

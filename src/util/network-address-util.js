@@ -143,13 +143,13 @@ const isHostnameValid = (hostName) => {
         return true
     }
 
-    return (
-        hostName &&
+    return hostName &&
         typeof hostName === 'string' &&
         hostName.length <= 253 &&
         domainNameHasValidLabels(hostName) &&
-        isValidHostname(hostName)
-    )
+        hostName.indexOf(':') > 0
+        ? isValidHostname(hostName.split(':')[0])
+        : isValidHostname(hostName)
 }
 
 const isDomainSearchPathValid = (domainSearchPath) => {

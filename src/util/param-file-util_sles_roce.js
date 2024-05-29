@@ -181,7 +181,7 @@ const stateToVncParams = (state) => {
             installationParameters.vnc.password.value &&
             installationParameters.vnc.password.value.length > 0
         ) {
-            const vncServerLine = `vnc=1 vncpassword=${installationParameters.vnc.password}`
+            const vncServerLine = `vnc=1 vncpassword=${installationParameters.vnc.password.value}`
             paramFileContents = {
                 contents: `${vncServerLine}`,
                 complete: installationParameters.complete,
@@ -221,7 +221,7 @@ const stateToSshParams = (state) => {
             installationParameters.ssh.password.value &&
             installationParameters.ssh.password.value.length > 0
         )
-        const sshServerLine = `ssh=1${hasSshPassword ? ` ssh.password=${installationParameters.ssh.password}` : ''}`
+        const sshServerLine = `ssh=1${hasSshPassword ? ` ssh.password=${installationParameters.ssh.password.value}` : ''}`
         paramFileContents = {
             contents: `${sshServerLine}`,
             complete: installationParameters.complete,
