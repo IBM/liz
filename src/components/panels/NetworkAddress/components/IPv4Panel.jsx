@@ -296,7 +296,7 @@ const IPv4Panel = ({
                     const localNetmaskValueIsValid =
                         isIpv4NetworkAddressValid(localNetmaskValue)
 
-                    if (!localNetmaskValueIsValid) {
+                    if (localNetmaskValueIsValid) {
                         updateFunction({
                             propertyName: UPDATE_FUNCTION__IPV4_NETMASK,
                             propertyValue: localNetmaskValue,
