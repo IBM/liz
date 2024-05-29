@@ -302,13 +302,16 @@ const DeviceSettings = ({
                                 const pciFunctionIdIsValid =
                                     isPciFunctionIdValid(pciFunctionIdValue)
 
-                                if (!pciFunctionIdIsValid) {
-                                    updateFunction(
-                                        UPDATE_FUNCTION__PCI_FUNCTION_ID,
-                                        pciFunctionIdValue,
-                                        pciFunctionIdIsValid
-                                    )
-                                }
+                                updateFunction(
+                                    UPDATE_FUNCTION__PCI_FUNCTION_ID,
+                                    pciFunctionIdValue,
+                                    pciFunctionIdIsValid
+                                )
+                                updateFunction(
+                                    UPDATE_FUNCTION__USER_IDENTIFIER,
+                                    state?.userIdentifier?.value ?? '',
+                                    true
+                                )
                             }}
                         />
                         <TextInput
@@ -371,13 +374,16 @@ const DeviceSettings = ({
                                 const userIdentifierIsValid =
                                     isUserIdentifierValid(userIdentifierValue)
 
-                                if (!userIdentifierIsValid) {
-                                    updateFunction(
-                                        UPDATE_FUNCTION__USER_IDENTIFIER,
-                                        userIdentifierValue,
-                                        userIdentifierIsValid
-                                    )
-                                }
+                                updateFunction(
+                                    UPDATE_FUNCTION__USER_IDENTIFIER,
+                                    userIdentifierValue,
+                                    userIdentifierIsValid
+                                )
+                                updateFunction(
+                                    UPDATE_FUNCTION__PCI_FUNCTION_ID,
+                                    state?.pciFunctionId?.value ?? '',
+                                    true
+                                )
                             }}
                         />
                     </div>
