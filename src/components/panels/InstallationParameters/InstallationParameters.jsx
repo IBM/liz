@@ -41,7 +41,6 @@ import { encryptItem } from '../../../util/local-storage-util'
 import './_installation-parameters.scss'
 
 const SUPPORTED_PROTOCOLS = ['http', 'https', 'ftp']
-const PWD_REGEXP = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/
 
 const InstallationParameters = forwardRef(
     function InstallationParameters(props, ref) {
@@ -180,7 +179,7 @@ const InstallationParameters = forwardRef(
             if (typeof password === 'string' && password.length === 0) {
                 return true
             }
-            return PWD_REGEXP.test(password)
+            return password.indexOf(' ') === -1
         }
 
         const urlUsesSupportedProtocols = (url) => {
