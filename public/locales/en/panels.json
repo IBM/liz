@@ -64,7 +64,7 @@
     "panel.networkDevice.uidTextLabelOptional": "PCI User-defined identifier (UID, optional)",
     "panel.networkDevice.uidPlaceholder": "e.g. 0x1234",
     "panel.networkDevice.uidHelp": "User-defined identifier (UID) of the PCI network device in hexadecimal format.",
-    "panel.networkDevice.roceHelperNotificationSubtitle": "All available PCI network devices will automatically be considered for the configuration.",
+    "panel.networkDevice.roceHelperNotificationSubtitle": "If multiple network devices are detected, the installer tries each one until a connection is made. This process may take several minutes. To speed up installation, consider removing extra network devices.",
     "panel.networkDevice.roceHelperNotificationTitle": "Configuration",
     "panel.networkAddress.gatewayAddressTextLabel": "Gateway IP address",
     "panel.networkAddress.gatewayAddressPlaceholderIPv4": "192.0.2.1",

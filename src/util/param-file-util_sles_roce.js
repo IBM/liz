@@ -30,7 +30,7 @@ const stateToIpv4NetworkAddressParams = (state) => {
         installationParameters.domainSearchPath.length > 0
     )
 
-    return `ifcfg=${hasVlanId ? `*.${vlanId}` : '*'}=${ipAddress}/${prefixLength},${gatewayIpAddress},${nameserver},${hasDomainSearchPath ? `${installationParameters.domainSearchPath}` : ''}`
+    return `ifcfg=${hasVlanId ? `*.${vlanId}` : '*'}=try,${ipAddress}/${prefixLength},${gatewayIpAddress},${nameserver},${hasDomainSearchPath ? `${installationParameters.domainSearchPath}` : ''}`
 }
 
 const stateToIpv6NetworkAddressParams = (state) => {
@@ -52,7 +52,7 @@ const stateToIpv6NetworkAddressParams = (state) => {
         installationParameters.domainSearchPath.length > 0
     )
 
-    return `ifcfg=${hasVlanId ? `*.${vlanId}` : '*'}=${ipAddress}/${prefixLength},${gatewayIpAddress},${nameserver},${hasDomainSearchPath ? `${installationParameters.domainSearchPath}` : ''}`
+    return `ifcfg=${hasVlanId ? `*.${vlanId}` : '*'}=try,${ipAddress}/${prefixLength},${gatewayIpAddress},${nameserver},${hasDomainSearchPath ? `${installationParameters.domainSearchPath}` : ''}`
 }
 
 const stateToNetworkAddressParams = (state) => {
