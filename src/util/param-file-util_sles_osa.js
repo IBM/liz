@@ -13,36 +13,55 @@ import {
 
 const stateToIpv4NetworkAddressParams = (state) => {
     const installationParameters = state?.steps?.networkAddress ?? {}
+    const installationParametersForDeviceType =
+        state?.steps?.networkDevice ?? {}
+    const hasVlanId =
+        installationParametersForDeviceType.vlan.enabled &&
+        typeof installationParametersForDeviceType.vlan === 'object' &&
+        typeof installationParametersForDeviceType.vlan.id === 'number' &&
+        installationParametersForDeviceType.vlan.id > 0
+    const vlanId = `${installationParametersForDeviceType.vlan.id}`
     const ipAddress = installationParameters?.ipv4?.address ?? ''
     const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? ''
     const prefixLength = installationParameters?.ipv4?.cidr ?? 1
-    const hostName = installationParameters?.hostName ?? ''
-    const hasHostName = !!(
-        state?.steps?.networkAddress.hostName &&
-        state?.steps?.networkAddress.hostName.length > 0
+    const nameserver = `${installationParameters.nameserverIpAddress}`
+    const hasDomainSearchPath = !!(
+        installationParameters.domainSearchPath &&
+        installationParameters.domainSearchPath.length > 0
     )
 
-    return `${hasHostName ? `hostname=${hostName} ` : ''}hostip=${ipAddress}/${prefixLength} gateway=${gatewayIpAddress}`
+    return `ifcfg=${hasVlanId ? `*.${vlanId}` : '*'}=try,${ipAddress}/${prefixLength},${gatewayIpAddress},${nameserver},${hasDomainSearchPath ? `${installationParameters.domainSearchPath}` : ''}`
 }
 
 const stateToIpv6NetworkAddressParams = (state) => {
     const installationParameters = state?.steps?.networkAddress ?? {}
+    const installationParametersForDeviceType =
+        state?.steps?.networkDevice ?? {}
+    const hasVlanId =
+        installationParametersForDeviceType.vlan.enabled &&
+        typeof installationParametersForDeviceType.vlan === 'object' &&
+        typeof installationParametersForDeviceType.vlan.id === 'number' &&
+        installationParametersForDeviceType.vlan.id > 0
+    const vlanId = `${installationParametersForDeviceType.vlan.id}`
     const ipAddress = installationParameters?.ipv6?.address ?? ''
     const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? ''
     const prefixLength = installationParameters?.ipv6?.cidr ?? 1
+    const nameserver = `${installationParameters.nameserverIpAddress}`
+    const hasDomainSearchPath = !!(
+        installationParameters.domainSearchPath &&
+        installationParameters.domainSearchPath.length > 0
+    )
+
+    return `ifcfg=${hasVlanId ? `*.${vlanId}` : '*'}=try,${ipAddress}/${prefixLength},${gatewayIpAddress},${nameserver},${hasDomainSearchPath ? `${installationParameters.domainSearchPath}` : ''}`
+}
+
+const stateToNetworkAddressParams = (state) => {
+    const installationParameters = state?.steps?.networkAddress ?? {}
     const hostName = installationParameters?.hostName ?? ''
     const hasHostName = !!(
         state?.steps?.networkAddress.hostName &&
         state?.steps?.networkAddress.hostName.length > 0
     )
-    const hostIpFragment = `hostip=${ipAddress}/${prefixLength}`
-    const gatewayFragment = `gateway=${gatewayIpAddress}`
-
-    return `${hasHostName ? `hostname=${hostName} ` : ''}${hostIpFragment} ${gatewayFragment}`
-}
-
-const stateToNetworkAddressParams = (state) => {
-    const installationParameters = state?.steps?.networkAddress ?? {}
     let paramFileContents = {
         contents: '',
         complete: false,
@@ -57,13 +76,8 @@ const stateToNetworkAddressParams = (state) => {
             installationParameters.addressType === ADDRESS_TYPE_IPV4
                 ? stateToIpv4NetworkAddressParams(state)
                 : stateToIpv6NetworkAddressParams(state)
-        const hasDomainSearchPath = !!(
-            installationParameters.domainSearchPath &&
-            installationParameters.domainSearchPath.length > 0
-        )
-        const nameserver = `nameserver=${installationParameters.nameserverIpAddress}${installationParameters.addressType === ADDRESS_TYPE_IPV6 ? ' ipv6=1' : ''}`
         const installationRepoLine = `${ipAddressParemeters}
-${nameserver}${hasDomainSearchPath ? ` domain=${installationParameters.domainSearchPath}` : ''}
+${installationParameters.addressType === ADDRESS_TYPE_IPV6 ? 'ipv6=1 ' : ''}${hasHostName ? `hostname=${hostName} ` : ''}
 `
         paramFileContents = {
             contents: `${installationRepoLine}`,
@@ -105,13 +119,6 @@ const stateToNetworkDeviceParams = (state) => {
         installationParameters.deviceType === DEVICE_TYPE_OSA
             ? stateToOsaNetworkDeviceParams(installationParameters)
             : ``
-    const hasVlanId =
-        installationParameters.vlan.enabled &&
-        typeof installationParameters.vlan === 'object' &&
-        typeof installationParameters.vlan.id === 'number' &&
-        installationParameters.vlan.id > 0
-    const vlanId = `
-vlanid=${installationParameters.vlan.id}`
     let paramFileContents = {
         contents: '',
         complete: false,
@@ -121,7 +128,7 @@ vlanid=${installationParameters.vlan.id}`
 
     // => rd.znet...
     if (installationParameters) {
-        const installationRepoLine = `${hasVlanId ? `${networkDeviceSettings} ${vlanId}` : networkDeviceSettings}`
+        const installationRepoLine = `${networkDeviceSettings}`
         paramFileContents = {
             contents: `${installationRepoLine}`,
             complete: installationParameters.complete,
