@@ -119,7 +119,7 @@ const RHEL_V9_VERSION_ID = 'version-9.x'
 const RHEL_V9_VERSION_LABEL = '9.x'
 
 const SLES_DISTRIBUTION_ID = 'sles'
-const SLES_DISTRIBUTION_LABEL = 'SUSE Linux Enterprise Server (experimental)'
+const SLES_DISTRIBUTION_LABEL = 'SUSE Linux Enterprise Server'
 const SLES_V15_VERSION_ID = 'version-15'
 const SLES_V15_VERSION_LABEL = '15 SP5'
 
@@ -139,7 +139,7 @@ const DISTRIBUTION_LIST = [
     {
         id: SLES_DISTRIBUTION_ID,
         label: SLES_DISTRIBUTION_LABEL,
-        majority: MAJORITY_EXPERIMENTAL,
+        majority: MAJORITY_STABLE,
     },
     {
         id: UBUNTU_DISTRIBUTION_ID,
