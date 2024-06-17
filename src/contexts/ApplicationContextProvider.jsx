@@ -78,6 +78,7 @@ const ApplicationContextProvider = ({ value, children }) => {
 
     const getConfig = useCallback((updates) => {
         const hasConfigObject =
+            updates &&
             typeof updates.config === 'object' &&
             Object.keys(updates.config).length > 0
 
