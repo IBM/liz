@@ -1,9 +1,10 @@
 {
-  "config": {
-    "bugTrackerUrl": "BUG_TRACKER",
-    "knownIssuesUrl": "KNOWN_ISSUES",
-    "buildDate": "BUILD_DATE",
-    "commitHashShort": "COMMIT_HASH_SHORT",
-    "commitHashLong": "COMMIT_HASH_LONG"
-  }
+    "config": {
+        "bugTrackerUrl": "BUG_TRACKER",
+        "knownIssuesUrl": "KNOWN_ISSUES",
+        "buildDate": "BUILD_DATE",
+        "commitHashShort": "COMMIT_HASH_SHORT",
+        "commitHashLong": "COMMIT_HASH_LONG",
+        "showConfidentialityNotice": "SHOW_NOTICE"
+    }
 }

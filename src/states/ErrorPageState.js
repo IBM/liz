@@ -5,23 +5,22 @@
  */
 
 import {
-  LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
-  STATE_ORIGIN_DEFAULT,
-} from "../util/local-storage-constants";
-import { getItem } from "../util/local-storage-util";
+    LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
+    STATE_ORIGIN_DEFAULT,
+} from '../util/local-storage-constants'
+import { getItem } from '../util/local-storage-util'
 
 const createInitialState = (skipLocalStorageUsage = false) => {
-  const initialState = getItem(LOCAL_STORAGE_KEY_APP_ERROR_PAGE);
-  const defaultState = {
-    appConfig: {},
-    origin: STATE_ORIGIN_DEFAULT,
-  };
+    const initialState = getItem(LOCAL_STORAGE_KEY_APP_ERROR_PAGE)
+    const defaultState = {
+        origin: STATE_ORIGIN_DEFAULT,
+    }
 
-  if (initialState && !skipLocalStorageUsage) {
-    return initialState;
-  }
+    if (initialState && !skipLocalStorageUsage) {
+        return initialState
+    }
 
-  return defaultState;
-};
+    return defaultState
+}
 
-export { createInitialState };
+export { createInitialState }

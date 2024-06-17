@@ -17,6 +17,7 @@ import {
     RadioButtonGroup,
     RadioButton,
     ActionableNotification,
+    InlineNotification,
 } from '@carbon/react'
 import {
     toChannelSegments,
@@ -904,6 +905,21 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
         />
     )
 
+    const roceHelperMarkup = (
+        <InlineNotification
+            hideCloseButton
+            statusIconDescription="notification"
+            subtitle={t('panel.networkDevice.roceHelperNotificationSubtitle', {
+                ns: 'panels',
+            })}
+            title={t('panel.networkDevice.roceHelperNotificationTitle', {
+                ns: 'panels',
+            })}
+            kind="info"
+            className="network-device_roce-helper-banner"
+        />
+    )
+
     return (
         <Layer className="network-device__layer">
             <FlexGrid className="network-device__grid">
@@ -911,6 +927,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     <Column>
                         {paramFileHasBeenModifiedFromState &&
                             parmfileHasBeenModifiedNotificationMarkup}
+                        {!displayRoCEControls && roceHelperMarkup}
                     </Column>
                 </Row>
                 <Row>

@@ -78,11 +78,17 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         updateNextStepsCardHasBeenReviewed,
     } = useContext(LandingPageContext)
     const {
+        config,
         state: globalState,
         updateStep,
         updateShowLegalNotification,
         updateIsEditing,
     } = useContext(ApplicationContext)
+    const { appConfig } = config || {
+        appConfig: {},
+    }
+    const showConfidentialityNotice =
+        appConfig?.config?.showConfidentialityNotice ?? false
     const publicRef = {
         persistState: () => {
             setItem(
@@ -135,7 +141,9 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         t('legalNotice.contentLabel')
     )
     const showInlineNotification = inlineNotification
-        ? inlineNotification.show
+        ? inlineNotification.show &&
+          typeof showConfidentialityNotice === 'string' &&
+          showConfidentialityNotice.toLowerCase() === 'true'
         : false
 
     const getBreadcrumbs = () => {

@@ -65,6 +65,11 @@ const EditPage = forwardRef(function EditPage(props, ref) {
     } = useContext(ApplicationContext)
     const { state: headerState, updateNeedsManualNavigationConfirmation } =
         useContext(HeaderContext)
+    const { appConfig } = config || {
+        appConfig: {},
+    }
+    const showConfidentialityNotice =
+        appConfig?.config?.showConfidentialityNotice ?? false
     const { panelConfig } = config
     const publicRef = {
         persistState: () => {
@@ -122,7 +127,9 @@ const EditPage = forwardRef(function EditPage(props, ref) {
         t('legalNotice.contentLabel')
     )
     const showInlineNotification = inlineNotification
-        ? inlineNotification.show
+        ? inlineNotification.show &&
+          typeof showConfidentialityNotice === 'string' &&
+          showConfidentialityNotice.toLowerCase() === 'true'
         : false
 
     const subtitleNew = t('editPage.pageHeader.subtitle.new')

@@ -15,7 +15,6 @@ import {
     Row,
     RadioButtonGroup,
     RadioButton,
-    InlineNotification,
 } from '@carbon/react'
 import {
     PORT_NUMBER_ZERO,
@@ -215,24 +214,7 @@ const DeviceSettings = ({
         <FlexGrid className="device-settings_grid" fullWidth>
             <Row>
                 <Column>
-                    <div className="device-settings_grid-column-single">
-                        <InlineNotification
-                            hideCloseButton
-                            statusIconDescription="notification"
-                            subtitle={t(
-                                'panel.networkDevice.roceHelperNotificationSubtitle',
-                                {
-                                    ns: 'panels',
-                                }
-                            )}
-                            title={t(
-                                'panel.networkDevice.roceHelperNotificationTitle',
-                                { ns: 'panels' }
-                            )}
-                            kind="info"
-                            className="device-settings_roce-helper-banner"
-                        />
-                    </div>
+                    <div className="device-settings_grid-column-single"></div>
                 </Column>
             </Row>
         </FlexGrid>

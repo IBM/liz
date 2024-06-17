@@ -130,6 +130,7 @@ const UBUNTU_V20_VERSION_LABEL = '20.04.6 LTS'
 const UBUNTU_V22_VERSION_ID = 'version-22'
 const UBUNTU_V22_VERSION_LABEL = '22.04.4 LTS'
 
+/*
 const DISTRIBUTION_LIST = [
     {
         id: RHEL_DISTRIBUTION_ID,
@@ -145,6 +146,19 @@ const DISTRIBUTION_LIST = [
         id: UBUNTU_DISTRIBUTION_ID,
         label: UBUNTU_DISTRIBUTION_LABEL,
         majority: MAJORITY_EXPERIMENTAL,
+    },
+]
+*/
+const DISTRIBUTION_LIST = [
+    {
+        id: RHEL_DISTRIBUTION_ID,
+        label: RHEL_DISTRIBUTION_LABEL,
+        majority: MAJORITY_STABLE,
+    },
+    {
+        id: SLES_DISTRIBUTION_ID,
+        label: SLES_DISTRIBUTION_LABEL,
+        majority: MAJORITY_STABLE,
     },
 ]
 const VERSION_LIST = {

@@ -36,6 +36,7 @@ import {
     ACTION_UPDATE_APP_IS_DISABLED,
     ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
     ACTION_UPDATE_APP_USE_OS_THEME,
+    ACTION_UPDATE_APP_CONFIG,
 } from '../util/reducer-action-constants'
 import { ADDRESS_TYPE_IPV4, DEFAULT_STEPS } from '../util/constants'
 import { getLocalStorageKeys, pruneSettings } from '../util/local-storage-util'
@@ -64,6 +65,35 @@ const ApplicationContextProvider = ({ value, children }) => {
         },
         [state, dispatch]
     )
+
+    const updateConfig = useCallback(
+        (updates) => {
+            dispatch({
+                type: ACTION_UPDATE_APP_CONFIG,
+                nextAppConfig: updates,
+            })
+        },
+        [state, dispatch]
+    )
+
+    const getConfig = useCallback((updates) => {
+        const hasConfigObject =
+            typeof updates.config === 'object' &&
+            Object.keys(updates.config).length > 0
+
+        const fetchData = async () => {
+            const response = await fetch(
+                `${import.meta.env.VITE_URL_PATH_PREFIX}config/app/config.json`
+            )
+            const config = await response.json()
+
+            return config
+        }
+
+        fetchData().then((config) => {
+            !hasConfigObject && updateConfig(config)
+        })
+    })
 
     const updateUseOperatingSystemTheme = useCallback(
         (updates) => {
@@ -537,8 +567,8 @@ const ApplicationContextProvider = ({ value, children }) => {
         ]
     )
 
-    const getContextValue = useCallback(
-        () => ({
+    const getContextValue = useCallback(() => {
+        return {
             ...value,
             state,
             updateTheme,
@@ -558,33 +588,36 @@ const ApplicationContextProvider = ({ value, children }) => {
             updateIsDisabled,
             resetToInitialState,
             config: {
+                appConfig: state.appConfig,
                 panelConfig: panelConfigArray,
                 helpPanelConfig: getHelpPanelConfig({ step: state.step }),
             },
-        }),
-        [
-            value,
-            state,
-            updateTheme,
-            updateState,
-            updateStep,
-            updateNextStep,
-            updateCurrentHelpStep,
-            updateIncludeIntroStep,
-            updateParamFileContent,
-            updateModified,
-            updateShowLegalNotification,
-            updateUseStateFromLocalStorage,
-            updateUseOperatingSystemTheme,
-            updateIsDirty,
-            updateIsEditing,
-            updateSteps,
-            updateIsDisabled,
-            resetToInitialState,
-            panelConfigArray,
-            getHelpPanelConfig,
-        ]
-    )
+        }
+    }, [
+        value,
+        state,
+        getConfig,
+        updateTheme,
+        updateState,
+        updateStep,
+        updateNextStep,
+        updateCurrentHelpStep,
+        updateIncludeIntroStep,
+        updateParamFileContent,
+        updateModified,
+        updateShowLegalNotification,
+        updateUseStateFromLocalStorage,
+        updateUseOperatingSystemTheme,
+        updateIsDirty,
+        updateIsEditing,
+        updateSteps,
+        updateIsDisabled,
+        resetToInitialState,
+        panelConfigArray,
+        getHelpPanelConfig,
+    ])
+
+    getConfig(state.appConfig)
 
     return (
         <ApplicationContext.Provider value={getContextValue()}>

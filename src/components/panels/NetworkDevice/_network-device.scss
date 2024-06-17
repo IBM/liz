@@ -4,52 +4,57 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-@use "@carbon/react" with (
-  $font-path: "@ibm/plex",
-  $use-flexbox-grid: true
+@use '@carbon/react' with (
+    $font-path: '@ibm/plex',
+    $use-flexbox-grid: true
 );
 
 .network-device__layer {
-  padding: 0 react.$spacing-08 0 react.$spacing-08;
+    padding: 0 react.$spacing-08 0 react.$spacing-08;
 
-  .network-device__grid {
-    &.cds--grid {
-      padding: 0;
+    .network-device__grid {
+        &.cds--grid {
+            padding: 0;
+        }
     }
-  }
 
-  .network-device_parmfile-purge-banner {
-    margin: 0 0 react.$spacing-07 0;
-    max-width: 100% !important;
-  }
+    .network-device_parmfile-purge-banner {
+        margin: 0 0 react.$spacing-07 0;
+        max-width: 100% !important;
+    }
+
+    .network-device_roce-helper-banner {
+        margin-bottom: react.$spacing-05;
+        max-width: 100% !important;
+    }
 }
 
 .cds--form__helper-text {
-  p {
-    @include react.type-style("label-01");
-  }
+    p {
+        @include react.type-style('label-01');
+    }
 }
 
 .network-device_column-left {
-  .cds--dropdown__wrapper,
-  .cds--form-item,
-  .network-device_vlan-toggle {
-    padding: 0 0 react.$spacing-07 0;
-  }
-
-  .network-device_device-type-radiobutton-group {
-    width: 50%;
-  }
-
-  .device-settings_grid-column-left {
-    .cds--toggle {
-      padding: 0 0 react.$spacing-07 0;
+    .cds--dropdown__wrapper,
+    .cds--form-item,
+    .network-device_vlan-toggle {
+        padding: 0 0 react.$spacing-07 0;
     }
-  }
+
+    .network-device_device-type-radiobutton-group {
+        width: 50%;
+    }
+
+    .device-settings_grid-column-left {
+        .cds--toggle {
+            padding: 0 0 react.$spacing-07 0;
+        }
+    }
 }
 
 .network-device_column-right {
-  .cds--form-item {
-    padding: 0 0 react.$spacing-07 0;
-  }
+    .cds--form-item {
+        padding: 0 0 react.$spacing-07 0;
+    }
 }
