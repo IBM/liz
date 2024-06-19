@@ -50,7 +50,7 @@
     "dialog.about.lightThemeLabel": "Light",
     "dialog.about.themeFromOsLabel": "Use operating system theme",
     "dialog.about.externalLinkHint": "Opens in a new window",
-    "landingPage.pageHeader.subtitle": "Start paving the road for a successful installation journey",
+    "landingPage.pageHeader.subtitle": "Create parameter files for your IBM Z Linux installation",
     "landingPage.pageHeader.title": "Linux on IBM Z installation",
     "landingPage.expressiveCard.tool.paraNew": "Start composing a new parameter file by providing the required input information.",
     "landingPage.expressiveCard.tool.paraModify": "Edit an existing parameter file or start from scratch by composing a new parameter file.",
