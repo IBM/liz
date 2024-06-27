@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Build and deploy to GitHub Pages
+name: 'Build and deploy to GitHub Pages'
 
 on:
     release:
@@ -21,11 +21,40 @@ concurrency:
     cancel-in-progress: false
 
 jobs:
-    build:
+    prerequisites:
+        runs-on: ubuntu-latest
+        outputs:
+            bug_tracker: ${{ vars.BUG_TRACKER }}
+            known_issues: ${{ vars.KNOWN_ISSUES }}
+            show_notice: ${{ vars.SHOW_NOTICE }}
+            build_date: ${{steps.environments.outputs.build_date}}
+            commit_hash_short: ${{steps.build_environment.outputs.commit_hash_short}}
+            commit_hash_long: ${{steps.build_environments.outputs.commit_hash_long}}
+        steps:
+            - name: 'Build environment creation'
+              id: build_environment
+              run: |
+                  build_date=`date "+%Y-%m-%d"`
+                  commit_hash_short=`git rev-parse --short=11 HEAD`
+                  commit_hash_long=`git rev-parse HEAD`
+    prepare:
+        needs: prerequisites
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+            - name: Patch
+              run: |
+                  perl -i -p -e 's/BUG_TRACKER/${{needs.prerequisites.outputs.bug_tracker}}/' public/config/app/config.json
+                  perl -i -p -e 's/KNOWN_ISSUES/${{needs.prerequisites.outputs.known_issues}}/' public/config/app/config.json
+                  perl -i -p -e 's/BUILD_DATE/${{needs.prerequisites.outputs.build_date}}/' public/config/app/config.json
+                  perl -i -p -e 's/COMMIT_HASH_SHORT/${{needs.prerequisites.outputs.commit_hash_short}}/' public/config/app/config.json
+                  perl -i -p -e 's/COMMIT_HASH_LONG/${{needs.prerequisites.outputs.commit_hash_long}}/' public/config/app/config.json
+                  perl -i -p -e 's/SHOW_NOTICE/${{needs.prerequisites.outputs.show_notice}}/' public/config/app/config.json
+    build:
+        needs: prepare
+        runs-on: ubuntu-latest
+        steps:
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
@@ -34,20 +63,19 @@ jobs:
             - run: npm ci
             - run: npm run build --if-present
     deploy:
+        needs: build
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v4
             - name: Setup Pages
               uses: actions/configure-pages@v5
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  # Upload entire repository
-                  path: './dist'
+                  # Upload disr repository
+                  path: 'dist/'
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v4
