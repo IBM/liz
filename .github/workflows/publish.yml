@@ -56,12 +56,19 @@ jobs:
                   echo "Commit hash (long): ${{ needs.prerequisites.outputs.commit_hash_long }}"
             - name: Patch
               run: |
-                  perl -i -p -e 's/BUG_TRACKER/${{ needs.prerequisites.outputs.bug_tracker }}/' public/config/app/config.json
-                  perl -i -p -e 's/KNOWN_ISSUES/${{ needs.prerequisites.outputs.known_issues }}/' public/config/app/config.json
-                  perl -i -p -e 's/BUILD_DATE/${{ needs.prerequisites.outputs.build_date }}/' public/config/app/config.json
-                  perl -i -p -e 's/COMMIT_HASH_SHORT/${{ needs.prerequisites.outputs.commit_hash_short }}/' public/config/app/config.json
-                  perl -i -p -e 's/COMMIT_HASH_LONG/${{ needs.prerequisites.outputs.commit_hash_long }}/' public/config/app/config.json
-                  perl -i -p -e 's/SHOW_NOTICE/${{ needs.prerequisites.outputs.show_notice }}/' public/config/app/config.json
+                  perl -i -p -e 's/BUG_TRACKER/$BUG_TRACKER/' public/config/app/config.json
+                  perl -i -p -e 's/KNOWN_ISSUES/$KNOWN_ISSUES/' public/config/app/config.json
+                  perl -i -p -e 's/BUILD_DATE/$BUILD_DATA/' public/config/app/config.json
+                  perl -i -p -e 's/COMMIT_HASH_SHORT/$COMMIT_HASH_SHORT/' public/config/app/config.json
+                  perl -i -p -e 's/COMMIT_HASH_LONG/$COMMIT_HASH_LONG/' public/config/app/config.json
+                  perl -i -p -e 's/SHOW_NOTICE/$SHOW_NOTICE/' public/config/app/config.json
+              env:
+                  BUG_TRACKER: ${{ needs.prerequisites.outputs.bug_tracker }}
+                  KNOWN_ISSUES: ${{ needs.prerequisites.outputs.known_issues }}
+                  BUILD_DATE: ${{ needs.prerequisites.outputs.build_date }}
+                  COMMIT_HASH_SHORT: ${{ needs.prerequisites.outputs.commit_hash_short }}
+                  COMMIT_HASH_LONG: ${{ needs.prerequisites.outputs.commit_hash_long }}
+                  SHOW_NOTICE: ${{ needs.prerequisites.outputs.show_notice }}
             - name: Upload patched app config
               uses: actions/upload-artifact@v4
               with:
