@@ -31,7 +31,9 @@ jobs:
             commit_hash_short: ${{steps.build_environment.outputs.commit_hash_short}}
             commit_hash_long: ${{steps.build_environments.outputs.commit_hash_long}}
         steps:
-            - name: 'Build environment creation'
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: 'Build environment variable creation'
               id: build_environment
               run: |
                   build_date=`date "+%Y-%m-%d"`
