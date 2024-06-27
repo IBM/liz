@@ -36,9 +36,9 @@ jobs:
             - name: 'Build environment variable creation'
               id: build_environment
               run: |
-                  build_date=`date "+%Y-%m-%d"`
-                  commit_hash_short=`git rev-parse --short=11 HEAD`
-                  commit_hash_long=`git rev-parse HEAD`
+                  echo "build_date=`date "+%Y-%m-%d"`" >> $GITHUB_OUTPUT
+                  echo "commit_hash_short=`git rev-parse --short=11 HEAD`" >> $GITHUB_OUTPUT
+                  echo "commit_hash_long=`git rev-parse HEAD`" >> $GITHUB_OUTPUT
     prepare:
         needs: prerequisites
         runs-on: ubuntu-latest
