@@ -92,10 +92,10 @@ jobs:
               with:
                   name: patched_config
                   path: 'dist/config/'
-            - name: Upload dist directory
-              uses: actions/upload-artifact@v4
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
               with:
-                  name: github-pages
+                  # Upload entire dist directory
                   path: 'dist/'
     deploy:
         needs: build
