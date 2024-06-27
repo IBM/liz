@@ -30,7 +30,7 @@ jobs:
             show_notice: ${{ vars.SHOW_NOTICE }}
             build_date: ${{ steps.build_environment.outputs.build_date }}
             commit_hash_short: ${{ steps.build_environment.outputs.commit_hash_short }}
-            commit_hash_long: ${{ steps.build_environments.outputs.commit_hash_long }}
+            commit_hash_long: ${{ steps.build_environment.outputs.commit_hash_long }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
