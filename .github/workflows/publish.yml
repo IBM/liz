@@ -63,12 +63,12 @@ jobs:
                   echo "Commit hash (long): ${{ needs.prerequisites.outputs.commit_hash_long }}"
             - name: Patch
               run: |
-                  perl -i -p -e 's/BUG_TRACKER/$BUG_TRACKER/' public/config/app/config.json
-                  perl -i -p -e 's/KNOWN_ISSUES/$KNOWN_ISSUES/' public/config/app/config.json
-                  perl -i -p -e 's/BUILD_DATE/$BUILD_DATA/' public/config/app/config.json
-                  perl -i -p -e 's/COMMIT_HASH_SHORT/$COMMIT_HASH_SHORT/' public/config/app/config.json
-                  perl -i -p -e 's/COMMIT_HASH_LONG/$COMMIT_HASH_LONG/' public/config/app/config.json
-                  perl -i -p -e 's/SHOW_NOTICE/$SHOW_NOTICE/' public/config/app/config.json
+                  perl -i -p -e 's/BUG_TRACKER/$ENV{BUG_TRACKER}/' public/config/app/config.json
+                  perl -i -p -e 's/KNOWN_ISSUES/$ENV{KNOWN_ISSUES}/' public/config/app/config.json
+                  perl -i -p -e 's/BUILD_DATE/$ENV{BUILD_DATE}/' public/config/app/config.json
+                  perl -i -p -e 's/COMMIT_HASH_SHORT/$ENV{COMMIT_HASH_SHORT}/' public/config/app/config.json
+                  perl -i -p -e 's/COMMIT_HASH_LONG/$ENV{COMMIT_HASH_LONG}/' public/config/app/config.json
+                  perl -i -p -e 's/SHOW_NOTICE/$ENV{SHOW_NOTICE}/' public/config/app/config.json
             - name: Upload patched app config
               uses: actions/upload-artifact@v4
               with:
