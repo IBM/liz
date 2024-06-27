@@ -64,10 +64,6 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Download patched app config
-              uses: actions/download-artifact@v4
-              with:
-                  name: patched_config
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
@@ -75,6 +71,11 @@ jobs:
                   registry-url: 'https://registry.npmjs.org'
             - run: npm ci
             - run: npm run build --if-present
+            - name: Download patched app config
+              uses: actions/download-artifact@v4
+              with:
+                  name: patched_config
+                  path: 'dist/config/'
             - name: Upload dist directory
               uses: actions/upload-artifact@v4
               with:
@@ -83,14 +84,10 @@ jobs:
     deploy:
         needs: build
         environment:
-            name: github-pages
+            name: dist_directory
             url: ${{ steps.deployment.outputs.page_url }}
         runs-on: ubuntu-latest
         steps:
-            - name: Download dist directory
-              uses: actions/download-artifact@v4
-              with:
-                  name: dist_directory
             - name: Setup Pages
               uses: actions/configure-pages@v5
             - name: Deploy to GitHub Pages
