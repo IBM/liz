@@ -75,12 +75,21 @@ jobs:
               with:
                   name: patched_config
                   path: 'public/config/'
+            - name: Upload patched package.json
+              uses: actions/upload-artifact@v4
+              with:
+                  name: patched_package_json
+                  path: 'package.json'
     build:
         needs: prepare
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+            - name: Download patched package.json
+              uses: actions/download-artifact@v4
+              with:
+                  name: patched_package_json
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
