@@ -7,7 +7,7 @@
     "repository": "git@github.ibm.com:linuxonz/liz.git",
     "bugs": "https://github.ibm.com/linuxonz/liz/issues",
     "homepage": "https://github.ibm.com/linuxonz/liz",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "main": "index.js",
     "engines": {
         "node": "20.15.0",
