@@ -35,7 +35,10 @@ const reducer = (state, action) => {
                 ...state,
                 appConfig: action.nextAppConfig,
             }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
+            // do not persist app config since it contains information such
+            // as the build number and commit hashes that will be changing
+            // on each new deployment and thus must be up-to-date.
+            // persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
             return updatedState
         case ACTION_UPDATE_APP_USE_OS_THEME:
             updatedState = {
