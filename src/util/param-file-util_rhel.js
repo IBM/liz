@@ -6,7 +6,11 @@
 
 import { toChannelSegments } from './network-device-util'
 import { ADDRESS_TYPE_IPV4, DEVICE_TYPE_OSA } from './constants'
-import { getInterfaceNameParamContents } from './param-file-util_common'
+import {
+    getInterfaceNameParamContents,
+    getNetdevName,
+    getVlanName,
+} from './param-file-util_common'
 
 const stateToIpv4NetworkAddressParams = (state) => {
     const installationParameters = state?.steps?.networkAddress ?? {}
@@ -237,33 +241,6 @@ const stateToSshParams = (state) => {
     }
 
     return paramFileContents
-}
-
-const getNetdevName = (vlanId = '', interfaceName = '') => {
-    if (
-        vlanId &&
-        typeof vlanId === 'number' &&
-        interfaceName &&
-        typeof interfaceName === 'string' &&
-        interfaceName.length > 0
-    ) {
-        return `${getVlanName(interfaceName, vlanId)}`
-    } else if (
-        interfaceName &&
-        typeof interfaceName === 'string' &&
-        interfaceName.length > 0
-    ) {
-        return interfaceName
-    }
-
-    return ``
-}
-
-const getVlanName = (interfaceName, vlanId) => {
-    if (interfaceName && vlanId) {
-        return `${interfaceName}.${vlanId}`
-    }
-    return ``
 }
 
 export {

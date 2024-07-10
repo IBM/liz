@@ -28,6 +28,8 @@ import {
 import {
     ADDRESS_TYPE_IPV4,
     SLES_DISTRIBUTION_ID,
+    RHEL_DISTRIBUTION_ID,
+    UBUNTU_DISTRIBUTION_ID,
     DEFAULT_DISTRIBUTION_ID,
 } from '../../../util/constants'
 import {
@@ -311,7 +313,11 @@ const InstallationParameters = forwardRef(
             globalState?.steps?.inputFileSelection?.distributionName ??
             DEFAULT_DISTRIBUTION_ID
         const requiresSshPassword =
-            distributionName && distributionName === SLES_DISTRIBUTION_ID
+            (distributionName && distributionName === SLES_DISTRIBUTION_ID) ||
+            (distributionName && distributionName === UBUNTU_DISTRIBUTION_ID)
+        const requiresVncSupport =
+            (distributionName && distributionName === SLES_DISTRIBUTION_ID) ||
+            (distributionName && distributionName === RHEL_DISTRIBUTION_ID)
 
         const isCompleteAndValid = (callback) => {
             let isComplete = false
@@ -896,8 +902,15 @@ const InstallationParameters = forwardRef(
                         <Column>{gridContentsMarkupComputedRow}</Column>
                     </Row>
                     <Row>
-                        <Column>{gridContentsMarkupRowThreeColumnOne}</Column>
-                        <Column>{gridContentsMarkupRowThreeColumnTwo}</Column>
+                        <Column>
+                            {requiresVncSupport
+                                ? gridContentsMarkupRowThreeColumnOne
+                                : gridContentsMarkupRowThreeColumnTwo}
+                        </Column>
+                        <Column>
+                            {requiresVncSupport &&
+                                gridContentsMarkupRowThreeColumnTwo}
+                        </Column>
                     </Row>
                 </FlexGrid>
             </Layer>

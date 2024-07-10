@@ -57,7 +57,7 @@ const UPDATE_FUNCTION__USER_IDENTIFIER = 'userIdentifier'
 
 const RHEL_PRESET = 'ro ramdisk_size=40000 cio_ignore=all,!condev'
 const SLES_PRESET = 'ro TERM=dumb MANUAL=0 deviceautoconfig=0'
-const UBUNTU_PRESET = 'ro locale=en_US auto=true priority=critical'
+const UBUNTU_PRESET = 'TERM=dumb'
 
 const RHEL_SSH_USERNAME = 'installer'
 const SLES_SSH_USERNAME = 'root'
@@ -129,8 +129,9 @@ const UBUNTU_V20_VERSION_ID = 'version-20'
 const UBUNTU_V20_VERSION_LABEL = '20.04.6 LTS'
 const UBUNTU_V22_VERSION_ID = 'version-22'
 const UBUNTU_V22_VERSION_LABEL = '22.04.4 LTS'
+const UBUNTU_V24_VERSION_ID = 'version-24'
+const UBUNTU_V24_VERSION_LABEL = '24.04 LTS'
 
-/*
 const DISTRIBUTION_LIST = [
     {
         id: RHEL_DISTRIBUTION_ID,
@@ -148,19 +149,6 @@ const DISTRIBUTION_LIST = [
         majority: MAJORITY_EXPERIMENTAL,
     },
 ]
-*/
-const DISTRIBUTION_LIST = [
-    {
-        id: RHEL_DISTRIBUTION_ID,
-        label: RHEL_DISTRIBUTION_LABEL,
-        majority: MAJORITY_STABLE,
-    },
-    {
-        id: SLES_DISTRIBUTION_ID,
-        label: SLES_DISTRIBUTION_LABEL,
-        majority: MAJORITY_STABLE,
-    },
-]
 const VERSION_LIST = {
     rhel: [
         {
@@ -176,12 +164,8 @@ const VERSION_LIST = {
     ],
     ubuntu: [
         {
-            id: UBUNTU_V20_VERSION_ID,
-            label: UBUNTU_V20_VERSION_LABEL,
-        },
-        {
-            id: UBUNTU_V22_VERSION_ID,
-            label: UBUNTU_V22_VERSION_LABEL,
+            id: UBUNTU_V24_VERSION_ID,
+            label: UBUNTU_V24_VERSION_LABEL,
         },
     ],
 }

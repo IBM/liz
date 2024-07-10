@@ -34,6 +34,7 @@
     "panel.hint.listItem13": "User name and password, if required",
     "panel.networkDevice.deviceTypeTextLabel": "Device type",
     "panel.networkDevice.deviceTypeHelp": "OSA (Open Systems Adapter) or RoCE (PCI RDMA over Converged Ethernet).",
+    "panel.networkDevice.deviceTypeHelpNoRoCE": "OSA (Open Systems Adapter).",
     "panel.networkDevice.deviceTypeLabel": "Select a device type",
     "panel.networkDevice.vlanToggleTextLabel": "Use VLAN",
     "panel.networkDevice.vlanToggleHelp": "Activate VLAN support.",

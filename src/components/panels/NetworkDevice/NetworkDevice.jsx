@@ -37,6 +37,7 @@ import {
     UPDATE_FUNCTION__PCI_FUNCTION_ID,
     UPDATE_FUNCTION__USER_IDENTIFIER,
     SLES_DISTRIBUTION_ID,
+    UBUNTU_DISTRIBUTION_ID,
 } from '../../../util/constants'
 import {
     LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
@@ -270,6 +271,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
         globalState?.steps.downloadParamFile?.modified ?? false
     const distributionName =
         globalState.steps.inputFileSelection.distributionName
+    const displayNoneUbuntuControl = distributionName !== UBUNTU_DISTRIBUTION_ID
     const displayRoCEControls = distributionName !== SLES_DISTRIBUTION_ID
 
     const updateFunction = (propertyName, propertyValue, propertyIsValid) => {
@@ -586,9 +588,14 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                 legendText={t('panel.networkDevice.deviceTypeTextLabel', {
                     ns: 'panels',
                 })}
-                helperText={t('panel.networkDevice.deviceTypeHelp', {
-                    ns: 'panels',
-                })}
+                helperText={t(
+                    displayRoCEControls
+                        ? 'panel.networkDevice.deviceTypeHelp'
+                        : 'panel.networkDevice.deviceTypeHelpNoRoCE',
+                    {
+                        ns: 'panels',
+                    }
+                )}
                 name="network-device_device-type-group"
                 defaultSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
                 onChange={(selectedItem) => {
@@ -602,11 +609,13 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     value={DEVICE_TYPE_OSA}
                     id="network-device_osa-radio"
                 />
-                <RadioButton
-                    labelText="RoCE"
-                    value={DEVICE_TYPE_ROCE}
-                    id="network-device_roce-radio"
-                />
+                {displayRoCEControls && (
+                    <RadioButton
+                        labelText="RoCE"
+                        value={DEVICE_TYPE_ROCE}
+                        id="network-device_roce-radio"
+                    />
+                )}
             </RadioButtonGroup>
         </div>
     )
@@ -755,124 +764,146 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                             }
                         }}
                     />
-                    <TextInput
-                        readOnly={paramFileHasBeenModifiedFromState}
-                        helperText={t('panel.networkDevice.writeChannelHelp', {
-                            ns: 'panels',
-                        })}
-                        id="network-device_write-channel-input"
-                        key="network-device_write-channel-input"
-                        invalidText={t('invalidTextLabel', { ns: 'common' })}
-                        invalid={!writeChannelIdIsValid}
-                        maxLength={16}
-                        labelText={t(
-                            'panel.networkDevice.writeChannelTextLabel',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        placeholder={t(
-                            'panel.networkDevice.writeChannelPlaceholder',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        value={writeChannelId}
-                        onChange={(writeChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                    {displayNoneUbuntuControl && (
+                        <>
+                            <TextInput
+                                readOnly={paramFileHasBeenModifiedFromState}
+                                helperText={t(
+                                    'panel.networkDevice.writeChannelHelp',
+                                    {
+                                        ns: 'panels',
+                                    }
+                                )}
+                                id="network-device_write-channel-input"
+                                key="network-device_write-channel-input"
+                                invalidText={t('invalidTextLabel', {
+                                    ns: 'common',
+                                })}
+                                invalid={!writeChannelIdIsValid}
+                                maxLength={16}
+                                labelText={t(
+                                    'panel.networkDevice.writeChannelTextLabel',
+                                    {
+                                        ns: 'panels',
+                                    }
+                                )}
+                                placeholder={t(
+                                    'panel.networkDevice.writeChannelPlaceholder',
+                                    {
+                                        ns: 'panels',
+                                    }
+                                )}
+                                value={writeChannelId}
+                                onChange={(writeChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return
 
-                            const writeChannelIdValue =
-                                writeChannelId?.target?.value ?? ''
-                            const computedWriteChannelIdValue =
-                                toChannelSegments(
-                                    writeChannelIdValue.toLowerCase()
-                                ).join('.')
-                            updateWriteChannelId({
-                                value: writeChannelIdValue,
-                                computed: computedWriteChannelIdValue,
-                                valid: true,
-                            })
-                        }}
-                        onBlur={(writeChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                                    const writeChannelIdValue =
+                                        writeChannelId?.target?.value ?? ''
+                                    const computedWriteChannelIdValue =
+                                        toChannelSegments(
+                                            writeChannelIdValue.toLowerCase()
+                                        ).join('.')
+                                    updateWriteChannelId({
+                                        value: writeChannelIdValue,
+                                        computed: computedWriteChannelIdValue,
+                                        valid: true,
+                                    })
+                                }}
+                                onBlur={(writeChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return
 
-                            const writeChannelIdValue =
-                                writeChannelId?.target?.value ?? ''
-                            const computedWriteChannelIdValue =
-                                toChannelSegments(
-                                    writeChannelIdValue.toLowerCase()
-                                ).join('.')
-                            const writeChannelIdIsValid =
-                                isWriteChannelIdValid(writeChannelIdValue)
+                                    const writeChannelIdValue =
+                                        writeChannelId?.target?.value ?? ''
+                                    const computedWriteChannelIdValue =
+                                        toChannelSegments(
+                                            writeChannelIdValue.toLowerCase()
+                                        ).join('.')
+                                    const writeChannelIdIsValid =
+                                        isWriteChannelIdValid(
+                                            writeChannelIdValue
+                                        )
 
-                            if (!writeChannelIdIsValid) {
-                                updateWriteChannelId({
-                                    value: writeChannelIdValue,
-                                    computed: computedWriteChannelIdValue,
-                                    valid: writeChannelIdIsValid,
-                                })
-                            }
-                        }}
-                    />
-                    <TextInput
-                        readOnly={paramFileHasBeenModifiedFromState}
-                        helperText={t('panel.networkDevice.dataChannelHelp', {
-                            ns: 'panels',
-                        })}
-                        id="network-device_data-channel-input"
-                        key="network-device_data-channel-input"
-                        invalidText={t('invalidTextLabel', { ns: 'common' })}
-                        invalid={!dataChannelIdIsValid}
-                        maxLength={16}
-                        labelText={t(
-                            'panel.networkDevice.dataChannelTextLabel',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        placeholder={t(
-                            'panel.networkDevice.dataChannelPlaceholder',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        value={dataChannelId}
-                        onChange={(dataChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                                    if (!writeChannelIdIsValid) {
+                                        updateWriteChannelId({
+                                            value: writeChannelIdValue,
+                                            computed:
+                                                computedWriteChannelIdValue,
+                                            valid: writeChannelIdIsValid,
+                                        })
+                                    }
+                                }}
+                            />
+                            <TextInput
+                                readOnly={paramFileHasBeenModifiedFromState}
+                                helperText={t(
+                                    'panel.networkDevice.dataChannelHelp',
+                                    {
+                                        ns: 'panels',
+                                    }
+                                )}
+                                id="network-device_data-channel-input"
+                                key="network-device_data-channel-input"
+                                invalidText={t('invalidTextLabel', {
+                                    ns: 'common',
+                                })}
+                                invalid={!dataChannelIdIsValid}
+                                maxLength={16}
+                                labelText={t(
+                                    'panel.networkDevice.dataChannelTextLabel',
+                                    {
+                                        ns: 'panels',
+                                    }
+                                )}
+                                placeholder={t(
+                                    'panel.networkDevice.dataChannelPlaceholder',
+                                    {
+                                        ns: 'panels',
+                                    }
+                                )}
+                                value={dataChannelId}
+                                onChange={(dataChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return
 
-                            const dataChannelIdValue =
-                                dataChannelId?.target?.value ?? ''
-                            const computedDataChannelIdValue =
-                                toChannelSegments(
-                                    dataChannelIdValue.toLowerCase()
-                                ).join('.')
-                            updateDataChannelId({
-                                value: dataChannelIdValue,
-                                computed: computedDataChannelIdValue,
-                                valid: true,
-                            })
-                        }}
-                        onBlur={(dataChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                                    const dataChannelIdValue =
+                                        dataChannelId?.target?.value ?? ''
+                                    const computedDataChannelIdValue =
+                                        toChannelSegments(
+                                            dataChannelIdValue.toLowerCase()
+                                        ).join('.')
+                                    updateDataChannelId({
+                                        value: dataChannelIdValue,
+                                        computed: computedDataChannelIdValue,
+                                        valid: true,
+                                    })
+                                }}
+                                onBlur={(dataChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return
 
-                            const dataChannelIdValue =
-                                dataChannelId?.target?.value ?? ''
-                            const computedDataChannelIdValue =
-                                toChannelSegments(
-                                    dataChannelIdValue.toLowerCase()
-                                ).join('.')
-                            const dataChannelIdIsValid =
-                                isDataChannelIdValid(dataChannelIdValue)
+                                    const dataChannelIdValue =
+                                        dataChannelId?.target?.value ?? ''
+                                    const computedDataChannelIdValue =
+                                        toChannelSegments(
+                                            dataChannelIdValue.toLowerCase()
+                                        ).join('.')
+                                    const dataChannelIdIsValid =
+                                        isDataChannelIdValid(dataChannelIdValue)
 
-                            if (!dataChannelIdIsValid) {
-                                updateDataChannelId({
-                                    value: dataChannelIdValue,
-                                    computed: computedDataChannelIdValue,
-                                    valid: dataChannelIdIsValid,
-                                })
-                            }
-                        }}
-                    />
+                                    if (!dataChannelIdIsValid) {
+                                        updateDataChannelId({
+                                            value: dataChannelIdValue,
+                                            computed:
+                                                computedDataChannelIdValue,
+                                            valid: dataChannelIdIsValid,
+                                        })
+                                    }
+                                }}
+                            />
+                        </>
+                    )}
                 </>
             ) : null}
         </div>
