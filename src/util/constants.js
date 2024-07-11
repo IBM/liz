@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 
 import {
     LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
@@ -15,65 +15,65 @@ import {
     LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
     LOCAL_STORAGE_KEY_APP_SUMMARY,
     LOCAL_STORAGE_KEY_APP_INTRO,
-} from './local-storage-constants'
+} from './local-storage-constants';
 
-const ADDRESS_TYPE_IPV4 = 'ipv4'
-const ADDRESS_TYPE_IPV6 = 'ipv6'
+const ADDRESS_TYPE_IPV4 = 'ipv4';
+const ADDRESS_TYPE_IPV6 = 'ipv6';
 
-const PORT_NUMBER_ZERO = 'port-00'
-const PORT_NUMBER_ONE = 'port-01'
+const PORT_NUMBER_ZERO = 'port-00';
+const PORT_NUMBER_ONE = 'port-01';
 
-const UPDATE_FUNCTION__UNKNOWN = 'unknown'
+const UPDATE_FUNCTION__UNKNOWN = 'unknown';
 
-const UPDATE_FUNCTION__IPV4_ADDRESS = 'ipv4-address'
-const UPDATE_FUNCTION__IPV4_PREFIX = 'ipv4-prefix'
-const UPDATE_FUNCTION__IPV4_NETMASK = 'ipv4-netmask'
-const UPDATE_FUNCTION__IPV4_BINARY = 'ipv4-binary'
-const UPDATE_FUNCTION__IPV4_GATEWAY = 'ipv4-gateway'
-const UPDATE_FUNCTION__IPV4_NAMESERVER = 'ipv4-nameserver'
-const UPDATE_FUNCTION__IPV4_HOSTNAME = 'ipv4-hostname'
-const UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH = 'ipv4-domainSearchPath'
+const UPDATE_FUNCTION__IPV4_ADDRESS = 'ipv4-address';
+const UPDATE_FUNCTION__IPV4_PREFIX = 'ipv4-prefix';
+const UPDATE_FUNCTION__IPV4_NETMASK = 'ipv4-netmask';
+const UPDATE_FUNCTION__IPV4_BINARY = 'ipv4-binary';
+const UPDATE_FUNCTION__IPV4_GATEWAY = 'ipv4-gateway';
+const UPDATE_FUNCTION__IPV4_NAMESERVER = 'ipv4-nameserver';
+const UPDATE_FUNCTION__IPV4_HOSTNAME = 'ipv4-hostname';
+const UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH = 'ipv4-domainSearchPath';
 
-const UPDATE_FUNCTION__IPV6_ADDRESS = 'ipv6-address'
-const UPDATE_FUNCTION__IPV6_PREFIX = 'ipv6-prefix'
-const UPDATE_FUNCTION__IPV6_GATEWAY = 'ipv6-gateway'
-const UPDATE_FUNCTION__IPV6_NAMESERVER = 'ipv6-nameserver'
-const UPDATE_FUNCTION__IPV6_HOSTNAME = 'ipv6-hostname'
-const UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH = 'ipv6-domainSearchPath'
+const UPDATE_FUNCTION__IPV6_ADDRESS = 'ipv6-address';
+const UPDATE_FUNCTION__IPV6_PREFIX = 'ipv6-prefix';
+const UPDATE_FUNCTION__IPV6_GATEWAY = 'ipv6-gateway';
+const UPDATE_FUNCTION__IPV6_NAMESERVER = 'ipv6-nameserver';
+const UPDATE_FUNCTION__IPV6_HOSTNAME = 'ipv6-hostname';
+const UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH = 'ipv6-domainSearchPath';
 
-const DEVICE_TYPE_OSA = 'network-device_osa-option'
-const DEVICE_TYPE_ROCE = 'network-device_roce-option'
+const DEVICE_TYPE_OSA = 'network-device_osa-option';
+const DEVICE_TYPE_ROCE = 'network-device_roce-option';
 
-const UPDATE_FUNCTION__SELECT_DEVICE_TYPE = 'selectedDeviceType'
-const UPDATE_FUNCTION__READ_CHANNEL_ID = 'readChannelId'
-const UPDATE_FUNCTION__WRITE_CHANNEL_ID = 'writeChannelId'
-const UPDATE_FUNCTION__DATA_CHANNEL_ID = 'dataChannelId'
+const UPDATE_FUNCTION__SELECT_DEVICE_TYPE = 'selectedDeviceType';
+const UPDATE_FUNCTION__READ_CHANNEL_ID = 'readChannelId';
+const UPDATE_FUNCTION__WRITE_CHANNEL_ID = 'writeChannelId';
+const UPDATE_FUNCTION__DATA_CHANNEL_ID = 'dataChannelId';
 
-const UPDATE_FUNCTION__LAYER = 'layer'
-const UPDATE_FUNCTION__USE_MULTIPORT = 'useMultiPort'
-const UPDATE_FUNCTION__PORT_NO = 'portNo'
-const UPDATE_FUNCTION__PCI_FUNCTION_ID = 'pciFunctionId'
-const UPDATE_FUNCTION__USER_IDENTIFIER = 'userIdentifier'
+const UPDATE_FUNCTION__LAYER = 'layer';
+const UPDATE_FUNCTION__USE_MULTIPORT = 'useMultiPort';
+const UPDATE_FUNCTION__PORT_NO = 'portNo';
+const UPDATE_FUNCTION__PCI_FUNCTION_ID = 'pciFunctionId';
+const UPDATE_FUNCTION__USER_IDENTIFIER = 'userIdentifier';
 
-const RHEL_PRESET = 'ro ramdisk_size=40000 cio_ignore=all,!condev'
-const SLES_PRESET = 'ro TERM=dumb MANUAL=0 deviceautoconfig=0'
-const UBUNTU_PRESET = 'TERM=dumb'
+const RHEL_PRESET = 'ro ramdisk_size=40000 cio_ignore=all,!condev';
+const SLES_PRESET = 'ro TERM=dumb MANUAL=0 deviceautoconfig=0';
+const UBUNTU_PRESET = 'TERM=dumb';
 
-const RHEL_SSH_USERNAME = 'installer'
-const SLES_SSH_USERNAME = 'root'
-const UBUNTU_SSH_USERNAME = 'root'
+const RHEL_SSH_USERNAME = 'install';
+const SLES_SSH_USERNAME = 'root';
+const UBUNTU_SSH_USERNAME = 'root';
 
 const PRESETS = {
     rhel: RHEL_PRESET,
     sles: SLES_PRESET,
     ubuntu: UBUNTU_PRESET,
-}
+};
 
 const SSH_USERNAMES = {
     rhel: RHEL_SSH_USERNAME,
     sles: SLES_SSH_USERNAME,
     ubuntu: UBUNTU_SSH_USERNAME,
-}
+};
 
 const SYSTEM_REQUIREMENTS = {
     rhel: {
@@ -97,7 +97,7 @@ const SYSTEM_REQUIREMENTS = {
         machineLevel: 'IBM z13s/z13, IBM LinuxONE Rockhopper/Emperor',
         docLink: 'https://ubuntu.com/server/docs/system-requirements',
     },
-}
+};
 
 const DEVICE_TYPE_LIST = [
     {
@@ -108,29 +108,29 @@ const DEVICE_TYPE_LIST = [
         id: 'network-device_roce-option',
         label: 'RoCE',
     },
-]
+];
 
-const MAJORITY_STABLE = 'majorityStable'
-const MAJORITY_EXPERIMENTAL = 'majorityExperimental'
+const MAJORITY_STABLE = 'majorityStable';
+const MAJORITY_EXPERIMENTAL = 'majorityExperimental';
 
-const RHEL_DISTRIBUTION_ID = 'rhel'
-const RHEL_DISTRIBUTION_LABEL = 'Red Hat Enterprise Linux'
-const RHEL_V9_VERSION_ID = 'version-9.x'
-const RHEL_V9_VERSION_LABEL = '9.x'
+const RHEL_DISTRIBUTION_ID = 'rhel';
+const RHEL_DISTRIBUTION_LABEL = 'Red Hat Enterprise Linux';
+const RHEL_V9_VERSION_ID = 'version-9.x';
+const RHEL_V9_VERSION_LABEL = '9.x';
 
-const SLES_DISTRIBUTION_ID = 'sles'
-const SLES_DISTRIBUTION_LABEL = 'SUSE Linux Enterprise Server'
-const SLES_V15_VERSION_ID = 'version-15'
-const SLES_V15_VERSION_LABEL = '15 SP5'
+const SLES_DISTRIBUTION_ID = 'sles';
+const SLES_DISTRIBUTION_LABEL = 'SUSE Linux Enterprise Server';
+const SLES_V15_VERSION_ID = 'version-15';
+const SLES_V15_VERSION_LABEL = '15 SP5';
 
-const UBUNTU_DISTRIBUTION_ID = 'ubuntu'
-const UBUNTU_DISTRIBUTION_LABEL = 'Ubuntu Server (experimental)'
-const UBUNTU_V20_VERSION_ID = 'version-20'
-const UBUNTU_V20_VERSION_LABEL = '20.04.6 LTS'
-const UBUNTU_V22_VERSION_ID = 'version-22'
-const UBUNTU_V22_VERSION_LABEL = '22.04.4 LTS'
-const UBUNTU_V24_VERSION_ID = 'version-24'
-const UBUNTU_V24_VERSION_LABEL = '24.04 LTS'
+const UBUNTU_DISTRIBUTION_ID = 'ubuntu';
+const UBUNTU_DISTRIBUTION_LABEL = 'Ubuntu Server (experimental)';
+const UBUNTU_V20_VERSION_ID = 'version-20';
+const UBUNTU_V20_VERSION_LABEL = '20.04.6 LTS';
+const UBUNTU_V22_VERSION_ID = 'version-22';
+const UBUNTU_V22_VERSION_LABEL = '22.04.4 LTS';
+const UBUNTU_V24_VERSION_ID = 'version-24';
+const UBUNTU_V24_VERSION_LABEL = '24.04 LTS';
 
 const DISTRIBUTION_LIST = [
     {
@@ -148,7 +148,7 @@ const DISTRIBUTION_LIST = [
         label: UBUNTU_DISTRIBUTION_LABEL,
         majority: MAJORITY_EXPERIMENTAL,
     },
-]
+];
 const VERSION_LIST = {
     rhel: [
         {
@@ -168,48 +168,48 @@ const VERSION_LIST = {
             label: UBUNTU_V24_VERSION_LABEL,
         },
     ],
-}
+};
 
 const DEFAULT_STRING_OBJECT = {
     value: '',
     valid: true,
-}
+};
 
 const DEFAULT_NUMBER_OBJECT = {
     value: 1,
     valid: true,
-}
+};
 
 const DEFAULT_COMPUTED_STRING_OBJECT = {
     value: '',
     valid: true,
     computed: false,
-}
+};
 
 const DEFAULT_COMPUTED_NUMBER_OBJECT = {
     value: 1,
     valid: true,
     computed: false,
-}
+};
 
-const DEFAULT_DISTRIBUTION_ID = 'rhel'
-const DEFAULT_VERSION_ID = 'version-9.x'
+const DEFAULT_DISTRIBUTION_ID = 'rhel';
+const DEFAULT_VERSION_ID = 'version-9.x';
 
-const TEARSHEET_KIND_GETTING_STARTED = 'gettingStarted'
-const TEARSHEET_KIND_NEXT_STEPS = 'nextSteps'
-const TEARSHEET_KIND_NONE = 'none'
+const TEARSHEET_KIND_GETTING_STARTED = 'gettingStarted';
+const TEARSHEET_KIND_NEXT_STEPS = 'nextSteps';
+const TEARSHEET_KIND_NONE = 'none';
 
-const TEARSHEET_TAB_CONTENT_CLASSIC_MODE = 'tabContentClassicMode'
-const TEARSHEET_TAB_CONTENT_DPM = 'tabContentDPM'
+const TEARSHEET_TAB_CONTENT_CLASSIC_MODE = 'tabContentClassicMode';
+const TEARSHEET_TAB_CONTENT_DPM = 'tabContentDPM';
 
-const DEFAULT_PARAM_FILE_NAME = `parmfile__${nanoid()}.txt`
+const DEFAULT_PARAM_FILE_NAME = `parmfile__${nanoid()}.txt`;
 
-const DEFAULT_THEME = 'white'
-const DARK_THEME = 'g100'
-const LIGHT_THEME = DEFAULT_THEME
+const DEFAULT_THEME = 'white';
+const DARK_THEME = 'g100';
+const LIGHT_THEME = DEFAULT_THEME;
 
-const OS_DARK_THEME = 'dark'
-const OS_LIGHT_THEME = 'light'
+const OS_DARK_THEME = 'dark';
+const OS_LIGHT_THEME = 'light';
 
 const DEFAULT_STEPS = {
     inputFileSelection: {
@@ -317,7 +317,7 @@ const DEFAULT_STEPS = {
         localStorageKey: LOCAL_STORAGE_KEY_APP_INTRO,
         index: 10,
     },
-}
+};
 
 export {
     PRESETS,
@@ -392,4 +392,4 @@ export {
     UBUNTU_V20_VERSION_LABEL,
     UBUNTU_V22_VERSION_ID,
     UBUNTU_V22_VERSION_LABEL,
-}
+};

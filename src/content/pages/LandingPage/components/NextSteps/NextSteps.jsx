@@ -4,10 +4,10 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { Trans, useTranslation } from 'react-i18next'
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { Trans, useTranslation } from "react-i18next";
 import {
     UnorderedList,
     ListItem,
@@ -15,11 +15,11 @@ import {
     Accordion,
     AccordionItem,
     Button,
-} from '@carbon/react'
-import { Checkmark, Copy } from '@carbon/icons-react'
-import { getLabel, getContent } from '../../../../../uiUtil/help-util'
-import { ADDRESS_TYPE_IPV4 } from '../../../../../util/constants'
-import './_next-steps.scss'
+} from "@carbon/react";
+import { Checkmark, Copy } from "@carbon/icons-react";
+import { getLabel, getContent } from "../../../../../uiUtil/help-util";
+import { ADDRESS_TYPE_IPV4 } from "../../../../../util/constants";
+import "./_next-steps.scss";
 
 const NextSteps = ({
     useSsh,
@@ -29,94 +29,94 @@ const NextSteps = ({
     vncPassword,
     sshUsername,
 }) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
 
-    const [vncHostHasBeenCopied, setVncHostHasBeenCopied] = useState(false)
+    const [vncHostHasBeenCopied, setVncHostHasBeenCopied] = useState(false);
     const [vncPasswordHasBeenCopied, setVncPasswordHasBeenCopied] =
-        useState(false)
-    const [sshHostHasBeenCopied, setSshHostHasBeenCopied] = useState(false)
+        useState(false);
+    const [sshHostHasBeenCopied, setSshHostHasBeenCopied] = useState(false);
 
-    const COPY_TYPE_VNC_HOST = 0
-    const COPY_TYPE_VNC_PASSWORD = 1
-    const COPY_TYPE_SSH_HOST = 2
+    const COPY_TYPE_VNC_HOST = 0;
+    const COPY_TYPE_VNC_PASSWORD = 1;
+    const COPY_TYPE_SSH_HOST = 2;
 
     const updateCopied = (type) => {
         switch (type) {
             case COPY_TYPE_VNC_HOST:
-                setVncHostHasBeenCopied(true)
-                break
+                setVncHostHasBeenCopied(true);
+                break;
             case COPY_TYPE_VNC_PASSWORD:
-                setVncPasswordHasBeenCopied(true)
-                break
+                setVncPasswordHasBeenCopied(true);
+                break;
             case COPY_TYPE_SSH_HOST:
-                setSshHostHasBeenCopied(true)
-                break
+                setSshHostHasBeenCopied(true);
+                break;
             default:
-                break
+                break;
         }
 
         const timer = setTimeout(() => {
             switch (type) {
                 case COPY_TYPE_VNC_HOST:
-                    setVncHostHasBeenCopied(false)
-                    break
+                    setVncHostHasBeenCopied(false);
+                    break;
                 case COPY_TYPE_VNC_PASSWORD:
-                    setVncPasswordHasBeenCopied(false)
-                    break
+                    setVncPasswordHasBeenCopied(false);
+                    break;
                 case COPY_TYPE_SSH_HOST:
-                    setSshHostHasBeenCopied(false)
-                    break
+                    setSshHostHasBeenCopied(false);
+                    break;
                 default:
-                    break
+                    break;
             }
-        }, 2000)
-        return () => clearTimeout(timer)
-    }
+        }, 2000);
+        return () => clearTimeout(timer);
+    };
 
     const networkAddressForListItem =
         `${addressType === ADDRESS_TYPE_IPV4 ? `${networkAddress}` : `[${networkAddress}]`}` ||
-        '[host-IP-address]'
-    const remoteAccessConfigIsMissing = !useSsh && !useVnc
+        "[host-IP-address]";
+    const remoteAccessConfigIsMissing = !useSsh && !useVnc;
 
-    const vncHostCopyIcon = vncHostHasBeenCopied ? Checkmark : Copy
-    const vncPasswordCopyIcon = vncPasswordHasBeenCopied ? Checkmark : Copy
-    const sshHostCopyIcon = sshHostHasBeenCopied ? Checkmark : Copy
+    const vncHostCopyIcon = vncHostHasBeenCopied ? Checkmark : Copy;
+    const vncPasswordCopyIcon = vncPasswordHasBeenCopied ? Checkmark : Copy;
+    const sshHostCopyIcon = sshHostHasBeenCopied ? Checkmark : Copy;
 
     const vncHostCopyClass = vncHostHasBeenCopied
-        ? 'next-steps_copy-button_copied'
-        : 'next-steps_copy-button'
+        ? "next-steps_copy-button_copied"
+        : "next-steps_copy-button";
     const vncPasswordCopyClass = vncPasswordHasBeenCopied
-        ? 'next-steps_copy-button_copied'
-        : 'next-steps_copy-button'
+        ? "next-steps_copy-button_copied"
+        : "next-steps_copy-button";
     const sshHostCopyClass = sshHostHasBeenCopied
-        ? 'next-steps_copy-button_copied'
-        : 'next-steps_copy-button'
+        ? "next-steps_copy-button_copied"
+        : "next-steps_copy-button";
     const vncHostCopyAriaProps = vncHostHasBeenCopied
         ? {
-              'aria-checked': 'true',
+              "aria-checked": "true",
           }
         : {
-              'aria-checked': 'true',
-          }
+              "aria-checked": "true",
+          };
     const vncPasswordCopyAriaProps = vncPasswordHasBeenCopied
         ? {
-              'aria-checked': 'true',
+              "aria-checked": "true",
           }
         : {
-              'aria-checked': 'true',
-          }
+              "aria-checked": "true",
+          };
     const sshHostCopyAriaProps = sshHostHasBeenCopied
         ? {
-              'aria-checked': 'true',
+              "aria-checked": "true",
           }
         : {
-              'aria-checked': 'true',
-          }
+              "aria-checked": "true",
+          };
 
     const vncInstructionsMarkup = (
         <>
             <div className="next-steps_para_bottom">
-                {t('panel.nextSteps.explanation2', { ns: 'panels' })}
+                {t("panel.nextSteps.explanation2", { ns: "panels" })}
             </div>
             <UnorderedList>
                 <ListItem>
@@ -128,10 +128,10 @@ const NextSteps = ({
                     </Trans>
                     {!networkAddress &&
                         getLabel(
-                            '',
-                            t('showInformationLabel', { ns: 'common' }),
+                            "",
+                            t("showInformationLabel", { ns: "common" }),
                             getContent(
-                                t('landingPage.expressiveCard.missingHostName')
+                                t("landingPage.expressiveCard.missingHostName")
                             )
                         )}
                     {networkAddress && (
@@ -145,8 +145,8 @@ const NextSteps = ({
                                     hasIconOnly
                                     size="sm"
                                     kind="ghost"
-                                    iconDescription={t('btnLabel.Copy', {
-                                        ns: 'common',
+                                    iconDescription={t("btnLabel.Copy", {
+                                        ns: "common",
                                     })}
                                     onClick={function noRefCheck() {}}
                                     renderIcon={vncHostCopyIcon}
@@ -176,8 +176,8 @@ const NextSteps = ({
                                     hasIconOnly
                                     size="sm"
                                     kind="ghost"
-                                    iconDescription={t('btnLabel.Copy', {
-                                        ns: 'common',
+                                    iconDescription={t("btnLabel.Copy", {
+                                        ns: "common",
                                     })}
                                     onClick={function noRefCheck() {}}
                                     renderIcon={vncPasswordCopyIcon}
@@ -189,12 +189,12 @@ const NextSteps = ({
                 )}
             </UnorderedList>
         </>
-    )
+    );
 
     const sshInstructionsMarkup = (
         <>
             <div className="next-steps_para">
-                {t('panel.nextSteps.explanation3', { ns: 'panels' })}
+                {t("panel.nextSteps.explanation3", { ns: "panels" })}
             </div>
             <UnorderedList>
                 <ListItem>
@@ -206,16 +206,16 @@ const NextSteps = ({
                     </Trans>
                     {!networkAddress &&
                         getLabel(
-                            '',
-                            t('showInformationLabel', { ns: 'common' }),
+                            "",
+                            t("showInformationLabel", { ns: "common" }),
                             getContent(
-                                t('landingPage.expressiveCard.missingHostName')
+                                t("landingPage.expressiveCard.missingHostName")
                             )
                         )}
                     {networkAddress && (
                         <span className={sshHostCopyClass}>
                             <CopyToClipboard
-                                text={`${sshUsername}@${networkAddressForListItem}`}
+                                text={`ssh ${sshUsername}@${networkAddressForListItem}`}
                                 onCopy={() => updateCopied(COPY_TYPE_SSH_HOST)}
                             >
                                 <Button
@@ -223,8 +223,8 @@ const NextSteps = ({
                                     hasIconOnly
                                     size="sm"
                                     kind="ghost"
-                                    iconDescription={t('btnLabel.Copy', {
-                                        ns: 'common',
+                                    iconDescription={t("btnLabel.Copy", {
+                                        ns: "common",
                                     })}
                                     onClick={function noRefCheck() {}}
                                     renderIcon={sshHostCopyIcon}
@@ -236,7 +236,7 @@ const NextSteps = ({
                 </ListItem>
             </UnorderedList>
         </>
-    )
+    );
 
     const missingRemoteAccessNotification = (
         <InlineNotification
@@ -244,27 +244,27 @@ const NextSteps = ({
             hideCloseButton
             statusIconDescription="notification"
             subtitle={t(
-                'panel.nextSteps.missingRemoteAccessNotificationSubtitle',
+                "panel.nextSteps.missingRemoteAccessNotificationSubtitle",
                 {
-                    ns: 'panels',
+                    ns: "panels",
                 }
             )}
-            title={t('panel.nextSteps.missingRemoteAccessNotificationTitle', {
-                ns: 'panels',
+            title={t("panel.nextSteps.missingRemoteAccessNotificationTitle", {
+                ns: "panels",
             })}
             kind="warning"
             className="next-steps_missing-remote-access-banner"
         />
-    )
+    );
 
     const nextStepsInformation = (
         <>
             <div className="next-steps_para_bottom">
-                {t('panel.nextSteps.explanation1', { ns: 'panels' })}
+                {t("panel.nextSteps.explanation1", { ns: "panels" })}
             </div>
             <UnorderedList>
                 <ListItem>
-                    {t('panel.nextSteps.listItem1', { ns: 'panels' })}
+                    {t("panel.nextSteps.listItem1", { ns: "panels" })}
                 </ListItem>
                 <UnorderedList>
                     <ListItem>
@@ -297,7 +297,7 @@ const NextSteps = ({
                     </Trans>
                 </ListItem>
                 <ListItem>
-                    {t('panel.nextSteps.listItem5', { ns: 'panels' })}
+                    {t("panel.nextSteps.listItem5", { ns: "panels" })}
                 </ListItem>
                 <ListItem>
                     <Trans i18nKey="panel.nextSteps.listItem6" ns="panels">
@@ -313,8 +313,8 @@ const NextSteps = ({
             <div className="next-steps__accordion">
                 <Accordion>
                     <AccordionItem
-                        title={t('panel.nextSteps.listItem14', {
-                            ns: 'panels',
+                        title={t("panel.nextSteps.listItem14", {
+                            ns: "panels",
                         })}
                     >
                         <UnorderedList>
@@ -387,8 +387,8 @@ const NextSteps = ({
                         </UnorderedList>
                     </AccordionItem>
                     <AccordionItem
-                        title={t('panel.nextSteps.listItem18', {
-                            ns: 'panels',
+                        title={t("panel.nextSteps.listItem18", {
+                            ns: "panels",
                         })}
                     >
                         <UnorderedList>
@@ -461,10 +461,10 @@ const NextSteps = ({
             {useSsh && sshInstructionsMarkup}
             {remoteAccessConfigIsMissing && missingRemoteAccessNotification}
         </>
-    )
+    );
 
-    return <>{nextStepsInformation}</>
-}
+    return <>{nextStepsInformation}</>;
+};
 
 NextSteps.propTypes = {
     hasMultipleSteps: PropTypes.bool,
@@ -476,6 +476,6 @@ NextSteps.propTypes = {
     addressType: PropTypes.string,
     vncPassword: PropTypes.string,
     sshUsername: PropTypes.string,
-}
+};
 
-export default NextSteps
+export default NextSteps;
