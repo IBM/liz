@@ -570,7 +570,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
                     }
                 )}
                 name="network-address_ip-version-group"
-                defaultSelected={state?.addressType ?? ADDRESS_TYPE_IPV4}
+                valueSelected={state?.addressType ?? ADDRESS_TYPE_IPV4}
                 onChange={(selected) => {
                     if (paramFileHasBeenModifiedFromState) return
 

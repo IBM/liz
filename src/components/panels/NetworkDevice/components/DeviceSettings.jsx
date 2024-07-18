@@ -167,7 +167,7 @@ const DeviceSettings = ({
                                     }
                                 )}
                                 name="network-device_port-number-group"
-                                defaultSelected={getDefaultSelected()}
+                                valueSelected={getDefaultSelected()}
                                 onChange={(selectedItem) => {
                                     if (readOnly) return
 

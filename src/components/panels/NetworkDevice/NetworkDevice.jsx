@@ -387,8 +387,21 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
         return false
     }
 
-    const areChannelIdsValid = () => {
+    const areChannelIdsForUbuntuValid = () => {
         if (
+            !state.readChannelId
+        ) {
+            return false
+        }
+        return (
+            state.readChannelId.valid
+        )
+    }
+
+    const areChannelIdsValid = () => {
+        if (distributionName === UBUNTU_DISTRIBUTION_ID) {
+            return areChannelIdsForUbuntuValid();
+        } else if (
             !state.readChannelId ||
             !state.writeChannelId ||
             !state.dataChannelId
@@ -464,6 +477,9 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     }
 
     const areChannelIdsComplete = () => {
+        if (distributionName === UBUNTU_DISTRIBUTION_ID) {
+            return isReadChannelIdComplete();
+        }
         return (
             isReadChannelIdComplete() &&
             isWriteChannelIdComplete() &&
@@ -597,7 +613,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     }
                 )}
                 name="network-device_device-type-group"
-                defaultSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
+                valueSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
                 onChange={(selectedItem) => {
                     if (paramFileHasBeenModifiedFromState) return
 

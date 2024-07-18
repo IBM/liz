@@ -40,6 +40,7 @@ import {
 import { updateIsDisabled as updateIsDisabledFromUtils } from '../../../util/panel-util'
 import { resetParamFileTextAreaData } from '../../../uiUtil/panel-util'
 import { encryptItem } from '../../../util/local-storage-util'
+import { hexEncodePassword } from "../../../util/password-util"
 import './_installation-parameters.scss'
 
 const SUPPORTED_PROTOCOLS = ['http', 'https', 'ftp']
@@ -239,25 +240,6 @@ const InstallationParameters = forwardRef(
             }
 
             return false
-        }
-
-        const hexEncodePassword = (password) => {
-            if (
-                password &&
-                typeof password === 'string' &&
-                password.length > 0
-            ) {
-                return (
-                    '%' +
-                    password
-                        .split('')
-                        .map((c) =>
-                            c.charCodeAt(0).toString(16).padStart(2, '0')
-                        )
-                        .join('%')
-                )
-            }
-            return ''
         }
 
         const computeInstallationAddress = ({

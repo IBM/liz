@@ -8,7 +8,9 @@ import { ADDRESS_TYPE_IPV4 } from './constants'
 import {
     getInterfaceNameParamContents,
     getNetdevName,
+    getVlanName
 } from './param-file-util_common'
+import { hexEncodePassword } from "./password-util";
 
 const stateToIpv4NetworkAddressParams = (state) => {
     const installationParameters = state?.steps?.networkAddress ?? {}
@@ -63,6 +65,11 @@ const stateToNetworkAddressParams = (state) => {
 
 const stateToNetworkDeviceParams = (state) => {
     const installationParameters = state?.steps?.networkDevice ?? {}
+    const hasVlanId =
+        installationParameters.vlan.enabled &&
+        typeof installationParameters.vlan === 'object' &&
+        typeof installationParameters.vlan.id === 'number' &&
+        installationParameters.vlan.id > 0
     let paramFileContents = {
         contents: '',
         complete: false,
@@ -72,12 +79,31 @@ const stateToNetworkDeviceParams = (state) => {
 
     // => rd.znet...
     if (installationParameters) {
-        const installationRepoLine = ``
-        paramFileContents = {
-            contents: `${installationRepoLine}`,
-            complete: installationParameters.complete,
-            invalid: installationParameters.invalid,
-            index: installationParameters.index,
+        const interfaceName =
+            getInterfaceNameParamContents(installationParameters) || ''
+
+        if (hasVlanId) {
+            const vlanId = `vlan=${getVlanName(
+                interfaceName,
+                installationParameters.vlan.id
+            )}:${interfaceName}`
+            const installationRepoLine = `
+${vlanId}
+`
+            paramFileContents = {
+                contents: `${installationRepoLine}`,
+                complete: installationParameters.complete,
+                invalid: installationParameters.invalid,
+                index: installationParameters.index,
+            }
+        } else {
+            const installationRepoLine = ``
+            paramFileContents = {
+                contents: `${installationRepoLine}`,
+                complete: installationParameters.complete,
+                invalid: installationParameters.invalid,
+                index: installationParameters.index,
+            }
         }
     }
 
@@ -135,7 +161,7 @@ const stateToSshParams = (state) => {
             installationParameters.ssh.password.value &&
             installationParameters.ssh.password.value.length > 0
         )
-        const sshServerLine = `${hasSshPassword ? `cc: password: ${installationParameters.ssh.password.value} end_cc` : ''}`
+        const sshServerLine = `${hasSshPassword ? `cc: password: ${hexEncodePassword(installationParameters.ssh.password.value)} end_cc` : ''}`
         paramFileContents = {
             contents: `${sshServerLine}`,
             complete: installationParameters.complete,

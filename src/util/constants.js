@@ -61,7 +61,7 @@ const UBUNTU_PRESET = 'TERM=dumb';
 
 const RHEL_SSH_USERNAME = 'install';
 const SLES_SSH_USERNAME = 'root';
-const UBUNTU_SSH_USERNAME = 'root';
+const UBUNTU_SSH_USERNAME = 'installer';
 
 const PRESETS = {
     rhel: RHEL_PRESET,

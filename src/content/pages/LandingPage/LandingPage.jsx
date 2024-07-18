@@ -37,6 +37,7 @@ import {
     ADDRESS_TYPE_IPV4,
     DEFAULT_PARAM_FILE_NAME,
     SSH_USERNAMES,
+    UBUNTU_DISTRIBUTION_ID
 } from '../../../util/constants'
 import {
     STATE_ORIGIN_STORAGE,
@@ -670,7 +671,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         ? SSH_USERNAMES[distributionName]
         : ''
     const useSsh = globalState.steps.installationParameters.ssh.enabled
-    const useVnc = globalState.steps.installationParameters.vnc.enabled
+    const useVnc = globalState.steps.installationParameters.vnc.enabled && distributionName !== UBUNTU_DISTRIBUTION_ID;
     const networkAddress =
         globalState.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
             ? globalState.steps.networkAddress.ipv4.address
