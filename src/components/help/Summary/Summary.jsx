@@ -24,7 +24,7 @@ const Summary = ({
                 </span>
             </div>
             <div
-                className="help-panel__summary__content"
+                className="help-panel__summary__content__bottom"
                 id="helpPanelContents_summary_para1"
             >
                 <Trans

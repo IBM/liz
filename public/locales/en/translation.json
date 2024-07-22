@@ -51,7 +51,7 @@
     "dialog.about.themeFromOsLabel": "Use operating system theme",
     "dialog.about.externalLinkHint": "Opens in a new window",
     "landingPage.pageHeader.subtitle": "Create parameter files for your IBM Z and LinuxONE Linux installation",
-    "landingPage.pageHeader.title": "Linux on IBM IBM Z and LinuxONE installation",
+    "landingPage.pageHeader.title": "Linux on IBM Z and LinuxONE installation",
     "landingPage.expressiveCard.tool.paraNew": "Start composing a new parameter file by providing the required input information.",
     "landingPage.expressiveCard.tool.paraModify": "Edit an existing parameter file or start from scratch by composing a new parameter file.",
     "landingPage.expressiveCard.tool.label": "Start composing",
