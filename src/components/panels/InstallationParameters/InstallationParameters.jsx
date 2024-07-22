@@ -861,11 +861,39 @@ const InstallationParameters = forwardRef(
                                 ?.classList?.remove(
                                     "help-panel__installation-parameters__content__active"
                                 );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para4"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para5"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
                         }}
                         onFocus={() => {
                             document
                                 .getElementById(
                                     "helpPanelContents_installationParameters_para3"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para4"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para5"
                                 )
                                 ?.classList?.add(
                                     "help-panel__installation-parameters__content__active"
@@ -982,11 +1010,25 @@ const InstallationParameters = forwardRef(
                                 ?.classList?.remove(
                                     "help-panel__installation-parameters__content__active"
                                 );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
                         }}
                         onFocus={() => {
                             document
                                 .getElementById(
                                     "helpPanelContents_installationParameters_para3"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
                                 )
                                 ?.classList?.add(
                                     "help-panel__installation-parameters__content__active"
