@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
- @use "@carbon/react" with (
+@use "@carbon/react" with (
     $font-path: "@ibm/plex"
 );
 
@@ -14,11 +14,11 @@
     .help-content__panel-component-header__title {
         @include react.type-style("heading-01");
         @include react.font-weight("semibold");
-      
+
         float: left;
         padding: react.$spacing-03 0 react.$spacing-07 0;
     }
-      
+
     span:first-of-type {
         float: right;
         right: 0;
@@ -31,9 +31,9 @@
     }
 
     .help-content__grid__row {
-        width: 100%;
+        min-width: 100%;
     }
-    
+
     .help-content__grid__column {
         width: 100%;
     }
@@ -44,4 +44,3 @@
 
     padding: react.$spacing-07 0 0 0;
 }
-

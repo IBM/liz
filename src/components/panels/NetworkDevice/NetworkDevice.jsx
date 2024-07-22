@@ -755,6 +755,23 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 valid: vlanIdIsValid,
                             });
                         }
+
+                        document
+                            .getElementById(
+                                "helpPanelContents_networkDevice_para7"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__network-device__content__active"
+                            );
+                    }}
+                    onFocus={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_networkDevice_para7"
+                            )
+                            ?.classList?.add(
+                                "help-panel__network-device__content__active"
+                            );
                     }}
                 />
             )}
