@@ -12,47 +12,72 @@ import { NextOutline } from "@carbon/icons-react";
 import "./_landing-page.scss";
 
 const LandingPage = ({
-  hasMultipleSteps,
-  currentHelpStep,
-  updateCurrentHelpStep,
+    hasMultipleSteps,
+    currentHelpStep,
+    updateCurrentHelpStep,
 }) => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  return (
-    <>
-      {currentHelpStep === 0 && (
+    return (
         <>
-          <div className="help-panel__landing-page__header">
-            <span>{t("helpPanelHeader.landingPage", { ns: "help" })}</span>
-          </div>
-          <div className="help-panel__landing-page__content">
-            <Trans i18nKey="helpPanelContents.landingPage" ns="help" />
-          </div>
-          <div className="help-panel__landing-page__footer">
-            {hasMultipleSteps && (
-              <Button
-                kind="tertiary"
-                onClick={() => updateCurrentHelpStep(currentHelpStep + 1)}
-                renderIcon={(props) => <NextOutline size={24} {...props} />}
-              >
-                {t("btnLabel.SystemRequirements", { ns: "common" })}
-              </Button>
+            {currentHelpStep === 0 && (
+                <>
+                    <div className="help-panel__landing-page__header">
+                        <span>
+                            {t("helpPanelHeader.landingPage", {
+                                ns: "help_landingPage",
+                            })}
+                        </span>
+                    </div>
+                    <div
+                        className="help-panel__landing-page__content"
+                        id="helpPanelContents_landingPage_para1"
+                    >
+                        <Trans
+                            i18nKey="helpPanelContents.landingPage.para1"
+                            ns="help_landingPage"
+                        />
+                    </div>
+                    <div
+                        className="help-panel__landing-page__content__bottom"
+                        id="helpPanelContents_landingPage_para2"
+                    >
+                        <Trans
+                            i18nKey="helpPanelContents.landingPage.para2"
+                            ns="help_landingPage"
+                        />
+                    </div>
+                    <div className="help-panel__landing-page__footer">
+                        {hasMultipleSteps && (
+                            <Button
+                                kind="tertiary"
+                                onClick={() =>
+                                    updateCurrentHelpStep(currentHelpStep + 1)
+                                }
+                                renderIcon={(props) => (
+                                    <NextOutline size={24} {...props} />
+                                )}
+                            >
+                                {t("btnLabel.SystemRequirements", {
+                                    ns: "common",
+                                })}
+                            </Button>
+                        )}
+                    </div>
+                </>
             )}
-          </div>
         </>
-      )}
-    </>
-  );
+    );
 };
 
 LandingPage.propTypes = {
-  hasMultipleSteps: PropTypes.bool,
-  currentHelpStep: PropTypes.number,
-  updateCurrentHelpStep: PropTypes.func,
-  useSsh: PropTypes.bool,
-  useVnc: PropTypes.bool,
-  networkAddress: PropTypes.string,
-  vncPassword: PropTypes.string,
+    hasMultipleSteps: PropTypes.bool,
+    currentHelpStep: PropTypes.number,
+    updateCurrentHelpStep: PropTypes.func,
+    useSsh: PropTypes.bool,
+    useVnc: PropTypes.bool,
+    networkAddress: PropTypes.string,
+    vncPassword: PropTypes.string,
 };
 
 export default LandingPage;

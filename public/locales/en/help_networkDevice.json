@@ -1,0 +1,10 @@
+{
+    "helpPanelContents.networkDevice.para1": "Specify the network device to use for accessing the installation media and to access the interactive installer.",
+    "helpPanelContents.networkDevice.para2": "First select the type of network device that is available in the target system. Depending on the type, the dialog will ask for different parameters.",
+    "helpPanelContents.networkDevice.para3": "Types:\n1. Open Systems Adapter (OSA)\n2. PCI RDMA over Converged Ethernet (RoCE)",
+    "helpPanelContents.networkDevice.para4": "For OSA connections, specify the device bus-IDs that correspond to the read, write, and data subchannels. The device bus-IDs are of the format 0.x.y, where x is the subchannel set ID, and y is the device number.",
+    "helpPanelContents.networkDevice.para5": "Additional OSA parameters:\n- OSI Layer: Select Layer 2 if the network device is operating in Ethernet mode, or Layer 3 if it is operating in IP mode.\n- Port number: For adapters with multiple ports per CHPID, select port 0 or 1.",
+    "helpPanelContents.networkDevice.para6": "Depending on the selected Linux distribution for RoCE, you can specify the network device either by the PCI function ID (FID), or the User-defined identifier (UID). Specify the UID if the target system has the partition UID uniqueness setting enabled, otherwise specify the FID. Both IDs are hexadecimal numbers.",
+    "helpPanelContents.networkDevice.para7": "If the network is configured as a virtual LAN, use the toggle button to enable the VLAN setting, and enter the VLAN ID.",
+    "helpPanelHeader.networkDevice": "Specify network device"
+}

@@ -9,8 +9,8 @@ import React, {
     useContext,
     useEffect,
     useImperativeHandle,
-} from 'react'
-import { useTranslation } from 'react-i18next'
+} from "react";
+import { useTranslation } from "react-i18next";
 import {
     Layer,
     Toggle,
@@ -19,12 +19,12 @@ import {
     Column,
     InlineNotification,
     ActionableNotification,
-} from '@carbon/react'
+} from "@carbon/react";
 import {
     LOCAL_STORAGE_KEY_APP_INTRO,
     STATE_ORIGIN_USER,
     STATE_ORIGIN_STORAGE,
-} from '../../../util/local-storage-constants'
+} from "../../../util/local-storage-constants";
 import {
     ApplicationContext,
     DownloadParamFileContext,
@@ -38,11 +38,11 @@ import {
     NetworkAddressContext,
     NetworkDeviceContext,
     SummaryContext,
-} from '../../../contexts'
-import { updateIsDisabled as updateIsDisabledFromUtils } from '../../../util/panel-util'
-import { resetParamFileTextAreaData } from '../../../uiUtil/panel-util'
-import { setItem } from '../../../util/local-storage-util'
-import './_intro.scss'
+} from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import { setItem } from "../../../util/local-storage-util";
+import "./_intro.scss";
 
 const Intro = forwardRef(function Intro(props, ref) {
     const {
@@ -54,55 +54,55 @@ const Intro = forwardRef(function Intro(props, ref) {
         updateIsDisabled,
         updateIsEditing,
         resetToInitialState: globalResetToInitialState,
-    } = useContext(ApplicationContext)
+    } = useContext(ApplicationContext);
     const {
         resetToInitialState: downloadParamFileResetToInitialState,
         updateModified,
         updateParamFileContent,
-    } = useContext(DownloadParamFileContext)
+    } = useContext(DownloadParamFileContext);
     const { resetToInitialState: editPageResetToInitialState } =
-        useContext(EditPageContext)
+        useContext(EditPageContext);
     const { resetToInitialState: headerResetToInitialState } =
-        useContext(HeaderContext)
+        useContext(HeaderContext);
     const { resetToInitialState: informationResetToInitialState } =
-        useContext(InformationContext)
+        useContext(InformationContext);
     const { resetToInitialState: inputFileSelectionResetToInitialState } =
-        useContext(InputFileSelectionContext)
+        useContext(InputFileSelectionContext);
     const { resetToInitialState: installationParameterResetToInitialState } =
-        useContext(InstallationParameterContext)
+        useContext(InstallationParameterContext);
     const {
         state,
         updatePurgeParmfileSettings,
         resetToInitialState: introResetToInitialState,
-    } = useContext(IntroContext)
+    } = useContext(IntroContext);
     const { resetToInitialState: landingPageResetToInitialState } =
-        useContext(LandingPageContext)
+        useContext(LandingPageContext);
     const { resetToInitialState: networkAddressResetToInitialState } =
-        useContext(NetworkAddressContext)
+        useContext(NetworkAddressContext);
     const { resetToInitialState: networkDeviceResetToInitialState } =
-        useContext(NetworkDeviceContext)
+        useContext(NetworkDeviceContext);
     const { resetToInitialState: summaryResetToInitialState } =
-        useContext(SummaryContext)
-    const { t } = useTranslation()
+        useContext(SummaryContext);
+    const { t } = useTranslation();
     const publicRef = {
         pruneSettings: () => {
             if (purgeParmfileSettings) {
-                globalResetToInitialState(true)
-                downloadParamFileResetToInitialState()
-                editPageResetToInitialState()
-                headerResetToInitialState()
-                informationResetToInitialState()
-                inputFileSelectionResetToInitialState()
-                installationParameterResetToInitialState()
-                introResetToInitialState()
-                landingPageResetToInitialState()
-                networkAddressResetToInitialState()
-                networkDeviceResetToInitialState()
-                summaryResetToInitialState()
-                updateIsEditing(true)
+                globalResetToInitialState(true);
+                downloadParamFileResetToInitialState();
+                editPageResetToInitialState();
+                headerResetToInitialState();
+                informationResetToInitialState();
+                inputFileSelectionResetToInitialState();
+                installationParameterResetToInitialState();
+                introResetToInitialState();
+                landingPageResetToInitialState();
+                networkAddressResetToInitialState();
+                networkDeviceResetToInitialState();
+                summaryResetToInitialState();
+                updateIsEditing(true);
 
                 if (panelHasBeenIncluded) {
-                    updateIncludeIntroStep(true)
+                    updateIncludeIntroStep(true);
                 }
             }
         },
@@ -120,11 +120,11 @@ const Intro = forwardRef(function Intro(props, ref) {
                         origin: STATE_ORIGIN_USER,
                     },
                 },
-            }
+            };
 
-            updateNextStep(mergedSteps.steps)
-            updateIsDirty(true)
-            updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps))
+            updateNextStep(mergedSteps.steps);
+            updateIsDirty(true);
+            updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
 
             setItem(
                 LOCAL_STORAGE_KEY_APP_INTRO,
@@ -132,34 +132,34 @@ const Intro = forwardRef(function Intro(props, ref) {
                     ...state,
                     origin: STATE_ORIGIN_STORAGE,
                 })
-            )
+            );
         },
-    }
+    };
 
-    useEffect(publicRef.persistState, [state])
-    useImperativeHandle(ref, () => publicRef)
+    useEffect(publicRef.persistState, [state]);
+    useImperativeHandle(ref, () => publicRef);
 
     const paramFileHasBeenModifiedFromState =
-        globalState?.steps.downloadParamFile?.modified ?? false
-    const purgeParmfileSettings = state.purgeParmfileSettings
+        globalState?.steps.downloadParamFile?.modified ?? false;
+    const purgeParmfileSettings = state.purgeParmfileSettings;
     const panelHasBeenIncluded =
         (globalState?.isEditing && globalState?.useStateFromLocalStorage) ??
-        false
+        false;
 
     const parmfilePurgeNotificationMarkup = (
         <InlineNotification
             hideCloseButton
             statusIconDescription="notification"
-            subtitle={t('panel.intro.parmFilePurgeNotificationSubtitle', {
-                ns: 'panels',
+            subtitle={t("panel.intro.parmFilePurgeNotificationSubtitle", {
+                ns: "panels",
             })}
-            title={t('panel.intro.parmFilePurgeNotificationTitle', {
-                ns: 'panels',
+            title={t("panel.intro.parmFilePurgeNotificationTitle", {
+                ns: "panels",
             })}
             kind="warning"
             className="intro_parmfile-purge-warning-banner"
         />
-    )
+    );
 
     const parmfileHasBeenModifiedNotificationMarkup = (
         <ActionableNotification
@@ -167,7 +167,7 @@ const Intro = forwardRef(function Intro(props, ref) {
             inline
             lowContrast
             className="intro_parmfile-purge-banner"
-            actionButtonLabel={t('btnLabel.Reset', { ns: 'common' })}
+            actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
             aria-label="closes notification"
             kind="info"
             onActionButtonClick={() => {
@@ -176,17 +176,17 @@ const Intro = forwardRef(function Intro(props, ref) {
                     globalUpdateModified,
                     updateModified,
                     state: globalState,
-                })
+                });
             }}
             onClose={function noRefCheck() {}}
             onCloseButtonClick={function noRefCheck() {}}
             statusIconDescription="notification"
-            subtitle={t('panel.parmFileHasBeenModifiedNotificationSubtitle', {
-                ns: 'common',
+            subtitle={t("panel.parmFileHasBeenModifiedNotificationSubtitle", {
+                ns: "common",
             })}
-            title={t('modalHeading.discardParamFileModificationsPrompt')}
+            title={t("modalHeading.discardParamFileModificationsPrompt")}
         />
-    )
+    );
 
     const gridContentsMarkup = (
         <>
@@ -194,27 +194,67 @@ const Intro = forwardRef(function Intro(props, ref) {
                 parmfileHasBeenModifiedNotificationMarkup}
             <Toggle
                 labelText={t(
-                    'panel.intro.purgeParmfileSettingsToggleTextLabel',
+                    "panel.intro.purgeParmfileSettingsToggleTextLabel",
                     {
-                        ns: 'panels',
+                        ns: "panels",
                     }
                 )}
-                labelA={t('btnLabel.No', { ns: 'common' })}
-                labelB={t('btnLabel.Yes', { ns: 'common' })}
+                labelA={t("btnLabel.No", { ns: "common" })}
+                labelB={t("btnLabel.Yes", { ns: "common" })}
                 id="intro_purge-parmfile-settings-toggle"
                 className="intro_purge-parmfile-settings-toggle"
                 toggled={!purgeParmfileSettings}
                 onToggle={() => {
                     if (purgeParmfileSettings) {
-                        updatePurgeParmfileSettings(false)
+                        updatePurgeParmfileSettings(false);
+                        document
+                            .getElementById("helpPanelContents_intro_para1")
+                            ?.classList?.add(
+                                "help-panel__intro__content__active"
+                            );
+                        document
+                            .getElementById("helpPanelContents_intro_para2")
+                            ?.classList?.remove(
+                                "help-panel__intro__content__active"
+                            );
                     } else {
-                        updatePurgeParmfileSettings(true)
+                        updatePurgeParmfileSettings(true);
+                        document
+                            .getElementById("helpPanelContents_intro_para1")
+                            ?.classList?.remove(
+                                "help-panel__intro__content__active"
+                            );
+                        document
+                            .getElementById("helpPanelContents_intro_para2")
+                            ?.classList?.add(
+                                "help-panel__intro__content__active"
+                            );
                     }
+                }}
+                onFocus={() => {
+                    document
+                        .getElementById("helpPanelContents_intro_para1")
+                        ?.classList?.add("help-panel__intro__content__active");
+                    document
+                        .getElementById("helpPanelContents_intro_para2")
+                        ?.classList?.add("help-panel__intro__content__active");
+                }}
+                onBlur={() => {
+                    document
+                        .getElementById("helpPanelContents_intro_para1")
+                        ?.classList?.remove(
+                            "help-panel__intro__content__active"
+                        );
+                    document
+                        .getElementById("helpPanelContents_intro_para2")
+                        ?.classList?.remove(
+                            "help-panel__intro__content__active"
+                        );
                 }}
             />
             {purgeParmfileSettings && parmfilePurgeNotificationMarkup}
         </>
-    )
+    );
 
     const markup = (
         <Layer className="summary__layer">
@@ -224,9 +264,9 @@ const Intro = forwardRef(function Intro(props, ref) {
                 </Row>
             </FlexGrid>
         </Layer>
-    )
+    );
 
-    return markup
-})
+    return markup;
+});
 
-export default Intro
+export default Intro;

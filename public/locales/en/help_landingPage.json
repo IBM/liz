@@ -1,0 +1,5 @@
+{
+    "helpPanelContents.landingPage.para1": "You require the information listed here to compose parameter files. If you created a parameter file in a previous session, you can either modify it or discard it to create a new parameter file.",
+    "helpPanelContents.landingPage.para2": "Parameter files from a previous session, if any, can be downloaded using the appropriate button on the \"Start composing\" card.",
+    "helpPanelHeader.landingPage": "Getting started"
+}
