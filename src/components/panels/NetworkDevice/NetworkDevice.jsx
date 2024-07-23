@@ -258,7 +258,12 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     useImperativeHandle(ref, () => publicRef);
 
     const useVlanToggled = state?.useVlan ?? false;
-    const selectedDeviceType = state.selectedDeviceType;
+    const selectedDeviceType = () => {
+        if (displayRoCEControls) {
+            return state?.selectedDeviceType ?? DEVICE_TYPE_OSA;
+        }
+        return DEVICE_TYPE_OSA;
+    };
     const vlanIdIsValid = state?.vlanId?.valid;
     const vlanId = state?.vlanId?.value;
     const readChannelIdIsValid = state?.readChannelId?.valid;
@@ -610,7 +615,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     }
                 )}
                 name="network-device_device-type-group"
-                valueSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
+                valueSelected={selectedDeviceType()}
                 onChange={(selectedItem) => {
                     if (paramFileHasBeenModifiedFromState) return;
 
@@ -671,7 +676,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     const gridContentsMarkupRowTwoColumnOne = (
         <div className="network-device_column-left">
             <DeviceSettings
-                deviceSettingsId={selectedDeviceType}
+                deviceSettingsId={selectedDeviceType()}
                 updateFunction={updateFunction}
                 state={state}
                 readOnly={paramFileHasBeenModifiedFromState}

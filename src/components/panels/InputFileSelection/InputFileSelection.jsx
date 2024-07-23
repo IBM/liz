@@ -26,14 +26,20 @@ import {
     LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
 } from "../../../util/local-storage-constants";
 import {
+    DEVICE_TYPE_OSA,
+    ADDRESS_TYPE_IPV4,
     MAJORITY_EXPERIMENTAL,
     DISTRIBUTION_LIST,
     VERSION_LIST,
+    SLES_DISTRIBUTION_ID,
+    UBUNTU_DISTRIBUTION_ID,
 } from "../../../util/constants";
 import {
     ApplicationContext,
     InputFileSelectionContext,
     DownloadParamFileContext,
+    NetworkAddressContext,
+    NetworkDeviceContext,
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
@@ -57,6 +63,8 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
         updateSelectedDistributionName,
         updateSelectedDistributionVersion,
     } = useContext(InputFileSelectionContext);
+    const { updateAddressType } = React.useContext(NetworkAddressContext);
+    const { updateSelectedDeviceType } = React.useContext(NetworkDeviceContext);
     const publicRef = {
         persistState: () => {
             isComplete((error, isComplete) => {
@@ -218,6 +226,12 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
                     onChange={({ selectedItem }) => {
                         if (paramFileHasBeenModifiedFromState) return;
 
+                        if (selectedItem.id === UBUNTU_DISTRIBUTION_ID) {
+                            updateAddressType(ADDRESS_TYPE_IPV4);
+                        }
+                        if (selectedItem.id === SLES_DISTRIBUTION_ID) {
+                            updateSelectedDeviceType(DEVICE_TYPE_OSA);
+                        }
                         updateSelectedDistributionName(selectedItem);
                         updateSelectedDistributionVersion({});
                     }}

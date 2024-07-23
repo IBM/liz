@@ -241,6 +241,12 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
         (distributionName === SLES_DISTRIBUTION_ID ||
             distributionName === UBUNTU_DISTRIBUTION_ID)
     );
+    const selectedAddressType = () => {
+        if (displayNoneUbuntuControl) {
+            return state?.addressType ?? ADDRESS_TYPE_IPV4;
+        }
+        return ADDRESS_TYPE_IPV4;
+    };
 
     const updateFunction = ({
         propertyName = UPDATE_FUNCTION__UNKNOWN,
@@ -571,7 +577,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
                     }
                 )}
                 name="network-address_ip-version-group"
-                valueSelected={state?.addressType ?? ADDRESS_TYPE_IPV4}
+                valueSelected={selectedAddressType()}
                 onChange={(selected) => {
                     if (paramFileHasBeenModifiedFromState) return;
 

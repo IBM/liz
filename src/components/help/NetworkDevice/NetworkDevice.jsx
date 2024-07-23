@@ -4,9 +4,11 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Trans, useTranslation } from "react-i18next";
+import { ApplicationContext } from "../../../contexts";
+import { SLES_DISTRIBUTION_ID } from "../../../util/constants";
 import "./_network-device.scss";
 
 const NetworkDevice = ({
@@ -15,6 +17,10 @@ const NetworkDevice = ({
     updateCurrentHelpStep,
 }) => {
     const { t } = useTranslation();
+    const { state: globalState } = useContext(ApplicationContext);
+
+    const distributionName =
+        globalState.steps.inputFileSelection.distributionName;
 
     return (
         <>
@@ -70,15 +76,17 @@ const NetworkDevice = ({
                     ns="help_networkDevice"
                 />
             </div>
-            <div
-                className="help-panel__network-device__content"
-                id="helpPanelContents_networkDevice_para6"
-            >
-                <Trans
-                    i18nKey="helpPanelContents.networkDevice.para6"
-                    ns="help_networkDevice"
-                />
-            </div>
+            {distributionName !== SLES_DISTRIBUTION_ID && (
+                <div
+                    className="help-panel__network-device__content"
+                    id="helpPanelContents_networkDevice_para6"
+                >
+                    <Trans
+                        i18nKey="helpPanelContents.networkDevice.para6"
+                        ns="help_networkDevice"
+                    />
+                </div>
+            )}
             <div
                 className="help-panel__network-device__content__bottom"
                 id="helpPanelContents_networkDevice_para7"

@@ -4,7 +4,7 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
 import {
     LOCAL_STORAGE_KEY_INPUT_FILE_SELECTION,
@@ -15,53 +15,53 @@ import {
     LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
     LOCAL_STORAGE_KEY_APP_SUMMARY,
     LOCAL_STORAGE_KEY_APP_INTRO,
-} from './local-storage-constants';
+} from "./local-storage-constants";
 
-const ADDRESS_TYPE_IPV4 = 'ipv4';
-const ADDRESS_TYPE_IPV6 = 'ipv6';
+const ADDRESS_TYPE_IPV4 = "network-address_ipv4-radio";
+const ADDRESS_TYPE_IPV6 = "network-address_ipv6-radio";
 
-const PORT_NUMBER_ZERO = 'port-00';
-const PORT_NUMBER_ONE = 'port-01';
+const PORT_NUMBER_ZERO = "port-00";
+const PORT_NUMBER_ONE = "port-01";
 
-const UPDATE_FUNCTION__UNKNOWN = 'unknown';
+const UPDATE_FUNCTION__UNKNOWN = "unknown";
 
-const UPDATE_FUNCTION__IPV4_ADDRESS = 'ipv4-address';
-const UPDATE_FUNCTION__IPV4_PREFIX = 'ipv4-prefix';
-const UPDATE_FUNCTION__IPV4_NETMASK = 'ipv4-netmask';
-const UPDATE_FUNCTION__IPV4_BINARY = 'ipv4-binary';
-const UPDATE_FUNCTION__IPV4_GATEWAY = 'ipv4-gateway';
-const UPDATE_FUNCTION__IPV4_NAMESERVER = 'ipv4-nameserver';
-const UPDATE_FUNCTION__IPV4_HOSTNAME = 'ipv4-hostname';
-const UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH = 'ipv4-domainSearchPath';
+const UPDATE_FUNCTION__IPV4_ADDRESS = "ipv4-address";
+const UPDATE_FUNCTION__IPV4_PREFIX = "ipv4-prefix";
+const UPDATE_FUNCTION__IPV4_NETMASK = "ipv4-netmask";
+const UPDATE_FUNCTION__IPV4_BINARY = "ipv4-binary";
+const UPDATE_FUNCTION__IPV4_GATEWAY = "ipv4-gateway";
+const UPDATE_FUNCTION__IPV4_NAMESERVER = "ipv4-nameserver";
+const UPDATE_FUNCTION__IPV4_HOSTNAME = "ipv4-hostname";
+const UPDATE_FUNCTION__IPV4_DOMAIN_SEARCH_PATH = "ipv4-domainSearchPath";
 
-const UPDATE_FUNCTION__IPV6_ADDRESS = 'ipv6-address';
-const UPDATE_FUNCTION__IPV6_PREFIX = 'ipv6-prefix';
-const UPDATE_FUNCTION__IPV6_GATEWAY = 'ipv6-gateway';
-const UPDATE_FUNCTION__IPV6_NAMESERVER = 'ipv6-nameserver';
-const UPDATE_FUNCTION__IPV6_HOSTNAME = 'ipv6-hostname';
-const UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH = 'ipv6-domainSearchPath';
+const UPDATE_FUNCTION__IPV6_ADDRESS = "ipv6-address";
+const UPDATE_FUNCTION__IPV6_PREFIX = "ipv6-prefix";
+const UPDATE_FUNCTION__IPV6_GATEWAY = "ipv6-gateway";
+const UPDATE_FUNCTION__IPV6_NAMESERVER = "ipv6-nameserver";
+const UPDATE_FUNCTION__IPV6_HOSTNAME = "ipv6-hostname";
+const UPDATE_FUNCTION__IPV6_DOMAIN_SEARCH_PATH = "ipv6-domainSearchPath";
 
-const DEVICE_TYPE_OSA = 'network-device_osa-option';
-const DEVICE_TYPE_ROCE = 'network-device_roce-option';
+const DEVICE_TYPE_OSA = "network-device_osa-option";
+const DEVICE_TYPE_ROCE = "network-device_roce-option";
 
-const UPDATE_FUNCTION__SELECT_DEVICE_TYPE = 'selectedDeviceType';
-const UPDATE_FUNCTION__READ_CHANNEL_ID = 'readChannelId';
-const UPDATE_FUNCTION__WRITE_CHANNEL_ID = 'writeChannelId';
-const UPDATE_FUNCTION__DATA_CHANNEL_ID = 'dataChannelId';
+const UPDATE_FUNCTION__SELECT_DEVICE_TYPE = "selectedDeviceType";
+const UPDATE_FUNCTION__READ_CHANNEL_ID = "readChannelId";
+const UPDATE_FUNCTION__WRITE_CHANNEL_ID = "writeChannelId";
+const UPDATE_FUNCTION__DATA_CHANNEL_ID = "dataChannelId";
 
-const UPDATE_FUNCTION__LAYER = 'layer';
-const UPDATE_FUNCTION__USE_MULTIPORT = 'useMultiPort';
-const UPDATE_FUNCTION__PORT_NO = 'portNo';
-const UPDATE_FUNCTION__PCI_FUNCTION_ID = 'pciFunctionId';
-const UPDATE_FUNCTION__USER_IDENTIFIER = 'userIdentifier';
+const UPDATE_FUNCTION__LAYER = "layer";
+const UPDATE_FUNCTION__USE_MULTIPORT = "useMultiPort";
+const UPDATE_FUNCTION__PORT_NO = "portNo";
+const UPDATE_FUNCTION__PCI_FUNCTION_ID = "pciFunctionId";
+const UPDATE_FUNCTION__USER_IDENTIFIER = "userIdentifier";
 
-const RHEL_PRESET = 'ro ramdisk_size=40000 cio_ignore=all,!condev';
-const SLES_PRESET = 'ro TERM=dumb MANUAL=0 deviceautoconfig=0';
-const UBUNTU_PRESET = 'TERM=dumb';
+const RHEL_PRESET = "ro ramdisk_size=40000 cio_ignore=all,!condev";
+const SLES_PRESET = "ro TERM=dumb MANUAL=0 deviceautoconfig=0";
+const UBUNTU_PRESET = "TERM=dumb";
 
-const RHEL_SSH_USERNAME = 'install';
-const SLES_SSH_USERNAME = 'root';
-const UBUNTU_SSH_USERNAME = 'installer';
+const RHEL_SSH_USERNAME = "install";
+const SLES_SSH_USERNAME = "root";
+const UBUNTU_SSH_USERNAME = "installer";
 
 const PRESETS = {
     rhel: RHEL_PRESET,
@@ -79,58 +79,58 @@ const SYSTEM_REQUIREMENTS = {
     rhel: {
         memorySize: 3,
         diskSize: 10,
-        machineLevel: 'IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II',
+        machineLevel: "IBM z14(r), IBM LinuxONE Emperor II or Rockhopper II",
         docLink:
-            'https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9',
+            "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9",
     },
     sles: {
         memorySize: 1.5,
         diskSize: 10,
         machineLevel:
-            'IBM zEnterprise EC12, BC12 IBM LinuxONE Emperor, Rockhopper',
+            "IBM zEnterprise EC12, BC12 IBM LinuxONE Emperor, Rockhopper",
         docLink:
-            'https://documentation.suse.com/sles/15-SP5/single-html/SLES-deployment/#sec-zseries-requirements',
+            "https://documentation.suse.com/sles/15-SP5/single-html/SLES-deployment/#sec-zseries-requirements",
     },
     ubuntu: {
         memorySize: 1,
         diskSize: 5,
-        machineLevel: 'IBM z13s/z13, IBM LinuxONE Rockhopper/Emperor',
-        docLink: 'https://ubuntu.com/server/docs/system-requirements',
+        machineLevel: "IBM z13s/z13, IBM LinuxONE Rockhopper/Emperor",
+        docLink: "https://ubuntu.com/server/docs/system-requirements",
     },
 };
 
 const DEVICE_TYPE_LIST = [
     {
-        id: 'network-device_osa-option',
-        label: 'OSA',
+        id: "network-device_osa-option",
+        label: "OSA",
     },
     {
-        id: 'network-device_roce-option',
-        label: 'RoCE',
+        id: "network-device_roce-option",
+        label: "RoCE",
     },
 ];
 
-const MAJORITY_STABLE = 'majorityStable';
-const MAJORITY_EXPERIMENTAL = 'majorityExperimental';
+const MAJORITY_STABLE = "majorityStable";
+const MAJORITY_EXPERIMENTAL = "majorityExperimental";
 
-const RHEL_DISTRIBUTION_ID = 'rhel';
-const RHEL_DISTRIBUTION_LABEL = 'Red Hat Enterprise Linux';
-const RHEL_V9_VERSION_ID = 'version-9.x';
-const RHEL_V9_VERSION_LABEL = '9.x';
+const RHEL_DISTRIBUTION_ID = "rhel";
+const RHEL_DISTRIBUTION_LABEL = "Red Hat Enterprise Linux";
+const RHEL_V9_VERSION_ID = "version-9.x";
+const RHEL_V9_VERSION_LABEL = "9.x";
 
-const SLES_DISTRIBUTION_ID = 'sles';
-const SLES_DISTRIBUTION_LABEL = 'SUSE Linux Enterprise Server';
-const SLES_V15_VERSION_ID = 'version-15';
-const SLES_V15_VERSION_LABEL = '15 SP5';
+const SLES_DISTRIBUTION_ID = "sles";
+const SLES_DISTRIBUTION_LABEL = "SUSE Linux Enterprise Server";
+const SLES_V15_VERSION_ID = "version-15";
+const SLES_V15_VERSION_LABEL = "15 (any SP)";
 
-const UBUNTU_DISTRIBUTION_ID = 'ubuntu';
-const UBUNTU_DISTRIBUTION_LABEL = 'Ubuntu Server (experimental)';
-const UBUNTU_V20_VERSION_ID = 'version-20';
-const UBUNTU_V20_VERSION_LABEL = '20.04.6 LTS';
-const UBUNTU_V22_VERSION_ID = 'version-22';
-const UBUNTU_V22_VERSION_LABEL = '22.04.4 LTS';
-const UBUNTU_V24_VERSION_ID = 'version-24';
-const UBUNTU_V24_VERSION_LABEL = '24.04 LTS';
+const UBUNTU_DISTRIBUTION_ID = "ubuntu";
+const UBUNTU_DISTRIBUTION_LABEL = "Ubuntu Server (experimental)";
+const UBUNTU_V20_VERSION_ID = "version-20";
+const UBUNTU_V20_VERSION_LABEL = "20.04.6 LTS";
+const UBUNTU_V22_VERSION_ID = "version-22";
+const UBUNTU_V22_VERSION_LABEL = "22.04.4 LTS";
+const UBUNTU_V24_VERSION_ID = "version-24";
+const UBUNTU_V24_VERSION_LABEL = "24.04 LTS";
 
 const DISTRIBUTION_LIST = [
     {
@@ -171,7 +171,7 @@ const VERSION_LIST = {
 };
 
 const DEFAULT_STRING_OBJECT = {
-    value: '',
+    value: "",
     valid: true,
 };
 
@@ -181,7 +181,7 @@ const DEFAULT_NUMBER_OBJECT = {
 };
 
 const DEFAULT_COMPUTED_STRING_OBJECT = {
-    value: '',
+    value: "",
     valid: true,
     computed: false,
 };
@@ -192,24 +192,24 @@ const DEFAULT_COMPUTED_NUMBER_OBJECT = {
     computed: false,
 };
 
-const DEFAULT_DISTRIBUTION_ID = 'rhel';
-const DEFAULT_VERSION_ID = 'version-9.x';
+const DEFAULT_DISTRIBUTION_ID = "rhel";
+const DEFAULT_VERSION_ID = "version-9.x";
 
-const TEARSHEET_KIND_GETTING_STARTED = 'gettingStarted';
-const TEARSHEET_KIND_NEXT_STEPS = 'nextSteps';
-const TEARSHEET_KIND_NONE = 'none';
+const TEARSHEET_KIND_GETTING_STARTED = "gettingStarted";
+const TEARSHEET_KIND_NEXT_STEPS = "nextSteps";
+const TEARSHEET_KIND_NONE = "none";
 
-const TEARSHEET_TAB_CONTENT_CLASSIC_MODE = 'tabContentClassicMode';
-const TEARSHEET_TAB_CONTENT_DPM = 'tabContentDPM';
+const TEARSHEET_TAB_CONTENT_CLASSIC_MODE = "tabContentClassicMode";
+const TEARSHEET_TAB_CONTENT_DPM = "tabContentDPM";
 
 const DEFAULT_PARAM_FILE_NAME = `parmfile__${nanoid()}.txt`;
 
-const DEFAULT_THEME = 'white';
-const DARK_THEME = 'g100';
+const DEFAULT_THEME = "white";
+const DARK_THEME = "g100";
 const LIGHT_THEME = DEFAULT_THEME;
 
-const OS_DARK_THEME = 'dark';
-const OS_LIGHT_THEME = 'light';
+const OS_DARK_THEME = "dark";
+const OS_LIGHT_THEME = "light";
 
 const DEFAULT_STEPS = {
     inputFileSelection: {
@@ -231,7 +231,7 @@ const DEFAULT_STEPS = {
     },
     downloadParamFile: {
         presets: RHEL_PRESET,
-        contents: '',
+        contents: "",
         modified: false,
         complete: false,
         disabled: true,
@@ -240,13 +240,13 @@ const DEFAULT_STEPS = {
         index: 6,
     },
     installationParameters: {
-        networkInstallationUrl: '',
+        networkInstallationUrl: "",
         vnc: {
-            password: '',
+            password: "",
             enabled: true,
         },
         ssh: {
-            password: '',
+            password: "",
             enabled: false,
         },
         complete: false,
@@ -259,18 +259,18 @@ const DEFAULT_STEPS = {
         addressType: ADDRESS_TYPE_IPV4,
         ipv4: {
             cidr: 1,
-            binary: '',
-            netmask: '',
-            address: '',
+            binary: "",
+            netmask: "",
+            address: "",
         },
         ipv6: {
             cidr: 1,
-            address: '',
+            address: "",
         },
-        gatewayIpAddress: '',
-        nameserverIpAddress: '',
-        hostName: '',
-        domainSearchPath: '',
+        gatewayIpAddress: "",
+        nameserverIpAddress: "",
+        hostName: "",
+        domainSearchPath: "",
         complete: false,
         disabled: true,
         invalid: false,
@@ -280,15 +280,15 @@ const DEFAULT_STEPS = {
     networkDevice: {
         deviceType: DEVICE_TYPE_OSA,
         osa: {
-            readChannel: '',
-            writeChannel: '',
-            dataChannel: '',
+            readChannel: "",
+            writeChannel: "",
+            dataChannel: "",
             portNumber: 0,
             layer: 0,
         },
         roce: {
-            fid: '',
-            uid: '',
+            fid: "",
+            uid: "",
         },
         vlan: {
             id: 1,
@@ -302,7 +302,7 @@ const DEFAULT_STEPS = {
     },
     summary: {
         downloadParmfile: false,
-        downloadParmfileName: '',
+        downloadParmfileName: "",
         disabled: true,
         complete: true,
         invalid: false,
