@@ -1,0 +1,4 @@
+{
+    "helpPanelContents.hint": "The installation assistant dialog asks for information relating to the target system and installation parameters of the Linux distribution to be installed. This information is typically provided by hardware or network administrators of the system to be installed. Be sure to obtain this data before continuing.",
+    "helpPanelHeader.hint": "Required information"
+}

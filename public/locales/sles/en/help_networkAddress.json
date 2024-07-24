@@ -1,0 +1,7 @@
+{
+    "helpPanelContents.networkAddress.para1": "Enter network address information for the target host in this panel. First select the IP version – either IPv4 or IPv6. Depending on the IP version, IP addresses have a different format:",
+    "helpPanelContents.networkAddress.para2": "- IPv4 addresses consist of 4 decimal numbers separated by dots, for example \"192.168.0.1\"\n- IPv6 addresses consist of up to 8 hexadecimal numbers separated by colons, for example \"fd00::1a\"",
+    "helpPanelContents.networkAddress.para3": "Next, enter the IP address information:",
+    "helpPanelContents.networkAddress.para4": "- Host IP address and prefix or netmask: the IP address assigned to the target host\n- Gateway IP address: the address of an IP gateway that the host can use to reach other networks\n- Nameserver IP address: the address of a DNS server to use for resolving host names into IP addresses\n- Host name: an optional name to be associated with the host\n",
+    "helpPanelHeader.networkAddress": "Specify network address"
+}

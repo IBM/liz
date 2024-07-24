@@ -1,0 +1,6 @@
+{
+    "helpPanelContents.downloadParamFile.para1": "The text area contains the resulting installation parameter file. If you are familiar with the file format, you can make manual changes.",
+    "helpPanelContents.downloadParamFile.para2": "<strong>Warning: Manual changes will render any previous step in read only mode. You will need to discard your changes to be able to modify existing data on previous steps.</strong>",
+    "helpPanelContents.downloadParamFile.para3": "Additional information can be displayed if any input data looks incorrect or is missing:\n- Steps with incomplete data: Review your input on the listed panels for completeness\n- Steps with invalid data: Review your input on the listed panels for correctness\nTo start the installation, copy the parameter file contents, or save it to a file and proceed with the steps outlined in the next panel.",
+    "helpPanelHeader.downloadParamFile": "Review parameter file"
+}
