@@ -4,6 +4,6 @@
     "helpPanelContents.installationParameters.para3": "Note: Passwords are in clear text in the resulting parameter file. The passwords are also stored in the browser's local storage as obfuscated strings. Use \"Clear settings\" menu item in the About this app menu under the Linux penguin icon to delete application data from the browser's local storage.",
     "helpPanelContents.installationParameters.para4": "When the installation is started, the installer can be controlled either through a VNC-based GUI, or an SSH text-based interface.",
     "helpPanelContents.installationParameters.para5": "Set the Start VNC installation toggle to yes and specify an optional password to enable the graphical installation.",
-    "helpPanelContents.installationParameters.para6": "Set the Start SSH installation toggle to enable text-based installation. Not all installer options may be available when using the text-based interface.",
+    "helpPanelContents.installationParameters.para6": "Provide a SSH password to enable text-based installation. Not all installer options may be available when using the text-based interface.",
     "helpPanelHeader.installationParameters": "Designate installation source"
 }

@@ -44,7 +44,7 @@ const DownloadParamFile = ({
                 />
             </div>
             <div
-                className="help-panel__download-param-file__content"
+                className="help-panel__download-param-file__content__bottom"
                 id="helpPanelContents_downloadParamFile_para3"
             >
                 <Trans
