@@ -40,6 +40,7 @@ import {
     DownloadParamFileContext,
     NetworkAddressContext,
     NetworkDeviceContext,
+    InstallationParameterContext,
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
@@ -64,6 +65,7 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
         updateSelectedDistributionName,
         updateSelectedDistributionVersion,
     } = useContext(InputFileSelectionContext);
+    const { updateUseSsh } = React.useContext(InstallationParameterContext);
     const { updateAddressType } = React.useContext(NetworkAddressContext);
     const { updateSelectedDeviceType } = React.useContext(NetworkDeviceContext);
     const publicRef = {
@@ -228,6 +230,7 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
                         if (paramFileHasBeenModifiedFromState) return;
 
                         if (selectedItem.id === UBUNTU_DISTRIBUTION_ID) {
+                            updateUseSsh(true);
                             updateAddressType(ADDRESS_TYPE_IPV4);
                         }
                         if (selectedItem.id === SLES_DISTRIBUTION_ID) {

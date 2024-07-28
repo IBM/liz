@@ -5,22 +5,20 @@
  */
 
 const hexEncodePassword = (password) => {
-    if (
-        password &&
-        typeof password === 'string' &&
-        password.length > 0
-    ) {
+    if (password && typeof password === "string" && password.length > 0) {
         return (
-            '%' +
+            "%" +
             password
-                .split('')
-                .map((c) =>
-                    c.charCodeAt(0).toString(16).padStart(2, '0')
-                )
-                .join('%')
-        )
+                .split("")
+                .map((c) => c.charCodeAt(0).toString(16).padStart(2, "0"))
+                .join("%")
+        );
     }
-    return ''
-}
+    return "";
+};
 
-export { hexEncodePassword };
+const toAsteriskRepresentation = (password) => {
+    return password.replace(/./g, "*");
+};
+
+export { hexEncodePassword, toAsteriskRepresentation };

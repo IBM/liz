@@ -179,9 +179,20 @@ const InstallationParameters = forwardRef(
         const isPasswordInputValid = (password) => {
             // The password is optional, if it is a zero length string
             // mark it as a valid value.
-            if (typeof password === "string" && password.length === 0) {
+            if (
+                distributionName !== UBUNTU_DISTRIBUTION_ID &&
+                typeof password === "string" &&
+                password.length === 0
+            ) {
                 return true;
+            } else if (
+                distributionName === UBUNTU_DISTRIBUTION_ID &&
+                typeof password === "string" &&
+                password.length === 0
+            ) {
+                return false;
             }
+
             return password.indexOf(" ") === -1;
         };
 
@@ -287,6 +298,15 @@ const InstallationParameters = forwardRef(
             return "";
         };
 
+        const isSshPasswordComplete = () => {
+            const password = state?.sshPassword?.value ?? "";
+
+            if (distributionName !== UBUNTU_DISTRIBUTION_ID) {
+                return true;
+            }
+            return typeof password === "string" && password.length > 0;
+        };
+
         const useSshToggled = state?.useSsh ?? false;
         const useVncToggled = state?.useVnc ?? true;
         const paramFileHasBeenModifiedFromState =
@@ -308,7 +328,8 @@ const InstallationParameters = forwardRef(
             if (
                 typeof state.installationAddress === "object" &&
                 typeof state.installationAddress.value === "string" &&
-                state.installationAddress.value.length > 0
+                state.installationAddress.value.length > 0 &&
+                isSshPasswordComplete()
             ) {
                 isComplete = true;
                 isValid =
@@ -476,31 +497,33 @@ const InstallationParameters = forwardRef(
 
         const gridContentsMarkupComputedRow = (
             <>
-                <TextInput
-                    readOnly
-                    helperText={t(
-                        "panel.installationParameter.computedInstallationAddressHelp",
-                        {
-                            ns: "panels",
+                {/*
+                    <TextInput
+                        readOnly
+                        helperText={t(
+                            "panel.installationParameter.computedInstallationAddressHelp",
+                            {
+                                ns: "panels",
+                            }
+                        )}
+                        id="computed-installation-address-input"
+                        key="computed-installation-address-input"
+                        labelText={t(
+                            "panel.installationParameter.computedInstallationAddressTextLabel",
+                            { ns: "panels" }
+                        )}
+                        placeholder={t(
+                            "panel.installationParameter.computedInstallationAddressPlaceholder",
+                            { ns: "panels" }
+                        )}
+                        className="installation-parameters_installation-address-input"
+                        value={
+                            state.installationAddress
+                                ? state.installationAddress.computed
+                                : ""
                         }
-                    )}
-                    id="computed-installation-address-input"
-                    key="computed-installation-address-input"
-                    labelText={t(
-                        "panel.installationParameter.computedInstallationAddressTextLabel",
-                        { ns: "panels" }
-                    )}
-                    placeholder={t(
-                        "panel.installationParameter.computedInstallationAddressPlaceholder",
-                        { ns: "panels" }
-                    )}
-                    className="installation-parameters_installation-address-input"
-                    value={
-                        state.installationAddress
-                            ? state.installationAddress.computed
-                            : ""
-                    }
-                />
+                    />
+                */}
             </>
         );
 
@@ -906,46 +929,48 @@ const InstallationParameters = forwardRef(
 
         const gridContentsMarkupRowThreeColumnTwo = (
             <div className="installation-parameters_column-right">
-                <Toggle
-                    readOnly={paramFileHasBeenModifiedFromState}
-                    labelText={t(
-                        "panel.installationParameter.sshToggleTextLabel",
-                        {
-                            ns: "panels",
-                        }
-                    )}
-                    labelA={t("btnLabel.No", { ns: "common" })}
-                    labelB={t("btnLabel.Yes", { ns: "common" })}
-                    id="ssh-toggle"
-                    toggled={useSshToggled}
-                    onToggle={() => {
-                        if (paramFileHasBeenModifiedFromState) return;
+                {distributionName !== UBUNTU_DISTRIBUTION_ID && (
+                    <Toggle
+                        readOnly={paramFileHasBeenModifiedFromState}
+                        labelText={t(
+                            "panel.installationParameter.sshToggleTextLabel",
+                            {
+                                ns: "panels",
+                            }
+                        )}
+                        labelA={t("btnLabel.No", { ns: "common" })}
+                        labelB={t("btnLabel.Yes", { ns: "common" })}
+                        id="ssh-toggle"
+                        toggled={useSshToggled}
+                        onToggle={() => {
+                            if (paramFileHasBeenModifiedFromState) return;
 
-                        if (useSshToggled) {
-                            updateUseSsh(false);
-                        } else {
-                            updateUseSsh(true);
-                        }
-                    }}
-                    onFocus={() => {
-                        document
-                            .getElementById(
-                                "helpPanelContents_installationParameters_para6"
-                            )
-                            ?.classList?.add(
-                                "help-panel__installation-parameters__content__active"
-                            );
-                    }}
-                    onBlur={() => {
-                        document
-                            .getElementById(
-                                "helpPanelContents_installationParameters_para6"
-                            )
-                            ?.classList?.remove(
-                                "help-panel__installation-parameters__content__active"
-                            );
-                    }}
-                />
+                            if (useSshToggled) {
+                                updateUseSsh(false);
+                            } else {
+                                updateUseSsh(true);
+                            }
+                        }}
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                        }}
+                        onBlur={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                        }}
+                    />
+                )}
                 {useSshToggled && requiresSshPassword && (
                     <PasswordInput
                         readOnly={paramFileHasBeenModifiedFromState}
