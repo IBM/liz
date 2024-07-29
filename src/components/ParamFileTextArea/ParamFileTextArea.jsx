@@ -93,7 +93,7 @@ const ParamFileTextArea = ({
                     />
                 </div>
             )}
-            {!editing && (
+            {!editing && !allowReset && (
                 <div
                     className="param-file-text-area_textarea-button-bar__button"
                     onClick={onShowPassword}
