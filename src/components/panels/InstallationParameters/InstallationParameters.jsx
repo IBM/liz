@@ -40,7 +40,10 @@ import {
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import { encryptItem } from "../../../util/local-storage-util";
-import { hexEncodePassword } from "../../../util/password-util";
+import {
+    hexEncodePassword,
+    toAsteriskRepresentation,
+} from "../../../util/password-util";
 import "./_installation-parameters.scss";
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
@@ -83,6 +86,9 @@ const InstallationParameters = forwardRef(
                                     ...globalState.steps.installationParameters,
                                     networkInstallationUrl:
                                         state.installationAddress.computed,
+                                    networkInstallationUrlWithPasswordsRemoved:
+                                        state.installationAddress
+                                            .computedWithPasswordsRemoved,
                                     vnc: {
                                         password: state.vncPassword,
                                         enabled: state?.useVnc ?? true,
@@ -106,6 +112,9 @@ const InstallationParameters = forwardRef(
                                     ...globalState.steps.installationParameters,
                                     networkInstallationUrl:
                                         state.installationAddress.computed,
+                                    networkInstallationUrlWithPasswordsRemoved:
+                                        state.installationAddress
+                                            .computedWithPasswordsRemoved,
                                     vnc: {
                                         password: state.vncPassword,
                                         enabled: state?.useVnc ?? true,
@@ -129,6 +138,10 @@ const InstallationParameters = forwardRef(
                                     ...globalState.steps.installationParameters,
                                     networkInstallationUrl:
                                         state.installationAddress?.computed ??
+                                        "",
+                                    networkInstallationUrlWithPasswordsRemoved:
+                                        state?.installationAddress
+                                            ?.computedWithPasswordsRemoved ??
                                         "",
                                     vnc: {
                                         password: state?.vncPassword ?? "",
@@ -253,6 +266,51 @@ const InstallationParameters = forwardRef(
             return false;
         };
 
+        const computeInstallationAddresWithPasswordsRemoved = ({
+            url = "",
+            uid = "",
+            pwd = "",
+            clearUid = false,
+            clearPwd = false,
+        }) => {
+            const address = url || (state?.installationAddress?.value ?? "");
+            const userName = clearUid
+                ? ""
+                : uid || (state?.userName?.value ?? "");
+            const password = clearPwd
+                ? ""
+                : pwd || (state?.password?.value ?? "");
+
+            if (address && address.length > 0) {
+                const installationAddressUrl = toUrl(address);
+                if (installationAddressUrl && userName && userName.length > 0) {
+                    installationAddressUrl.username = userName;
+                }
+                if (
+                    installationAddressUrl &&
+                    installationAddressUrl.password &&
+                    installationAddressUrl.password.length > 0
+                ) {
+                    installationAddressUrl.password = toAsteriskRepresentation(
+                        installationAddressUrl.password
+                    );
+                }
+                if (
+                    installationAddressUrl &&
+                    !installationAddressUrl.password &&
+                    password &&
+                    password.length > 0
+                ) {
+                    installationAddressUrl.password =
+                        toAsteriskRepresentation(password);
+                }
+                return installationAddressUrl
+                    ? installationAddressUrl.toString()
+                    : "";
+            }
+            return "";
+        };
+
         const computeInstallationAddress = ({
             url = "",
             uid = "",
@@ -281,6 +339,10 @@ const InstallationParameters = forwardRef(
                     installationAddressUrl.password = hexEncodePassword(
                         installationAddressUrl.password
                     );
+                    installationAddressUrl.passwordWithAsterisks =
+                        toAsteriskRepresentation(
+                            installationAddressUrl.password
+                        );
                 }
                 if (
                     installationAddressUrl &&
@@ -290,6 +352,8 @@ const InstallationParameters = forwardRef(
                 ) {
                     installationAddressUrl.password =
                         hexEncodePassword(password);
+                    installationAddressUrl.passwordWithAsterisks =
+                        toAsteriskRepresentation(password);
                 }
                 return installationAddressUrl
                     ? installationAddressUrl.toString()
@@ -431,11 +495,17 @@ const InstallationParameters = forwardRef(
                         const computedUrlValue = computeInstallationAddress({
                             url: urlValue,
                         });
+                        const computedWithPasswordsRemovedUrlValue =
+                            computeInstallationAddresWithPasswordsRemoved({
+                                url: urlValue,
+                            });
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
                         updateInstallationAddress({
                             address: urlValue,
                             computedAddress: computedUrlValue,
+                            computedWithPasswordsRemovedAddress:
+                                computedWithPasswordsRemovedUrlValue,
                             valid: true,
                         });
                     }}
@@ -447,6 +517,10 @@ const InstallationParameters = forwardRef(
                         const computedUrlValue = computeInstallationAddress({
                             url: urlValue,
                         });
+                        const computedWithPasswordsRemovedUrlValue =
+                            computeInstallationAddresWithPasswordsRemoved({
+                                url: urlValue,
+                            });
                         const urlValueIsValid =
                             isInstallationAddressInputValid(urlValue);
 
@@ -454,6 +528,8 @@ const InstallationParameters = forwardRef(
                             updateInstallationAddress({
                                 address: urlValue,
                                 computedAddress: computedUrlValue,
+                                computedWithPasswordsRemovedAddress:
+                                    computedWithPasswordsRemovedUrlValue,
                                 valid: urlValueIsValid,
                             });
                         }
@@ -570,6 +646,16 @@ const InstallationParameters = forwardRef(
                                   clearUid: userNameValue.length === 0,
                               })
                             : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: userNameValue,
+                                          clearUid: userNameValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
                         updateUserName({
@@ -579,6 +665,8 @@ const InstallationParameters = forwardRef(
                         updateInstallationAddress({
                             address: state?.installationAddress?.value ?? "",
                             computedAddress: computedUrlValue,
+                            computedWithPasswordsRemovedAddress:
+                                computedWithPasswordsRemovedUrlValue,
                             valid: true,
                         });
                     }}
@@ -596,6 +684,16 @@ const InstallationParameters = forwardRef(
                                   clearUid: userNameValue.length === 0,
                               })
                             : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: userNameValue,
+                                          clearUid: userNameValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         const userNameValueIsValid =
                             isUserNameInputValid(userNameValue);
 
@@ -608,6 +706,8 @@ const InstallationParameters = forwardRef(
                                 address:
                                     state?.installationAddress?.value ?? "",
                                 computedAddress: computedUrlValue,
+                                computedWithPasswordsRemovedAddress:
+                                    computedWithPasswordsRemovedUrlValue,
                                 valid: true,
                             });
                         }
@@ -696,6 +796,21 @@ const InstallationParameters = forwardRef(
                                   clearPwd: passwordValue.length === 0,
                               })
                             : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: state?.userName?.value ?? "",
+                                          clearUid:
+                                              typeof state.userName.value !==
+                                                  "string" ||
+                                              state.userName.value.length === 0,
+                                          pwd: passwordValue,
+                                          clearPwd: passwordValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
                         updatePassword({
@@ -705,6 +820,8 @@ const InstallationParameters = forwardRef(
                         updateInstallationAddress({
                             address: state?.installationAddress?.value ?? "",
                             computedAddress: computedUrlValue,
+                            computedWithPasswordsRemovedAddress:
+                                computedWithPasswordsRemovedUrlValue,
                             valid: true,
                         });
                     }}
@@ -727,6 +844,21 @@ const InstallationParameters = forwardRef(
                                   clearPwd: passwordValue.length === 0,
                               })
                             : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: state?.userName?.value ?? "",
+                                          clearUid:
+                                              typeof state.userName.value !==
+                                                  "string" ||
+                                              state.userName.value.length === 0,
+                                          pwd: passwordValue,
+                                          clearPwd: passwordValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         const passwordValueIsValid =
                             isPasswordInputValid(passwordValue);
 
@@ -739,6 +871,8 @@ const InstallationParameters = forwardRef(
                                 address:
                                     state?.installationAddress?.value ?? "",
                                 computedAddress: computedUrlValue,
+                                computedWithPasswordsRemovedAddress:
+                                    computedWithPasswordsRemovedUrlValue,
                                 valid: true,
                             });
                         }

@@ -232,6 +232,7 @@ const DEFAULT_STEPS = {
     downloadParamFile: {
         presets: RHEL_PRESET,
         contents: "",
+        contentsWithPasswordsRemoved: "",
         modified: false,
         complete: false,
         disabled: true,
@@ -241,6 +242,7 @@ const DEFAULT_STEPS = {
     },
     installationParameters: {
         networkInstallationUrl: "",
+        networkInstallationUrlWithPasswordsRemoved: "",
         vnc: {
             password: "",
             enabled: true,

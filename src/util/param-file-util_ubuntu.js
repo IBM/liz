@@ -4,151 +4,160 @@
  * (C) Copyright IBM Corp. 2024
  */
 
-import { ADDRESS_TYPE_IPV4 } from './constants'
+import { ADDRESS_TYPE_IPV4 } from "./constants";
 import {
     getInterfaceNameParamContents,
     getNetdevName,
-    getVlanName
-} from './param-file-util_common'
-import { hexEncodePassword } from "./password-util";
+    getVlanName,
+} from "./param-file-util_common";
+import { hexEncodePassword, toAsteriskRepresentation } from "./password-util";
 
 const stateToIpv4NetworkAddressParams = (state) => {
-    const installationParameters = state?.steps?.networkAddress ?? {}
+    const installationParameters = state?.steps?.networkAddress ?? {};
     const networkDeviceInstallationParameters =
-        state?.steps?.networkDevice ?? {}
-    const ipAddress = installationParameters?.ipv4?.address ?? ''
-    const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? ''
-    const netmask = installationParameters?.ipv4?.netmask
-    const hostName = installationParameters?.hostName ?? ''
+        state?.steps?.networkDevice ?? {};
+    const ipAddress = installationParameters?.ipv4?.address ?? "";
+    const gatewayIpAddress = installationParameters?.gatewayIpAddress ?? "";
+    const netmask = installationParameters?.ipv4?.netmask;
+    const hostName = installationParameters?.hostName ?? "";
     const hasHostName = !!(
         state?.steps?.networkAddress.hostName &&
         state?.steps?.networkAddress.hostName.length > 0
-    )
+    );
     const vlanId = networkDeviceInstallationParameters.vlan.enabled
-        ? networkDeviceInstallationParameters?.vlan?.id ?? 1
-        : null
+        ? (networkDeviceInstallationParameters?.vlan?.id ?? 1)
+        : null;
     const interfaceName =
-        getInterfaceNameParamContents(networkDeviceInstallationParameters) || ''
-    const netdevName = getNetdevName(vlanId, interfaceName) || ''
+        getInterfaceNameParamContents(networkDeviceInstallationParameters) ||
+        "";
+    const netdevName = getNetdevName(vlanId, interfaceName) || "";
 
-    return `ip=${ipAddress}::${gatewayIpAddress}:${netmask}:${hasHostName ? `hostname=${hostName}` : ''}:${netdevName}:none:${installationParameters.nameserverIpAddress}`
-}
+    return `ip=${ipAddress}::${gatewayIpAddress}:${netmask}:${hasHostName ? `hostname=${hostName}` : ""}:${netdevName}:none:${installationParameters.nameserverIpAddress}`;
+};
 
 const stateToNetworkAddressParams = (state) => {
-    const installationParameters = state?.steps?.networkAddress ?? {}
+    const installationParameters = state?.steps?.networkAddress ?? {};
     let paramFileContents = {
-        contents: '',
+        contents: "",
         complete: false,
         invalid: false,
-        label: '',
+        label: "",
         index: 0,
-    }
+    };
 
     // => ip=...
     if (installationParameters && installationParameters.addressType) {
         const ipAddressParemeters =
             installationParameters.addressType === ADDRESS_TYPE_IPV4
                 ? stateToIpv4NetworkAddressParams(state)
-                : ''
+                : "";
         const installationRepoLine = `${ipAddressParemeters}
-`
+`;
         paramFileContents = {
             contents: `${installationRepoLine}`,
             complete: installationParameters.complete,
             invalid: installationParameters.invalid,
             index: installationParameters.index,
-        }
+        };
     }
 
-    return paramFileContents
-}
+    return paramFileContents;
+};
 
 const stateToNetworkDeviceParams = (state) => {
-    const installationParameters = state?.steps?.networkDevice ?? {}
+    const installationParameters = state?.steps?.networkDevice ?? {};
     const hasVlanId =
         installationParameters.vlan.enabled &&
-        typeof installationParameters.vlan === 'object' &&
-        typeof installationParameters.vlan.id === 'number' &&
-        installationParameters.vlan.id > 0
+        typeof installationParameters.vlan === "object" &&
+        typeof installationParameters.vlan.id === "number" &&
+        installationParameters.vlan.id > 0;
     let paramFileContents = {
-        contents: '',
+        contents: "",
         complete: false,
-        label: '',
+        label: "",
         index: 0,
-    }
+    };
 
     // => rd.znet...
     if (installationParameters) {
         const interfaceName =
-            getInterfaceNameParamContents(installationParameters) || ''
+            getInterfaceNameParamContents(installationParameters) || "";
 
         if (hasVlanId) {
             const vlanId = `vlan=${getVlanName(
                 interfaceName,
                 installationParameters.vlan.id
-            )}:${interfaceName}`
+            )}:${interfaceName}`;
             const installationRepoLine = `
 ${vlanId}
-`
+`;
             paramFileContents = {
                 contents: `${installationRepoLine}`,
                 complete: installationParameters.complete,
                 invalid: installationParameters.invalid,
                 index: installationParameters.index,
-            }
+            };
         } else {
-            const installationRepoLine = ``
+            const installationRepoLine = ``;
             paramFileContents = {
                 contents: `${installationRepoLine}`,
                 complete: installationParameters.complete,
                 invalid: installationParameters.invalid,
                 index: installationParameters.index,
-            }
+            };
         }
     }
 
-    return paramFileContents
-}
+    return paramFileContents;
+};
 
 const stateToInstallationRepoParams = (state) => {
-    const installationParameters = state?.steps?.installationParameters ?? {}
+    const installationParameters = state?.steps?.installationParameters ?? {};
     const networkInstallationUrl =
-        installationParameters?.networkInstallationUrl ?? ''
+        installationParameters?.networkInstallationUrl ?? "";
+    const networkInstallationUrlWithPasswordsRemoved =
+        installationParameters?.networkInstallationUrlWithPasswordsRemoved ??
+        "";
     let paramFileContents = {
-        contents: '',
+        contents: "",
+        contentsWithPasswordsRemoved: "",
         complete: false,
         index: 0,
-    }
+    };
 
     // => inst.repo=...
-    const installationRepoLine = `url=${networkInstallationUrl}`
+    const installationRepoLine = `url=${networkInstallationUrl}`;
+    const installationRepoLineWithPasswordsRemoved = `url=${networkInstallationUrlWithPasswordsRemoved}`;
     paramFileContents = {
         contents: `${installationRepoLine}`,
+        contentsWithPasswordsRemoved: `${installationRepoLineWithPasswordsRemoved}`,
         complete: installationParameters.complete,
         invalid: installationParameters.invalid,
         index: installationParameters.index,
-    }
+    };
 
-    return paramFileContents
-}
+    return paramFileContents;
+};
 
 const stateToVncParams = (state) => {
     const paramFileContents = {
-        contents: '',
+        contents: "",
+        contentsWithPasswordsRemoved: "",
         complete: false,
         index: 0,
-    }
+    };
 
-    return paramFileContents
-}
+    return paramFileContents;
+};
 
 const stateToSshParams = (state) => {
-    const installationParameters = state?.steps?.installationParameters ?? {}
+    const installationParameters = state?.steps?.installationParameters ?? {};
     let paramFileContents = {
-        contents: '',
+        contents: "",
+        contentsWithPasswordsRemoved: "",
         complete: false,
         index: 0,
-    }
+    };
 
     // => inst.sshd
     if (
@@ -160,18 +169,20 @@ const stateToSshParams = (state) => {
             installationParameters.ssh.password &&
             installationParameters.ssh.password.value &&
             installationParameters.ssh.password.value.length > 0
-        )
-        const sshServerLine = `${hasSshPassword ? `cc: password: ${hexEncodePassword(installationParameters.ssh.password.value)} end_cc` : ''}`
+        );
+        const sshServerLine = `${hasSshPassword ? `cc: password: ${hexEncodePassword(installationParameters.ssh.password.value)} end_cc` : ""}`;
+        const sshServerLineWithPasswordsRemoved = `${hasSshPassword ? `cc: password: ${toAsteriskRepresentation(installationParameters.ssh.password.value)} end_cc` : ""}`;
         paramFileContents = {
             contents: `${sshServerLine}`,
+            contentsWithPasswordsRemoved: `${sshServerLineWithPasswordsRemoved}`,
             complete: installationParameters.complete,
             invalid: installationParameters.invalid,
             index: installationParameters.index,
-        }
+        };
     }
 
-    return paramFileContents
-}
+    return paramFileContents;
+};
 
 export {
     stateToNetworkAddressParams,
@@ -179,4 +190,4 @@ export {
     stateToInstallationRepoParams,
     stateToVncParams,
     stateToSshParams,
-}
+};

@@ -59,6 +59,13 @@ const removeItem = (key) => {
     return ls.remove(key);
 };
 
+const getLocalStorageContentsForApp = () => {
+    const appString = decryptItem(LOCAL_STORAGE_KEY_APP);
+    const app = typeof appString === "object" ? appString : {};
+
+    return app;
+};
+
 const getLocalStorageContentsForDownloadParamFileStep = () => {
     const downloadParamFileString = getItem(
         LOCAL_STORAGE_KEY_APP_DOWNLOAD_PARAM_FILE
@@ -266,6 +273,7 @@ export {
     hasLocalStorageState,
     getDistributionName,
     getLocalStorageKeys,
+    getLocalStorageContentsForApp,
     getLocalStorageContentsForDownloadParamFileStep,
     getLocalStorageContentsForSummaryStep,
     getLocalStorageContentsForInformationStep,

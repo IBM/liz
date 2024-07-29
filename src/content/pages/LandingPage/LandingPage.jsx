@@ -47,6 +47,7 @@ import {
 import {
     saveParamFileContent,
     getParamFileContents,
+    getParamFileContentsWithPasswordsRemoved,
     getParamFileName,
     hasParamFile,
 } from "../../../util/param-file-util";
@@ -687,6 +688,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                 >
                     {state.parmfileCardIsExpanded && (
                         <Parmfile
+                            parmfileWithPasswordsRemoved={getParamFileContentsWithPasswordsRemoved()}
                             parmfile={getParamFileContents()}
                             distributionName={
                                 globalState.steps.inputFileSelection

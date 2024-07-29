@@ -58,6 +58,8 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         updatParamFileCopied,
         updateModified,
         updateParamFileContent,
+        updateShowPasswords,
+        updateIsEditing,
     } = useContext(DownloadParamFileContext);
     const distributionName =
         globalState.steps.inputFileSelection.distributionName ??
@@ -69,6 +71,10 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                 stateHasValidParamFileContents()
                     ? state.paramFileContent
                     : paramFileContent.data;
+            const paramFileContentToBePersistedWithPasswordsRemoved =
+                stateHasValidParamFileContents()
+                    ? state.paramFileContent
+                    : paramFileContent.dataWithPasswordsRemoved;
 
             isCompleteAndValid((error, isCompleteAndValid) => {
                 let mergedSteps = {};
@@ -81,6 +87,8 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                             downloadParamFile: {
                                 ...globalState.steps.downloadParamFile,
                                 contents: paramFileContentToBePersisted,
+                                contentsWithPasswordsRemoved:
+                                    paramFileContentToBePersistedWithPasswordsRemoved,
                                 presets,
                                 modified: state.paramFileContentModified,
                                 complete: true,
@@ -97,6 +105,8 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                             downloadParamFile: {
                                 ...globalState.steps.downloadParamFile,
                                 contents: paramFileContentToBePersisted,
+                                contentsWithPasswordsRemoved:
+                                    paramFileContentToBePersistedWithPasswordsRemoved,
                                 presets,
                                 modified: state.paramFileContentModified,
                                 complete: isCompleteAndValid.isComplete,
@@ -113,6 +123,8 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                             downloadParamFile: {
                                 ...globalState.steps.downloadParamFile,
                                 contents: paramFileContentToBePersisted,
+                                contentsWithPasswordsRemoved:
+                                    paramFileContentToBePersistedWithPasswordsRemoved,
                                 presets,
                                 modified: state.paramFileContentModified,
                                 disabled: false,
@@ -144,6 +156,22 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
     useImperativeHandle(ref, () => publicRef);
 
     const paramFileContent = stateToParamFile(globalState);
+
+    const showPassword = () => {
+        if (state.showPasswords) {
+            updateShowPasswords(false);
+        } else {
+            updateShowPasswords(true);
+        }
+    };
+
+    const isEditing = () => {
+        if (state.isEditing) {
+            updateIsEditing(false);
+        } else {
+            updateIsEditing(true);
+        }
+    };
 
     const updateCopied = () => {
         updatParamFileCopied(true);
@@ -235,7 +263,16 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                             ? state.paramFileContent
                             : paramFileContent.data
                     }
+                    contentsWithPasswordsRemoved={
+                        stateHasValidParamFileContents()
+                            ? state.paramFileContent
+                            : paramFileContent.dataWithPasswordsRemoved
+                    }
                     copyContents={updateCopied}
+                    onShowPassword={showPassword}
+                    showPasswords={state.showPasswords}
+                    onEditing={isEditing}
+                    editing={state.isEditing}
                     resetContents={() => {
                         resetParamFileTextAreaData({
                             updateParamFileContent,

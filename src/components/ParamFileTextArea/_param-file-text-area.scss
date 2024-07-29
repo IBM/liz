@@ -5,44 +5,44 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+    $font-path: "@ibm/plex"
 );
 
 .cds--form__helper-text {
-  p {
-    @include react.type-style("label-01");
-  }
+    p {
+        @include react.type-style("label-01");
+    }
 }
 
 .param-file-text-area_textarea {
-  > div > textarea {
-    @include react.type-style("code-02");
+    > div > textarea {
+        @include react.type-style("code-02");
 
-    padding: react.$spacing-04 react.$spacing-10 react.$spacing-04
-      react.$spacing-04;
-  }
+        padding: react.$spacing-05 react.$spacing-10 react.$spacing-06
+            react.$spacing-04;
+    }
 
-  &.param-file-text-area_textarea__padding {
-    padding: 0 0 react.$spacing-09 0;
-  }
+    &.param-file-text-area_textarea__padding {
+        padding: 0 0 react.$spacing-09 0;
+    }
 
-  &.param-file-text-area_textarea__modified > div > textarea {
-    border: react.$spacing-01 solid react.$support-warning;
-  }
+    &.param-file-text-area_textarea__modified > div > textarea {
+        border: react.$spacing-01 solid react.$support-warning;
+    }
 
-  .cds--form__helper-text {
-    margin: react.$spacing-02 0 react.$spacing-04 0;
-  }
+    .cds--form__helper-text {
+        margin: react.$spacing-02 0 react.$spacing-04 0;
+    }
 }
 
 .param-file-text-area_textarea-button-bar {
-  position: absolute;
-  top: react.$spacing-07;
-  right: react.$spacing-03;
-  z-index: 10000;
+    position: absolute;
+    top: react.$spacing-07;
+    right: react.$spacing-03;
+    z-index: 10000;
 
-  .param-file-text-area_textarea-button-bar__button {
-    cursor: pointer;
-    padding: react.$spacing-03;
-  }
+    .param-file-text-area_textarea-button-bar__button {
+        cursor: pointer;
+        padding: react.$spacing-03;
+    }
 }

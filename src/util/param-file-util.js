@@ -10,25 +10,26 @@ import {
     RHEL_DISTRIBUTION_ID,
     SLES_DISTRIBUTION_ID,
     UBUNTU_DISTRIBUTION_ID,
-} from './constants'
+} from "./constants";
 import {
+    getLocalStorageContentsForApp,
     getLocalStorageContentsForSummaryStep,
     getLocalStorageContentsForDownloadParamFileStep,
-} from './local-storage-util'
+} from "./local-storage-util";
 import {
     stateToNetworkAddressParams as stateToNetworkAddressParamsRhel,
     stateToNetworkDeviceParams as stateToNetworkDeviceParamsRhel,
     stateToSshParams as stateToSshParamsRhel,
     stateToVncParams as stateToVncParamsRhel,
     stateToInstallationRepoParams as stateToInstallationRepoParamsRhel,
-} from './param-file-util_rhel'
+} from "./param-file-util_rhel";
 import {
     stateToNetworkAddressParams as stateToNetworkAddressParamsSles,
     stateToNetworkDeviceParams as stateToNetworkDeviceParamsSles,
     stateToSshParams as stateToSshParamsSles,
     stateToVncParams as stateToVncParamsSles,
     stateToInstallationRepoParams as stateToInstallationRepoParamsSles,
-} from './param-file-util_sles'
+} from "./param-file-util_sles";
 
 import {
     stateToNetworkAddressParams as stateToNetworkAddressParamsUbuntu,
@@ -36,7 +37,7 @@ import {
     stateToSshParams as stateToSshParamsUbuntu,
     stateToVncParams as stateToVncParamsUbuntu,
     stateToInstallationRepoParams as stateToInstallationRepoParamsUbuntu,
-} from './param-file-util_ubuntu'
+} from "./param-file-util_ubuntu";
 
 const getFunctionsForDistribution = () => {
     return {
@@ -61,59 +62,66 @@ const getFunctionsForDistribution = () => {
             stateToVncParams: stateToVncParamsUbuntu,
             stateToInstallationRepoParams: stateToInstallationRepoParamsUbuntu,
         },
-    }
-}
+    };
+};
 
 const removeEmptyLines = (str) =>
     str
         .split(/\r?\n/)
-        .filter((line) => line.trim() !== '')
-        .join('\n')
+        .filter((line) => line.trim() !== "")
+        .join("\n");
 
 const hasIncompleteData = (steps) => {
     for (const property in steps) {
         if (steps[property].complete === false) {
-            return true
+            return true;
         }
     }
-    return false
-}
+    return false;
+};
 
 const hasInvalidData = (steps) => {
     for (const property in steps) {
         if (steps[property].invalid === true) {
-            return true
+            return true;
         }
     }
-    return false
-}
+    return false;
+};
 
 const stateToParamFile = (state) => {
     const distributionName =
         state.steps.inputFileSelection.distributionName &&
         state.steps.inputFileSelection.distributionName.length > 0
             ? state.steps.inputFileSelection.distributionName
-            : DEFAULT_DISTRIBUTION_ID
-    const functionNames = getFunctionsForDistribution()[distributionName]
+            : DEFAULT_DISTRIBUTION_ID;
+    const functionNames = getFunctionsForDistribution()[distributionName];
 
     const stateToInstallationRepoParamsResult =
-        functionNames.stateToInstallationRepoParams(state)
-    const stateToVncParamsResult = functionNames.stateToVncParams(state)
-    const stateToSshParamsResult = functionNames.stateToSshParams(state)
+        functionNames.stateToInstallationRepoParams(state);
+    const stateToVncParamsResult = functionNames.stateToVncParams(state);
+    const stateToSshParamsResult = functionNames.stateToSshParams(state);
     const stateToNetworkDeviceParamsResult =
-        functionNames.stateToNetworkDeviceParams(state)
+        functionNames.stateToNetworkDeviceParams(state);
     const stateToNetworkAddressParamsResult =
-        functionNames.stateToNetworkAddressParams(state)
+        functionNames.stateToNetworkAddressParams(state);
 
-    const presets = state?.steps?.downloadParamFile?.presets ?? ''
+    const presets = state?.steps?.downloadParamFile?.presets ?? "";
 
     const data = removeEmptyLines(`${presets}
 ${stateToNetworkDeviceParamsResult.contents}
 ${stateToNetworkAddressParamsResult.contents}
 ${stateToInstallationRepoParamsResult.contents}
-${distributionName !== UBUNTU_DISTRIBUTION_ID ? stateToVncParamsResult.contents : ''}
+${distributionName !== UBUNTU_DISTRIBUTION_ID ? stateToVncParamsResult.contents : ""}
 ${stateToSshParamsResult.contents}
-`)
+`);
+    const dataWithPasswordsRemoved = removeEmptyLines(`${presets}
+${stateToNetworkDeviceParamsResult.contents}
+${stateToNetworkAddressParamsResult.contents}
+${stateToInstallationRepoParamsResult.contentsWithPasswordsRemoved}
+${distributionName !== UBUNTU_DISTRIBUTION_ID ? stateToVncParamsResult.contentsWithPasswordsRemoved : ""}
+${stateToSshParamsResult.contentsWithPasswordsRemoved}
+`);
     const steps = {
         installationParameters: {
             complete: stateToInstallationRepoParamsResult.complete,
@@ -130,71 +138,81 @@ ${stateToSshParamsResult.contents}
             invalid: stateToNetworkDeviceParamsResult.invalid,
             index: stateToNetworkDeviceParamsResult.index,
         },
-    }
+    };
     const metadata = {
         hasIncompleteData: hasIncompleteData(steps),
         hasInvalidData: hasInvalidData(steps),
         steps,
-    }
+    };
 
     return {
         data,
+        dataWithPasswordsRemoved,
         metadata,
-    }
-}
+    };
+};
 
 const destroyClickedElement = (event) => {
     // remove the link from the DOM
-    document.body.removeChild(event.target)
-}
+    document.body.removeChild(event.target);
+};
 
 const saveParamFileContent = (content, name = DEFAULT_PARAM_FILE_NAME) => {
     const textFileAsBlob = new Blob([content], {
-        type: 'text/plain',
-    })
+        type: "text/plain",
+    });
 
-    const downloadLink = document.createElement('a')
-    downloadLink.download = name
-    downloadLink.innerHTML = 'Download File'
+    const downloadLink = document.createElement("a");
+    downloadLink.download = name;
+    downloadLink.innerHTML = "Download File";
     if (window.webkitURL != null) {
         // Chrome allows the link to be clicked without actually adding it to the DOM.
-        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob)
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
     } else {
         // Firefox requires the link to be added to the DOM before it can be clicked.
-        downloadLink.href = window.URL.createObjectURL(textFileAsBlob)
-        downloadLink.onclick = destroyClickedElement
-        downloadLink.style.display = 'none'
-        document.body.appendChild(downloadLink)
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
     }
 
-    downloadLink.click()
-}
+    downloadLink.click();
+};
 
 const getParamFileName = () => {
-    const summary = getLocalStorageContentsForSummaryStep()
-    const paramFileName = summary?.downloadParmfileName ?? ''
+    const summary = getLocalStorageContentsForSummaryStep();
+    const paramFileName = summary?.downloadParmfileName ?? "";
 
-    return paramFileName
-}
+    return paramFileName;
+};
+
+const getParamFileContentsWithPasswordsRemoved = () => {
+    const app = getLocalStorageContentsForApp();
+    const paramFileContents =
+        app?.steps?.downloadParamFile?.contentsWithPasswordsRemoved ?? "";
+
+    return paramFileContents;
+};
 
 const getParamFileContents = () => {
-    const downloadParamFile = getLocalStorageContentsForDownloadParamFileStep()
-    const paramFileContents = downloadParamFile?.paramFileContent ?? ''
+    const downloadParamFile = getLocalStorageContentsForDownloadParamFileStep();
+    const paramFileContents = downloadParamFile?.paramFileContent ?? "";
 
-    return paramFileContents
-}
+    return paramFileContents;
+};
 
 const hasParamFile = () => {
-    const paramFileContents = getParamFileContents()
-    const hasParamFile = paramFileContents.length > 0
+    const paramFileContents = getParamFileContents();
+    const hasParamFile = paramFileContents.length > 0;
 
-    return hasParamFile
-}
+    return hasParamFile;
+};
 
 export {
     stateToParamFile,
     saveParamFileContent,
     getParamFileName,
     getParamFileContents,
+    getParamFileContentsWithPasswordsRemoved,
     hasParamFile,
-}
+};
