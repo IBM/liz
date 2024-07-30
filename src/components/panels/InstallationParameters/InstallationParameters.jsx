@@ -292,7 +292,7 @@ const InstallationParameters = forwardRef(
                     installationAddressUrl.password.length > 0
                 ) {
                     installationAddressUrl.password = toAsteriskRepresentation(
-                        installationAddressUrl.password
+                        hexEncodePassword(installationAddressUrl.password)
                     );
                 }
                 if (
@@ -301,8 +301,9 @@ const InstallationParameters = forwardRef(
                     password &&
                     password.length > 0
                 ) {
-                    installationAddressUrl.password =
-                        toAsteriskRepresentation(password);
+                    installationAddressUrl.password = toAsteriskRepresentation(
+                        hexEncodePassword(password)
+                    );
                 }
                 return installationAddressUrl
                     ? installationAddressUrl.toString()
@@ -339,10 +340,6 @@ const InstallationParameters = forwardRef(
                     installationAddressUrl.password = hexEncodePassword(
                         installationAddressUrl.password
                     );
-                    installationAddressUrl.passwordWithAsterisks =
-                        toAsteriskRepresentation(
-                            installationAddressUrl.password
-                        );
                 }
                 if (
                     installationAddressUrl &&
@@ -352,8 +349,6 @@ const InstallationParameters = forwardRef(
                 ) {
                     installationAddressUrl.password =
                         hexEncodePassword(password);
-                    installationAddressUrl.passwordWithAsterisks =
-                        toAsteriskRepresentation(password);
                 }
                 return installationAddressUrl
                     ? installationAddressUrl.toString()

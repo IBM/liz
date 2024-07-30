@@ -152,6 +152,34 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         },
     };
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            const code = event.which || event.keyCode;
+            const charCode = String.fromCharCode(code).toLowerCase();
+
+            if (
+                (event.ctrlKey || event.metaKey) &&
+                charCode === "c" &&
+                event.target.id === "liz__param-file-text-area" &&
+                event.target.selectionStart !== event.target.selectionEnd
+            ) {
+                event.preventDefault();
+
+                updateCopied();
+                navigator.clipboard.writeText(
+                    stateHasValidParamFileContents()
+                        ? state.paramFileContent
+                        : paramFileContent.data
+                );
+            }
+            return true;
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
     useEffect(publicRef.persistState, [state]);
     useImperativeHandle(ref, () => publicRef);
 

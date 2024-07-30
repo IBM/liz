@@ -5,47 +5,50 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex",
-  $use-flexbox-grid: true
+    $font-path: "@ibm/plex",
+    $use-flexbox-grid: true
 );
 
 .download-param-file_layer {
-  padding: 0 react.$spacing-08 0 react.$spacing-08;
+    padding: 0 react.$spacing-08 0 react.$spacing-08;
 
-  .download-param-file_grid {
-    &.cds--grid {
-      padding: 0;
+    .download-param-file_grid {
+        &.cds--grid {
+            padding: 0;
+        }
     }
-  }
 }
 
 .download-param-file_data-tag-container {
-  padding: react.$spacing-06 0 0 0;
+    padding: react.$spacing-06 0 0 0;
 
-  .download-param-file_data-tag_heading {
-    @include react.type-style("heading-01");
-    @include react.font-weight("semibold");
+    .download-param-file_data-tag_heading {
+        @include react.type-style("heading-01");
+        @include react.font-weight("semibold");
 
-    padding: react.$spacing-03 0 react.$spacing-03 0;
-  }
+        padding: react.$spacing-03 0 react.$spacing-03 0;
+    }
 }
 
 .download-param-file_textarea-container {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .download-param-file_copied-label {
-  @include react.type-style("label-01");
+    @include react.type-style("helper-text-01");
 
-  margin: react.$spacing-03 0 0 0;
-  display: inline-block;
+    margin: react.$spacing-03 0 0 0;
+    float: right;
+    color: react.$text-secondary;
+    position: relative;
+    top: calc((react.$spacing-02 + react.$spacing-07) * -1);
 }
 
 .download-param-file__incomplete-data-banner {
-  max-width: 100% !important;
+    max-width: 100% !important;
 }
 
 .download-param-file_modified-data-message-link-anchor {
-  cursor: pointer;
+    cursor: pointer;
 }
