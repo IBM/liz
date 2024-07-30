@@ -171,7 +171,7 @@ const stateToSshParams = (state) => {
             installationParameters.ssh.password.value.length > 0
         );
         const sshServerLine = `${hasSshPassword ? `cc: password: ${hexEncodePassword(installationParameters.ssh.password.value)} end_cc` : ""}`;
-        const sshServerLineWithPasswordsRemoved = `${hasSshPassword ? `cc: password: ${toAsteriskRepresentation(installationParameters.ssh.password.value)} end_cc` : ""}`;
+        const sshServerLineWithPasswordsRemoved = `${hasSshPassword ? `cc: password: ${toAsteriskRepresentation(hexEncodePassword(installationParameters.ssh.password.value))} end_cc` : ""}`;
         paramFileContents = {
             contents: `${sshServerLine}`,
             contentsWithPasswordsRemoved: `${sshServerLineWithPasswordsRemoved}`,
