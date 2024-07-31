@@ -681,6 +681,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                 state={state}
                 readOnly={paramFileHasBeenModifiedFromState}
                 displayRoCEControls={displayRoCEControls}
+                distributionName={distributionName}
             />
             <Toggle
                 readOnly={paramFileHasBeenModifiedFromState}

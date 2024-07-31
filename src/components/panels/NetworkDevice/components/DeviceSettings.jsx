@@ -24,6 +24,7 @@ import {
     UPDATE_FUNCTION__PORT_NO,
     UPDATE_FUNCTION__PCI_FUNCTION_ID,
     UPDATE_FUNCTION__USER_IDENTIFIER,
+    UBUNTU_DISTRIBUTION_ID,
 } from "../../../../util/constants";
 import { isHex } from "../../../../util/network-device-util";
 import "./_device-settings.scss";
@@ -34,6 +35,7 @@ const DeviceSettings = ({
     state,
     readOnly,
     displayRoCEControls,
+    distributionName,
 }) => {
     const { t } = useTranslation();
 
@@ -462,7 +464,10 @@ const DeviceSettings = ({
         </FlexGrid>
     );
 
-    if (deviceSettingsId === "network-device_osa-option") {
+    if (
+        deviceSettingsId === "network-device_osa-option" &&
+        distributionName !== UBUNTU_DISTRIBUTION_ID
+    ) {
         return osaMarkup;
     } else if (
         displayRoCEControls &&
@@ -484,6 +489,7 @@ DeviceSettings.propTypes = {
     state: PropTypes.object.isRequired,
     readOnly: PropTypes.bool.isRequired,
     displayRoCEControls: PropTypes.bool.isRequired,
+    distributionName: PropTypes.string.isRequired,
 };
 
 export default DeviceSettings;
