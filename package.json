@@ -36,7 +36,7 @@
         "@carbon/layout": "11.24.0",
         "@carbon/react": "1.63.0",
         "@carbon/styles": "1.62.0",
-        "@carbon/themes": "11.37.1",
+        "@carbon/themes": "11.38.0",
         "@carbon/type": "11.28.1",
         "@loadable/component": "5.16.4",
         "i18next": "23.12.2",
