@@ -241,23 +241,22 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
     const tabMarkup = (
         <TabsVertical height="100%">
             <TabListVertical aria-label="List of tabs">
-                <Tab>About</Tab>
-                <Tab>Appearance</Tab>
-                <Tab>Security</Tab>
+                <Tab>{t("settingsPage.tabs.label.about")}</Tab>
+                <Tab>{t("settingsPage.tabs.label.appearance")}</Tab>
+                <Tab>{t("settingsPage.tabs.label.security")}</Tab>
             </TabListVertical>
             <TabPanels>
                 <TabPanel>
                     <Heading className="liz__settings-page__tab-panel-heading">
-                        About
+                        {t("settingsPage.tabs.label.about")}
                     </Heading>
                     <Section>
                         <Heading className="liz__settings-page__tab-panel-subheading">
-                            About this application
+                            {t("dialog.about.headerLabelLong")}
                         </Heading>
                         <Section className="liz__settings-page__about-build-info">
                             <div className="liz__settings-page__tab-panel-body-info">
-                                Use this information if reporting issues or
-                                making other references to the application.
+                                {t("settingsPage.tabs.label.aboutInfo")}
                             </div>
                             <div className={buildDateCopyClass}>
                                 <div className="liz__settings-page__tab-panel-body__date__left-column">
@@ -506,16 +505,15 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                 </TabPanel>
                 <TabPanel>
                     <Heading className="liz__settings-page__tab-panel-heading">
-                        Appearance
+                        {t("settingsPage.tabs.label.appearance")}
                     </Heading>
                     <Section>
                         <Heading className="liz__settings-page__tab-panel-subheading">
-                            Light mode / Dark mode
+                            {t("settingsPage.tabs.heading.lightDarkMode")}
                         </Heading>
                         <Section className="liz__settings-page__about-build-info">
                             <div className="liz__settings-page__tab-panel-body-info">
-                                This setting determins what kind of theme to
-                                use. Either dark or light mode can be used.
+                                {t("settingsPage.tabs.label.appearanceInfo")}
                             </div>
                             <div className="liz__settings-page__about-build-info__theme">
                                 <div
@@ -644,16 +642,15 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                 </TabPanel>
                 <TabPanel>
                     <Heading className="liz__settings-page__tab-panel-heading">
-                        Security
+                        {t("settingsPage.tabs.label.security")}
                     </Heading>
                     <Section>
                         <Heading className="liz__settings-page__tab-panel-subheading">
-                            Show Passwords
+                            {t("settingsPage.tabs.heading.showPasswords")}
                         </Heading>
                         <Section className="liz__settings-page__about-build-info">
                             <div className="liz__settings-page__tab-panel-body-info">
-                                This setting allows to specify that passwords
-                                shall be displayed instead of massking them.
+                                {t("settingsPage.tabs.label.securityInfo")}
                             </div>
                             <div className="liz__settings-page__about-build-info__theme">
                                 <div

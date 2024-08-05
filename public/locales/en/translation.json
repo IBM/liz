@@ -40,8 +40,9 @@
     "rightNavigation.header": "Help & Documentation",
     "dialog.about.showPasswordsLabel": "Show passwords",
     "dialog.about.headerLabel": "About this app",
-    "dialog.about.buildDateLabel": "Build date: <1>{{buildDate}}</1>",
-    "dialog.about.commitHashLabel": "Commit hash: <1>{{commitHashShort}}</1>",
+    "dialog.about.headerLabelLong": "About this application",
+    "dialog.about.buildDateLabel": "<1>Build date:</1> <2>{{buildDate}}</2>",
+    "dialog.about.commitHashLabel": "<1>Commit hash:</1> <2>{{commitHashShort}}</2>",
     "dialog.about.reportIssueLabel": "Report an issue",
     "dialog.about.knownIssuesLabel": "Known issues",
     "dialog.about.settingsLabel": "Settings",
@@ -80,5 +81,13 @@
     "errorPage.label.errorMessage": "Error code",
     "errorPage.detailsLabel": "Error details",
     "errorPage.dataPlaceholderString": "none",
-    "headerLayout.skiptToMainContentText": "Skip to main content"
+    "headerLayout.skiptToMainContentText": "Skip to main content",
+    "settingsPage.tabs.label.about": "About",
+    "settingsPage.tabs.label.aboutInfo": "Use this information if reporting issues or making other references to the application.",
+    "settingsPage.tabs.label.appearance": "Appearance",
+    "settingsPage.tabs.label.appearanceInfo": "This setting determins what kind of theme to use. Either dark or light mode can be used.",
+    "settingsPage.tabs.heading.lightDarkMode": "Light mode / Dark mode",
+    "settingsPage.tabs.label.security": "Security",
+    "settingsPage.tabs.label.securityInfo": "This setting allows to specify that passwords shall be displayed instead of massking them.",
+    "settingsPage.tabs.heading.showPasswords": "Show Passwords"
 }
