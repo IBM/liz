@@ -8,36 +8,36 @@
     $font-path: "@ibm/plex"
 );
 
-.help-panel__error-page__header {
+.help-panel__settings-page__header {
     @include react.type-style("heading-01");
     @include react.font-weight("semibold");
 }
 
-.help-panel__error-page__footer {
+.help-panel__settings-page__footer {
     /* nop */
 }
 
-.help-panel__error-page__content {
+.help-panel__settings-page__content {
     @include react.type-style("body-compact-01");
 
     padding: react.$spacing-03 react.$spacing-04 react.$spacing-05 0;
     white-space: pre-line;
     box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0 react.$border-subtle;
 
-    &.help-panel__error-page__content__active {
+    &.help-panel__settings-page__content__active {
         box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0
             react.$border-interactive;
     }
 }
 
-.help-panel__error-page__content__bottom {
+.help-panel__settings-page__content__bottom {
     @include react.type-style("body-compact-01");
 
     padding: react.$spacing-03 react.$spacing-04 react.$spacing-04 0;
     white-space: pre-line;
     box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0 react.$border-subtle;
 
-    &.help-panel__error-page__content__active {
+    &.help-panel__settings-page__content__active {
         box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0
             react.$border-interactive;
     }

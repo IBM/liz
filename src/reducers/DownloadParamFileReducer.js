@@ -10,6 +10,7 @@ import {
     ACTION_UPDATE_PARAM_FILE_CONTENT,
     ACTION_RESET_TO_INITIAL_STATE,
     ACTION_UPDATE_INSTALLATION_PARAM_SHOW_PASSWORDS,
+    ACTION_UPDATE_INSTALLATION_PARAM_OVERRIDE_GLOBAL_STATE,
     ACTION_UPDATE_INSTALLATION_PARAM_IS_EDITING,
 } from "../util/reducer-action-constants";
 
@@ -25,6 +26,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 showPasswords: action.nextShowPasswords,
+            };
+        case ACTION_UPDATE_INSTALLATION_PARAM_OVERRIDE_GLOBAL_STATE:
+            return {
+                ...state,
+                overrideGlobalState: action.nextOverrideGlobalState,
             };
         case ACTION_UPDATE_INSTALLATION_PARAM_IS_EDITING:
             return {

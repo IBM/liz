@@ -7,5 +7,6 @@
 import MainLayout from "./MainLayout";
 import EditLayout from "./EditLayout";
 import ErrorLayout from "./ErrorLayout";
+import SettingsLayout from "./SettingsLayout";
 
-export { MainLayout, EditLayout, ErrorLayout };
+export { MainLayout, EditLayout, SettingsLayout, ErrorLayout };

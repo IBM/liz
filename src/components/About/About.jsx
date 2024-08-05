@@ -11,6 +11,7 @@ import React, {
     useState,
     forwardRef,
 } from "react";
+import { useHref } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -26,16 +27,19 @@ import {
     ESCAPE_KEY_EVENT,
     TAB_KEY_EVENT,
 } from "../../util/event-handler-constants";
+import PathConstants from "../../util/path-constants";
 import "./_about.scss";
 
 const About = forwardRef(function About(props, ref) {
     const { t } = useTranslation();
     const { closeNotification, pruneSettings } = props;
+    const settingsPageHref = useHref(PathConstants.SETTINGS);
     const {
         config,
         state: globalState,
         updateTheme,
         updateUseOperatingSystemTheme,
+        updateShowPasswords,
     } = useContext(ApplicationContext);
 
     const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
@@ -84,6 +88,7 @@ const About = forwardRef(function About(props, ref) {
     const useLightTheme = theme === LIGHT_THEME;
     const useOperatingSystemTheme =
         globalState?.useOperatingSystemTheme ?? false;
+    const showPasswords = globalState?.showPasswords ?? false;
 
     const buildDateCopyIcon = buildDateBeenCopied ? Checkmark : Copy;
     const commitHashCopyIcon = commitHashHasBeenCopied ? Checkmark : Copy;
@@ -108,6 +113,9 @@ const About = forwardRef(function About(props, ref) {
         : {
               "aria-checked": "false",
           };
+    const externalLinkSettingsAriaProps = {
+        "aria-describedby": "about-dialog__about-internal-link-hint__settings",
+    };
     const externalLinkKnownIssueAriaProps = {
         "aria-describedby": "about-dialog__about-external-link-hint__kissues",
     };
@@ -430,10 +438,40 @@ const About = forwardRef(function About(props, ref) {
                                     renderIcon={commitHashCopyIcon}
                                     role="menuitemcheckbox"
                                     data-a11y-previous="about-dialog__copy-button__build-date"
-                                    data-a11y-next="about-dialog__theme-toggle"
+                                    data-a11y-next="about-dialog__show-passwords-toggle"
                                     {...commitHashCopyAriaProps}
                                 />
                             </CopyToClipboard>
+                        </div>
+                    </div>
+                    <div className="about-dialog__about-build-info__theme">
+                        <div
+                            id="about-dialog__show-passwords-toggle-label"
+                            className="about-dialog__about-build-info__theme__left-column"
+                        >
+                            {t("dialog.about.showPasswordsLabel")}:
+                        </div>
+                        <div className="about-dialog__about-build-info__theme__right-column">
+                            <Toggle
+                                size="sm"
+                                aria-labelledby="about-dialog__show-passwords-toggle-label"
+                                labelA={t("btnLabel.No", { ns: "common" })}
+                                labelB={t("btnLabel.Yes", { ns: "common" })}
+                                id="about-dialog__show-passwords-toggle"
+                                toggled={showPasswords}
+                                onToggle={() => {
+                                    if (showPasswords) {
+                                        updateShowPasswords(false);
+                                    } else {
+                                        updateShowPasswords(true);
+                                    }
+                                }}
+                                onBlur={handleTabElementOnBlur}
+                                onKeyDown={handleTabElementOnKeyDown}
+                                data-a11y-previous="about-dialog__copy-button__commit-hash"
+                                data-a11y-next="about-dialog__theme-toggle"
+                                role="menuitemradio"
+                            />
                         </div>
                     </div>
                     <div className="about-dialog__about-build-info__theme">
@@ -461,7 +499,7 @@ const About = forwardRef(function About(props, ref) {
                                 }}
                                 onBlur={handleTabElementOnBlur}
                                 onKeyDown={handleTabElementOnKeyDown}
-                                data-a11y-previous="about-dialog__copy-button__commit-hash"
+                                data-a11y-previous="about-dialog__show-passwords-toggle"
                                 data-a11y-next="about-dialog__theme-from-os-toggle"
                                 role="menuitemradio"
                                 {...useLightThemeAriaProps}
@@ -514,12 +552,40 @@ const About = forwardRef(function About(props, ref) {
                                 onBlur={handleTabElementOnBlur}
                                 onKeyDown={handleTabElementOnKeyDown}
                                 data-a11y-previous="about-dialog__theme-toggle"
-                                data-a11y-next="about-dialog__about-kissues-button"
+                                data-a11y-next="about-dialog__about-settings-button"
                                 role="menuitemradio"
                             />
                         </div>
                     </div>
                 </div>
+            </li>
+            <li
+                className="about-dialog__about-settings-button-container"
+                role="none"
+            >
+                <Button
+                    kind="ghost"
+                    data-title="report"
+                    id="about-dialog__about-settings-button"
+                    href={settingsPageHref}
+                    onClick={closeNotification}
+                    className="about-dialog__about-settings-button"
+                    role="menuitem"
+                    onBlur={handleTabElementOnBlur}
+                    onKeyDown={handleTabElementOnKeyDown}
+                    data-a11y-previous="about-dialog__theme-from-os-toggle"
+                    data-a11y-next="about-dialog__about-kissues-button"
+                    iconDescription={t("dialog.about.settingsLabel")}
+                    {...externalLinkSettingsAriaProps}
+                >
+                    <span>{t("dialog.about.settingsLabel")}</span>
+                    <span
+                        className="about-dialog__about-internal-link-hint"
+                        id="about-dialog__about-internal-link-hint__settings"
+                    >
+                        {t("dialog.about.internalLinkHint")}
+                    </span>
+                </Button>
             </li>
             <li
                 className="about-dialog__about-kissues-button-container"
@@ -535,7 +601,7 @@ const About = forwardRef(function About(props, ref) {
                     role="menuitem"
                     onBlur={handleTabElementOnBlur}
                     onKeyDown={handleTabElementOnKeyDown}
-                    data-a11y-previous="about-dialog__theme-from-os-toggle"
+                    data-a11y-previous="about-dialog__about-settings-button"
                     data-a11y-next="about-dialog__about-report-button"
                     renderIcon={Launch}
                     iconDescription={t("dialog.about.knownIssuesLabel")}

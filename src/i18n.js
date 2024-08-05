@@ -42,6 +42,7 @@ const i18Init = (distributionName) => {
                 "help_installationParameters",
                 "help_intro",
                 "help_landingPage",
+                "help_settingsPage",
                 "help_networkAddress",
                 "help_networkDevice",
                 "help_nextSteps",

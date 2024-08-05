@@ -3,9 +3,9 @@
  *
  * (C) Copyright IBM Corp. 2024
  */
-import React, { useReducer, useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types'
+import React, { useReducer, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 import {
     PANEL_DOWNLOAD_PARAM_FILE,
     PANEL_INFORMATION,
@@ -16,9 +16,10 @@ import {
     PANEL_SUMMARY,
     PANEL_INTRO,
     PANEL_LANDING_PAGE,
+    PANEL_SETTINGS_PAGE,
     PANEL_ERROR_PAGE,
     PANEL_UNKNOWN,
-} from '../util/panel-constants'
+} from "../util/panel-constants";
 import {
     ACTION_UPDATE_APP_THEME,
     ACTION_UPDATE_APP_STATE,
@@ -36,23 +37,24 @@ import {
     ACTION_UPDATE_APP_IS_DISABLED,
     ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
     ACTION_UPDATE_APP_USE_OS_THEME,
+    ACTION_UPDATE_APP_SHOW_PASSWORDS,
     ACTION_UPDATE_APP_CONFIG,
-} from '../util/reducer-action-constants'
-import { ADDRESS_TYPE_IPV4, DEFAULT_STEPS } from '../util/constants'
-import { getLocalStorageKeys, pruneSettings } from '../util/local-storage-util'
-import { ApplicationContext } from '.'
+} from "../util/reducer-action-constants";
+import { ADDRESS_TYPE_IPV4, DEFAULT_STEPS } from "../util/constants";
+import { getLocalStorageKeys, pruneSettings } from "../util/local-storage-util";
+import { ApplicationContext } from ".";
 
-import reducer from '../reducers/AppReducer'
-import createInitialState from '../states/AppState'
+import reducer from "../reducers/AppReducer";
+import createInitialState from "../states/AppState";
 
 const ApplicationContextProvider = ({ value, children }) => {
-    const { t } = useTranslation()
-    const [state, dispatch] = useReducer(reducer, createInitialState())
+    const { t } = useTranslation();
+    const [state, dispatch] = useReducer(reducer, createInitialState());
 
     const updateResetToInitialState = useCallback(
         (updates) => {
-            const includeIntroStep = updates
-            const initialState = createInitialState(true)
+            const includeIntroStep = updates;
+            const initialState = createInitialState(true);
             dispatch({
                 type: ACTION_RESET_TO_INITIAL_STATE,
                 nextInitialState: includeIntroStep
@@ -61,193 +63,203 @@ const ApplicationContextProvider = ({ value, children }) => {
                           includeIntroStep: true,
                       }
                     : initialState,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateConfig = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_CONFIG,
                 nextAppConfig: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const getConfig = useCallback((updates) => {
         const hasConfigObject =
             updates &&
-            typeof updates.config === 'object' &&
-            Object.keys(updates.config).length > 0
+            typeof updates.config === "object" &&
+            Object.keys(updates.config).length > 0;
 
         const fetchData = async () => {
             const response = await fetch(
                 `${import.meta.env.VITE_URL_PATH_PREFIX}config/app/config.json`
-            )
-            const config = await response.json()
+            );
+            const config = await response.json();
 
-            return config
-        }
+            return config;
+        };
 
         fetchData().then((config) => {
-            !hasConfigObject && updateConfig(config)
-        })
-    })
+            !hasConfigObject && updateConfig(config);
+        });
+    });
+
+    const updateShowPasswords = useCallback(
+        (updates) => {
+            dispatch({
+                type: ACTION_UPDATE_APP_SHOW_PASSWORDS,
+                nextShowPasswords: updates,
+            });
+        },
+        [state, dispatch]
+    );
 
     const updateUseOperatingSystemTheme = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_USE_OS_THEME,
                 nextUseOperatingSystemTheme: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateTheme = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_THEME,
                 nextTheme: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateState = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_STATE,
                 nextState: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateStep = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_STEP,
                 nextStep: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateCurrentHelpStep = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_HELP_STEP,
                 nextHelpStep: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateNextStep = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_NEXT_STEP,
                 nextNextStep: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateIncludeIntroStep = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_INCLUDE_INTRO_STEP,
                 nextIncludeIntroStep: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateParamFileContent = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_PARAM_FILE_CONTENT,
                 nextParamFileContent: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateModified = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_PARAM_FILE_MODIFIED,
                 nextParamFileContentModified: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateShowLegalNotification = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION,
                 nextShowLegalNotification: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateUseStateFromLocalStorage = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE,
                 nextUseStateFromLocalStorage: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateIsDirty = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_IS_DIRTY,
                 nextIsDirty: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateIsEditing = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_IS_EDITING,
                 nextIsEditing: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateSteps = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_STEPS,
                 nextSteps: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const updateIsDisabled = useCallback(
         (updates) => {
             dispatch({
                 type: ACTION_UPDATE_APP_IS_DISABLED,
                 nextSteps: updates,
-            })
+            });
         },
         [state, dispatch]
-    )
+    );
 
     const getHelpPanelConfig = ({ step }) => {
-        let config
+        let config;
 
         switch (step) {
             case 0:
@@ -258,8 +270,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 1:
                 config = {
                     forPanel: PANEL_INFORMATION,
@@ -268,8 +280,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 3:
                 config = {
                     forPanel: PANEL_NETWORK_DEVICE,
@@ -278,8 +290,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 4:
                 config = {
                     forPanel: PANEL_NETWORK_ADDRESS,
@@ -288,8 +300,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 5:
                 config = {
                     forPanel: PANEL_INSTALLATION_PARAMETERS,
@@ -298,8 +310,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 6:
                 config = {
                     forPanel: PANEL_DOWNLOAD_PARAM_FILE,
@@ -308,8 +320,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 8:
                 config = {
                     forPanel: PANEL_SUMMARY,
@@ -318,8 +330,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 9:
                 config = {
                     forPanel: PANEL_LANDING_PAGE,
@@ -328,8 +340,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 10:
                 config = {
                     forPanel: PANEL_INTRO,
@@ -338,8 +350,8 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
             case 11:
                 config = {
                     forPanel: PANEL_ERROR_PAGE,
@@ -348,17 +360,27 @@ const ApplicationContextProvider = ({ value, children }) => {
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
                     },
-                }
-                break
+                };
+                break;
+            case 12:
+                config = {
+                    forPanel: PANEL_SETTINGS_PAGE,
+                    params: {
+                        hasMultipleSteps: false,
+                        currentHelpStep: state.helpStep,
+                        updateCurrentHelpStep,
+                    },
+                };
+                break;
             default:
-                config = <div>Help content not yet implemented.</div>
+                config = <div>Help content not yet implemented.</div>;
         }
 
-        return config
-    }
+        return config;
+    };
 
     const getPanelConfig = ({ step }) => {
-        let config
+        let config;
 
         switch (step) {
             case 0:
@@ -368,17 +390,17 @@ const ApplicationContextProvider = ({ value, children }) => {
                         disableSubmit: !state.steps.inputFileSelection.complete,
                         invalid: state.steps.inputFileSelection.invalid,
                         title: t(
-                            'leftNavigation.progressStep.inputFileSelection.label'
+                            "leftNavigation.progressStep.inputFileSelection.label"
                         ),
                         subtitle: t(
-                            'leftNavigation.progressStep.inputFileSelection.secondaryLabel'
+                            "leftNavigation.progressStep.inputFileSelection.secondaryLabel"
                         ),
                         index: state.steps.inputFileSelection.index,
                         includeStep: true,
                         introStep: false,
                     },
-                }
-                break
+                };
+                break;
             case 1:
                 config = {
                     panel: PANEL_INFORMATION,
@@ -401,17 +423,17 @@ const ApplicationContextProvider = ({ value, children }) => {
                         disableSubmit: !state.steps.information.complete,
                         invalid: state.steps.information.invalid,
                         title: t(
-                            'leftNavigation.progressStep.information.label'
+                            "leftNavigation.progressStep.information.label"
                         ),
                         subtitle: t(
-                            'leftNavigation.progressStep.information.secondaryLabel'
+                            "leftNavigation.progressStep.information.secondaryLabel"
                         ),
                         index: state.steps.information.index,
                         includeStep: true,
                         introStep: false,
                     },
-                }
-                break
+                };
+                break;
             case 3:
                 config = {
                     panel: PANEL_NETWORK_DEVICE,
@@ -419,17 +441,17 @@ const ApplicationContextProvider = ({ value, children }) => {
                         disableSubmit: !state.steps.networkDevice.complete,
                         invalid: state.steps.networkDevice.invalid,
                         title: t(
-                            'leftNavigation.progressStep.networkDevice.label'
+                            "leftNavigation.progressStep.networkDevice.label"
                         ),
                         subtitle: t(
-                            'leftNavigation.progressStep.networkDevice.secondaryLabel'
+                            "leftNavigation.progressStep.networkDevice.secondaryLabel"
                         ),
                         index: state.steps.networkDevice.index,
                         includeStep: true,
                         introStep: false,
                     },
-                }
-                break
+                };
+                break;
             case 4:
                 config = {
                     panel: PANEL_NETWORK_ADDRESS,
@@ -437,17 +459,17 @@ const ApplicationContextProvider = ({ value, children }) => {
                         disableSubmit: !state.steps.networkAddress.complete,
                         invalid: state.steps.networkAddress.invalid,
                         title: t(
-                            'leftNavigation.progressStep.networkAddress.label'
+                            "leftNavigation.progressStep.networkAddress.label"
                         ),
                         subtitle: t(
-                            'leftNavigation.progressStep.networkAddress.secondaryLabel'
+                            "leftNavigation.progressStep.networkAddress.secondaryLabel"
                         ),
                         index: state.steps.networkAddress.index,
                         includeStep: true,
                         introStep: false,
                     },
-                }
-                break
+                };
+                break;
             case 5:
                 config = {
                     panel: PANEL_INSTALLATION_PARAMETERS,
@@ -459,17 +481,17 @@ const ApplicationContextProvider = ({ value, children }) => {
                             !state.steps.installationParameters.complete,
                         invalid: state.steps.installationParameters.invalid,
                         title: t(
-                            'leftNavigation.progressStep.installationParameters.label'
+                            "leftNavigation.progressStep.installationParameters.label"
                         ),
                         subtitle: t(
-                            'leftNavigation.progressStep.installationParameters.secondaryLabel'
+                            "leftNavigation.progressStep.installationParameters.secondaryLabel"
                         ),
                         index: state.steps.installationParameters.index,
                         includeStep: true,
                         introStep: false,
                     },
-                }
-                break
+                };
+                break;
             case 6:
                 config = {
                     panel: PANEL_DOWNLOAD_PARAM_FILE,
@@ -477,58 +499,58 @@ const ApplicationContextProvider = ({ value, children }) => {
                         disableSubmit: !state.steps.downloadParamFile.complete,
                         invalid: state.steps.downloadParamFile.invalid,
                         title: t(
-                            'leftNavigation.progressStep.downloadParamFile.label'
+                            "leftNavigation.progressStep.downloadParamFile.label"
                         ),
                         subtitle: t(
-                            'leftNavigation.progressStep.downloadParamFile.secondaryLabel'
+                            "leftNavigation.progressStep.downloadParamFile.secondaryLabel"
                         ),
                         index: state.steps.downloadParamFile.index,
                         includeStep: true,
                         introStep: false,
                     },
-                }
-                break
+                };
+                break;
             case 8:
                 config = {
                     panel: PANEL_SUMMARY,
                     params: {
                         disableSubmit: !state.steps.summary.complete,
                         invalid: state.steps.summary.invalid,
-                        title: t('leftNavigation.progressStep.summary.label'),
+                        title: t("leftNavigation.progressStep.summary.label"),
                         subtitle: t(
-                            'leftNavigation.progressStep.summary.secondaryLabel'
+                            "leftNavigation.progressStep.summary.secondaryLabel"
                         ),
                         index: state.steps.summary.index,
                         includeStep: true,
                         introStep: false,
                     },
-                }
-                break
+                };
+                break;
             case 10:
                 config = {
                     panel: PANEL_INTRO,
                     params: {
                         disableSubmit: !state.steps.intro.complete,
                         invalid: state.steps.intro.invalid,
-                        title: t('modalHeading.useExistingSettingsPrompt'),
-                        subtitle: t('modalBody.useExistingSettingsPrompt'),
+                        title: t("modalHeading.useExistingSettingsPrompt"),
+                        subtitle: t("modalBody.useExistingSettingsPrompt"),
                         index: state.steps.intro.index,
                         includeStep:
                             state.includeIntroStep ||
                             (state.isEditing && state.useStateFromLocalStorage),
                         introStep: true,
                     },
-                }
-                break
+                };
+                break;
             default:
                 config = {
                     panel: PANEL_UNKNOWN,
                     params: null,
-                }
+                };
         }
 
-        return config
-    }
+        return config;
+    };
 
     const getPanelConfigArray = () => {
         return [
@@ -542,20 +564,20 @@ const ApplicationContextProvider = ({ value, children }) => {
             }),
             getPanelConfig({ step: state.steps.downloadParamFile.index }),
             getPanelConfig({ step: state.steps.summary.index }),
-        ]
-    }
+        ];
+    };
 
-    const panelConfigArray = getPanelConfigArray()
+    const panelConfigArray = getPanelConfigArray();
 
     const resetToInitialState = useCallback(
         (updates) => {
-            pruneSettings(getLocalStorageKeys(state))
+            pruneSettings(getLocalStorageKeys(state));
 
-            updateResetToInitialState(updates)
+            updateResetToInitialState(updates);
 
-            updateSteps(DEFAULT_STEPS)
+            updateSteps(DEFAULT_STEPS);
             if (!state.isEditing) {
-                updateUseStateFromLocalStorage(false)
+                updateUseStateFromLocalStorage(false);
             }
         },
         [
@@ -566,7 +588,7 @@ const ApplicationContextProvider = ({ value, children }) => {
             updateSteps,
             updateUseStateFromLocalStorage,
         ]
-    )
+    );
 
     const getContextValue = useCallback(() => {
         return {
@@ -583,6 +605,7 @@ const ApplicationContextProvider = ({ value, children }) => {
             updateShowLegalNotification,
             updateUseStateFromLocalStorage,
             updateUseOperatingSystemTheme,
+            updateShowPasswords,
             updateIsDirty,
             updateIsEditing,
             updateSteps,
@@ -593,7 +616,7 @@ const ApplicationContextProvider = ({ value, children }) => {
                 panelConfig: panelConfigArray,
                 helpPanelConfig: getHelpPanelConfig({ step: state.step }),
             },
-        }
+        };
     }, [
         value,
         state,
@@ -609,6 +632,7 @@ const ApplicationContextProvider = ({ value, children }) => {
         updateShowLegalNotification,
         updateUseStateFromLocalStorage,
         updateUseOperatingSystemTheme,
+        updateShowPasswords,
         updateIsDirty,
         updateIsEditing,
         updateSteps,
@@ -616,20 +640,20 @@ const ApplicationContextProvider = ({ value, children }) => {
         resetToInitialState,
         panelConfigArray,
         getHelpPanelConfig,
-    ])
+    ]);
 
-    getConfig(state.appConfig)
+    getConfig(state.appConfig);
 
     return (
         <ApplicationContext.Provider value={getContextValue()}>
             {children}
         </ApplicationContext.Provider>
-    )
-}
+    );
+};
 
 ApplicationContextProvider.propTypes = {
     value: PropTypes.object,
     children: PropTypes.node,
-}
+};
 
-export default ApplicationContextProvider
+export default ApplicationContextProvider;

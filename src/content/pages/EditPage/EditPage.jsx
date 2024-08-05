@@ -66,7 +66,9 @@ const EditPage = forwardRef(function EditPage(props, ref) {
     } = useContext(ApplicationContext);
     const { state: headerState, updateNeedsManualNavigationConfirmation } =
         useContext(HeaderContext);
-    const { updateShowPasswords } = useContext(DownloadParamFileContext);
+    const { updateShowPasswords, updateOverrideGlobalState } = useContext(
+        DownloadParamFileContext
+    );
     const { appConfig } = config || {
         appConfig: {},
     };
@@ -255,6 +257,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
             nextButtonText={t("btnLabel.Next", { ns: "common" })}
             onClose={() => {
                 updateShowPasswords(false);
+                updateOverrideGlobalState(false);
                 updateIsEditing(false);
                 updateIncludeIntroStep(false);
                 updateUseStateFromLocalStorage(true);

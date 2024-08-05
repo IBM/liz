@@ -22,6 +22,7 @@
 
     padding: react.$spacing-03 react.$spacing-04 react.$spacing-05 0;
     white-space: pre-line;
+    box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0 react.$border-subtle;
 
     &.help-panel__landing-page__content__active {
         box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0
@@ -34,6 +35,7 @@
 
     padding: react.$spacing-03 react.$spacing-04 react.$spacing-04 0;
     white-space: pre-line;
+    box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0 react.$border-subtle;
 
     &.help-panel__landing-page__content__active {
         box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0

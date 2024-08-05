@@ -22,75 +22,87 @@ import {
     ACTION_UPDATE_APP_THEME,
     ACTION_UPDATE_APP_USE_OS_THEME,
     ACTION_UPDATE_APP_CONFIG,
-} from '../util/reducer-action-constants'
-import { LOCAL_STORAGE_KEY_APP } from '../util/local-storage-constants'
-import { persistToLocalStorage } from '../util/local-storage-util'
+    ACTION_UPDATE_APP_SHOW_PASSWORDS,
+} from "../util/reducer-action-constants";
+import { LOCAL_STORAGE_KEY_APP } from "../util/local-storage-constants";
+import { persistToLocalStorage } from "../util/local-storage-util";
 
 const reducer = (state, action) => {
-    let updatedState = {}
+    let updatedState = {};
 
     switch (action.type) {
         case ACTION_UPDATE_APP_CONFIG:
             updatedState = {
                 ...state,
                 appConfig: action.nextAppConfig,
-            }
+            };
             // do not persist app config since it contains information such
             // as the build number and commit hashes that will be changing
             // on each new deployment and thus must be up-to-date.
             // persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            return updatedState;
+        case ACTION_UPDATE_APP_SHOW_PASSWORDS:
+            updatedState = {
+                ...state,
+                showPasswords: action.nextShowPasswords,
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_USE_OS_THEME:
             updatedState = {
                 ...state,
                 useOperatingSystemTheme: action.nextUseOperatingSystemTheme,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_THEME:
             updatedState = {
                 ...state,
                 theme: action.nextTheme,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_RESET_TO_INITIAL_STATE:
             // for combined states the state is prefixed by the reducer name
             updatedState =
-                action.nextInitialState.reducer || action.nextInitialState
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+                action.nextInitialState.reducer || action.nextInitialState;
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_STATE:
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, action.nextState, true)
-            return action.nextState
+            persistToLocalStorage(
+                LOCAL_STORAGE_KEY_APP,
+                action.nextState,
+                true
+            );
+            return action.nextState;
         case ACTION_UPDATE_APP_STEP:
             updatedState = {
                 ...state,
                 step: action.nextStep,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_HELP_STEP:
             updatedState = {
                 ...state,
                 helpStep: action.nextHelpStep,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_NEXT_STEP:
             updatedState = {
                 ...state,
                 nextStep: action.nextNextStep,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_INCLUDE_INTRO_STEP:
             updatedState = {
                 ...state,
                 includeIntroStep: action.nextIncludeIntroStep,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_PARAM_FILE_CONTENT:
             updatedState = {
                 ...state,
@@ -101,9 +113,9 @@ const reducer = (state, action) => {
                         contents: action.nextParamFileContent,
                     },
                 },
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_PARAM_FILE_MODIFIED:
             updatedState = {
                 ...state,
@@ -114,48 +126,48 @@ const reducer = (state, action) => {
                         modified: action.nextParamFileContentModified,
                     },
                 },
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_SHOW_LEGAL_NOTIFICATION:
             updatedState = {
                 ...state,
                 showLegalNotification: action.nextShowLegalNotification,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_USE_STATE_FROM_LOCAL_STORAGE:
             updatedState = {
                 ...state,
                 useStateFromLocalStorage: action.nextUseStateFromLocalStorage,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_IS_DIRTY:
             updatedState = {
                 ...state,
                 isDirty: action.nextIsDirty,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_IS_EDITING:
             updatedState = {
                 ...state,
                 isEditing: action.nextIsEditing,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
         case ACTION_UPDATE_APP_STEPS:
         case ACTION_UPDATE_APP_IS_DISABLED:
             updatedState = {
                 ...state,
                 steps: action.nextSteps,
-            }
-            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true)
-            return updatedState
+            };
+            persistToLocalStorage(LOCAL_STORAGE_KEY_APP, updatedState, true);
+            return updatedState;
     }
 
-    throw Error(`Unknown action: ${action.type}`)
-}
+    throw Error(`Unknown action: ${action.type}`);
+};
 
-export default reducer
+export default reducer;

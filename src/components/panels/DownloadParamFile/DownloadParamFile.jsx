@@ -59,6 +59,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         updateModified,
         updateParamFileContent,
         updateShowPasswords,
+        updateOverrideGlobalState,
         updateIsEditing,
     } = useContext(DownloadParamFileContext);
     const distributionName =
@@ -184,8 +185,11 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
     useImperativeHandle(ref, () => publicRef);
 
     const paramFileContent = stateToParamFile(globalState);
+    const globalShowPasswords = globalState?.showPasswords ?? false;
 
-    const showPassword = () => {
+    const onShowPassword = () => {
+        updateOverrideGlobalState(true);
+
         if (state.showPasswords) {
             updateShowPasswords(false);
         } else {
@@ -297,8 +301,12 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                             : paramFileContent.dataWithPasswordsRemoved
                     }
                     copyContents={updateCopied}
-                    onShowPassword={showPassword}
-                    showPasswords={state.showPasswords}
+                    onShowPassword={onShowPassword}
+                    showPasswords={
+                        globalShowPasswords && !state.overrideGlobalState
+                            ? true
+                            : state.showPasswords
+                    }
                     onEditing={isEditing}
                     editing={state.isEditing}
                     resetContents={() => {

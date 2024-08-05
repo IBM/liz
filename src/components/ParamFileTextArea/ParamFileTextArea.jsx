@@ -57,6 +57,52 @@ const ParamFileTextArea = ({
                             })}
                             tooltipPosition="left"
                             hasIconOnly
+                            onFocus={() => {
+                                document
+                                    .getElementById(
+                                        "helpPanelContents_downloadParamFile_para1"
+                                    )
+                                    ?.classList?.add(
+                                        "help-panel__download-param-file__content__active"
+                                    );
+                                document
+                                    .getElementById(
+                                        "helpPanelContents_downloadParamFile_para2"
+                                    )
+                                    ?.classList?.add(
+                                        "help-panel__download-param-file__content__active"
+                                    );
+                                document
+                                    .getElementById(
+                                        "helpPanelContents_downloadParamFile_para3"
+                                    )
+                                    ?.classList?.add(
+                                        "help-panel__download-param-file__content__active"
+                                    );
+                            }}
+                            onBlur={() => {
+                                document
+                                    .getElementById(
+                                        "helpPanelContents_downloadParamFile_para1"
+                                    )
+                                    ?.classList?.remove(
+                                        "help-panel__download-param-file__content__active"
+                                    );
+                                document
+                                    .getElementById(
+                                        "helpPanelContents_downloadParamFile_para2"
+                                    )
+                                    ?.classList?.remove(
+                                        "help-panel__download-param-file__content__active"
+                                    );
+                                document
+                                    .getElementById(
+                                        "helpPanelContents_downloadParamFile_para3"
+                                    )
+                                    ?.classList?.remove(
+                                        "help-panel__download-param-file__content__active"
+                                    );
+                            }}
                         />
                     </div>
                 </CopyToClipboard>
@@ -73,6 +119,52 @@ const ParamFileTextArea = ({
                         iconDescription={t("btnLabel.Reset", { ns: "common" })}
                         tooltipPosition="left"
                         hasIconOnly
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para1"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para2"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para3"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                        }}
+                        onBlur={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para1"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para2"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para3"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                        }}
                     />
                 </div>
             )}
@@ -90,6 +182,52 @@ const ParamFileTextArea = ({
                         })}
                         tooltipPosition="left"
                         hasIconOnly
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para1"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para2"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para3"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                        }}
+                        onBlur={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para1"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para2"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para3"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                        }}
                     />
                 </div>
             )}
@@ -109,6 +247,52 @@ const ParamFileTextArea = ({
                         }
                         tooltipPosition="left"
                         hasIconOnly
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para1"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para2"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para3"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                        }}
+                        onBlur={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para1"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para2"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_downloadParamFile_para3"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__download-param-file__content__active"
+                                );
+                        }}
                     />
                 </div>
             )}
@@ -127,6 +311,52 @@ const ParamFileTextArea = ({
                     }
                     tooltipPosition="left"
                     hasIconOnly
+                    onFocus={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_downloadParamFile_para1"
+                            )
+                            ?.classList?.add(
+                                "help-panel__download-param-file__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_downloadParamFile_para2"
+                            )
+                            ?.classList?.add(
+                                "help-panel__download-param-file__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_downloadParamFile_para3"
+                            )
+                            ?.classList?.add(
+                                "help-panel__download-param-file__content__active"
+                            );
+                    }}
+                    onBlur={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_downloadParamFile_para1"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__download-param-file__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_downloadParamFile_para2"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__download-param-file__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_downloadParamFile_para3"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__download-param-file__content__active"
+                            );
+                    }}
                 />
             </div>
         </div>

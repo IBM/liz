@@ -17,6 +17,7 @@ const createInitialState = (skipLocalStorageUsage = false) => {
         paramFileContentModified: false,
         paramFileContent: "",
         showPasswords: false,
+        overrideGlobalState: false,
         isEditing: false,
         origin: STATE_ORIGIN_DEFAULT,
     };

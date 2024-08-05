@@ -368,6 +368,7 @@ const InstallationParameters = forwardRef(
 
         const useSshToggled = state?.useSsh ?? false;
         const useVncToggled = state?.useVnc ?? true;
+        const showPasswords = globalState?.showPasswords ?? false;
         const paramFileHasBeenModifiedFromState =
             globalState?.steps.downloadParamFile?.modified ?? false;
         const distributionName =
@@ -566,38 +567,6 @@ const InstallationParameters = forwardRef(
             </>
         );
 
-        const gridContentsMarkupComputedRow = (
-            <>
-                {/*
-                    <TextInput
-                        readOnly
-                        helperText={t(
-                            "panel.installationParameter.computedInstallationAddressHelp",
-                            {
-                                ns: "panels",
-                            }
-                        )}
-                        id="computed-installation-address-input"
-                        key="computed-installation-address-input"
-                        labelText={t(
-                            "panel.installationParameter.computedInstallationAddressTextLabel",
-                            { ns: "panels" }
-                        )}
-                        placeholder={t(
-                            "panel.installationParameter.computedInstallationAddressPlaceholder",
-                            { ns: "panels" }
-                        )}
-                        className="installation-parameters_installation-address-input"
-                        value={
-                            state.installationAddress
-                                ? state.installationAddress.computed
-                                : ""
-                        }
-                    />
-                */}
-            </>
-        );
-
         const gridContentsMarkupRowTwoColumnOne = (
             <div className="installation-parameters_column-left">
                 <TextInput
@@ -747,6 +716,7 @@ const InstallationParameters = forwardRef(
                 <PasswordInput
                     readOnly={paramFileHasBeenModifiedFromState}
                     disabled={state?.userAndPwdAreDisabled ?? true}
+                    type={showPasswords ? "text" : "password"}
                     autoComplete="on"
                     helperText={t("panel.installationParameter.passwordHelp", {
                         ns: "panels",
@@ -952,6 +922,7 @@ const InstallationParameters = forwardRef(
                 {useVncToggled && (
                     <PasswordInput
                         readOnly={paramFileHasBeenModifiedFromState}
+                        type={showPasswords ? "text" : "password"}
                         autoComplete="on"
                         helperText={t(
                             "panel.installationParameter.vncPasswordHelp",
@@ -1103,6 +1074,7 @@ const InstallationParameters = forwardRef(
                 {useSshToggled && requiresSshPassword && (
                     <PasswordInput
                         readOnly={paramFileHasBeenModifiedFromState}
+                        type={showPasswords ? "text" : "password"}
                         autoComplete="on"
                         helperText={t(
                             "panel.installationParameter.sshPasswordHelp",
@@ -1238,9 +1210,6 @@ const InstallationParameters = forwardRef(
                     <Row>
                         <Column>{gridContentsMarkupRowTwoColumnOne}</Column>
                         <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
-                    </Row>
-                    <Row>
-                        <Column>{gridContentsMarkupComputedRow}</Column>
                     </Row>
                     <Row>
                         <Column>

@@ -45,6 +45,7 @@
     "pageHeader.breadcrumbOverflowAriaLabel": "Open and close additional breadcrumb item list.",
     "pageHeader.breadcrumbs.home": "Home",
     "pageHeader.breadcrumbs.composeParmfile": "Compose parmeter file",
+    "pageHeader.breadcrumbs.settings": "Settings",
     "pageHeader.collapseHeaderIconDescription": "Collapse the page header",
     "pageHeader.expandHeaderIconDescription": "Expand the page header",
     "pageHeader.pageActionsOverflowLabel": "Page actions...",

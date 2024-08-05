@@ -13,6 +13,7 @@ import {
     ACTION_UPDATE_PARAM_FILE_CONTENT,
     ACTION_RESET_TO_INITIAL_STATE,
     ACTION_UPDATE_INSTALLATION_PARAM_SHOW_PASSWORDS,
+    ACTION_UPDATE_INSTALLATION_PARAM_OVERRIDE_GLOBAL_STATE,
     ACTION_UPDATE_INSTALLATION_PARAM_IS_EDITING,
 } from "../util/reducer-action-constants";
 import { DownloadParamFileContext } from "./index";
@@ -28,6 +29,16 @@ const DownloadParamFileContextProvider = ({ value, children }) => {
             dispatch({
                 type: ACTION_RESET_TO_INITIAL_STATE,
                 nextInitialState: createInitialDownloadParamFileState(true),
+            });
+        },
+        [state, dispatch]
+    );
+
+    const updateOverrideGlobalState = useCallback(
+        (updates) => {
+            dispatch({
+                type: ACTION_UPDATE_INSTALLATION_PARAM_OVERRIDE_GLOBAL_STATE,
+                nextOverrideGlobalState: updates,
             });
         },
         [state, dispatch]
@@ -88,6 +99,7 @@ const DownloadParamFileContextProvider = ({ value, children }) => {
         () => ({
             ...value,
             state,
+            updateOverrideGlobalState,
             updateShowPasswords,
             updateIsEditing,
             updatParamFileCopied,
@@ -98,6 +110,7 @@ const DownloadParamFileContextProvider = ({ value, children }) => {
         [
             value,
             state,
+            updateOverrideGlobalState,
             updateShowPasswords,
             updateIsEditing,
             updatParamFileCopied,
