@@ -6,14 +6,11 @@
 
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import { getDistributionName } from "./util/local-storage-util";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 import Pseudo from "i18next-pseudo";
 
 const i18Init = (distributionName) => {
-    const localDistributionName = distributionName || getDistributionName();
-
     i18n.use(
         new Pseudo({
             enabled: true,
@@ -40,6 +37,7 @@ const i18Init = (distributionName) => {
                 "help_information",
                 "help_inputFileSelection",
                 "help_installationParameters",
+                "help_installationParameters_ubuntu",
                 "help_intro",
                 "help_landingPage",
                 "help_settingsPage",
@@ -50,7 +48,7 @@ const i18Init = (distributionName) => {
             ],
             defaultNS: "translation",
             backend: {
-                loadPath: `${import.meta.env.VITE_URL_PATH_PREFIX}locales/${localDistributionName}/{{lng}}/{{ns}}.json`,
+                loadPath: `${import.meta.env.VITE_URL_PATH_PREFIX}locales/{{lng}}/{{ns}}.json`,
             },
             detection: {
                 order: ["querystring", "cookie", "navigator", "htmlTag"],

@@ -1,8 +1,0 @@
-{
-    "helpPanelContents.settingsPage.para1": "The application settings page provides context information of the application and it also allows to tailor its behaviour.",
-    "helpPanelContents.settingsPage.para2": "The build number and commit hash shall be used at times where the application is not working properly and thus an issue must be reported. A page with already known issues provides a way to identify whether an issues has already been reported and thus there might be a workaround available.",
-    "helpPanelContents.settingsPage.para3": "The application can be set to either support dark mode or light mode as a theme. It is also possible to let the application determin what theme the operating system is using to also use it for the application. In cases where the operating system theme is used for the application the theme can not be set manually in the application but must be set in the operating system instead.",
-    "helpPanelContents.settingsPage.para4": "Usually security best practices mandate that passwords that a user types into an application must be masked and thus must not be visible. There might be occasions where this behaviour is not wanted and thus it is possible to configure the application to show passwords by default that would normally be masked using a password input control.",
-    "helpPanelContents.settingsPage.para5": "<strong>Note: If the application is configured to always show passwords someone standing next to you may eavesdrop the passwords that are set in the application.</strong>",
-    "helpPanelHeader.settingsPage": "Application settings"
-}

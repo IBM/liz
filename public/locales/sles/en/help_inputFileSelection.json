@@ -1,5 +1,0 @@
-{
-    "helpPanelContents.inputFileSelection.para1": "Select the Linux distribution type and version that you want to install. This choice will affect the format of the resulting installer parameter file.",
-    "helpPanelContents.inputFileSelection.para2": "Note that installer parameter file formats differ between distribution types, and may change with newer versions of the same type. In case the exact version is not available for selection, choose the same distribution type and closest version that is lower than the one to be installed.",
-    "helpPanelHeader.inputFileSelection": "Select the Linux distribution"
-}

@@ -45,7 +45,6 @@ import {
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
 import { setItem } from "../../../util/local-storage-util";
-import i18Init from "../../../i18n";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
@@ -238,7 +237,6 @@ const InputFileSelection = forwardRef(function InputFileSelection(props, ref) {
                         }
                         updateSelectedDistributionName(selectedItem);
                         updateSelectedDistributionVersion({});
-                        i18Init(selectedItem.id);
                     }}
                     selectedItem={state.selectedDistributionName}
                     onFocus={() => {

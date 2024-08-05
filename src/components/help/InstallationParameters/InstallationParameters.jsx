@@ -86,7 +86,11 @@ const InstallationParameters = ({
             >
                 <Trans
                     i18nKey="helpPanelContents.installationParameters.para6"
-                    ns="help_installationParameters"
+                    ns={
+                        distributionName !== UBUNTU_DISTRIBUTION_ID
+                            ? "help_installationParameters"
+                            : "help_installationParameters_ubuntu"
+                    }
                 />
             </div>
         </>

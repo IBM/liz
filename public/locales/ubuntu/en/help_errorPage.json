@@ -1,8 +1,0 @@
-{
-    "helpPanelContents.errorPage.para1": "First review the known issues page, then submit an issue if you cannot find a solution.",
-    "helpPanelContents.errorPage.para2": "Both the known issues page and the submit issue page are linked on the error page.",
-    "helpPanelContents.errorPage.para3": "Note: The link on the error page to submit a new issue will pre populate the issue to be created with the data available on the error page.",
-    "helpPanelContents.errorPage.para4": "The links can also be found under the Linux penguin icon on the About this app menu.",
-    "helpPanelContents.errorPage.para5": "When submitting an issue, remember that the browser console might contain relevant information to include.",
-    "helpPanelHeader.errorPage": "What to do next"
-}
