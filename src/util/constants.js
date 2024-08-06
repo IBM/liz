@@ -124,7 +124,7 @@ const SLES_V15_VERSION_ID = "version-15";
 const SLES_V15_VERSION_LABEL = "15 (any SP)";
 
 const UBUNTU_DISTRIBUTION_ID = "ubuntu";
-const UBUNTU_DISTRIBUTION_LABEL = "Ubuntu Server (experimental)";
+const UBUNTU_DISTRIBUTION_LABEL = "Ubuntu Server";
 const UBUNTU_V20_VERSION_ID = "version-20";
 const UBUNTU_V20_VERSION_LABEL = "20.04.6 LTS";
 const UBUNTU_V22_VERSION_ID = "version-22";
@@ -146,7 +146,7 @@ const DISTRIBUTION_LIST = [
     {
         id: UBUNTU_DISTRIBUTION_ID,
         label: UBUNTU_DISTRIBUTION_LABEL,
-        majority: MAJORITY_EXPERIMENTAL,
+        majority: MAJORITY_STABLE,
     },
 ];
 const VERSION_LIST = {
