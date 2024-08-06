@@ -85,9 +85,9 @@
     "settingsPage.tabs.label.about": "About",
     "settingsPage.tabs.label.aboutInfo": "Use this information if reporting issues or making other references to the application.",
     "settingsPage.tabs.label.appearance": "Appearance",
-    "settingsPage.tabs.label.appearanceInfo": "This setting determins what kind of theme to use. Either dark or light mode can be used.",
-    "settingsPage.tabs.heading.lightDarkMode": "Light mode / Dark mode",
+    "settingsPage.tabs.label.appearanceInfo": "Choose dark or light mode, or make the mode depend on the operating system theme.",
+    "settingsPage.tabs.heading.lightDarkMode": "Light or dark mode",
     "settingsPage.tabs.label.security": "Security",
-    "settingsPage.tabs.label.securityInfo": "This setting allows to specify that passwords shall be displayed instead of massking them.",
+    "settingsPage.tabs.label.securityInfo": "Choose to display passwords instead of masking them.",
     "settingsPage.tabs.heading.showPasswords": "Show Passwords"
 }
