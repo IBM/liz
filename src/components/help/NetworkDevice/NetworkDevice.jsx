@@ -8,7 +8,10 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Trans, useTranslation } from "react-i18next";
 import { ApplicationContext } from "../../../contexts";
-import { SLES_DISTRIBUTION_ID } from "../../../util/constants";
+import {
+    SLES_DISTRIBUTION_ID,
+    UBUNTU_DISTRIBUTION_ID,
+} from "../../../util/constants";
 import "./_network-device.scss";
 
 const NetworkDevice = ({
@@ -67,15 +70,17 @@ const NetworkDevice = ({
                     ns="help_networkDevice"
                 />
             </div>
-            <div
-                className="help-panel__network-device__content"
-                id="helpPanelContents_networkDevice_para5"
-            >
-                <Trans
-                    i18nKey="helpPanelContents.networkDevice.para5"
-                    ns="help_networkDevice"
-                />
-            </div>
+            {distributionName !== UBUNTU_DISTRIBUTION_ID && (
+                <div
+                    className="help-panel__network-device__content"
+                    id="helpPanelContents_networkDevice_para5"
+                >
+                    <Trans
+                        i18nKey="helpPanelContents.networkDevice.para5"
+                        ns="help_networkDevice"
+                    />
+                </div>
+            )}
             {distributionName !== SLES_DISTRIBUTION_ID && (
                 <div
                     className="help-panel__network-device__content"
