@@ -10,6 +10,7 @@ import {
     Button,
     InlineNotification,
     Layer,
+    Link,
     FlexGrid,
     Row,
     Column,
@@ -26,8 +27,12 @@ import { Checkmark, Copy, Debug, Report } from "@carbon/icons-react";
 import { PageHeader } from "@carbon/ibm-products";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Trans, useTranslation } from "react-i18next";
-import { useHref } from "react-router-dom";
-import { ApplicationContext, SettingsPageContext } from "../../../contexts";
+import { useNavigate, useHref } from "react-router-dom";
+import {
+    ApplicationContext,
+    SettingsPageContext,
+    HeaderContext,
+} from "../../../contexts";
 import {
     parmfileCardIsExpanded,
     setItem,
@@ -35,10 +40,12 @@ import {
 import { getInlineNotification } from "../../../uiUtil/panel-util";
 import PathConstants from "../../../util/path-constants";
 import { LIGHT_THEME, DARK_THEME } from "../../../util/constants";
+import { PANEL_SETTINGS_PAGE } from "../../../util/panel-constants";
 import "./_settings-page.scss";
 
 const SettingsPage = forwardRef(function SettingsPage(props, ref) {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const expandedParmfileCardHref = useHref(
         PathConstants.EXPANDED_PARMFILE_CARD
     );
@@ -60,6 +67,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
         updateUseOperatingSystemTheme: localUpdateUseOperatingSystemTheme,
         updateShowPasswords: localUpdateShowPasswords,
     } = useContext(SettingsPageContext);
+    const {
+        state: headerState,
+        updateNeedsManualNavigationConfirmation,
+        updateManualNavigationOrigin,
+    } = useContext(HeaderContext);
 
     const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
     const [commitHashHasBeenCopied, setCommitHashHasBeenCopied] =
@@ -180,7 +192,7 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                     ? expandedParmfileCardHref
                     : homePageHref,
                 key: "breadcrumb-01",
-                label: t("pageHeader.breadcrumbs.home", { ns: "common" }),
+                label: labelForHomeLink,
                 title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
             },
             {
@@ -193,6 +205,26 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
             },
         ];
     };
+
+    const labelForHomeLink = !headerState.needsManualNavigationConfirmation ? (
+        <Link
+            className="liz__settings-page__link-cursor"
+            onClick={() => {
+                if (state.isDirty) {
+                    updateNeedsManualNavigationConfirmation(true);
+                    updateManualNavigationOrigin(PANEL_SETTINGS_PAGE);
+                } else {
+                    navigate(
+                        `${parmfileCardIsExpanded() ? PathConstants.EXPANDED_PARMFILE_CARD : PathConstants.HOME}`
+                    );
+                }
+            }}
+        >
+            {t("pageHeader.breadcrumbs.home", { ns: "common" })}
+        </Link>
+    ) : (
+        t("pageHeader.breadcrumbs.home", { ns: "common" })
+    );
 
     const pageHeaderMarkup = (
         <PageHeader
@@ -759,9 +791,15 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
             <Button
                 data-title="cancel"
                 id="settings-page__cancel-button"
-                href={homePageHref}
                 onClick={() => {
-                    updateIsDirty(false);
+                    if (state.isDirty) {
+                        updateNeedsManualNavigationConfirmation(true);
+                        updateManualNavigationOrigin(PANEL_SETTINGS_PAGE);
+                    } else {
+                        navigate(
+                            `${parmfileCardIsExpanded() ? PathConstants.EXPANDED_PARMFILE_CARD : PathConstants.HOME}`
+                        );
+                    }
                 }}
                 className="liz__settings-page__buttonbar-button liz__settings-page__buttonbar-button__cancel"
                 kind="ghost"
@@ -771,7 +809,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
             <Button
                 data-title="ok"
                 id="settings-page__ok-button"
-                href={homePageHref}
+                href={
+                    parmfileCardIsExpanded()
+                        ? expandedParmfileCardHref
+                        : homePageHref
+                }
                 onClick={() => {
                     if (isDirty) {
                         updateTheme(state.theme);

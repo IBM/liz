@@ -89,5 +89,6 @@
     "settingsPage.tabs.heading.lightDarkMode": "Light or dark mode",
     "settingsPage.tabs.label.security": "Security",
     "settingsPage.tabs.label.securityInfo": "Choose to display passwords instead of masking them.",
-    "settingsPage.tabs.heading.showPasswords": "Show Passwords"
+    "settingsPage.tabs.heading.showPasswords": "Show Passwords",
+    "settingsPage.buttonBar.modalDangerButtonText": "Discard settings"
 }

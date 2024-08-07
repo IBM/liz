@@ -23,6 +23,10 @@
     background: react.$layer-02;
 
     .liz__settings-page__page-header {
+        .liz__settings-page__link-cursor {
+            cursor: pointer;
+        }
+
         .cds--grid {
             margin-inline: inherit;
         }
@@ -38,6 +42,10 @@
     background: react.$layer-02;
 
     .liz__settings-page__page-header {
+        .liz__settings-page__link-cursor {
+            cursor: pointer;
+        }
+
         .cds--grid {
             margin-inline: inherit;
         }
