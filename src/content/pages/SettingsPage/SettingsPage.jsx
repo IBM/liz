@@ -27,7 +27,7 @@ import { PageHeader } from "@carbon/ibm-products";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Trans, useTranslation } from "react-i18next";
 import { useHref } from "react-router-dom";
-import { ApplicationContext } from "../../../contexts";
+import { ApplicationContext, SettingsPageContext } from "../../../contexts";
 import {
     parmfileCardIsExpanded,
     setItem,
@@ -53,6 +53,13 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
         updateUseOperatingSystemTheme,
         updateShowPasswords,
     } = useContext(ApplicationContext);
+    const {
+        state,
+        updateIsDirty,
+        updateTheme: localUpdateTheme,
+        updateUseOperatingSystemTheme: localUpdateUseOperatingSystemTheme,
+        updateShowPasswords: localUpdateShowPasswords,
+    } = useContext(SettingsPageContext);
 
     const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
     const [commitHashHasBeenCopied, setCommitHashHasBeenCopied] =
@@ -68,11 +75,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
     const commitHashLong = appConfig?.config?.commitHashLong ?? "";
     const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
     const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? "";
-    const theme = globalState?.theme ?? LIGHT_THEME;
+    const theme = state?.theme ?? LIGHT_THEME;
     const useLightTheme = theme === LIGHT_THEME;
-    const useOperatingSystemTheme =
-        globalState?.useOperatingSystemTheme ?? false;
-    const showPasswords = globalState?.showPasswords ?? false;
+    const useOperatingSystemTheme = state?.useOperatingSystemTheme ?? false;
+    const showPasswords = state?.showPasswords ?? false;
+    const isDirty = state?.isDirty ?? false;
 
     const buildDateCopyIcon = buildDateBeenCopied ? Checkmark : Copy;
     const commitHashCopyIcon = commitHashHasBeenCopied ? Checkmark : Copy;
@@ -525,7 +532,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                                 <div className="liz__settings-page__about-build-info__theme__right-column">
                                     <Toggle
                                         size="md"
-                                        readOnly={useOperatingSystemTheme}
+                                        readOnly={
+                                            isDirty
+                                                ? useOperatingSystemTheme
+                                                : globalState.useOperatingSystemTheme
+                                        }
                                         aria-labelledby="settings-page__theme-toggle-label"
                                         labelA={t(
                                             "dialog.about.darkThemeLabel"
@@ -534,12 +545,19 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                                             "dialog.about.lightThemeLabel"
                                         )}
                                         id="settings-page__theme-toggle"
-                                        toggled={useLightTheme}
+                                        toggled={
+                                            isDirty
+                                                ? useLightTheme
+                                                : globalState.theme ===
+                                                  LIGHT_THEME
+                                        }
                                         onToggle={() => {
                                             if (useLightTheme) {
-                                                updateTheme(DARK_THEME);
+                                                localUpdateTheme(DARK_THEME);
+                                                updateIsDirty(true);
                                             } else {
-                                                updateTheme(LIGHT_THEME);
+                                                localUpdateTheme(LIGHT_THEME);
+                                                updateIsDirty(true);
                                             }
                                         }}
                                         {...useLightThemeAriaProps}
@@ -582,7 +600,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                                             ns: "common",
                                         })}
                                         id="about-dialog__theme-from-os-toggle"
-                                        toggled={useOperatingSystemTheme}
+                                        toggled={
+                                            isDirty
+                                                ? useOperatingSystemTheme
+                                                : globalState.useOperatingSystemTheme
+                                        }
                                         onToggle={() => {
                                             const dataset =
                                                 document.documentElement
@@ -601,19 +623,25 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                                             if (useOperatingSystemTheme) {
                                                 dataset.useOperatingSystemTheme =
                                                     "false";
-                                                updateUseOperatingSystemTheme(
+                                                localUpdateUseOperatingSystemTheme(
                                                     false
                                                 );
+                                                updateIsDirty(true);
                                             } else {
                                                 osThemeUsesDarkMode &&
-                                                    updateTheme(DARK_THEME);
+                                                    localUpdateTheme(
+                                                        DARK_THEME
+                                                    );
                                                 osThemeUsesLightMode &&
-                                                    updateTheme(LIGHT_THEME);
+                                                    localUpdateTheme(
+                                                        LIGHT_THEME
+                                                    );
                                                 dataset.useOperatingSystemTheme =
                                                     "true";
-                                                updateUseOperatingSystemTheme(
+                                                localUpdateUseOperatingSystemTheme(
                                                     true
                                                 );
+                                                updateIsDirty(true);
                                             }
                                         }}
                                         onBlur={() => {
@@ -670,12 +698,18 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                                             ns: "common",
                                         })}
                                         id="settings-page__show-passwords-toggle"
-                                        toggled={showPasswords}
+                                        toggled={
+                                            isDirty
+                                                ? showPasswords
+                                                : globalState.showPasswords
+                                        }
                                         onToggle={() => {
                                             if (showPasswords) {
-                                                updateShowPasswords(false);
+                                                localUpdateShowPasswords(false);
+                                                updateIsDirty(true);
                                             } else {
-                                                updateShowPasswords(true);
+                                                localUpdateShowPasswords(true);
+                                                updateIsDirty(true);
                                             }
                                         }}
                                         onBlur={() => {
@@ -720,6 +754,41 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
         </TabsVertical>
     );
 
+    const buttonMarkup = (
+        <>
+            <Button
+                data-title="cancel"
+                id="settings-page__cancel-button"
+                href={homePageHref}
+                onClick={() => {
+                    updateIsDirty(false);
+                }}
+                className="liz__settings-page__buttonbar-button liz__settings-page__buttonbar-button__cancel"
+                kind="ghost"
+            >
+                {t("btnLabel.Cancel", { ns: "common" })}
+            </Button>
+            <Button
+                data-title="ok"
+                id="settings-page__ok-button"
+                href={homePageHref}
+                onClick={() => {
+                    if (isDirty) {
+                        updateTheme(state.theme);
+                        updateUseOperatingSystemTheme(
+                            state.useOperatingSystemTheme
+                        );
+                        updateShowPasswords(state.showPasswords);
+                    }
+                    updateIsDirty(false);
+                }}
+                className="liz__settings-page__buttonbar-button liz__settings-page__buttonbar-button__ok"
+            >
+                {t("btnLabel.OK", { ns: "common" })}
+            </Button>
+        </>
+    );
+
     const rootLayerClassName = showInlineNotification
         ? "liz__settings-page__root-layer__with-legal-banner"
         : "liz__settings-page__root-layer__wo-legal-banner";
@@ -742,10 +811,13 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                 {pageHeaderMarkup}
                 <Layer className="liz__settings-page__grid-layer">
                     <FlexGrid className="liz__settings-page__grid">
-                        <Row className="liz__settings-page__grid__tab-row">
+                        <Row className="liz__settings-page__grid__tab-row liz__settings-page__grid__tab-row__tabs">
                             <Column className="liz__settings-page__grid__tab-column">
                                 {tabMarkup}
                             </Column>
+                        </Row>
+                        <Row className="liz__settings-page__grid__tab-row liz__settings-page__grid__tab-row__buttonbar">
+                            {buttonMarkup}
                         </Row>
                     </FlexGrid>
                 </Layer>
