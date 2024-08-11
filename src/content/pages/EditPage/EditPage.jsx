@@ -42,6 +42,7 @@ import {
     getParamFileContents,
 } from "../../../util/param-file-util";
 import PathConstants from "../../../util/path-constants";
+import { PANEL_EDIT_PAGE } from "../../../util/panel-constants";
 import { getSteps, getInlineNotification } from "../../../uiUtil/panel-util";
 import "./_edit-page.scss";
 
@@ -64,8 +65,11 @@ const EditPage = forwardRef(function EditPage(props, ref) {
         updateIncludeIntroStep,
         updateUseStateFromLocalStorage,
     } = useContext(ApplicationContext);
-    const { state: headerState, updateNeedsManualNavigationConfirmation } =
-        useContext(HeaderContext);
+    const {
+        state: headerState,
+        updateNeedsManualNavigationConfirmation,
+        updateManualNavigationOrigin,
+    } = useContext(HeaderContext);
     const { updateShowPasswords, updateOverrideGlobalState } = useContext(
         DownloadParamFileContext
     );
@@ -151,6 +155,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
             className="liz__edit-page__link-cursor"
             onClick={() => {
                 updateNeedsManualNavigationConfirmation(true);
+                updateManualNavigationOrigin(PANEL_EDIT_PAGE);
             }}
         >
             {t("pageHeader.breadcrumbs.home", { ns: "common" })}

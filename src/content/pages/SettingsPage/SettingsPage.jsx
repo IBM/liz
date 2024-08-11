@@ -299,7 +299,7 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                             </div>
                             <div className={buildDateCopyClass}>
                                 <div className="liz__settings-page__tab-panel-body__date__left-column">
-                                    <Trans i18nKey="dialog.about.buildDateLabel">
+                                    <Trans i18nKey="dialog.about.buildDateLabelWithDate">
                                         <span>Build date:</span>
                                         <code role="presentation">
                                             {{ buildDate }}
@@ -365,7 +365,7 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                             </div>
                             <div className={commitHashCopyClass}>
                                 <div className="liz__settings-page__tab-panel-body__hash__left-column">
-                                    <Trans i18nKey="dialog.about.commitHashLabel">
+                                    <Trans i18nKey="dialog.about.commitHashLabelWithLabel">
                                         <span>Commit hash:</span>
                                         <code role="presentation">
                                             {{ commitHashShort }}

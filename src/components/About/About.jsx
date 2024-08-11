@@ -12,7 +12,7 @@ import React, {
     forwardRef,
 } from "react";
 import { useHref } from "react-router-dom";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button, Toggle, Tooltip } from "@carbon/react";
@@ -94,10 +94,10 @@ const About = forwardRef(function About(props, ref) {
     const commitHashCopyIcon = commitHashHasBeenCopied ? Checkmark : Copy;
 
     const buildDateCopyClass = buildDateBeenCopied
-        ? "about-dialog__about-build-info__date__copied"
+        ? "about-dialog__about-build-info__date about-dialog__about-build-info__value-copied"
         : "about-dialog__about-build-info__date";
     const commitHashCopyClass = commitHashHasBeenCopied
-        ? "about-dialog__about-build-info__commit-hash__copied"
+        ? "about-dialog__about-build-info__commit-hash about-dialog__about-build-info__value-copied"
         : "about-dialog__about-build-info__commit-hash";
     const buildDateCopyAriaProps = buildDateBeenCopied
         ? {
@@ -158,13 +158,6 @@ const About = forwardRef(function About(props, ref) {
         ) {
             return closeNotification();
         } else if (
-            !globalState.isEditing &&
-            targetId === "about-dialog__about-prune-button" &&
-            relatedTargetId === "liz__skip-to-content"
-        ) {
-            return closeNotification();
-        } else if (
-            globalState.isEditing &&
             targetId === "about-dialog__about-report-button" &&
             relatedTargetId === "liz__skip-to-content"
         ) {
@@ -216,12 +209,6 @@ const About = forwardRef(function About(props, ref) {
                 case TAB_KEY_EVENT:
                     if (
                         !event.shiftKey &&
-                        target.id === "about-dialog__about-prune-button"
-                    ) {
-                        skipToContent?.focus();
-                    } else if (
-                        !event.shiftKey &&
-                        globalState.isEditing &&
                         target.id === "about-dialog__about-report-button"
                     ) {
                         skipToContent?.focus();
@@ -257,15 +244,17 @@ const About = forwardRef(function About(props, ref) {
     const pruneButtonMarkup = (
         <Button
             disabled={globalState.isEditing}
-            kind="ghost"
+            kind="danger--ghost"
+            size="sm"
             data-title="prune"
             id="about-dialog__about-prune-button"
+            role="menuitem"
             onClick={pruneSettings}
             onBlur={handleTabElementOnBlur}
             onKeyDown={handleTabElementOnKeyDown}
-            className="about-dialog__about-prune-button"
-            data-a11y-previous="about-dialog__about-report-button"
-            data-a11y-next="about-dialog__close-button"
+            className="about-dialog__about-menu-item__button"
+            data-a11y-previous="about-dialog__about-settings-button"
+            data-a11y-next="about-dialog__show-passwords-toggle"
         >
             <span>{t("dialog.about.pruneSettingsLabel")}</span>
         </Button>
@@ -279,8 +268,48 @@ const About = forwardRef(function About(props, ref) {
         pruneButtonMarkup
     );
 
+    const settingsButtonMarkup = (
+        <Button
+            disabled={globalState.isEditing}
+            kind="ghost"
+            size="sm"
+            data-title="report"
+            id="about-dialog__about-settings-button"
+            href={settingsPageHref}
+            onClick={closeNotification}
+            className="about-dialog__about-menu-item__button"
+            role="menuitem"
+            onBlur={handleTabElementOnBlur}
+            onKeyDown={handleTabElementOnKeyDown}
+            data-a11y-previous="about-dialog__copy-button__commit-hash"
+            data-a11y-next={
+                !globalState.isEditing
+                    ? "about-dialog__about-prune-button"
+                    : "about-dialog__show-passwords-toggle"
+            }
+            iconDescription={t("dialog.about.settingsLabel")}
+            {...externalLinkSettingsAriaProps}
+        >
+            <span>{t("dialog.about.settingsLabel")}</span>
+            <span
+                className="about-dialog__about-internal-link-hint"
+                id="about-dialog__about-internal-link-hint__settings"
+            >
+                {t("dialog.about.internalLinkHint")}
+            </span>
+        </Button>
+    );
+
+    const settingsButtonTooltipMarkup = globalState.isEditing ? (
+        <Tooltip align="top" label={t("dialog.about.pruneSettingsTooltip")}>
+            {settingsButtonMarkup}
+        </Tooltip>
+    ) : (
+        settingsButtonMarkup
+    );
+
     return (
-        <ul
+        <div
             tabIndex="0"
             id="about-dialog__about-menu"
             className="about-dialog__about-menu"
@@ -297,20 +326,27 @@ const About = forwardRef(function About(props, ref) {
                     : "about-dialog__about-report-button"
             }
         >
-            <li
-                id="about-dialog__about-title"
-                className="about-dialog__about__title-section"
-                aria-owns="about-dialog__about__title-section-group"
-                role="none"
+            <ul
+                id="about-dialog__about-menu__title-options"
+                aria-label={t("dialog.about.ariaLabel.applicationInformation")}
+                role="group"
+                className="about-dialog__panel-group"
             >
-                <div
-                    className="about-dialog__about__title-section-group"
-                    id="about-dialog__about__title-section-group"
-                    role="group"
+                <li
+                    id="about-dialog__about-title"
+                    className="about-dialog__about__title-section"
+                    aria-owns="about-dialog__about__title-section-group"
+                    role="none"
                 >
-                    <div className="about-dialog__about__linux-icon">
-                        <div role="presentation">
-                            <LinuxAlt size="48" />
+                    <div
+                        className="about-dialog__about__title-section-group"
+                        id="about-dialog__about__title-section-group"
+                        role="group"
+                    >
+                        <div className="about-dialog__about__linux-icon">
+                            <div role="presentation">
+                                <LinuxAlt size="48" />
+                            </div>
                         </div>
                     </div>
                     <div className="about-dialog__about__info-section">
@@ -353,35 +389,25 @@ const About = forwardRef(function About(props, ref) {
                                 onKeyDown={handleTabElementOnKeyDown}
                                 renderIcon={Close}
                                 tooltipPosition="left"
-                                data-a11y-previous={
-                                    !globalState.isEditing
-                                        ? "about-dialog__about-prune-button"
-                                        : "about-dialog__about-report-button"
-                                }
+                                data-a11y-previous="about-dialog__about-report-button"
                                 data-a11y-next="about-dialog__copy-button__build-date"
                             />
                         </div>
                     </div>
-                </div>
-            </li>
-            <li
-                id="about-dialog__about-build-info"
-                role="none"
-                aria-owns="about-dialog__about-build-info-group"
+                </li>
+            </ul>
+            <hr className="about-dialog__panel-divider" />
+            <ul
+                id="about-dialog__about-menu__settings-options"
+                aria-label={t("dialog.about.ariaLabel.applicationOptions")}
+                role="group"
+                className="about-dialog__panel-group"
             >
-                <div
-                    className="about-dialog__about-build-info"
-                    id="about-dialog__about-build-info-group"
-                    role="group"
-                >
+                <li className="about-dialog__about-build-info" role="none">
                     <div className={buildDateCopyClass}>
-                        <div className="about-dialog__about-build-info__date__left-column">
-                            <Trans i18nKey="dialog.about.buildDateLabel">
-                                <span>Build date:</span>
-                                <code role="presentation">{{ buildDate }}</code>
-                            </Trans>
-                        </div>
-                        <div className="about-dialog__about-build-info__date__right-column">
+                        {t("dialog.about.buildDateLabel")}
+                        <div className="about-dialog__about-build-info__value">
+                            <code role="presentation">{buildDate}</code>
                             <CopyToClipboard
                                 text={buildDate}
                                 onCopy={() =>
@@ -393,12 +419,14 @@ const About = forwardRef(function About(props, ref) {
                                     size="sm"
                                     kind="ghost"
                                     id="about-dialog__copy-button__build-date"
+                                    className="about-dialog__copy-button"
                                     iconDescription={t("btnLabel.Copy", {
                                         ns: "common",
                                     })}
                                     onClick={function noRefCheck() {}}
                                     onBlur={handleTabElementOnBlur}
                                     onKeyDown={handleTabElementOnKeyDown}
+                                    tooltipPosition="left"
                                     renderIcon={buildDateCopyIcon}
                                     role="menuitemcheckbox"
                                     data-a11y-previous="about-dialog__close-button"
@@ -408,16 +436,12 @@ const About = forwardRef(function About(props, ref) {
                             </CopyToClipboard>
                         </div>
                     </div>
+                </li>
+                <li className="about-dialog__about-build-info" role="none">
                     <div className={commitHashCopyClass}>
-                        <div className="about-dialog__about-build-info__hash__left-column">
-                            <Trans i18nKey="dialog.about.commitHashLabel">
-                                <span>Commit hash:</span>
-                                <code role="presentation">
-                                    {{ commitHashShort }}
-                                </code>
-                            </Trans>
-                        </div>
-                        <div className="about-dialog__about-build-info__hash__right-column">
+                        {t("dialog.about.commitHashLabel")}
+                        <div className="about-dialog__about-build-info__value">
+                            <code role="presentation">{commitHashShort}</code>
                             <CopyToClipboard
                                 text={commitHashLong}
                                 onCopy={() =>
@@ -429,29 +453,45 @@ const About = forwardRef(function About(props, ref) {
                                     size="sm"
                                     kind="ghost"
                                     id="about-dialog__copy-button__commit-hash"
+                                    className="about-dialog__copy-button"
                                     iconDescription={t("btnLabel.Copy", {
                                         ns: "common",
                                     })}
                                     onClick={function noRefCheck() {}}
                                     onBlur={handleTabElementOnBlur}
                                     onKeyDown={handleTabElementOnKeyDown}
+                                    tooltipPosition="left"
                                     renderIcon={commitHashCopyIcon}
                                     role="menuitemcheckbox"
                                     data-a11y-previous="about-dialog__copy-button__build-date"
-                                    data-a11y-next="about-dialog__show-passwords-toggle"
+                                    data-a11y-next={
+                                        !globalState.isEditing
+                                            ? "about-dialog__about-settings-button"
+                                            : "about-dialog__show-passwords-toggle"
+                                    }
                                     {...commitHashCopyAriaProps}
                                 />
                             </CopyToClipboard>
                         </div>
                     </div>
-                    <div className="about-dialog__about-build-info__theme">
-                        <div
-                            id="about-dialog__show-passwords-toggle-label"
-                            className="about-dialog__about-build-info__theme__left-column"
-                        >
-                            {t("dialog.about.showPasswordsLabel")}:
-                        </div>
-                        <div className="about-dialog__about-build-info__theme__right-column">
+                </li>
+                <li className="about-dialog__about-menu-item" role="none">
+                    {settingsButtonTooltipMarkup}
+                </li>
+                <li
+                    className={
+                        globalState.isEditing
+                            ? "about-dialog__about-menu-item"
+                            : "about-dialog__about-menu-item about-dialog__about-menu-item-danger"
+                    }
+                    role="none"
+                >
+                    {pruneButtonTooltipMarkup}
+                </li>
+                <li className="about-dialog__about-build-info" role="none">
+                    <div className="about-dialog__about-build-info__show-passwords">
+                        {t("dialog.about.showPasswordsLabel")}
+                        <div className="about-dialog__about-build-info__value">
                             <Toggle
                                 size="sm"
                                 aria-labelledby="about-dialog__show-passwords-toggle-label"
@@ -468,20 +508,21 @@ const About = forwardRef(function About(props, ref) {
                                 }}
                                 onBlur={handleTabElementOnBlur}
                                 onKeyDown={handleTabElementOnKeyDown}
-                                data-a11y-previous="about-dialog__copy-button__commit-hash"
+                                data-a11y-previous={
+                                    !globalState.isEditing
+                                        ? "about-dialog__about-prune-button"
+                                        : "about-dialog__copy-button__commit-hash"
+                                }
                                 data-a11y-next="about-dialog__theme-toggle"
                                 role="menuitemradio"
                             />
                         </div>
                     </div>
+                </li>
+                <li className="about-dialog__about-build-info" role="none">
                     <div className="about-dialog__about-build-info__theme">
-                        <div
-                            id="about-dialog__theme-toggle-label"
-                            className="about-dialog__about-build-info__theme__left-column"
-                        >
-                            {t("dialog.about.themeLabel")}:
-                        </div>
-                        <div className="about-dialog__about-build-info__theme__right-column">
+                        {t("dialog.about.themeLabel")}
+                        <div className="about-dialog__about-build-info__value">
                             <Toggle
                                 size="sm"
                                 readOnly={useOperatingSystemTheme}
@@ -506,14 +547,11 @@ const About = forwardRef(function About(props, ref) {
                             />
                         </div>
                     </div>
+                </li>
+                <li className="about-dialog__about-build-info" role="none">
                     <div className="about-dialog__about-build-info__theme">
-                        <div
-                            id="about-dialog__theme-from-os-toggle-label"
-                            className="about-dialog__about-build-info__theme__leftcolumn"
-                        >
-                            {t("dialog.about.themeFromOsLabel")}:
-                        </div>
-                        <div className="about-dialog__about-build-info__theme__right-column">
+                        {t("dialog.about.themeFromOsLabel")}
+                        <div className="about-dialog__about-build-info__value">
                             <Toggle
                                 size="sm"
                                 aria-labelledby="about-dialog__theme-from-os-toggle-label"
@@ -552,110 +590,79 @@ const About = forwardRef(function About(props, ref) {
                                 onBlur={handleTabElementOnBlur}
                                 onKeyDown={handleTabElementOnKeyDown}
                                 data-a11y-previous="about-dialog__theme-toggle"
-                                data-a11y-next="about-dialog__about-settings-button"
+                                data-a11y-next="about-dialog__about-kissues-button"
                                 role="menuitemradio"
                             />
                         </div>
                     </div>
-                </div>
-            </li>
-            <li
-                className="about-dialog__about-settings-button-container"
-                role="none"
+                </li>
+            </ul>
+            <p className="about-dialog__panel-divider-label">
+                {t("dialog.about.shortcutsLabel")}
+            </p>
+            <hr className="about-dialog__panel-divider" />
+            <ul
+                id="about-dialog__about-menu__shortcut-options"
+                aria-label={t("dialog.about.ariaLabel.applicationShortcuts")}
+                role="group"
+                className="about-dialog__panel-group"
             >
-                <Button
-                    kind="ghost"
-                    data-title="report"
-                    id="about-dialog__about-settings-button"
-                    href={settingsPageHref}
-                    onClick={closeNotification}
-                    className="about-dialog__about-settings-button"
-                    role="menuitem"
-                    onBlur={handleTabElementOnBlur}
-                    onKeyDown={handleTabElementOnKeyDown}
-                    data-a11y-previous="about-dialog__theme-from-os-toggle"
-                    data-a11y-next="about-dialog__about-kissues-button"
-                    iconDescription={t("dialog.about.settingsLabel")}
-                    {...externalLinkSettingsAriaProps}
-                >
-                    <span>{t("dialog.about.settingsLabel")}</span>
-                    <span
-                        className="about-dialog__about-internal-link-hint"
-                        id="about-dialog__about-internal-link-hint__settings"
+                <li className="about-dialog__about-menu-item" role="none">
+                    <Button
+                        kind="ghost"
+                        size="sm"
+                        data-title="report"
+                        id="about-dialog__about-kissues-button"
+                        href={knownIssuesUrl}
+                        target="_blank"
+                        className="about-dialog__about-menu-item__button"
+                        role="menuitem"
+                        onBlur={handleTabElementOnBlur}
+                        onKeyDown={handleTabElementOnKeyDown}
+                        data-a11y-previous="about-dialog__theme-from-os-toggle"
+                        data-a11y-next="about-dialog__about-report-button"
+                        renderIcon={Launch}
+                        iconDescription={t("dialog.about.knownIssuesLabel")}
+                        {...externalLinkKnownIssueAriaProps}
                     >
-                        {t("dialog.about.internalLinkHint")}
-                    </span>
-                </Button>
-            </li>
-            <li
-                className="about-dialog__about-kissues-button-container"
-                role="none"
-            >
-                <Button
-                    kind="ghost"
-                    data-title="report"
-                    id="about-dialog__about-kissues-button"
-                    href={knownIssuesUrl}
-                    target="_blank"
-                    className="about-dialog__about-kissues-button"
-                    role="menuitem"
-                    onBlur={handleTabElementOnBlur}
-                    onKeyDown={handleTabElementOnKeyDown}
-                    data-a11y-previous="about-dialog__about-settings-button"
-                    data-a11y-next="about-dialog__about-report-button"
-                    renderIcon={Launch}
-                    iconDescription={t("dialog.about.knownIssuesLabel")}
-                    {...externalLinkKnownIssueAriaProps}
-                >
-                    <span>{t("dialog.about.knownIssuesLabel")}</span>
-                    <span
-                        className="about-dialog__about-external-link-hint"
-                        id="about-dialog__about-external-link-hint__kissues"
+                        <span>{t("dialog.about.knownIssuesLabel")}</span>
+                        <span
+                            className="about-dialog__about-external-link-hint"
+                            id="about-dialog__about-external-link-hint__kissues"
+                        >
+                            {t("dialog.about.externalLinkHint")}
+                        </span>
+                    </Button>
+                </li>
+                <li className="about-dialog__about-menu-item" role="none">
+                    <Button
+                        kind="ghost"
+                        size="sm"
+                        data-title="report"
+                        id="about-dialog__about-report-button"
+                        href={bugTrackerUrl}
+                        target="_blank"
+                        className="about-dialog__about-menu-item__button"
+                        role="menuitem"
+                        onBlur={handleTabElementOnBlur}
+                        onKeyDown={handleTabElementOnKeyDown}
+                        data-a11y-previous="about-dialog__about-kissues-button"
+                        data-a11y-next="about-dialog__close-button"
+                        renderIcon={Launch}
+                        iconDescription={t("dialog.about.reportIssueLabel")}
+                        {...externalLinkReportIssueAriaProps}
                     >
-                        {t("dialog.about.externalLinkHint")}
-                    </span>
-                </Button>
-            </li>
-            <li
-                className="about-dialog__about-report-button-container"
-                role="none"
-            >
-                <Button
-                    kind="ghost"
-                    data-title="report"
-                    id="about-dialog__about-report-button"
-                    href={bugTrackerUrl}
-                    target="_blank"
-                    className="about-dialog__about-report-button"
-                    role="menuitem"
-                    onBlur={handleTabElementOnBlur}
-                    onKeyDown={handleTabElementOnKeyDown}
-                    data-a11y-previous="about-dialog__about-kissues-button"
-                    data-a11y-next={
-                        !globalState.isEditing
-                            ? "about-dialog__about-prune-button"
-                            : "about-dialog__close-button"
-                    }
-                    renderIcon={Launch}
-                    iconDescription={t("dialog.about.reportIssueLabel")}
-                    {...externalLinkReportIssueAriaProps}
-                >
-                    <span>{t("dialog.about.reportIssueLabel")}</span>
-                    <span
-                        className="about-dialog__about-external-link-hint"
-                        id="about-dialog__about-external-link-hint__rissues"
-                    >
-                        {t("dialog.about.externalLinkHint")}
-                    </span>
-                </Button>
-            </li>
-            <li
-                className="about-dialog__about-prune-button-container"
-                role="none"
-            >
-                {pruneButtonTooltipMarkup}
-            </li>
-        </ul>
+                        <span>{t("dialog.about.reportIssueLabel")}</span>
+                        <span
+                            className="about-dialog__about-external-link-hint"
+                            id="about-dialog__about-external-link-hint__rissues"
+                        >
+                            {t("dialog.about.externalLinkHint")}
+                        </span>
+                    </Button>
+                </li>
+            </ul>
+        </div>
     );
 });
 
