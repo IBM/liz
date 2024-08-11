@@ -27,6 +27,7 @@ const ParamFileTextArea = ({
     onEditing,
     onShowPassword,
     showPasswords,
+    hasPasswords,
     resetContents,
     downloadContents,
     onChange,
@@ -231,7 +232,7 @@ const ParamFileTextArea = ({
                     />
                 </div>
             )}
-            {!editing && !allowReset && (
+            {!editing && !allowReset && hasPasswords && (
                 <div
                     className="param-file-text-area_textarea-button-bar__button"
                     onClick={onShowPassword}
@@ -412,6 +413,7 @@ ParamFileTextArea.propTypes = {
     allowReset: PropTypes.bool,
     allowDownload: PropTypes.bool,
     showPasswords: PropTypes.bool,
+    hasPasswords: PropTypes.bool,
     label: PropTypes.shape({
         text: PropTypes.string,
         content: PropTypes.string,

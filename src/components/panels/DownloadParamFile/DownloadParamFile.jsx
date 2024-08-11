@@ -34,6 +34,7 @@ import {
 import {
     ApplicationContext,
     DownloadParamFileContext,
+    InstallationParameterContext,
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
@@ -42,6 +43,7 @@ import {
     stateToParamFile,
 } from "../../../util/param-file-util";
 import { setItem } from "../../../util/local-storage-util";
+import { toUrl } from "../../../util/network-address-util";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
@@ -62,6 +64,9 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         updateOverrideGlobalState,
         updateIsEditing,
     } = useContext(DownloadParamFileContext);
+    const { state: installationParameterState } = useContext(
+        InstallationParameterContext
+    );
     const distributionName =
         globalState.steps.inputFileSelection.distributionName ??
         RHEL_DISTRIBUTION_ID;
@@ -233,6 +238,32 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         return false;
     };
 
+    const hasPasswords = () => {
+        const installationAddress =
+            installationParameterState?.installationAddress?.value ?? "";
+        const password = installationParameterState?.password?.value ?? "";
+        const sshPassword =
+            installationParameterState?.sshPassword?.value ?? "";
+        const vncPassword =
+            installationParameterState?.vncPassword?.value ?? "";
+        const installationAddressUrl = toUrl(installationAddress);
+
+        if (password && password.length > 0) {
+            return true;
+        } else if (sshPassword && sshPassword.length > 0) {
+            return true;
+        } else if (vncPassword && vncPassword.length > 0) {
+            return true;
+        } else if (
+            installationAddressUrl &&
+            installationAddressUrl.password &&
+            installationAddressUrl.password.length > 0
+        ) {
+            return true;
+        }
+        return false;
+    };
+
     const notificationMarkup = (
         <InlineNotification
             hideCloseButton
@@ -307,6 +338,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                             ? true
                             : state.showPasswords
                     }
+                    hasPasswords={hasPasswords()}
                     onEditing={isEditing}
                     editing={state.isEditing}
                     resetContents={() => {
