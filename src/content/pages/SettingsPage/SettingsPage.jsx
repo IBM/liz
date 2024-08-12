@@ -656,11 +656,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                             <div className="liz__settings-page__about-build-info__theme">
                                 <div
                                     id="settings-page__theme-toggle-label"
-                                    className="liz__settings-page__about-build-info__theme__left-column"
+                                    className="liz__settings-page__tab-panel-body__theme__left-column"
                                 >
                                     {t("dialog.about.themeLabel")}:
                                 </div>
-                                <div className="liz__settings-page__about-build-info__theme__right-column">
+                                <div className="liz__settings-page__tab-panel-body__theme__right-column">
                                     <Toggle
                                         size="md"
                                         readOnly={
@@ -716,11 +716,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                             <div className="liz__settings-page__about-build-info__theme">
                                 <div
                                     id="settings-page__theme-from-os-toggle-label"
-                                    className="liz__settings-page__about-build-info__theme__leftcolumn"
+                                    className="liz__settings-page__tab-panel-body__theme__left-column"
                                 >
                                     {t("dialog.about.themeFromOsLabel")}:
                                 </div>
-                                <div className="liz__settings-page__about-build-info__theme__right-column">
+                                <div className="liz__settings-page__tab-panel-body__theme__right-column">
                                     <Toggle
                                         size="md"
                                         aria-labelledby="settings-page__theme-from-os-toggle-label"
@@ -814,11 +814,11 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                             <div className="liz__settings-page__about-build-info__theme">
                                 <div
                                     id="settings-page__show-passwords-toggle-label"
-                                    className="liz__settings-page__about-build-info__theme__left-column"
+                                    className="liz__settings-page__tab-panel-body__theme__left-column"
                                 >
                                     {t("dialog.about.showPasswordsLabel")}:
                                 </div>
-                                <div className="liz__settings-page__about-build-info__theme__right-column">
+                                <div className="liz__settings-page__tab-panel-body__theme__right-column">
                                     <Toggle
                                         size="md"
                                         aria-labelledby="about-dialog__show-passwords-toggle-label"
