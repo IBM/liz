@@ -44,6 +44,7 @@ import {
     PANEL_EDIT_PAGE,
 } from "../../../util/panel-constants";
 import { parmfileCardIsExpanded } from "../../../util/local-storage-util";
+import { resetToInitialState } from "../../../uiUtil/state-util";
 import "./_header-layout.scss";
 
 const HeaderLayout = () => {
@@ -51,19 +52,31 @@ const HeaderLayout = () => {
     const homePageHref = useHref(PathConstants.HOME);
     const mainContentHref = useHref(PathConstants.MAIN_CONTENT);
     const navigate = useNavigate();
+
+    const contexts = {
+        applicationContext: useContext(ApplicationContext),
+        downloadParamFileContext: useContext(DownloadParamFileContext),
+        editPageContext: useContext(EditPageContext),
+        settingsPageContext: useContext(SettingsPageContext),
+        headerContext: useContext(HeaderContext),
+        informationContext: useContext(InformationContext),
+        inputFileSelectionContext: useContext(InputFileSelectionContext),
+        installationParameterContext: useContext(InstallationParameterContext),
+        introContext: useContext(IntroContext),
+        landingPageContext: useContext(LandingPageContext),
+        networkAddressContext: useContext(NetworkAddressContext),
+        networkDeviceContext: useContext(NetworkDeviceContext),
+        summaryContext: useContext(SummaryContext),
+    };
+
     const {
         state: globalState,
         config,
-        resetToInitialState: globalResetToInitialState,
         updateIsEditing,
         updateIncludeIntroStep,
         updateUseStateFromLocalStorage,
-    } = useContext(ApplicationContext);
-    const { resetToInitialState: downloadParamFileResetToInitialState } =
-        useContext(DownloadParamFileContext);
-    const { resetToInitialState: editPageResetToInitialState } =
-        useContext(EditPageContext);
-    const { updateIsDirty } = useContext(SettingsPageContext);
+    } = contexts.applicationContext;
+    const { updateIsDirty } = contexts.settingsPageContext;
     const {
         state,
         closeNotification,
@@ -71,24 +84,8 @@ const HeaderLayout = () => {
         updateIsHelpPanelExpanded,
         updateShowConfirmationModal,
         updateNeedsManualNavigationConfirmation,
-        resetToInitialState: headerResetToInitialState,
-    } = useContext(HeaderContext);
-    const { resetToInitialState: informationResetToInitialState } =
-        useContext(InformationContext);
-    const { resetToInitialState: inputFileSelectionResetToInitialState } =
-        useContext(InputFileSelectionContext);
-    const { resetToInitialState: installationParameterResetToInitialState } =
-        useContext(InstallationParameterContext);
-    const { resetToInitialState: introResetToInitialState } =
-        useContext(IntroContext);
-    const { resetToInitialState: landingPageResetToInitialState } =
-        useContext(LandingPageContext);
-    const { resetToInitialState: networkAddressResetToInitialState } =
-        useContext(NetworkAddressContext);
-    const { resetToInitialState: networkDeviceResetToInitialState } =
-        useContext(NetworkDeviceContext);
-    const { resetToInitialState: summaryResetToInitialState } =
-        useContext(SummaryContext);
+    } = contexts.headerContext;
+
     const { helpPanelConfig } = config || {
         helpPanelConfig: {},
     };
@@ -143,26 +140,19 @@ const HeaderLayout = () => {
     };
 
     const localPruneSettings = () => {
-        globalResetToInitialState();
-        downloadParamFileResetToInitialState();
-        editPageResetToInitialState();
-        headerResetToInitialState();
-        informationResetToInitialState();
-        inputFileSelectionResetToInitialState();
-        installationParameterResetToInitialState();
-        introResetToInitialState();
-        landingPageResetToInitialState();
-        networkAddressResetToInitialState();
-        networkDeviceResetToInitialState();
-        summaryResetToInitialState();
-        closeNotification(true);
+        const resetToInitialStateParameters = {
+            shouldCloseNotification: true,
+            contexts,
+        };
 
         if (wasEditing) {
-            updateIsEditing(true);
+            resetToInitialStateParameters.isEditing = true;
         }
         if (introPanelHasBeenIncluded) {
-            updateIncludeIntroStep(true);
+            resetToInitialStateParameters.includeIntroStep = true;
         }
+
+        resetToInitialState(resetToInitialStateParameters);
     };
 
     const updateExpanded = (expanded) => {

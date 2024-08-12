@@ -38,72 +38,56 @@ import {
     NetworkAddressContext,
     NetworkDeviceContext,
     SummaryContext,
+    SettingsPageContext,
 } from "../../../contexts";
 import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
 import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import { resetToInitialState } from "../../../uiUtil/state-util";
 import { setItem } from "../../../util/local-storage-util";
 import "./_intro.scss";
 
 const Intro = forwardRef(function Intro(props, ref) {
+    const contexts = {
+        applicationContext: useContext(ApplicationContext),
+        downloadParamFileContext: useContext(DownloadParamFileContext),
+        editPageContext: useContext(EditPageContext),
+        settingsPageContext: useContext(SettingsPageContext),
+        headerContext: useContext(HeaderContext),
+        informationContext: useContext(InformationContext),
+        inputFileSelectionContext: useContext(InputFileSelectionContext),
+        installationParameterContext: useContext(InstallationParameterContext),
+        introContext: useContext(IntroContext),
+        landingPageContext: useContext(LandingPageContext),
+        networkAddressContext: useContext(NetworkAddressContext),
+        networkDeviceContext: useContext(NetworkDeviceContext),
+        summaryContext: useContext(SummaryContext),
+    };
+
     const {
         state: globalState,
         updateModified: globalUpdateModified,
         updateNextStep,
         updateIsDirty,
-        updateIncludeIntroStep,
         updateIsDisabled,
-        updateIsEditing,
-        resetToInitialState: globalResetToInitialState,
-    } = useContext(ApplicationContext);
-    const {
-        resetToInitialState: downloadParamFileResetToInitialState,
-        updateModified,
-        updateParamFileContent,
-    } = useContext(DownloadParamFileContext);
-    const { resetToInitialState: editPageResetToInitialState } =
-        useContext(EditPageContext);
-    const { resetToInitialState: headerResetToInitialState } =
-        useContext(HeaderContext);
-    const { resetToInitialState: informationResetToInitialState } =
-        useContext(InformationContext);
-    const { resetToInitialState: inputFileSelectionResetToInitialState } =
-        useContext(InputFileSelectionContext);
-    const { resetToInitialState: installationParameterResetToInitialState } =
-        useContext(InstallationParameterContext);
-    const {
-        state,
-        updatePurgeParmfileSettings,
-        resetToInitialState: introResetToInitialState,
-    } = useContext(IntroContext);
-    const { resetToInitialState: landingPageResetToInitialState } =
-        useContext(LandingPageContext);
-    const { resetToInitialState: networkAddressResetToInitialState } =
-        useContext(NetworkAddressContext);
-    const { resetToInitialState: networkDeviceResetToInitialState } =
-        useContext(NetworkDeviceContext);
-    const { resetToInitialState: summaryResetToInitialState } =
-        useContext(SummaryContext);
+    } = contexts.applicationContext;
+    const { updateModified, updateParamFileContent } =
+        contexts.downloadParamFileContext;
+    const { state, updatePurgeParmfileSettings } = contexts.introContext;
     const { t } = useTranslation();
     const publicRef = {
         pruneSettings: () => {
             if (purgeParmfileSettings) {
-                globalResetToInitialState(true);
-                downloadParamFileResetToInitialState();
-                editPageResetToInitialState();
-                headerResetToInitialState();
-                informationResetToInitialState();
-                inputFileSelectionResetToInitialState();
-                installationParameterResetToInitialState();
-                introResetToInitialState();
-                landingPageResetToInitialState();
-                networkAddressResetToInitialState();
-                networkDeviceResetToInitialState();
-                summaryResetToInitialState();
-                updateIsEditing(true);
+                const resetToInitialStateParameters = {
+                    globalResetToInitialStateShouldBeUsingTrue: true,
+                    isEditing: true,
+                    contexts,
+                };
 
                 if (panelHasBeenIncluded) {
-                    updateIncludeIntroStep(true);
+                    resetToInitialStateParameters.includeIntroStep = true;
                 }
+
+                resetToInitialState(resetToInitialStateParameters);
             }
         },
         persistState: () => {

@@ -48,6 +48,7 @@ import {
     setItem,
 } from "../../../util/local-storage-util";
 import { getInlineNotification } from "../../../uiUtil/panel-util";
+import { resetToInitialState } from "../../../uiUtil/state-util";
 import PathConstants from "../../../util/path-constants";
 import { LIGHT_THEME, DARK_THEME } from "../../../util/constants";
 import { PANEL_SETTINGS_PAGE } from "../../../util/panel-constants";
@@ -61,51 +62,44 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
     );
     const homePageHref = useHref(PathConstants.HOME);
     const settingsPageHref = useHref(PathConstants.SETTINGS);
-    const { resetToInitialState: downloadParamFileResetToInitialState } =
-        useContext(DownloadParamFileContext);
-    const { resetToInitialState: editPageResetToInitialState } =
-        useContext(EditPageContext);
-    const { resetToInitialState: informationResetToInitialState } =
-        useContext(InformationContext);
-    const { resetToInitialState: inputFileSelectionResetToInitialState } =
-        useContext(InputFileSelectionContext);
-    const { resetToInitialState: installationParameterResetToInitialState } =
-        useContext(InstallationParameterContext);
-    const { resetToInitialState: introResetToInitialState } =
-        useContext(IntroContext);
-    const { resetToInitialState: landingPageResetToInitialState } =
-        useContext(LandingPageContext);
-    const { resetToInitialState: networkAddressResetToInitialState } =
-        useContext(NetworkAddressContext);
-    const { resetToInitialState: networkDeviceResetToInitialState } =
-        useContext(NetworkDeviceContext);
-    const { resetToInitialState: summaryResetToInitialState } =
-        useContext(SummaryContext);
+
+    const contexts = {
+        applicationContext: useContext(ApplicationContext),
+        downloadParamFileContext: useContext(DownloadParamFileContext),
+        editPageContext: useContext(EditPageContext),
+        settingsPageContext: useContext(SettingsPageContext),
+        headerContext: useContext(HeaderContext),
+        informationContext: useContext(InformationContext),
+        inputFileSelectionContext: useContext(InputFileSelectionContext),
+        installationParameterContext: useContext(InstallationParameterContext),
+        introContext: useContext(IntroContext),
+        landingPageContext: useContext(LandingPageContext),
+        networkAddressContext: useContext(NetworkAddressContext),
+        networkDeviceContext: useContext(NetworkDeviceContext),
+        summaryContext: useContext(SummaryContext),
+    };
+
     const {
         state: globalState,
         config,
-        resetToInitialState: globalResetToInitialState,
         updateShowLegalNotification,
         updateTheme,
         updateStep,
         updateUseOperatingSystemTheme,
         updateShowPasswords,
-    } = useContext(ApplicationContext);
+    } = contexts.applicationContext;
     const {
         state,
         updateIsDirty,
-        resetToInitialState: settingsResetToInitialState,
         updateTheme: localUpdateTheme,
         updateUseOperatingSystemTheme: localUpdateUseOperatingSystemTheme,
         updateShowPasswords: localUpdateShowPasswords,
-    } = useContext(SettingsPageContext);
+    } = contexts.settingsPageContext;
     const {
         state: headerState,
-        resetToInitialState: headerResetToInitialState,
-        closeNotification,
         updateNeedsManualNavigationConfirmation,
         updateManualNavigationOrigin,
-    } = useContext(HeaderContext);
+    } = contexts.headerContext;
 
     const [buildDateBeenCopied, setBuildDateHasBeenCopied] = useState(false);
     const [commitHashHasBeenCopied, setCommitHashHasBeenCopied] =
@@ -241,20 +235,10 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
     };
 
     const localPruneSettings = () => {
-        globalResetToInitialState();
-        downloadParamFileResetToInitialState();
-        editPageResetToInitialState();
-        headerResetToInitialState();
-        informationResetToInitialState();
-        inputFileSelectionResetToInitialState();
-        installationParameterResetToInitialState();
-        introResetToInitialState();
-        landingPageResetToInitialState();
-        networkAddressResetToInitialState();
-        networkDeviceResetToInitialState();
-        summaryResetToInitialState();
-        settingsResetToInitialState();
-        closeNotification(true);
+        resetToInitialState({
+            shouldCloseNotification: true,
+            contexts,
+        });
     };
 
     const labelForHomeLink = !headerState.needsManualNavigationConfirmation ? (
