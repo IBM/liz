@@ -23,7 +23,7 @@ import {
     Section,
     Toggle,
 } from "@carbon/react";
-import { Checkmark, Copy, Debug, Report } from "@carbon/icons-react";
+import { Checkmark, Copy, Debug, Report, Erase } from "@carbon/icons-react";
 import { PageHeader } from "@carbon/ibm-products";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Trans, useTranslation } from "react-i18next";
@@ -32,6 +32,16 @@ import {
     ApplicationContext,
     SettingsPageContext,
     HeaderContext,
+    DownloadParamFileContext,
+    EditPageContext,
+    InformationContext,
+    InputFileSelectionContext,
+    InstallationParameterContext,
+    IntroContext,
+    LandingPageContext,
+    NetworkAddressContext,
+    NetworkDeviceContext,
+    SummaryContext,
 } from "../../../contexts";
 import {
     parmfileCardIsExpanded,
@@ -51,9 +61,30 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
     );
     const homePageHref = useHref(PathConstants.HOME);
     const settingsPageHref = useHref(PathConstants.SETTINGS);
+    const { resetToInitialState: downloadParamFileResetToInitialState } =
+        useContext(DownloadParamFileContext);
+    const { resetToInitialState: editPageResetToInitialState } =
+        useContext(EditPageContext);
+    const { resetToInitialState: informationResetToInitialState } =
+        useContext(InformationContext);
+    const { resetToInitialState: inputFileSelectionResetToInitialState } =
+        useContext(InputFileSelectionContext);
+    const { resetToInitialState: installationParameterResetToInitialState } =
+        useContext(InstallationParameterContext);
+    const { resetToInitialState: introResetToInitialState } =
+        useContext(IntroContext);
+    const { resetToInitialState: landingPageResetToInitialState } =
+        useContext(LandingPageContext);
+    const { resetToInitialState: networkAddressResetToInitialState } =
+        useContext(NetworkAddressContext);
+    const { resetToInitialState: networkDeviceResetToInitialState } =
+        useContext(NetworkDeviceContext);
+    const { resetToInitialState: summaryResetToInitialState } =
+        useContext(SummaryContext);
     const {
         state: globalState,
         config,
+        resetToInitialState: globalResetToInitialState,
         updateShowLegalNotification,
         updateTheme,
         updateStep,
@@ -63,12 +94,15 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
     const {
         state,
         updateIsDirty,
+        resetToInitialState: settingsResetToInitialState,
         updateTheme: localUpdateTheme,
         updateUseOperatingSystemTheme: localUpdateUseOperatingSystemTheme,
         updateShowPasswords: localUpdateShowPasswords,
     } = useContext(SettingsPageContext);
     const {
         state: headerState,
+        resetToInitialState: headerResetToInitialState,
+        closeNotification,
         updateNeedsManualNavigationConfirmation,
         updateManualNavigationOrigin,
     } = useContext(HeaderContext);
@@ -204,6 +238,23 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                 }),
             },
         ];
+    };
+
+    const localPruneSettings = () => {
+        globalResetToInitialState();
+        downloadParamFileResetToInitialState();
+        editPageResetToInitialState();
+        headerResetToInitialState();
+        informationResetToInitialState();
+        inputFileSelectionResetToInitialState();
+        installationParameterResetToInitialState();
+        introResetToInitialState();
+        landingPageResetToInitialState();
+        networkAddressResetToInitialState();
+        networkDeviceResetToInitialState();
+        summaryResetToInitialState();
+        settingsResetToInitialState();
+        closeNotification(true);
     };
 
     const labelForHomeLink = !headerState.needsManualNavigationConfirmation ? (
@@ -430,6 +481,54 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                                 </div>
                             </div>
                             <div className="liz__settings-page__about-build-info__theme">
+                                <Button
+                                    data-title="clear"
+                                    kind="danger"
+                                    id="settings-page__about-clear-settings-button"
+                                    target="_blank"
+                                    className="liz__settings-page__about-clear-settings-button"
+                                    renderIcon={Erase}
+                                    iconDescription={t(
+                                        "dialog.about.pruneSettingsLabel"
+                                    )}
+                                    onClick={localPruneSettings}
+                                    onBlur={() => {
+                                        document
+                                            .getElementById(
+                                                "helpPanelContents_settingsPage_para1"
+                                            )
+                                            ?.classList?.remove(
+                                                "help-panel__settings-page__content__active"
+                                            );
+                                        document
+                                            .getElementById(
+                                                "helpPanelContents_settingsPage_para2"
+                                            )
+                                            ?.classList?.remove(
+                                                "help-panel__settings-page__content__active"
+                                            );
+                                    }}
+                                    onFocus={() => {
+                                        document
+                                            .getElementById(
+                                                "helpPanelContents_settingsPage_para1"
+                                            )
+                                            ?.classList?.add(
+                                                "help-panel__settings-page__content__active"
+                                            );
+                                        document
+                                            .getElementById(
+                                                "helpPanelContents_settingsPage_para2"
+                                            )
+                                            ?.classList?.add(
+                                                "help-panel__settings-page__content__active"
+                                            );
+                                    }}
+                                >
+                                    <span>
+                                        {t("dialog.about.pruneSettingsLabel")}
+                                    </span>
+                                </Button>
                                 <Button
                                     data-title="report"
                                     id="settings-page__about-kissues-button"
