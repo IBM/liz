@@ -26,7 +26,7 @@ import {
 import { Checkmark, Copy, Debug, Report, Erase } from "@carbon/icons-react";
 import { PageHeader } from "@carbon/ibm-products";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useHref } from "react-router-dom";
 import {
     ApplicationContext,
@@ -350,12 +350,10 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                             </div>
                             <div className={buildDateCopyClass}>
                                 <div className="liz__settings-page__tab-panel-body__date__left-column">
-                                    <Trans i18nKey="dialog.about.buildDateLabelWithDate">
-                                        <span>Build date:</span>
-                                        <code role="presentation">
-                                            {{ buildDate }}
-                                        </code>
-                                    </Trans>
+                                    <span>
+                                        {t("dialog.about.buildDateLabel")}:{" "}
+                                    </span>
+                                    <code role="presentation">{buildDate}</code>
                                 </div>
                                 <div className="liz__settings-page__tab-panel-body__date__right-column">
                                     <CopyToClipboard
@@ -416,12 +414,12 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                             </div>
                             <div className={commitHashCopyClass}>
                                 <div className="liz__settings-page__tab-panel-body__hash__left-column">
-                                    <Trans i18nKey="dialog.about.commitHashLabelWithHash">
-                                        <span>Commit hash:</span>
-                                        <code role="presentation">
-                                            {{ commitHashShort }}
-                                        </code>
-                                    </Trans>
+                                    <span>
+                                        {t("dialog.about.commitHashLabel")}:{" "}
+                                    </span>
+                                    <code role="presentation">
+                                        {commitHashShort}
+                                    </code>
                                 </div>
                                 <div className="liz__settings-page__tab-panel-body__hash__right-column">
                                     <CopyToClipboard
