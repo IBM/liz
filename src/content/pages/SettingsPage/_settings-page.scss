@@ -113,8 +113,8 @@
                                     @include react.type-style("code-01");
                                 }
 
-                                .liz__settings-page__about-build-info__date__right-column,
-                                .liz__settings-page__about-build-info__hash__right-column {
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__right-column {
                                     margin-left: react.$spacing-03;
 
                                     svg {
@@ -122,10 +122,10 @@
                                     }
                                 }
 
-                                .liz__settings-page__about-build-info__date__left-column,
-                                .liz__settings-page__about-build-info__date__right-column,
-                                .liz__settings-page__about-build-info__hash__left-column,
-                                .liz__settings-page__about-build-info__hash__right-column {
+                                .liz__settings-page__tab-panel-body__date__left-column,
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__left-column,
+                                .liz__settings-page__tab-panel-body__hash__right-column {
                                     text-align: right;
                                 }
                             }
@@ -160,18 +160,18 @@
                                     @include react.type-style("code-01");
                                 }
 
-                                .liz__settings-page__about-build-info__date__right-column,
-                                .liz__settings-page__about-build-info__hash__right-column,
-                                .liz__settings-page__about-build-info__theme__right-column {
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__right-column,
+                                .liz__settings-page__tab-panel-body__theme__right-column {
                                     margin-left: react.$spacing-03;
                                 }
 
-                                .liz__settings-page__about-build-info__date__left-column,
-                                .liz__settings-page__about-build-info__date__right-column,
-                                .liz__settings-page__about-build-info__hash__left-column,
-                                .liz__settings-page__about-build-info__hash__right-colum,
-                                .liz__settings-page__about-build-info__theme__left-column,
-                                .liz__settings-page__about-build-info__theme__right-column {
+                                .liz__settings-page__tab-panel-body__date__left-column,
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__left-column,
+                                .liz__settings-page__tab-panel-body__hash__right-colum,
+                                .liz__settings-page__tab-panel-body__theme__left-column,
+                                .liz__settings-page__tab-panel-body__theme__right-column {
                                     text-align: right;
                                 }
                             }
