@@ -20,6 +20,8 @@ import { Checkmark, Close, Copy, LinuxAlt, Launch } from "@carbon/icons-react";
 import { ApplicationContext } from "../../contexts";
 import { LIGHT_THEME, DARK_THEME } from "../../util/constants";
 import {
+    ARROW_KEY_LEFT_EVENT,
+    ARROW_KEY_RIGHT_EVENT,
     ARROW_KEY_DOWN_EVENT,
     ARROW_KEY_UP_EVENT,
     HOME_KEY_EVENT,
@@ -214,10 +216,12 @@ const About = forwardRef(function About(props, ref) {
                         skipToContent?.focus();
                     }
                     break;
+                case ARROW_KEY_LEFT_EVENT:
                 case ARROW_KEY_UP_EVENT:
                     event.preventDefault();
                     previous?.focus();
                     break;
+                case ARROW_KEY_RIGHT_EVENT:
                 case ARROW_KEY_DOWN_EVENT:
                     event.preventDefault();
                     next?.focus();
