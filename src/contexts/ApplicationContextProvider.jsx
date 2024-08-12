@@ -94,7 +94,12 @@ const ApplicationContextProvider = ({ value, children }) => {
         };
 
         fetchData().then((config) => {
-            !hasConfigObject && updateConfig(config);
+            if (
+                !hasConfigObject ||
+                JSON.stringify(updates) !== JSON.stringify(config)
+            ) {
+                updateConfig(config);
+            }
         });
     });
 
