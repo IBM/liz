@@ -238,8 +238,7 @@ const NetworkAddress = forwardRef(function NetworkAddress(props, ref) {
     const requiresDomainSearchName = !!(
         distributionName &&
         distributionName.length > 0 &&
-        (distributionName === SLES_DISTRIBUTION_ID ||
-            distributionName === UBUNTU_DISTRIBUTION_ID)
+        distributionName === SLES_DISTRIBUTION_ID
     );
     const selectedAddressType = () => {
         if (displayNoneUbuntuControl) {

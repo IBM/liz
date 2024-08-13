@@ -124,6 +124,7 @@
     "panel.installationParameter.sshToggleTextLabel": "Start SSH installation",
     "panel.installationParameter.sshToggleHelp": "Activate SSH remote access to text-based installer UI.",
     "panel.installationParameter.sshPasswordTextLabel": "SSH password (optional)",
+    "panel.installationParameter.sshPasswordTextLabelNoOptional": "SSH password",
     "panel.installationParameter.sshPasswordPlaceholder": "SSH password here",
     "panel.installationParameter.sshPasswordHelp": "Specify a password for SSH access.",
     "panel.downloadParamFile.stepsWithIncompleteData": "Steps with incomplete data",

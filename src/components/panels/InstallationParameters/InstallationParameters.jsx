@@ -1090,12 +1090,21 @@ const InstallationParameters = forwardRef(
                         }
                         invalidText={t("invalidTextLabel", { ns: "common" })}
                         maxLength={64}
-                        labelText={t(
-                            "panel.installationParameter.sshPasswordTextLabel",
-                            {
-                                ns: "panels",
-                            }
-                        )}
+                        labelText={
+                            distributionName === UBUNTU_DISTRIBUTION_ID
+                                ? t(
+                                      "panel.installationParameter.sshPasswordTextLabelNoOptional",
+                                      {
+                                          ns: "panels",
+                                      }
+                                  )
+                                : t(
+                                      "panel.installationParameter.sshPasswordTextLabel",
+                                      {
+                                          ns: "panels",
+                                      }
+                                  )
+                        }
                         placeholder={t(
                             "panel.installationParameter.sshPasswordPlaceholder",
                             {

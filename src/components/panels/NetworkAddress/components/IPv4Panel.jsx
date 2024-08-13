@@ -413,25 +413,6 @@ const IPv4Panel = ({
                         );
                 }}
             />
-            {/*
-                <TextInput
-                    readOnly
-                    id="network-address_ipv4-binary"
-                    key="network-address_ipv4-binary"
-                    invalidText={t("invalidTextLabel", { ns: "common" })}
-                    labelText={t(
-                        "panel.networkAddress.networkAddressBinaryIPv4TextLabel",
-                        {
-                            ns: "panels",
-                        }
-                    )}
-                    placeholder={t(
-                        "panel.networkAddress.networkAddressBinaryIPv4Placeholder",
-                        { ns: "panels" }
-                    )}
-                    value={state?.ipv4?.binary ?? ""}
-                />
-            */}
         </div>
     );
 
