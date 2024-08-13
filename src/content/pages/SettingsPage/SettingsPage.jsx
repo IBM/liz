@@ -227,9 +227,7 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
                 href: settingsPageHref,
                 isCurrentPage: true,
                 key: "breadcrumb-02",
-                label: t("pageHeader.breadcrumbs.settings", {
-                    ns: "common",
-                }),
+                label: labelForSettingsLink,
             },
         ];
     };
@@ -240,6 +238,14 @@ const SettingsPage = forwardRef(function SettingsPage(props, ref) {
             contexts,
         });
     };
+
+    const labelForSettingsLink = state.isDirty
+        ? `${t("pageHeader.breadcrumbs.settings", {
+              ns: "common",
+          })} *`
+        : t("pageHeader.breadcrumbs.settings", {
+              ns: "common",
+          });
 
     const labelForHomeLink = !headerState.needsManualNavigationConfirmation ? (
         <Link
