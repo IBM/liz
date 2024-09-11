@@ -175,7 +175,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
                 navigator.clipboard.writeText(
                     stateHasValidParamFileContents()
                         ? state.paramFileContent
-                        : paramFileContent.data
+                        : stateToParamFile(globalState).data
                 );
             }
             return true;
@@ -184,7 +184,7 @@ const DownloadParamFile = forwardRef(function DownloadParamFile(props, ref) {
         window.addEventListener("keydown", handleKeyDown);
 
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
+    }, [state, globalState]);
 
     useEffect(publicRef.persistState, [state]);
     useImperativeHandle(ref, () => publicRef);
