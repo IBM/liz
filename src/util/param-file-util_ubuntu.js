@@ -32,7 +32,7 @@ const stateToIpv4NetworkAddressParams = (state) => {
         "";
     const netdevName = getNetdevName(vlanId, interfaceName) || "";
 
-    return `ip=${ipAddress}::${gatewayIpAddress}:${netmask}:${hasHostName ? `hostname=${hostName}` : ""}:${netdevName}:none:${installationParameters.nameserverIpAddress}`;
+    return `ip=${ipAddress}::${gatewayIpAddress}:${netmask}:${hasHostName ? `${hostName}` : ""}:${netdevName}:none:${installationParameters.nameserverIpAddress}`;
 };
 
 const stateToNetworkAddressParams = (state) => {
