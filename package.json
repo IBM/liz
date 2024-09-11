@@ -39,7 +39,7 @@
         "@carbon/themes": "11.39.0",
         "@carbon/type": "11.30.0",
         "@loadable/component": "5.16.4",
-        "i18next": "23.15.0",
+        "i18next": "23.15.1",
         "i18next-browser-languagedetector": "7.2.1",
         "i18next-http-backend": "2.6.1",
         "i18next-pseudo": "2.2.1",
