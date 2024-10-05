@@ -10,7 +10,7 @@
     "license": "MIT",
     "main": "index.js",
     "engines": {
-        "node": "20.17.0",
+        "node": "20.18.0",
         "npm": "10.9.0"
     },
     "scripts": {
