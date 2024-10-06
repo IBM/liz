@@ -1,0 +1,77 @@
+language: node_js
+node_js: 20.11.1
+git:
+    depth: false
+dist: focal
+env:
+    - BUILD_DATE=`date "+%Y-%m-%d"` COMMIT_HASH_SHORT=`git rev-parse --short=11 HEAD` COMMIT_HASH_LONG=`git rev-parse HEAD`
+notifications:
+    slack:
+        rooms:
+            - ibm-systems-z:GsrFzDjDjUXPTi8zgEH5VMfU#linux-io-liz-devops
+        on_success: change
+        on_failure: always
+before_script:
+    - travis_retry npm install -g license-checker-rseidelsohn
+    - travis_retry npm install
+    - perl -i -p -e 's/BUG_TRACKER/$ENV{BUG_TRACKER}/' public/config/app/config.json
+    - perl -i -p -e 's/KNOWN_ISSUES/$ENV{KNOWN_ISSUES}/' public/config/app/config.json
+    - perl -i -p -e 's/BUILD_DATE/$ENV{BUILD_DATE}/' public/config/app/config.json
+    - perl -i -p -e 's/COMMIT_HASH_SHORT/$ENV{COMMIT_HASH_SHORT}/' public/config/app/config.json
+    - perl -i -p -e 's/COMMIT_HASH_LONG/$ENV{COMMIT_HASH_LONG}/' public/config/app/config.json
+    - perl -i -p -e 's/SHOW_NOTICE/$ENV{SHOW_NOTICE}/' public/config/app/config.json
+    - perl -i -p -e 's/URL_PATH_TOKEN/$ENV{URL_PATH_TOKEN}/' .env.github
+    - perl -pi -e 's/vite build/vite build --mode github --base=\/$ENV{URL_PATH_TOKEN}\/liz\//' package.json
+script:
+    - npm run build
+
+after_success:
+    - git clone https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git
+    - echo "# Lines of code needed for the implementation" > liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "~~~" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "git ls-files src/**/*.js src/**/*.jsx src/**/*.scss public/**/*.json | xargs wc -l" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - git ls-files src/**/*.js src/**/*.jsx src/**/*.scss public/**/*.json | xargs wc -l >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "~~~" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "# OSS License Compatibility" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "" >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "There's a [compatibility matrix](https://wiki.geant.org/display/GSD/General+information+about+OSS+licences?preview=/419758342/419758376/licenses.png) available to show which OSS license can be combined with other OSS licenses." >> liz.wiki/OSS-Licensing-\&-Legal-Stuff.md
+    - echo "# Overview" > liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
+    - license-checker-rseidelsohn --development --excludePackages liz --summary >> liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "~~~" >> liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "# Dependency List" >> liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "Open Source dependencies that will be used to build the UI." >> liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "" >> liz.wiki/Open-Source-Development-Dependencies.md
+    - license-checker-rseidelsohn --development --markdown --excludePackages liz >> liz.wiki/Open-Source-Development-Dependencies.md
+    - echo "# Overview" > liz.wiki/Open-Source-Production-Dependencies.md
+    - echo "" >> liz.wiki/Open-Source-Production-Dependencies.md
+    - echo "~~~" >> liz.wiki/Open-Source-Production-Dependencies.md
+    - license-checker-rseidelsohn --production --excludePackages liz --summary >> liz.wiki/Open-Source-Production-Dependencies.md
+    - echo "~~~" >> liz.wiki/Open-Source-Production-Dependencies.md
+    - echo "# Dependency List" >> liz.wiki/Open-Source-Production-Dependencies.md
+    - echo "" >> liz.wiki/Open-Source-Production-Dependencies.md
+    - echo "Open Source dependencies that will be consumed by the UI during runtime after its deployment." >> liz.wiki/Open-Source-Production-Dependencies.md
+    - echo "" >> liz.wiki/Open-Source-Production-Dependencies.md
+    - license-checker-rseidelsohn --production --markdown --excludePackages liz >> liz.wiki/Open-Source-Production-Dependencies.md
+    - cd liz.wiki
+    - git remote add origin-wiki https://${GHE_TOKEN}@github.ibm.com/${URL_PATH_TOKEN}/liz.wiki.git > /dev/null 2>&1
+    - git add Open-Source-Development-Dependencies.md Open-Source-Production-Dependencies.md OSS-Licensing-\&-Legal-Stuff.md
+    - git commit -m "update dependencies"
+    - git pull --rebase
+    - git push --quiet --set-upstream origin-wiki master
+deploy:
+    provider: pages
+    local_dir: dist
+    github_url: github.ibm.com
+    skip_cleanup: true
+    github_token: $GHE_TOKEN
+    keep_history: true
+    target_branch: gh-pages
+    on:
+        branch: main
+        condition: $DEPLOY_PAGES = true

@@ -4,9 +4,9 @@
     "private": true,
     "sideEffects": false,
     "author": "Daniel S. Haischt <daniel.haischt@de.ibm.com>",
-    "repository": "git@github.com:IBM/liz.git",
-    "bugs": "https://github.com/IBM/liz/issues",
-    "homepage": "https://ibm.github.io/liz/",
+    "repository": "git@github.ibm.com:linuxonz/liz.git",
+    "bugs": "https://github.ibm.com/linuxonz/liz/issues",
+    "homepage": "https://github.ibm.com/linuxonz/liz",
     "license": "MIT",
     "main": "index.js",
     "engines": {
