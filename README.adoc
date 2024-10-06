@@ -7,16 +7,16 @@ _Installation assistant for Linux on IBM Z, a modern web application that is int
 
 ++++
 <p align="center">
-  <a href="https://v3.travis.ibm.com/linuxonz/liz" target="_blank">
-    <img alt="Travis" src="https://v3.travis.ibm.com/linuxonz/liz.svg?token=sTwrf5YsyjBkhBTKWnZE&branch=main">
+  <a href="https://github.com/IBM/liz/actions/workflows/publish.yml" target="_blank">
+    <img alt="Build and deploy to GitHub Pages" src="https://github.com/IBM/liz/actions/workflows/publish.yml/badge.svg">
   </a>
-  <a href="https://pages.github.ibm.com/linuxonz/liz/" target="_blank">
+  <a href="https://ibm.github.io/liz/" target="_blank">
     <img alt="Run Installation assistant for Linux on IBM Z" src="https://img.shields.io/badge/run-Installation_assistant_for_Linux_on_IBM_Z-blue" />
   </a>
-  <a href="https://github.ibm.com/linuxonz/liz/blob/main/LICENSE" target="_blank">
+  <a href="https://github.com/IBM/liz/blob/main/LICENSE" target="_blank">
     <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue" />
   </a>
-  <a href="https://github.ibm.com/linuxonz/liz/blob/main/CONTRIBUTING.adoc" target="_blank">
+  <a href="https://github.com/IBM/liz/blob/main/CONTRIBUTING.adoc" target="_blank">
     <img alt="MIT License" src="https://img.shields.io/badge/PRs-welcome-green" />
   </a>
 </p>
@@ -26,11 +26,11 @@ toc::[]
 
 == Quickstart
 
-If you are looking for the deployed *Installation assistant for Linux on IBM Z* application itself please click on the `run` button at the top of the page next to the `build` button. Alternatively to clicking the button the application is available at https://pages.github.ibm.com/linuxonz/liz/[this location]. In cases where you are instead interested in the sources of the application you might consider continue reading to familiarize yourself with the code base.
+If you are looking for the deployed *Installation assistant for Linux on IBM Z* application itself please click on the `run` button at the top of the page next to the `build` button. Alternatively to clicking the button the application is available at https://ibm.github.io/liz/[this location]. In cases where you are instead interested in the sources of the application you might consider continue reading to familiarize yourself with the code base.
 
 == Known issues
 
-A list of known issues is maintained at https://github.ibm.com/linuxonz/liz/wiki/Known-Issues[this location]. You may review it prior to reporting an issue.
+A list of known issues is maintained at https://github.com/IBM/liz/wiki/Known-Issues[this location]. You may review it prior to reporting an issue.
 
 == Overview
 
@@ -85,8 +85,8 @@ Automated testing is currently unavailable. It is planned to provide test automa
 
 === Functional Verification
 
-Functional verification testing (FVT) currently is a manual test. There are https://github.ibm.com/linuxonz/liz/wiki/Functional-Verification-Testing[test buckets] available that can be used to manually regression test the application workflow.
+Functional verification testing (FVT) currently is a manual test. There are https://github.com/IBM/liz/wiki/Functional-Verification-Testing[test buckets] available that can be used to manually regression test the application workflow.
 
 === Accessibility Testing
 
-Accessibility testing needs to be done manually. The https://www.ibm.com/able/toolkit/[IBM Equal Access Toolkit] provides a browser plug-in to analyze each page according to particular accessibility rules it is using. There are https://github.ibm.com/linuxonz/liz/wiki/Accessibility-Verification-Testing[instructions] available how to install and use this plug-in.
+Accessibility testing needs to be done manually. The https://www.ibm.com/able/toolkit/[IBM Equal Access Toolkit] provides a browser plug-in to analyze each page according to particular accessibility rules it is using. There are https://github.com/IBM/liz/wiki/Accessibility-Verification-Testing[instructions] available how to install and use this plug-in.
