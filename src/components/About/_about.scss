@@ -4,205 +4,205 @@
  * (C) Copyright IBM Corp. 2023, 2024
  */
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+    $font-path: "@ibm/plex"
 );
 
 .about-dialog__about-menu {
-  // the carbon <header /> component
-  // has a z-index of 8000 where the
-  // Carbon for IBM Products <SidePanel />
-  // component has z z-index of 9000.
-  z-index: 9500;
-  position: absolute;
-  top: react.$spacing-09;
-  border: 0;
-  transform: translateY(0);
-  opacity: 1;
-  visibility: visible;
-  overflow: visible;
-  max-height: calc(4 * react.$spacing-13);
-  width: calc(3 * react.$spacing-11);
-  right: 0;
-  min-width: calc(6 * react.$spacing-10);
-  background: react.$layer-01;
-  color: react.$background-inverse;
-  border-left: 1px solid react.$border-subtle-02;
-  border-bottom: 1px solid react.$border-subtle-02;
-  box-shadow: 0 0.125rem 0.25rem react.$overlay;
-
-  .about-dialog__about__title-section {
-    @include react.type-style("body-compact-01");
-
-    padding: react.$spacing-05;
-
-    .about-dialog__about__linux-icon {
-      display: inline-block;
-      vertical-align: middle;
-
-      > div {
-        > svg {
-          border-radius: 50%;
-          background: react.$background-inverse;
-          fill: react.$background;
-        }
-      }
-    }
-
-    .about-dialog__about__info-section {
-      margin-left: 1rem;
-      margin-right: 0;
-      align-self: center;
-      min-width: 0;
-      height: 100%;
-      display: inline-block;
-      vertical-align: middle;
-
-      .about-dialog__about__info-section__icon {
-        position: absolute;
-        right: 0;
-        top: 0;
-
-        > svg {
-          vertical-align: middle;
-        }
-      }
-
-      .about-dialog__about__info-section__app-title {
-        @include react.type-style("heading-03");
-        @include react.font-weight("semibold");
-      }
-
-      .about-dialog__about__info-section__app-subtitle {
-        @include react.type-style("heading-01");
-      }
-    }
-  }
-
-  .about-dialog__about-build-info {
-    @include react.type-style("helper-text-02");
-
-    padding: react.$spacing-05;
-
-    .about-dialog__about-build-info__commit-hash__copied,
-    .about-dialog__about-build-info__date__copied {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      code {
-        @include react.type-style("code-01");
-      }
-
-      .about-dialog__about-build-info__date__right-column,
-      .about-dialog__about-build-info__hash__right-column {
-        margin-left: react.$spacing-03;
-
-        svg {
-          fill: react.$support-success;
-        }
-      }
-
-      .about-dialog__about-build-info__date__left-column,
-      .about-dialog__about-build-info__date__right-column,
-      .about-dialog__about-build-info__hash__left-column,
-      .about-dialog__about-build-info__hash__right-column {
-        text-align: right;
-      }
-    }
-
-    .about-dialog__about-build-info__commit-hash,
-    .about-dialog__about-build-info__date,
-    .about-dialog__about-build-info__theme {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      code {
-        @include react.type-style("code-01");
-      }
-
-      .about-dialog__about-build-info__date__right-column,
-      .about-dialog__about-build-info__hash__right-column,
-      .about-dialog__about-build-info__theme__right-column {
-        margin-left: react.$spacing-03;
-      }
-
-      .about-dialog__about-build-info__date__left-column,
-      .about-dialog__about-build-info__date__right-column,
-      .about-dialog__about-build-info__hash__left-column,
-      .about-dialog__about-build-info__hash__right-colum,
-      .about-dialog__about-build-info__theme__left-column,
-      .about-dialog__about-build-info__theme__right-column {
-        text-align: right;
-      }
-    }
-  }
-}
-
-.about-dialog__about-report-button-container {
-  border-top: react.$spacing-01 solid react.$background-inverse;
-  border-bottom: react.$spacing-01 solid react.$background-inverse;
-
-  .about-dialog__about-external-link-hint {
-    display: none;
-  }
-}
-
-.about-dialog__about-kissues-button-container {
-  border-top: react.$spacing-01 solid react.$background-inverse;
-
-  .about-dialog__about-external-link-hint {
-    display: none;
-  }
-}
-
-.about-dialog__about-prune-button-container,
-.about-dialog__about-report-button-container,
-.about-dialog__about-kissues-button-container {
-  background: react.$layer-01;
-
-  .about-dialog__about-report-button,
-  .about-dialog__about-prune-button,
-  .about-dialog__about-kissues-button {
-    @include react.type-style("body-compact-01");
-
-    min-width: 100%;
-    padding: react.$spacing-05;
-    line-height: initial;
-    transition: background-color 250ms;
-    display: block;
+    // the carbon <header /> component
+    // has a z-index of 8000 where the
+    // Carbon for IBM Products <SidePanel />
+    // component has z z-index of 9000.
+    z-index: 9500;
+    position: absolute;
+    top: react.$spacing-09;
+    border: 0;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    overflow: visible;
+    max-height: calc(3 * react.$spacing-13);
+    width: calc(3 * react.$spacing-11);
+    right: 0;
+    min-width: calc(6 * react.$spacing-10);
+    background: react.$background;
     color: react.$background-inverse;
-    text-decoration: none;
-  }
-}
+    border-left: 1px solid react.$border-subtle-02;
+    border-bottom: 1px solid react.$border-subtle-02;
+    box-shadow: 0 react.$spacing-02 react.$spacing-02 react.$overlay;
 
-.about-dialog__about-prune-button-container:focus-within,
-.about-dialog__about-prune-button-container:hover {
-  background: react.$red-60;
+    ul,
+    li,
+    a {
+        width: 100%;
+    }
 
-  .about-dialog__about-prune-button {
-    color: react.$text-on-color;
-  }
-}
+    .about-dialog__about-build-info {
+        @include react.type-style("helper-text-02");
 
-.about-dialog__about-report-button-container:focus-within,
-.about-dialog__about-report-button-container:hover,
-.about-dialog__about-kissues-button-container:focus-within,
-.about-dialog__about-kissues-button-container:hover {
-  background: react.$background-hover;
-}
+        width: 100%;
 
-.about-dialog__about-prune-button-container:focus-within button,
-.about-dialog__about-prune-button-container:hover button,
-.about-dialog__about-report-button-container:focus-within button,
-.about-dialog__about-report-button-container:hover button,
-.about-dialog__about-kissues-button-container:focus-within button,
-.about-dialog__about-kissues-button-container:hover button,
-.about-dialog__about-prune-button-container:focus-within a,
-.about-dialog__about-prune-button-container:hover a,
-.about-dialog__about-report-button-container:focus-within a,
-.about-dialog__about-report-button-container:hover a,
-.about-dialog__about-kissues-button-container:focus-within a,
-.about-dialog__about-kissues-button-container:hover a {
-  color: react.$background-inverse;
+        .about-dialog__about-build-info__commit-hash,
+        .about-dialog__about-build-info__date,
+        .about-dialog__about-build-info__show-passwords,
+        .about-dialog__about-build-info__theme {
+            @include react.type-style("heading-compact-01");
+
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+            padding: calc(react.$spacing-01 + react.$spacing-02)
+                react.$spacing-05;
+            color: react.$text-secondary;
+            pointer-events: none;
+            width: 100%;
+            line-height: calc(react.$spacing-05 + react.$spacing-01);
+
+            &.about-dialog__about-build-info__value-copied {
+                svg {
+                    fill: react.$support-success;
+                }
+            }
+
+            .about-dialog__about-build-info__value {
+                pointer-events: all;
+                display: flex;
+                align-items: center;
+                position: absolute;
+                right: react.$spacing-05;
+
+                code {
+                    @include react.type-style("code-01");
+                }
+
+                .about-dialog__copy-button {
+                    margin-left: react.$spacing-03;
+                }
+            }
+        }
+    }
+
+    .about-dialog__about__title-section {
+        @include react.type-style("body-compact-01");
+
+        padding: react.$spacing-05;
+        display: flex;
+        width: 100%;
+
+        .about-dialog__about__info-section {
+            margin-left: react.$spacing-05;
+            margin-right: 0;
+            align-self: center;
+            min-width: 0;
+            height: 100%;
+            flex: 90%;
+            vertical-align: middle;
+
+            .about-dialog__about__info-section__icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+
+                > svg {
+                    vertical-align: middle;
+                }
+            }
+
+            .about-dialog__about__info-section__app-title {
+                @include react.type-style("heading-03");
+                @include react.font-weight("semibold");
+            }
+
+            .about-dialog__about__info-section__app-subtitle {
+                @include react.type-style("heading-01");
+            }
+        }
+
+        .about-dialog__about__title-section-group {
+            flex: 10%;
+
+            .about-dialog__about__linux-icon {
+                display: inline-block;
+                vertical-align: middle;
+
+                > div {
+                    > svg {
+                        border-radius: 50%;
+                        background: react.$background-inverse;
+                        fill: react.$background;
+                    }
+                }
+            }
+        }
+    }
+
+    .about-dialog__panel-group {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        vertical-align: baseline;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: react.$text-secondary;
+    }
+
+    .about-dialog__panel-divider {
+        display: block;
+        border: none;
+        margin: react.$spacing-03 react.$spacing-05 react.$spacing-03
+            react.$spacing-05;
+        background: react.$border-subtle;
+        block-size: 1px;
+    }
+
+    .about-dialog__panel-divider-label {
+        @include react.type-style("label-01");
+
+        margin-top: 36px;
+        position: relative;
+        padding-left: react.$spacing-05;
+        color: react.$text-secondary;
+    }
+
+    .about-dialog__about-menu-item:last-child {
+        margin-block-end: react.$spacing-05;
+    }
+
+    .about-dialog__about-menu-item {
+        button {
+            width: 100%;
+        }
+
+        a:focus-within {
+            background: react.$layer-01;
+        }
+
+        &.about-dialog__about-menu-item-danger {
+            button:focus-within,
+            button:hover {
+                color: react.$text-on-color;
+                background: react.$red-60;
+            }
+        }
+
+        .about-dialog__about-menu-item__button,
+        .about-dialog__about-menu-item__button:hover {
+            @include react.type-style("heading-compact-01");
+
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+            padding: calc(react.$spacing-01 + react.$spacing-02)
+                react.$spacing-05;
+            color: react.$text-secondary;
+            max-width: 100%;
+            line-height: calc(react.$spacing-05 + react.$spacing-01);
+        }
+
+        .about-dialog__about-external-link-hint,
+        .about-dialog__about-internal-link-hint {
+            display: none;
+        }
+    }
 }

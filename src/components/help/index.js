@@ -13,17 +13,19 @@ import DownloadParamFile from "./DownloadParamFile";
 import Summary from "./Summary";
 import Intro from "./Intro";
 import LandingPage from "./LandingPage";
+import SettingsPage from "./SettingsPage";
 import ErrorPage from "./ErrorPage";
 
 export {
-  Information,
-  InputFileSelection,
-  InstallationParameters,
-  NetworkAddress,
-  NetworkDevice,
-  DownloadParamFile,
-  Summary,
-  Intro,
-  LandingPage,
-  ErrorPage,
+    Information,
+    InputFileSelection,
+    InstallationParameters,
+    NetworkAddress,
+    NetworkDevice,
+    DownloadParamFile,
+    Summary,
+    Intro,
+    LandingPage,
+    SettingsPage,
+    ErrorPage,
 };

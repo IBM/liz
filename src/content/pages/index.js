@@ -7,5 +7,6 @@
 import LandingPage from "./LandingPage";
 import EditPage from "./EditPage";
 import ErrorPage from "./ErrorPage";
+import SettingsPage from "./SettingsPage";
 
-export { LandingPage, EditPage, ErrorPage };
+export { LandingPage, EditPage, SettingsPage, ErrorPage };

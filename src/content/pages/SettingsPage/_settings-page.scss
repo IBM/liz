@@ -1,0 +1,218 @@
+/* liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2024
+ */
+
+@use "@carbon/react" with (
+    $font-path: "@ibm/plex"
+);
+
+.liz__settings-page__legal-banner {
+    &.cds--inline-notification {
+        max-width: 100%;
+    }
+}
+
+.liz__settings-page__root-layer__with-legal-banner {
+    // the height of the legal banner equals $spacing-09
+    height: calc(
+        100% - react.$spacing-09 - react.$spacing-12 - react.$spacing-03 -
+            react.$spacing-04
+    );
+    width: 100%;
+    background: react.$layer-02;
+
+    .liz__settings-page__page-header {
+        .liz__settings-page__link-cursor {
+            cursor: pointer;
+        }
+
+        .cds--grid {
+            margin-inline: inherit;
+        }
+    }
+}
+
+.liz__settings-page__root-layer__wo-legal-banner {
+    // the height of the page header equals the sum of all spacing values
+    height: calc(
+        100% - react.$spacing-12 - react.$spacing-03 - react.$spacing-04
+    );
+    width: 100%;
+    background: react.$layer-02;
+
+    .liz__settings-page__page-header {
+        .liz__settings-page__link-cursor {
+            cursor: pointer;
+        }
+
+        .cds--grid {
+            margin-inline: inherit;
+        }
+    }
+}
+
+.liz__settings-page__grid-layer {
+    height: 100%;
+    width: 100%;
+    background: react.$layer-01;
+
+    .liz__settings-page__grid {
+        height: 100%;
+        padding: 0;
+        margin-left: 0;
+        max-width: 100% !important;
+        width: 100%;
+        display: flex;
+        max-height: 100%;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .liz__settings-page__grid__tab-row {
+            &.liz__settings-page__grid__tab-row__tabs {
+                overflow: auto;
+                flex-grow: 1;
+                overflow-x: hidden;
+
+                .liz__settings-page__grid__tab-column {
+                    .cds--css-grid {
+                        margin: inherit;
+                        padding-bottom: react.$spacing-06;
+                        min-width: 100%;
+
+                        .liz__settings-page__tab-panel-heading {
+                            @include react.type-style("heading-03");
+
+                            margin-bottom: react.$spacing-07;
+                        }
+
+                        .liz__settings-page__tab-panel-subheading {
+                            @include react.type-style("heading-01");
+
+                            margin-bottom: react.$spacing-05;
+                        }
+
+                        .liz__settings-page__tab-panel-body-info {
+                            @include react.type-style("body-compact-01");
+
+                            margin-bottom: react.$spacing-05;
+                        }
+
+                        .liz__settings-page__about-build-info {
+                            @include react.type-style("helper-text-02");
+
+                            padding: react.$spacing-05;
+
+                            .liz__settings-page__about-build-info__commit-hash__copied,
+                            .liz__settings-page__about-build-info__date__copied {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+
+                                code {
+                                    @include react.type-style("code-01");
+                                }
+
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__right-column {
+                                    margin-left: react.$spacing-03;
+
+                                    svg {
+                                        fill: react.$support-success;
+                                    }
+                                }
+
+                                .liz__settings-page__tab-panel-body__date__left-column,
+                                .liz__settings-page__tab-panel-body__hash__left-column,
+                                .liz__settings-page__tab-panel-body__theme__left-column {
+                                    margin-right: react.$spacing-03;
+                                }
+
+                                .liz__settings-page__tab-panel-body__date__left-column,
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__left-column,
+                                .liz__settings-page__tab-panel-body__hash__right-column {
+                                    text-align: right;
+                                }
+                            }
+
+                            .liz__settings-page__about-build-info__commit-hash,
+                            .liz__settings-page__about-build-info__date,
+                            .liz__settings-page__about-build-info__theme {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+
+                                .liz__settings-page__about-external-link-hint {
+                                    display: none;
+                                }
+
+                                .liz__settings-page__about-clear-settings-button {
+                                    margin: react.$spacing-08 react.$spacing-05
+                                        0 0;
+                                }
+
+                                .liz__settings-page__about-kissues-button {
+                                    margin: react.$spacing-08 react.$spacing-03
+                                        0 0;
+                                }
+
+                                .liz__settings-page__about-report-button {
+                                    margin: react.$spacing-08 0 0
+                                        react.$spacing-03;
+                                }
+
+                                code {
+                                    @include react.type-style("code-01");
+                                }
+
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__right-column,
+                                .liz__settings-page__tab-panel-body__theme__right-column {
+                                    margin-left: react.$spacing-03;
+                                }
+
+                                .liz__settings-page__tab-panel-body__date__left-column,
+                                .liz__settings-page__tab-panel-body__hash__left-column,
+                                .liz__settings-page__tab-panel-body__theme__left-column {
+                                    margin-right: react.$spacing-03;
+                                }
+
+                                .liz__settings-page__tab-panel-body__date__left-column,
+                                .liz__settings-page__tab-panel-body__date__right-column,
+                                .liz__settings-page__tab-panel-body__hash__left-column,
+                                .liz__settings-page__tab-panel-body__hash__right-colum,
+                                .liz__settings-page__tab-panel-body__theme__left-column,
+                                .liz__settings-page__tab-panel-body__theme__right-column {
+                                    text-align: right;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.liz__settings-page__grid__tab-row__buttonbar {
+                display: flex;
+                align-items: stretch;
+                justify-content: end;
+
+                .liz__settings-page__buttonbar-button {
+                    &.liz__settings-page__buttonbar-button__cancel {
+                        max-width: none;
+                        flex: 1 1 50%;
+                        padding: react.$spacing-05 0 react.$spacing-07
+                            react.$spacing-07;
+                        height: react.$spacing-10;
+                    }
+
+                    &.liz__settings-page__buttonbar-button__ok {
+                        max-width: 14.5rem;
+                        flex: 0 1 25%;
+                        height: react.$spacing-10;
+                    }
+                }
+            }
+        }
+    }
+}

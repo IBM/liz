@@ -5,27 +5,28 @@
  */
 
 import {
-  LOCAL_STORAGE_KEY_APP_HEADER,
-  STATE_ORIGIN_DEFAULT,
+    LOCAL_STORAGE_KEY_APP_HEADER,
+    STATE_ORIGIN_DEFAULT,
 } from "../util/local-storage-constants";
 import { getItem } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
-  const initialState = getItem(LOCAL_STORAGE_KEY_APP_HEADER);
-  const defaultState = {
-    isHelpPanelExpanded: true,
-    selectorPrimaryFocus: "",
-    needsManualNavigationConfirmation: false,
-    showNotification: false,
-    showConfirmationModal: false,
-    origin: STATE_ORIGIN_DEFAULT,
-  };
+    const initialState = getItem(LOCAL_STORAGE_KEY_APP_HEADER);
+    const defaultState = {
+        isHelpPanelExpanded: true,
+        selectorPrimaryFocus: "",
+        needsManualNavigationConfirmation: false,
+        manualNavigationOrigin: "",
+        showNotification: false,
+        showConfirmationModal: false,
+        origin: STATE_ORIGIN_DEFAULT,
+    };
 
-  if (initialState && !skipLocalStorageUsage) {
-    return initialState;
-  }
+    if (initialState && !skipLocalStorageUsage) {
+        return initialState;
+    }
 
-  return defaultState;
+    return defaultState;
 };
 
 export { createInitialState };

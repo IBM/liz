@@ -1,0 +1,5 @@
+{
+    "helpPanelContents.intro.para1": "Set the Use existing settings toggle to Yes (default) to use existing settings from a previous session. You can then tailor a parameter file to your needs.",
+    "helpPanelContents.intro.para2": "Set the Use existing settings toggle to No to purge any existing settings and start composing a new parameter file from scratch.",
+    "helpPanelHeader.intro": "Use existing settings"
+}

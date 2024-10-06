@@ -9,9 +9,9 @@ import React, {
     useContext,
     useEffect,
     useImperativeHandle,
-} from 'react'
-import { useRouteError } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+} from "react";
+import { useRouteError } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
     Accordion,
     AccordionItem,
@@ -22,31 +22,31 @@ import {
     Column,
     CodeSnippet,
     IconButton,
-} from '@carbon/react'
-import { Linux, Debug, Report } from '@carbon/icons-react'
-import { getUserAgent } from 'universal-user-agent'
+} from "@carbon/react";
+import { Linux, Debug, Report } from "@carbon/icons-react";
+import { getUserAgent } from "universal-user-agent";
 import {
     STATE_ORIGIN_STORAGE,
     LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
     LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
-} from '../../../util/local-storage-constants'
-import { ErrorPageContext, ApplicationContext } from '../../../contexts'
-import { getInlineNotification } from '../../../uiUtil/panel-util'
-import { setItem } from '../../../util/local-storage-util'
-import './_error-page.scss'
+} from "../../../util/local-storage-constants";
+import { ErrorPageContext, ApplicationContext } from "../../../contexts";
+import { getInlineNotification } from "../../../uiUtil/panel-util";
+import { setItem } from "../../../util/local-storage-util";
+import "./_error-page.scss";
 
 const ErrorPage = forwardRef(function ErrorPage(props, ref) {
-    const { t } = useTranslation()
-    const error = useRouteError()
+    const { t } = useTranslation();
+    const error = useRouteError();
     const { config, updateShowLegalNotification, updateStep } =
-        useContext(ApplicationContext)
-    const { state } = useContext(ErrorPageContext)
+        useContext(ApplicationContext);
+    const { state } = useContext(ErrorPageContext);
     const { appConfig } = config || {
         appConfig: {},
-    }
+    };
     const publicRef = {
         persistState: () => {
-            updateStep(11)
+            updateStep(11);
 
             setItem(
                 LOCAL_STORAGE_KEY_APP_ERROR_PAGE,
@@ -54,63 +54,63 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                     ...state,
                     origin: STATE_ORIGIN_STORAGE,
                 })
-            )
+            );
         },
-    }
+    };
 
-    useEffect(publicRef.persistState, [state])
-    useImperativeHandle(ref, () => publicRef)
+    useEffect(publicRef.persistState, [state]);
+    useImperativeHandle(ref, () => publicRef);
 
     const onCloseInlineNotification = () => {
-        const localInlineNotification = Object.assign({}, inlineNotification)
-        localInlineNotification.show = false
+        const localInlineNotification = Object.assign({}, inlineNotification);
+        localInlineNotification.show = false;
 
-        updateShowLegalNotification(false)
+        updateShowLegalNotification(false);
         setItem(
             LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
             JSON.stringify(localInlineNotification)
-        )
-    }
+        );
+    };
 
-    const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? ''
-    const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? ''
+    const bugTrackerUrl = appConfig?.config?.bugTrackerUrl ?? "";
+    const knownIssuesUrl = appConfig?.config?.knownIssuesUrl ?? "";
     const showConfidentialityNotice =
-        appConfig?.config?.showConfidentialityNotice ?? false
+        appConfig?.config?.showConfidentialityNotice ?? false;
 
     const inlineNotification = getInlineNotification(
-        t('legalNotice.headerLabel'),
-        t('legalNotice.contentLabel')
-    )
+        t("legalNotice.headerLabel"),
+        t("legalNotice.contentLabel")
+    );
     const showInlineNotification = inlineNotification
         ? inlineNotification.show &&
-          typeof showConfidentialityNotice === 'string' &&
-          showConfidentialityNotice.toLowerCase() === 'true'
-        : false
+          typeof showConfidentialityNotice === "string" &&
+          showConfidentialityNotice.toLowerCase() === "true"
+        : false;
 
     const rootLayerClassName = showInlineNotification
-        ? 'liz__error-page__root-layer__with-legal-banner'
-        : 'liz__error-page__root-layer__wo-legal-banner'
+        ? "liz__error-page__root-layer__with-legal-banner"
+        : "liz__error-page__root-layer__wo-legal-banner";
 
-    const errorStatus = error?.status ?? t('errorPage.dataPlaceholderString')
-    const errorData = error?.data ?? t('errorPage.dataPlaceholderString')
-    const hasErrorInsideError = typeof error.error === 'object'
+    const errorStatus = error?.status ?? t("errorPage.dataPlaceholderString");
+    const errorData = error?.data ?? t("errorPage.dataPlaceholderString");
+    const hasErrorInsideError = typeof error.error === "object";
     const errorDetailsMessage = hasErrorInsideError
-        ? error?.error?.message ?? t('errorPage.dataPlaceholderString')
-        : error?.message ?? t('errorPage.dataPlaceholderString')
+        ? (error?.error?.message ?? t("errorPage.dataPlaceholderString"))
+        : (error?.message ?? t("errorPage.dataPlaceholderString"));
     const errorDetailsStack = hasErrorInsideError
-        ? error?.error?.stack ?? t('errorPage.dataPlaceholderString')
-        : error?.stack ?? t('errorPage.dataPlaceholderString')
+        ? (error?.error?.stack ?? t("errorPage.dataPlaceholderString"))
+        : (error?.stack ?? t("errorPage.dataPlaceholderString"));
 
-    const userAgent = getUserAgent()
+    const userAgent = getUserAgent();
 
     const issueTemplate = `
   **Describe the bug**
   A clear and concise description of what the bug is.
 
   ***Error Details***
-  ${t('errorPage.label.statusCode')}: ${errorStatus}
-  ${t('errorPage.label.statusMessage')}: ${errorData}
-  ${t('errorPage.label.errorMessage')}: ${errorDetailsMessage}
+  ${t("errorPage.label.statusCode")}: ${errorStatus}
+  ${t("errorPage.label.statusMessage")}: ${errorData}
+  ${t("errorPage.label.errorMessage")}: ${errorDetailsMessage}
 
   ***Error Stack***
   ${errorDetailsStack}
@@ -133,9 +133,9 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
   
   **Additional context**
   Add any other context about the problem here.
-`
+`;
 
-    const newIssueUrl = `${bugTrackerUrl}/new?title=&body=${encodeURIComponent(issueTemplate)}`
+    const newIssueUrl = `${bugTrackerUrl}/new?title=&body=${encodeURIComponent(issueTemplate)}`;
 
     return (
         <>
@@ -160,20 +160,20 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                                     <Linux size="64" />
                                 </div>
                                 <div className="liz__error-page__payload-message-one">
-                                    {t('errorPage.headerTitleOne')}
+                                    {t("errorPage.headerTitleOne")}
                                 </div>
                                 <div className="liz__error-page__payload-message-two">
-                                    {t('errorPage.headerTitleTwo')}
+                                    {t("errorPage.headerTitleTwo")}
                                 </div>
                                 <div className="liz__error-page__payload-message-status">
                                     {errorStatus !==
                                         t(
-                                            'errorPage.dataPlaceholderString'
+                                            "errorPage.dataPlaceholderString"
                                         ) && (
                                         <div>
                                             <span className="liz__error-page__payload-message-status-key">
                                                 {t(
-                                                    'errorPage.label.statusCode'
+                                                    "errorPage.label.statusCode"
                                                 )}
                                                 :
                                             </span>
@@ -184,12 +184,12 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                                     )}
                                     {errorData !==
                                         t(
-                                            'errorPage.dataPlaceholderString'
+                                            "errorPage.dataPlaceholderString"
                                         ) && (
                                         <div>
                                             <span className="liz__error-page__payload-message-status-key">
                                                 {t(
-                                                    'errorPage.label.statusMessage'
+                                                    "errorPage.label.statusMessage"
                                                 )}
                                                 :
                                             </span>
@@ -202,19 +202,94 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                                 <div className="liz__error-page__payload-accordion">
                                     {errorDetailsStack !==
                                         t(
-                                            'errorPage.dataPlaceholderString'
+                                            "errorPage.dataPlaceholderString"
                                         ) && (
-                                        <Accordion>
+                                        <Accordion
+                                            onFocus={() => {
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para1"
+                                                    )
+                                                    ?.classList?.add(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para2"
+                                                    )
+                                                    ?.classList?.add(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para3"
+                                                    )
+                                                    ?.classList?.add(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para4"
+                                                    )
+                                                    ?.classList?.add(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para5"
+                                                    )
+                                                    ?.classList?.add(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                            }}
+                                            onBlur={() => {
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para1"
+                                                    )
+                                                    ?.classList?.remove(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para2"
+                                                    )
+                                                    ?.classList?.remove(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para3"
+                                                    )
+                                                    ?.classList?.remove(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para4"
+                                                    )
+                                                    ?.classList?.remove(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                                document
+                                                    .getElementById(
+                                                        "helpPanelContents_errorPage_para5"
+                                                    )
+                                                    ?.classList?.remove(
+                                                        "help-panel__error-page__content__active"
+                                                    );
+                                            }}
+                                        >
                                             <AccordionItem
                                                 title={t(
-                                                    'errorPage.detailsLabel'
+                                                    "errorPage.detailsLabel"
                                                 )}
                                             >
                                                 {errorDetailsMessage && (
                                                     <div className="liz__error-page__payload-error-message">
                                                         <span className="liz__error-page__payload-message-status-key">
                                                             {t(
-                                                                'errorPage.label.errorMessage'
+                                                                "errorPage.label.errorMessage"
                                                             )}
                                                             :
                                                         </span>
@@ -229,8 +304,8 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                                                     <CodeSnippet
                                                         type="multi"
                                                         feedback={t(
-                                                            'copied.long',
-                                                            { ns: 'common' }
+                                                            "copied.long",
+                                                            { ns: "common" }
                                                         )}
                                                     >
                                                         {errorDetailsStack}
@@ -244,22 +319,170 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                                     <IconButton
                                         kind="ghost"
                                         label={t(
-                                            'dialog.about.knownIssuesLabel'
+                                            "dialog.about.knownIssuesLabel"
                                         )}
                                         id="liz__error-page__report-button"
                                         href={knownIssuesUrl}
                                         target="_blank"
+                                        onFocus={() => {
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para1"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para2"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para3"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para4"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para5"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                        }}
+                                        onBlur={() => {
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para1"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para2"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para3"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para4"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para5"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                        }}
                                     >
                                         <Report size="24" />
                                     </IconButton>
                                     <IconButton
                                         kind="ghost"
                                         label={t(
-                                            'dialog.about.reportIssueLabel'
+                                            "dialog.about.reportIssueLabel"
                                         )}
                                         id="liz__error-page__report-button"
                                         href={newIssueUrl}
                                         target="_blank"
+                                        onFocus={() => {
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para1"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para2"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para3"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para4"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para5"
+                                                )
+                                                ?.classList?.add(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                        }}
+                                        onBlur={() => {
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para1"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para2"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para3"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para4"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                            document
+                                                .getElementById(
+                                                    "helpPanelContents_errorPage_para5"
+                                                )
+                                                ?.classList?.remove(
+                                                    "help-panel__error-page__content__active"
+                                                );
+                                        }}
                                     >
                                         <Debug size="24" />
                                     </IconButton>
@@ -270,7 +493,7 @@ const ErrorPage = forwardRef(function ErrorPage(props, ref) {
                 </FlexGrid>
             </Layer>
         </>
-    )
-})
+    );
+});
 
-export default ErrorPage
+export default ErrorPage;

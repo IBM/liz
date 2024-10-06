@@ -9,9 +9,9 @@ import React, {
     useContext,
     useEffect,
     useImperativeHandle,
-} from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useHref } from 'react-router-dom'
+} from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useHref } from "react-router-dom";
 import {
     Button,
     InlineNotification,
@@ -20,7 +20,7 @@ import {
     FlexGrid,
     Row,
     Column,
-} from '@carbon/react'
+} from "@carbon/react";
 import {
     Popup,
     CollapseAll,
@@ -31,44 +31,46 @@ import {
     CheckmarkOutline,
     Incomplete,
     DocumentDownload,
-} from '@carbon/icons-react'
-import { PageHeader, ExpressiveCard } from '@carbon/ibm-products'
+} from "@carbon/icons-react";
+import { PageHeader, ExpressiveCard } from "@carbon/ibm-products";
 import {
     ADDRESS_TYPE_IPV4,
     DEFAULT_PARAM_FILE_NAME,
     SSH_USERNAMES,
-} from '../../../util/constants'
+    UBUNTU_DISTRIBUTION_ID,
+} from "../../../util/constants";
 import {
     STATE_ORIGIN_STORAGE,
     LOCAL_STORAGE_KEY_APP_LANDING_PAGE,
     LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
-} from '../../../util/local-storage-constants'
+} from "../../../util/local-storage-constants";
 import {
     saveParamFileContent,
     getParamFileContents,
+    getParamFileContentsWithPasswordsRemoved,
     getParamFileName,
     hasParamFile,
-} from '../../../util/param-file-util'
-import { getInlineNotification } from '../../../uiUtil/panel-util'
-import PathConstants from '../../../util/path-constants'
-import { LandingPageContext, ApplicationContext } from '../../../contexts'
-import { SystemRequirements, Parmfile, NextSteps } from './components'
-import { setItem } from '../../../util/local-storage-util'
-import './_landing-page.scss'
+} from "../../../util/param-file-util";
+import { getInlineNotification } from "../../../uiUtil/panel-util";
+import PathConstants from "../../../util/path-constants";
+import { LandingPageContext, ApplicationContext } from "../../../contexts";
+import { SystemRequirements, Parmfile, NextSteps } from "./components";
+import { setItem } from "../../../util/local-storage-util";
+import "./_landing-page.scss";
 
 const LandingPage = forwardRef(function LandingPage(props, ref) {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
     const expandedRequirementsCardHref = useHref(
         PathConstants.EXPANDED_REQUIREMENTS_CARD
-    )
+    );
     const expandedParmfileCardHref = useHref(
         PathConstants.EXPANDED_PARMFILE_CARD
-    )
+    );
     const expandedNextStepsCardHref = useHref(
         PathConstants.EXPANDED_NEXTSTEPS_CARD
-    )
-    const homePageHref = useHref(PathConstants.HOME)
-    const navigate = useNavigate()
+    );
+    const homePageHref = useHref(PathConstants.HOME);
+    const navigate = useNavigate();
     const {
         state,
         updateRequirementsCardIsExpanded,
@@ -76,19 +78,19 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         updateParmfileCardIsExpanded,
         updateRequirementsCardHasBeenReviewed,
         updateNextStepsCardHasBeenReviewed,
-    } = useContext(LandingPageContext)
+    } = useContext(LandingPageContext);
     const {
         config,
         state: globalState,
         updateStep,
         updateShowLegalNotification,
         updateIsEditing,
-    } = useContext(ApplicationContext)
+    } = useContext(ApplicationContext);
     const { appConfig } = config || {
         appConfig: {},
-    }
+    };
     const showConfidentialityNotice =
-        appConfig?.config?.showConfidentialityNotice ?? false
+        appConfig?.config?.showConfidentialityNotice ?? false;
     const publicRef = {
         persistState: () => {
             setItem(
@@ -97,298 +99,351 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     ...state,
                     origin: STATE_ORIGIN_STORAGE,
                 })
-            )
+            );
         },
-    }
+    };
 
     useEffect(() => {
-        updateStep(9)
+        updateStep(9);
+
+        const secondaryButton = document
+            .getElementById("liz__landing-page__expressive-card__parmfile")
+            .getElementsByClassName(
+                "cds--btn cds--btn--md cds--layout--size-md cds--btn--secondary"
+            );
+        const primaryButton = document
+            .getElementById("liz__landing-page__expressive-card__parmfile")
+            .getElementsByClassName(
+                "cds--btn cds--btn--md cds--layout--size-md cds--btn--primary"
+            );
+
+        primaryButton[0].onfocus = () => {
+            document
+                .getElementById("helpPanelContents_landingPage_para1")
+                ?.classList?.add("help-panel__landing-page__content__active");
+            document
+                .getElementById("helpPanelContents_landingPage_para2")
+                ?.classList?.remove(
+                    "help-panel__landing-page__content__active"
+                );
+        };
+        primaryButton[0].onblur = () => {
+            document
+                .getElementById("helpPanelContents_landingPage_para1")
+                ?.classList?.remove(
+                    "help-panel__landing-page__content__active"
+                );
+        };
+
+        if (secondaryButton.length === 1) {
+            secondaryButton[0].onblur = () => {
+                document
+                    .getElementById("helpPanelContents_landingPage_para2")
+                    ?.classList?.remove(
+                        "help-panel__landing-page__content__active"
+                    );
+            };
+            secondaryButton[0].onfocus = () => {
+                document
+                    .getElementById("helpPanelContents_landingPage_para1")
+                    ?.classList?.remove(
+                        "help-panel__landing-page__content__active"
+                    );
+                document
+                    .getElementById("helpPanelContents_landingPage_para2")
+                    ?.classList?.add(
+                        "help-panel__landing-page__content__active"
+                    );
+            };
+        }
+
         if (
             window.location.hash &&
             window.location.hash ===
                 `#${PathConstants.EXPANDED_REQUIREMENTS_CARD}`
         ) {
-            updateRequirementsCardIsExpanded(true)
+            updateRequirementsCardIsExpanded(true);
         } else if (
             window.location.hash &&
             window.location.hash === `#${PathConstants.EXPANDED_NEXTSTEPS_CARD}`
         ) {
-            updateNextStepsCardIsExpanded(true)
+            updateNextStepsCardIsExpanded(true);
         } else if (
             window.location.hash &&
             window.location.hash === `#${PathConstants.EXPANDED_PARMFILE_CARD}`
         ) {
-            updateParmfileCardIsExpanded(true)
+            updateParmfileCardIsExpanded(true);
         }
-    }, [])
+    }, []);
 
-    useEffect(publicRef.persistState, [state])
-    useImperativeHandle(ref, () => publicRef)
+    useEffect(publicRef.persistState, [state]);
+    useImperativeHandle(ref, () => publicRef);
 
     const onCloseInlineNotification = () => {
-        const localInlineNotification = Object.assign({}, inlineNotification)
-        localInlineNotification.show = false
+        const localInlineNotification = Object.assign({}, inlineNotification);
+        localInlineNotification.show = false;
 
-        updateShowLegalNotification(false)
+        updateShowLegalNotification(false);
         setItem(
             LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
             JSON.stringify(localInlineNotification)
-        )
-    }
+        );
+    };
 
     const inlineNotification = getInlineNotification(
-        t('legalNotice.headerLabel'),
-        t('legalNotice.contentLabel')
-    )
+        t("legalNotice.headerLabel"),
+        t("legalNotice.contentLabel")
+    );
     const showInlineNotification = inlineNotification
         ? inlineNotification.show &&
-          typeof showConfidentialityNotice === 'string' &&
-          showConfidentialityNotice.toLowerCase() === 'true'
-        : false
+          typeof showConfidentialityNotice === "string" &&
+          showConfidentialityNotice.toLowerCase() === "true"
+        : false;
 
     const getBreadcrumbs = () => {
-        let breadcrumbs
+        let breadcrumbs;
 
         if (state.requirementsCardIsExpanded) {
             breadcrumbs = [
                 {
                     href: homePageHref,
                     isCurrentPage: false,
-                    key: 'breadcrumb-01',
-                    title: t('pageHeader.breadcrumbs.home', { ns: 'common' }),
+                    key: "breadcrumb-01",
+                    title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
                     label: (
                         <Link
                             href={homePageHref}
                             onClick={() => {
-                                updateRequirementsCardIsExpanded(false)
+                                updateRequirementsCardIsExpanded(false);
                             }}
                         >
-                            {t('pageHeader.breadcrumbs.home', { ns: 'common' })}
+                            {t("pageHeader.breadcrumbs.home", { ns: "common" })}
                         </Link>
                     ),
                 },
                 {
                     href: expandedRequirementsCardHref,
                     isCurrentPage: true,
-                    key: 'breadcrumb-02',
-                    label: t('panel.information.requirementsHeader', {
-                        ns: 'panels',
+                    key: "breadcrumb-02",
+                    label: t("panel.information.requirementsHeader", {
+                        ns: "panels",
                     }),
-                    title: t('panel.information.requirementsHeader', {
-                        ns: 'panels',
+                    title: t("panel.information.requirementsHeader", {
+                        ns: "panels",
                     }),
                 },
-            ]
+            ];
         } else if (state.parmfileCardIsExpanded) {
             breadcrumbs = [
                 {
                     href: homePageHref,
                     isCurrentPage: false,
-                    key: 'breadcrumb-01',
-                    title: t('pageHeader.breadcrumbs.home', { ns: 'common' }),
+                    key: "breadcrumb-01",
+                    title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
                     label: (
                         <Link
                             href={homePageHref}
                             onClick={() => {
-                                updateParmfileCardIsExpanded(false)
+                                updateParmfileCardIsExpanded(false);
                             }}
                         >
-                            {t('pageHeader.breadcrumbs.home', { ns: 'common' })}
+                            {t("pageHeader.breadcrumbs.home", { ns: "common" })}
                         </Link>
                     ),
                 },
                 {
                     href: expandedParmfileCardHref,
                     isCurrentPage: true,
-                    key: 'breadcrumb-02',
+                    key: "breadcrumb-02",
                     label: getTitleForParamFileCard(),
                     title: getTitleForParamFileCard(),
                 },
-            ]
+            ];
         } else if (state.nextStepsCardIsExpanded) {
             breadcrumbs = [
                 {
                     href: homePageHref,
                     isCurrentPage: false,
-                    key: 'breadcrumb-01',
-                    title: t('pageHeader.breadcrumbs.home', { ns: 'common' }),
+                    key: "breadcrumb-01",
+                    title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
                     label: (
                         <Link
                             href={homePageHref}
                             onClick={() => {
-                                updateNextStepsCardIsExpanded(false)
+                                updateNextStepsCardIsExpanded(false);
                             }}
                         >
-                            {t('pageHeader.breadcrumbs.home', { ns: 'common' })}
+                            {t("pageHeader.breadcrumbs.home", { ns: "common" })}
                         </Link>
                     ),
                 },
                 {
                     href: expandedNextStepsCardHref,
                     isCurrentPage: true,
-                    key: 'breadcrumb-02',
-                    label: t('modalHeading.showNextStepsInformation'),
-                    title: t('modalHeading.showNextStepsInformation'),
+                    key: "breadcrumb-02",
+                    label: t("modalHeading.showNextStepsInformation"),
+                    title: t("modalHeading.showNextStepsInformation"),
                 },
-            ]
+            ];
         } else {
             breadcrumbs = [
                 {
                     href: homePageHref,
                     isCurrentPage: true,
-                    key: 'breadcrumb-01',
-                    title: t('pageHeader.breadcrumbs.home', { ns: 'common' }),
+                    key: "breadcrumb-01",
+                    title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
                     label: (
                         <Link
                             href={homePageHref}
                             onClick={function noRefCheck() {}}
                         >
-                            {t('pageHeader.breadcrumbs.home', { ns: 'common' })}
+                            {t("pageHeader.breadcrumbs.home", { ns: "common" })}
                         </Link>
                     ),
                 },
-            ]
+            ];
         }
 
-        return breadcrumbs
-    }
+        return breadcrumbs;
+    };
 
     const getTitleForParamFileCard = () => {
-        let title = ''
+        let title = "";
 
         hasParamFile()
-            ? (title = t('editPage.pageHeader.subtitle.modify'))
-            : (title = t('editPage.pageHeader.subtitle.new'))
+            ? (title = t("editPage.pageHeader.subtitle.modify"))
+            : (title = t("editPage.pageHeader.subtitle.new"));
 
-        return title
-    }
+        return title;
+    };
 
     const pageHeaderMarkup = (
         <PageHeader
             className="liz__landing-page__page-header"
             actionBarOverflowAriaLabel={t(
-                'pageHeader.actionBarOverflowAriaLabel',
+                "pageHeader.actionBarOverflowAriaLabel",
                 {
-                    ns: 'common',
+                    ns: "common",
                 }
             )}
-            allTagsModalSearchLabel={t('pageHeader.allTagsModalSearchLabel', {
-                ns: 'common',
+            allTagsModalSearchLabel={t("pageHeader.allTagsModalSearchLabel", {
+                ns: "common",
             })}
             allTagsModalSearchPlaceholderText={t(
-                'pageHeader.allTagsModalSearchPlaceholderText',
-                { ns: 'common' }
+                "pageHeader.allTagsModalSearchPlaceholderText",
+                { ns: "common" }
             )}
-            allTagsModalTitle={t('pageHeader.allTagsModalTitle', {
-                ns: 'common',
+            allTagsModalTitle={t("pageHeader.allTagsModalTitle", {
+                ns: "common",
             })}
             breadcrumbOverflowAriaLabel={t(
-                'pageHeader.breadcrumbOverflowAriaLabel',
+                "pageHeader.breadcrumbOverflowAriaLabel",
                 {
-                    ns: 'common',
+                    ns: "common",
                 }
             )}
             breadcrumbs={getBreadcrumbs()}
             collapseHeaderIconDescription={t(
-                'pageHeader.collapseHeaderIconDescription',
-                { ns: 'common' }
+                "pageHeader.collapseHeaderIconDescription",
+                { ns: "common" }
             )}
             expandHeaderIconDescription={t(
-                'pageHeader.expandHeaderIconDescription',
+                "pageHeader.expandHeaderIconDescription",
                 {
-                    ns: 'common',
+                    ns: "common",
                 }
             )}
-            pageActionsOverflowLabel={t('pageHeader.pageActionsOverflowLabel', {
-                ns: 'common',
+            pageActionsOverflowLabel={t("pageHeader.pageActionsOverflowLabel", {
+                ns: "common",
             })}
-            showAllTagsLabel={t('pageHeader.showAllTagsLabel', {
-                ns: 'common',
+            showAllTagsLabel={t("pageHeader.showAllTagsLabel", {
+                ns: "common",
             })}
-            subtitle={t('landingPage.pageHeader.subtitle')}
+            subtitle={t("landingPage.pageHeader.subtitle")}
             title={{
                 icon: function noRefCheck() {},
                 loading: false,
-                text: t('landingPage.pageHeader.title'),
+                text: t("landingPage.pageHeader.title"),
             }}
         />
-    )
+    );
 
     const rootLayerClassName = showInlineNotification
-        ? 'liz__landing-page__root-layer__with-legal-banner'
-        : 'liz__landing-page__root-layer__wo-legal-banner'
+        ? "liz__landing-page__root-layer__with-legal-banner"
+        : "liz__landing-page__root-layer__wo-legal-banner";
 
     const hideRequirementsCard =
-        state.parmfileCardIsExpanded || state.nextStepsCardIsExpanded
+        state.parmfileCardIsExpanded || state.nextStepsCardIsExpanded;
     const hideParmfileCard =
-        state.requirementsCardIsExpanded || state.nextStepsCardIsExpanded
+        state.requirementsCardIsExpanded || state.nextStepsCardIsExpanded;
     const hideNextStepsCard =
-        state.parmfileCardIsExpanded || state.requirementsCardIsExpanded
+        state.parmfileCardIsExpanded || state.requirementsCardIsExpanded;
 
     const requirementsCardPrimaryButtonText =
         hideRequirementsCard || hideNextStepsCard
-            ? t('btnLabel.Close', { ns: 'common' })
-            : t('btnLabel.ReviewInformation', { ns: 'common' })
+            ? t("btnLabel.Close", { ns: "common" })
+            : t("btnLabel.ReviewInformation", { ns: "common" });
     const nextStepsCardPrimaryButtonText =
         hideRequirementsCard || hideNextStepsCard
-            ? t('btnLabel.Close', { ns: 'common' })
-            : t('btnLabel.NextSteps', { ns: 'common' })
+            ? t("btnLabel.Close", { ns: "common" })
+            : t("btnLabel.NextSteps", { ns: "common" });
 
     const titleForRequirementsCard = (
         <span className="liz__landing-page__page-header__productive-card-title__text">
-            {t('panel.information.requirementsHeader', { ns: 'panels' })}
+            {t("panel.information.requirementsHeader", { ns: "panels" })}
         </span>
-    )
+    );
 
     const collapseParmfileCard = () => {
-        updateParmfileCardIsExpanded(false)
-        navigate(PathConstants.HOME)
-    }
+        updateParmfileCardIsExpanded(false);
+        navigate(PathConstants.HOME);
+    };
 
     const collapseRequirementsCard = () => {
-        updateRequirementsCardIsExpanded(false)
-        updateRequirementsCardHasBeenReviewed(true)
-        navigate(PathConstants.HOME)
-    }
+        updateRequirementsCardIsExpanded(false);
+        updateRequirementsCardHasBeenReviewed(true);
+        navigate(PathConstants.HOME);
+    };
 
     const collapseNextStepsCard = () => {
-        updateNextStepsCardIsExpanded(false)
-        updateNextStepsCardHasBeenReviewed(true)
-        navigate(PathConstants.HOME)
-    }
+        updateNextStepsCardIsExpanded(false);
+        updateNextStepsCardHasBeenReviewed(true);
+        navigate(PathConstants.HOME);
+    };
 
     const expandParmfileCard = () => {
-        updateRequirementsCardIsExpanded(false)
-        updateParmfileCardIsExpanded(true)
-        updateNextStepsCardIsExpanded(false)
-        navigate(PathConstants.EXPANDED_PARMFILE_CARD)
-    }
+        updateRequirementsCardIsExpanded(false);
+        updateParmfileCardIsExpanded(true);
+        updateNextStepsCardIsExpanded(false);
+        navigate(PathConstants.EXPANDED_PARMFILE_CARD);
+    };
 
     const expandRequirementsCard = () => {
-        updateRequirementsCardIsExpanded(true)
-        updateParmfileCardIsExpanded(false)
-        updateNextStepsCardIsExpanded(false)
-        navigate(PathConstants.EXPANDED_REQUIREMENTS_CARD)
-    }
+        updateRequirementsCardIsExpanded(true);
+        updateParmfileCardIsExpanded(false);
+        updateNextStepsCardIsExpanded(false);
+        navigate(PathConstants.EXPANDED_REQUIREMENTS_CARD);
+    };
 
     const expandNextStepsCard = () => {
-        updateRequirementsCardIsExpanded(false)
-        updateParmfileCardIsExpanded(false)
-        updateNextStepsCardIsExpanded(true)
-        navigate(PathConstants.EXPANDED_NEXTSTEPS_CARD)
-    }
+        updateRequirementsCardIsExpanded(false);
+        updateParmfileCardIsExpanded(false);
+        updateNextStepsCardIsExpanded(true);
+        navigate(PathConstants.EXPANDED_NEXTSTEPS_CARD);
+    };
 
     const requirementsCardMarkup = (
         <>
             {!hideRequirementsCard && (
                 <ExpressiveCard
-                    label={t('landingPage.expressiveCard.requirements.label')}
+                    id="liz__landing-page__expressive-card__requirements"
+                    label={t("landingPage.expressiveCard.requirements.label")}
                     mediaRatio={null}
                     onPrimaryButtonClick={() => {
                         if (state.requirementsCardIsExpanded) {
-                            collapseRequirementsCard()
+                            collapseRequirementsCard();
                         } else {
-                            expandRequirementsCard()
+                            expandRequirementsCard();
                         }
                     }}
                     primaryButtonIcon={
@@ -400,7 +455,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     className="liz__landing-page__expressive-card"
                     actionIcons={[
                         {
-                            id: 'liz__landing-page__expressive-card_expand-requirements',
+                            id: "liz__landing-page__expressive-card_expand-requirements",
                             icon: state.requirementsCardIsExpanded
                                 ? (props) => (
                                       <CollapseAll size={16} {...props} />
@@ -408,129 +463,129 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                                 : (props) => <Popup size={16} {...props} />,
                             onClick: () => {
                                 if (state.requirementsCardIsExpanded) {
-                                    collapseRequirementsCard()
+                                    collapseRequirementsCard();
                                 } else {
-                                    expandRequirementsCard()
+                                    expandRequirementsCard();
                                 }
                             },
                             iconDescription: state.requirementsCardIsExpanded
-                                ? t('btnLabel.Collapse', { ns: 'common' })
-                                : t('btnLabel.Expand', { ns: 'common' }),
+                                ? t("btnLabel.Collapse", { ns: "common" })
+                                : t("btnLabel.Expand", { ns: "common" }),
                         },
                     ]}
                     actionsPlacement="top"
                 >
                     {state.requirementsCardIsExpanded && <SystemRequirements />}
                     {!state.requirementsCardIsExpanded && (
-                        <p>{t('panel.hint.explanation', { ns: 'panels' })}</p>
+                        <p>{t("panel.hint.explanation", { ns: "panels" })}</p>
                     )}
                 </ExpressiveCard>
             )}
         </>
-    )
+    );
 
     const distributionName =
-        globalState.steps.inputFileSelection.distributionName
+        globalState.steps.inputFileSelection.distributionName;
     const hasDistributionName =
         distributionName &&
-        typeof distributionName === 'string' &&
-        distributionName.length > 0
+        typeof distributionName === "string" &&
+        distributionName.length > 0;
     const distributionVersion =
-        globalState.steps.inputFileSelection.distributionVersion
+        globalState.steps.inputFileSelection.distributionVersion;
     const hasDistributionVersion =
         distributionVersion &&
-        typeof distributionVersion === 'string' &&
-        distributionVersion.length > 0
+        typeof distributionVersion === "string" &&
+        distributionVersion.length > 0;
 
     const getActionIconsForParmfileCard = () => {
         if (hasParamFile() && hasDistributionName && hasDistributionVersion) {
-            const iconMarkup = () => <Popup size={16} />
+            const iconMarkup = () => <Popup size={16} />;
             return [
                 {
-                    id: 'liz__landing-page__expressive-card_show-distribution-info',
+                    id: "liz__landing-page__expressive-card_show-distribution-info",
                     icon: iconMarkup,
                     onClick: () => {
                         if (state.parmfileCardIsExpanded) {
-                            collapseParmfileCard()
+                            collapseParmfileCard();
                         } else {
-                            expandParmfileCard()
+                            expandParmfileCard();
                         }
                     },
                     iconDescription: state.parmfileCardIsExpanded
-                        ? t('btnLabel.Collapse', { ns: 'common' })
-                        : t('btnLabel.Expand', { ns: 'common' }),
+                        ? t("btnLabel.Collapse", { ns: "common" })
+                        : t("btnLabel.Expand", { ns: "common" }),
                 },
-            ]
+            ];
         }
-        return null
-    }
+        return null;
+    };
 
     const saveParamFileContentProxy = () => {
-        const paramFileContents = getParamFileContents()
-        const paramFileName = getParamFileName() || DEFAULT_PARAM_FILE_NAME
+        const paramFileContents = getParamFileContents();
+        const paramFileName = getParamFileName() || DEFAULT_PARAM_FILE_NAME;
 
         if (paramFileContents.length > 0) {
-            saveParamFileContent(paramFileContents, paramFileName)
+            saveParamFileContent(paramFileContents, paramFileName);
         }
-    }
+    };
 
     const getPrimaryButtonTextForParamFileCard = () => {
-        let text = ''
+        let text = "";
 
         hasParamFile()
-            ? (text = t('btnLabel.EditParmfile', { ns: 'common' }))
-            : (text = t('btnLabel.ComposeParmfile', { ns: 'common' }))
+            ? (text = t("btnLabel.EditParmfile", { ns: "common" }))
+            : (text = t("btnLabel.ComposeParmfile", { ns: "common" }));
 
-        return text
-    }
+        return text;
+    };
 
     const getSecondaryButtonTextForParamFileCard = () => {
-        let text = ''
+        let text = "";
 
         hasParamFile() && hasDistributionName && hasDistributionVersion
-            ? (text = t('btnLabel.Download', { ns: 'common' }))
-            : (text = '')
+            ? (text = t("btnLabel.Download", { ns: "common" }))
+            : (text = "");
 
-        return text
-    }
+        return text;
+    };
 
     const hasInvalidSteps = () => {
-        const steps = globalState.steps
-        const stepKeys = Object.keys(steps)
-        let hasInvalidSteps = false
+        const steps = globalState.steps;
+        const stepKeys = Object.keys(steps);
+        let hasInvalidSteps = false;
 
         stepKeys.forEach((key) => {
             if (steps[key].invalid) {
-                hasInvalidSteps = true
+                hasInvalidSteps = true;
             }
-        })
+        });
 
-        return hasInvalidSteps
-    }
+        return hasInvalidSteps;
+    };
     const hasIncompleteSteps = () => {
-        const steps = globalState.steps
-        const stepKeys = Object.keys(steps)
-        let hasIncompleteSteps = false
+        const steps = globalState.steps;
+        const stepKeys = Object.keys(steps);
+        let hasIncompleteSteps = false;
 
         stepKeys.forEach((key) => {
             if (!steps[key].complete) {
-                hasIncompleteSteps = true
+                hasIncompleteSteps = true;
             }
-        })
+        });
 
-        return hasIncompleteSteps
-    }
+        return hasIncompleteSteps;
+    };
     const getClassNameForParmfileCardTitle = () => {
         if (hasParamFile() && hasInvalidSteps()) {
-            return 'liz__landing-page__page-header__productive-card-title__incomplete-error-icon'
+            return "liz__landing-page__page-header__productive-card-title__incomplete-error-icon";
         } else if (hasParamFile() && hasIncompleteSteps()) {
-            return 'liz__landing-page__page-header__productive-card-title__incomplete-icon'
+            return "liz__landing-page__page-header__productive-card-title__incomplete-icon";
         } else if (!hasParamFile()) {
-            return 'liz__landing-page__page-header__productive-card-title__incomplete-icon'
+            return "liz__landing-page__page-header__productive-card-title__incomplete-icon";
         }
 
-        return 'liz__landing-page__page-header__productive-card-title__complete-icon'
-    }
+        return "liz__landing-page__page-header__productive-card-title__complete-icon";
+    };
     const getIconForParmfileCardTitle = () => {
         if (hasParamFile() && hasInvalidSteps()) {
             return (
@@ -540,12 +595,12 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     size="sm"
                     kind="ghost"
                     iconDescription={t(
-                        'leftNavigation.descriptionForInvalidStep'
+                        "leftNavigation.descriptionForInvalidStep"
                     )}
                     onClick={function noRefCheck() {}}
                     renderIcon={Warning}
                 />
-            )
+            );
         } else if (hasParamFile() && hasIncompleteSteps()) {
             return (
                 <Button
@@ -554,12 +609,12 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     size="sm"
                     kind="ghost"
                     iconDescription={t(
-                        'leftNavigation.descriptionForIncompleteStep'
+                        "leftNavigation.descriptionForIncompleteStep"
                     )}
                     onClick={function noRefCheck() {}}
                     renderIcon={Incomplete}
                 />
-            )
+            );
         } else if (!hasParamFile()) {
             return (
                 <Button
@@ -568,12 +623,12 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     size="sm"
                     kind="ghost"
                     iconDescription={t(
-                        'leftNavigation.descriptionForIncompleteStep'
+                        "leftNavigation.descriptionForIncompleteStep"
                     )}
                     onClick={function noRefCheck() {}}
                     renderIcon={Incomplete}
                 />
-            )
+            );
         }
 
         return (
@@ -582,12 +637,12 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                 className={getClassNameForParmfileCardTitle()}
                 size="sm"
                 kind="ghost"
-                iconDescription={t('leftNavigation.descriptionForCompleteStep')}
+                iconDescription={t("leftNavigation.descriptionForCompleteStep")}
                 onClick={function noRefCheck() {}}
                 renderIcon={CheckmarkOutline}
             />
-        )
-    }
+        );
+    };
     const titleForParmfileCard = hasParamFile() ? (
         <>
             <span className="liz__landing-page__page-header__productive-card-title__text">
@@ -606,16 +661,17 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                 {getIconForParmfileCardTitle()}
             </span>
         </>
-    )
+    );
 
     const parmfileCardMarkup = (
         <>
             {!hideParmfileCard && (
                 <ExpressiveCard
-                    label={t('landingPage.expressiveCard.tool.label')}
+                    id="liz__landing-page__expressive-card__parmfile"
+                    label={t("landingPage.expressiveCard.tool.label")}
                     mediaRatio={null}
                     onPrimaryButtonClick={() => {
-                        updateIsEditing(true)
+                        updateIsEditing(true);
                     }}
                     actionIcons={getActionIconsForParmfileCard()}
                     actionsPlacement="top"
@@ -632,6 +688,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                 >
                     {state.parmfileCardIsExpanded && (
                         <Parmfile
+                            parmfileWithPasswordsRemoved={getParamFileContentsWithPasswordsRemoved()}
                             parmfile={getParamFileContents()}
                             distributionName={
                                 globalState.steps.inputFileSelection
@@ -647,35 +704,37 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                         (hasParamFile() ? (
                             <p>
                                 {t(
-                                    'landingPage.expressiveCard.tool.paraModify'
+                                    "landingPage.expressiveCard.tool.paraModify"
                                 )}
                             </p>
                         ) : (
                             <p>
-                                {t('landingPage.expressiveCard.tool.paraNew')}
+                                {t("landingPage.expressiveCard.tool.paraNew")}
                             </p>
                         ))}
                 </ExpressiveCard>
             )}
         </>
-    )
+    );
 
     const titleForNextStepsCard = (
         <span className="liz__landing-page__page-header__productive-card-title__text">
-            {t('modalHeading.showNextStepsInformation')}
+            {t("modalHeading.showNextStepsInformation")}
         </span>
-    )
+    );
 
     const sshUsername = hasDistributionName
         ? SSH_USERNAMES[distributionName]
-        : ''
-    const useSsh = globalState.steps.installationParameters.ssh.enabled
-    const useVnc = globalState.steps.installationParameters.vnc.enabled
+        : "";
+    const useSsh = globalState.steps.installationParameters.ssh.enabled;
+    const useVnc =
+        globalState.steps.installationParameters.vnc.enabled &&
+        distributionName !== UBUNTU_DISTRIBUTION_ID;
     const networkAddress =
         globalState.steps.networkAddress.addressType === ADDRESS_TYPE_IPV4
             ? globalState.steps.networkAddress.ipv4.address
-            : globalState.steps.networkAddress.ipv6.address
-    const vncPassword = globalState.steps.installationParameters.vnc.password
+            : globalState.steps.networkAddress.ipv6.address;
+    const vncPassword = globalState.steps.installationParameters.vnc.password;
     const nextStepsProps = {
         useSsh,
         useVnc,
@@ -683,13 +742,14 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
         addressType: globalState.steps.networkAddress.addressType,
         vncPassword: vncPassword.value,
         sshUsername,
-    }
+    };
 
     const nextStepsCardMarkup = (
         <>
             {!hideNextStepsCard && (
                 <ExpressiveCard
-                    label={t('panel.nextSteps.header', { ns: 'panels' })}
+                    id="liz__landing-page__expressive-card__next-steps"
+                    label={t("panel.nextSteps.header", { ns: "panels" })}
                     mediaRatio={null}
                     primaryButtonText={nextStepsCardPrimaryButtonText}
                     primaryButtonIcon={
@@ -697,9 +757,9 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     }
                     onPrimaryButtonClick={() => {
                         if (state.nextStepsCardIsExpanded) {
-                            collapseNextStepsCard()
+                            collapseNextStepsCard();
                         } else {
-                            expandNextStepsCard()
+                            expandNextStepsCard();
                         }
                     }}
                     title={titleForNextStepsCard}
@@ -707,7 +767,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                     className="liz__landing-page__expressive-card"
                     actionIcons={[
                         {
-                            id: 'liz__landing-page__productive-card_expand-nextsteps',
+                            id: "liz__landing-page__productive-card_expand-nextsteps",
                             icon: state.nextStepsCardIsExpanded
                                 ? (props) => (
                                       <CollapseAll size={16} {...props} />
@@ -715,14 +775,14 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                                 : (props) => <Popup size={16} {...props} />,
                             onClick: () => {
                                 if (state.nextStepsCardIsExpanded) {
-                                    collapseNextStepsCard()
+                                    collapseNextStepsCard();
                                 } else {
-                                    expandNextStepsCard()
+                                    expandNextStepsCard();
                                 }
                             },
                             iconDescription: state.nextStepsCardIsExpanded
-                                ? t('btnLabel.Collapse', { ns: 'common' })
-                                : t('btnLabel.Expand', { ns: 'common' }),
+                                ? t("btnLabel.Collapse", { ns: "common" })
+                                : t("btnLabel.Expand", { ns: "common" }),
                         },
                     ]}
                     actionsPlacement="top"
@@ -731,12 +791,12 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                         <NextSteps {...nextStepsProps} />
                     )}
                     {!state.nextStepsCardIsExpanded && (
-                        <p>{t('landingPage.expressiveCard.nextSteps.para')}</p>
+                        <p>{t("landingPage.expressiveCard.nextSteps.para")}</p>
                     )}
                 </ExpressiveCard>
             )}
         </>
-    )
+    );
 
     return (
         <>
@@ -767,7 +827,7 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
                 </Layer>
             </Layer>
         </>
-    )
-})
+    );
+});
 
-export default LandingPage
+export default LandingPage;

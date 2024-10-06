@@ -9,9 +9,9 @@ import React, {
     useContext,
     useEffect,
     useImperativeHandle,
-} from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useHref } from 'react-router-dom'
+} from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useHref } from "react-router-dom";
 import {
     InlineNotification,
     Layer,
@@ -19,40 +19,42 @@ import {
     Row,
     Column,
     Link,
-} from '@carbon/react'
-import { PageHeader, CreateFullPage } from '@carbon/ibm-products'
+} from "@carbon/react";
+import { PageHeader, CreateFullPage } from "@carbon/ibm-products";
 import {
     STATE_ORIGIN_STORAGE,
     LOCAL_STORAGE_KEY_APP_EDIT_PAGE,
     LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
-} from '../../../util/local-storage-constants'
-import { DEFAULT_PARAM_FILE_NAME } from '../../../util/constants'
+} from "../../../util/local-storage-constants";
+import { DEFAULT_PARAM_FILE_NAME } from "../../../util/constants";
 import {
     EditPageContext,
     ApplicationContext,
     HeaderContext,
-} from '../../../contexts'
+    DownloadParamFileContext,
+} from "../../../contexts";
 import {
     parmfileCardIsExpanded,
     setItem,
-} from '../../../util/local-storage-util'
+} from "../../../util/local-storage-util";
 import {
     saveParamFileContent,
     getParamFileContents,
-} from '../../../util/param-file-util'
-import PathConstants from '../../../util/path-constants'
-import { getSteps, getInlineNotification } from '../../../uiUtil/panel-util'
-import './_edit-page.scss'
+} from "../../../util/param-file-util";
+import PathConstants from "../../../util/path-constants";
+import { PANEL_EDIT_PAGE } from "../../../util/panel-constants";
+import { getSteps, getInlineNotification } from "../../../uiUtil/panel-util";
+import "./_edit-page.scss";
 
 const EditPage = forwardRef(function EditPage(props, ref) {
-    const { t } = useTranslation()
-    const navigate = useNavigate()
+    const { t } = useTranslation();
+    const navigate = useNavigate();
     const expandedParmfileCardHref = useHref(
         PathConstants.EXPANDED_PARMFILE_CARD
-    )
-    const homePageHref = useHref(PathConstants.HOME)
-    const editPageHref = useHref(PathConstants.EDIT)
-    const { state } = useContext(EditPageContext)
+    );
+    const homePageHref = useHref(PathConstants.HOME);
+    const editPageHref = useHref(PathConstants.EDIT);
+    const { state } = useContext(EditPageContext);
     const {
         state: globalState,
         config,
@@ -62,15 +64,21 @@ const EditPage = forwardRef(function EditPage(props, ref) {
         updateIsEditing,
         updateIncludeIntroStep,
         updateUseStateFromLocalStorage,
-    } = useContext(ApplicationContext)
-    const { state: headerState, updateNeedsManualNavigationConfirmation } =
-        useContext(HeaderContext)
+    } = useContext(ApplicationContext);
+    const {
+        state: headerState,
+        updateNeedsManualNavigationConfirmation,
+        updateManualNavigationOrigin,
+    } = useContext(HeaderContext);
+    const { updateShowPasswords, updateOverrideGlobalState } = useContext(
+        DownloadParamFileContext
+    );
     const { appConfig } = config || {
         appConfig: {},
-    }
+    };
     const showConfidentialityNotice =
-        appConfig?.config?.showConfidentialityNotice ?? false
-    const { panelConfig } = config
+        appConfig?.config?.showConfidentialityNotice ?? false;
+    const { panelConfig } = config;
     const publicRef = {
         persistState: () => {
             setItem(
@@ -79,34 +87,34 @@ const EditPage = forwardRef(function EditPage(props, ref) {
                     ...state,
                     origin: STATE_ORIGIN_STORAGE,
                 })
-            )
+            );
         },
-    }
+    };
 
-    useEffect(publicRef.persistState, [state])
-    useImperativeHandle(ref, () => publicRef)
+    useEffect(publicRef.persistState, [state]);
+    useImperativeHandle(ref, () => publicRef);
 
-    const hasLocalStorageState = globalState.useStateFromLocalStorage
+    const hasLocalStorageState = globalState.useStateFromLocalStorage;
 
     const onCloseInlineNotification = () => {
-        const localInlineNotification = Object.assign({}, inlineNotification)
-        localInlineNotification.show = false
+        const localInlineNotification = Object.assign({}, inlineNotification);
+        localInlineNotification.show = false;
 
-        updateShowLegalNotification(false)
+        updateShowLegalNotification(false);
         setItem(
             LOCAL_STORAGE_KEY_APP_INLINE_NOTIFICATION,
             JSON.stringify(localInlineNotification)
-        )
-    }
+        );
+    };
 
     const createParamFile = () => {
         const downloadParamFile =
-            globalState?.steps?.summary?.downloadParmfile ?? false
+            globalState?.steps?.summary?.downloadParmfile ?? false;
         const downloadParamFileName =
-            globalState?.steps?.summary?.downloadParmfileName ?? ''
+            globalState?.steps?.summary?.downloadParmfileName ?? "";
 
         if (downloadParamFile) {
-            const paramFileContents = getParamFileContents()
+            const paramFileContents = getParamFileContents();
 
             if (paramFileContents.length > 0) {
                 saveParamFileContent(
@@ -114,71 +122,72 @@ const EditPage = forwardRef(function EditPage(props, ref) {
                     downloadParamFileName.length > 0
                         ? downloadParamFileName
                         : DEFAULT_PARAM_FILE_NAME
-                )
+                );
             }
         }
-    }
+    };
 
-    const hasTabs = state.hasTabs
-    const tabs = state.tabs
+    const hasTabs = state.hasTabs;
+    const tabs = state.tabs;
 
     const inlineNotification = getInlineNotification(
-        t('legalNotice.headerLabel'),
-        t('legalNotice.contentLabel')
-    )
+        t("legalNotice.headerLabel"),
+        t("legalNotice.contentLabel")
+    );
     const showInlineNotification = inlineNotification
         ? inlineNotification.show &&
-          typeof showConfidentialityNotice === 'string' &&
-          showConfidentialityNotice.toLowerCase() === 'true'
-        : false
+          typeof showConfidentialityNotice === "string" &&
+          showConfidentialityNotice.toLowerCase() === "true"
+        : false;
 
-    const subtitleNew = t('editPage.pageHeader.subtitle.new')
-    const subtitleModify = t('editPage.pageHeader.subtitle.modify')
-    const subtitle = hasLocalStorageState ? subtitleModify : subtitleNew
+    const subtitleNew = t("editPage.pageHeader.subtitle.new");
+    const subtitleModify = t("editPage.pageHeader.subtitle.modify");
+    const subtitle = hasLocalStorageState ? subtitleModify : subtitleNew;
 
-    const titleNew = t('editPage.pageHeader.title.new')
-    const titleModify = t('editPage.pageHeader.title.modify')
-    const title = hasLocalStorageState ? titleModify : titleNew
+    const titleNew = t("editPage.pageHeader.title.new");
+    const titleModify = t("editPage.pageHeader.title.modify");
+    const title = hasLocalStorageState ? titleModify : titleNew;
 
-    const submitButton = t('btnLabel.Finish', { ns: 'common' })
+    const submitButton = t("btnLabel.Finish", { ns: "common" });
 
     const labelForHomeLink = !headerState.needsManualNavigationConfirmation ? (
         <Link
             className="liz__edit-page__link-cursor"
             onClick={() => {
-                updateNeedsManualNavigationConfirmation(true)
+                updateNeedsManualNavigationConfirmation(true);
+                updateManualNavigationOrigin(PANEL_EDIT_PAGE);
             }}
         >
-            {t('pageHeader.breadcrumbs.home', { ns: 'common' })}
+            {t("pageHeader.breadcrumbs.home", { ns: "common" })}
         </Link>
     ) : (
-        t('pageHeader.breadcrumbs.home', { ns: 'common' })
-    )
+        t("pageHeader.breadcrumbs.home", { ns: "common" })
+    );
 
     const pageHeaderMarkup = (
         <PageHeader
             navigation={hasTabs ? tabs : null}
             className="liz__edit-page__page-header"
             actionBarOverflowAriaLabel={t(
-                'pageHeader.actionBarOverflowAriaLabel',
+                "pageHeader.actionBarOverflowAriaLabel",
                 {
-                    ns: 'common',
+                    ns: "common",
                 }
             )}
-            allTagsModalSearchLabel={t('pageHeader.allTagsModalSearchLabel', {
-                ns: 'common',
+            allTagsModalSearchLabel={t("pageHeader.allTagsModalSearchLabel", {
+                ns: "common",
             })}
             allTagsModalSearchPlaceholderText={t(
-                'pageHeader.allTagsModalSearchPlaceholderText',
-                { ns: 'common' }
+                "pageHeader.allTagsModalSearchPlaceholderText",
+                { ns: "common" }
             )}
-            allTagsModalTitle={t('pageHeader.allTagsModalTitle', {
-                ns: 'common',
+            allTagsModalTitle={t("pageHeader.allTagsModalTitle", {
+                ns: "common",
             })}
             breadcrumbOverflowAriaLabel={t(
-                'pageHeader.breadcrumbOverflowAriaLabel',
+                "pageHeader.breadcrumbOverflowAriaLabel",
                 {
-                    ns: 'common',
+                    ns: "common",
                 }
             )}
             breadcrumbs={[
@@ -186,34 +195,34 @@ const EditPage = forwardRef(function EditPage(props, ref) {
                     href: parmfileCardIsExpanded()
                         ? expandedParmfileCardHref
                         : homePageHref,
-                    key: 'breadcrumb-01',
+                    key: "breadcrumb-01",
                     label: labelForHomeLink,
-                    title: t('pageHeader.breadcrumbs.home', { ns: 'common' }),
+                    title: t("pageHeader.breadcrumbs.home", { ns: "common" }),
                 },
                 {
                     href: editPageHref,
                     isCurrentPage: true,
-                    key: 'breadcrumb-02',
-                    label: t('pageHeader.breadcrumbs.composeParmfile', {
-                        ns: 'common',
+                    key: "breadcrumb-02",
+                    label: t("pageHeader.breadcrumbs.composeParmfile", {
+                        ns: "common",
                     }),
                 },
             ]}
             collapseHeaderIconDescription={t(
-                'pageHeader.collapseHeaderIconDescription',
-                { ns: 'common' }
+                "pageHeader.collapseHeaderIconDescription",
+                { ns: "common" }
             )}
             expandHeaderIconDescription={t(
-                'pageHeader.expandHeaderIconDescription',
+                "pageHeader.expandHeaderIconDescription",
                 {
-                    ns: 'common',
+                    ns: "common",
                 }
             )}
-            pageActionsOverflowLabel={t('pageHeader.pageActionsOverflowLabel', {
-                ns: 'common',
+            pageActionsOverflowLabel={t("pageHeader.pageActionsOverflowLabel", {
+                ns: "common",
             })}
-            showAllTagsLabel={t('pageHeader.showAllTagsLabel', {
-                ns: 'common',
+            showAllTagsLabel={t("pageHeader.showAllTagsLabel", {
+                ns: "common",
             })}
             subtitle={subtitle}
             title={{
@@ -222,42 +231,44 @@ const EditPage = forwardRef(function EditPage(props, ref) {
                 text: title,
             }}
         />
-    )
+    );
 
     const rootLayerClassName = showInlineNotification
-        ? 'liz__edit-page__root-layer__with-legal-banner'
-        : 'liz__edit-page__root-layer__wo-legal-banner'
+        ? "liz__edit-page__root-layer__with-legal-banner"
+        : "liz__edit-page__root-layer__wo-legal-banner";
 
     const CLASS_WITH_LEGAL_BANNER =
-        'liz__edit-page__full-page__with-legal-banner'
+        "liz__edit-page__full-page__with-legal-banner";
     const CLASS_WITHOUT_LEGAL_BANNER =
-        'liz__edit-page__full-page__wo-legal-banner'
+        "liz__edit-page__full-page__wo-legal-banner";
 
     const fullPageClassName = showInlineNotification
         ? CLASS_WITH_LEGAL_BANNER
-        : CLASS_WITHOUT_LEGAL_BANNER
+        : CLASS_WITHOUT_LEGAL_BANNER;
 
     const createFullPageMarkup = (
         <CreateFullPage
             className={fullPageClassName}
-            backButtonText={t('btnLabel.Back', { ns: 'common' })}
-            cancelButtonText={t('btnLabel.Cancel', { ns: 'common' })}
+            backButtonText={t("btnLabel.Back", { ns: "common" })}
+            cancelButtonText={t("btnLabel.Cancel", { ns: "common" })}
             modalDangerButtonText={t(
-                'editPage.createFullPage.modalDangerButtonText'
+                "editPage.createFullPage.modalDangerButtonText"
             )}
-            modalDescription={t('editPage.createFullPage.modalDescription')}
+            modalDescription={t("editPage.createFullPage.modalDescription")}
             modalSecondaryButtonText={t(
-                'editPage.createFullPage.modalSecondaryButtonText'
+                "editPage.createFullPage.modalSecondaryButtonText"
             )}
-            modalTitle={t('editPage.createFullPage.modalTitle')}
-            nextButtonText={t('btnLabel.Next', { ns: 'common' })}
+            modalTitle={t("editPage.createFullPage.modalTitle")}
+            nextButtonText={t("btnLabel.Next", { ns: "common" })}
             onClose={() => {
-                updateIsEditing(false)
-                updateIncludeIntroStep(false)
-                updateUseStateFromLocalStorage(true)
+                updateShowPasswords(false);
+                updateOverrideGlobalState(false);
+                updateIsEditing(false);
+                updateIncludeIntroStep(false);
+                updateUseStateFromLocalStorage(true);
                 navigate(
                     `${parmfileCardIsExpanded() ? PathConstants.EXPANDED_PARMFILE_CARD : PathConstants.HOME}`
-                )
+                );
             }}
             onRequestSubmit={createParamFile}
             secondaryTitle=""
@@ -265,7 +276,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
         >
             {getSteps({ panelConfig, updateStep, updateNextStep })}
         </CreateFullPage>
-    )
+    );
 
     return (
         <>
@@ -294,7 +305,7 @@ const EditPage = forwardRef(function EditPage(props, ref) {
                 </Layer>
             </Layer>
         </>
-    )
-})
+    );
+});
 
-export default EditPage
+export default EditPage;

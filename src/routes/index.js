@@ -13,15 +13,19 @@ import { renderRoutes, renderRoutesForCreateBrowser } from "./generate-routes";
  */
 
 const MainLayout = loadable(() => import("../content/layouts"), {
-  resolveComponent: (components) => components.MainLayout,
+    resolveComponent: (components) => components.MainLayout,
 });
 
 const EditLayout = loadable(() => import("../content/layouts"), {
-  resolveComponent: (components) => components.EditLayout,
+    resolveComponent: (components) => components.EditLayout,
+});
+
+const SettingsLayout = loadable(() => import("../content/layouts"), {
+    resolveComponent: (components) => components.SettingsLayout,
 });
 
 const ErrorLayout = loadable(() => import("../content/layouts"), {
-  resolveComponent: (components) => components.ErrorLayout,
+    resolveComponent: (components) => components.ErrorLayout,
 });
 
 /*
@@ -29,61 +33,76 @@ const ErrorLayout = loadable(() => import("../content/layouts"), {
  */
 
 const LandingPage = loadable(() => import("../content/pages"), {
-  resolveComponent: (components) => components.LandingPage,
+    resolveComponent: (components) => components.LandingPage,
 });
 
 const EditPage = loadable(() => import("../content/pages"), {
-  resolveComponent: (components) => components.EditPage,
+    resolveComponent: (components) => components.EditPage,
+});
+
+const SettingsPage = loadable(() => import("../content/pages"), {
+    resolveComponent: (components) => components.SettingsPage,
 });
 
 const ErrorPage = loadable(() => import("../content/pages"), {
-  resolveComponent: (components) => components.ErrorPage,
+    resolveComponent: (components) => components.ErrorPage,
 });
 
 export const routes = [
-  {
-    layout: ErrorLayout,
-    errorElement: {
-      layout: ErrorLayout,
-      page: ErrorPage,
-    },
-    routes: [
-      {
-        layout: EditLayout,
-        routes: [
-          {
-            name: "edit",
-            title: "Edit page",
-            component: EditPage,
-            path: PathConstants.EDIT,
-          },
-        ],
-      },
-      {
+    {
         layout: MainLayout,
+        errorElement: {
+            layout: ErrorLayout,
+            page: ErrorPage,
+        },
         routes: [
-          {
-            name: "landing",
-            title: "Landing page",
-            component: LandingPage,
-            path: PathConstants.HOME,
-          },
-          {
-            name: "cards",
-            title: "Cards",
-            routes: [
-              {
-                name: "expanded-card",
-                title: "Expanded card",
-                component: LandingPage,
-                path: PathConstants.EXPANDED_CARD_WITH_ROUTER_PARM,
-              },
-            ],
-          },
+            {
+                layout: EditLayout,
+                routes: [
+                    {
+                        name: "edit",
+                        title: "Edit page",
+                        component: EditPage,
+                        path: PathConstants.EDIT,
+                    },
+                ],
+            },
+            {
+                layout: SettingsLayout,
+                routes: [
+                    {
+                        name: "settings",
+                        title: "Settings page",
+                        component: SettingsPage,
+                        path: PathConstants.SETTINGS,
+                    },
+                ],
+            },
+            {
+                layout: MainLayout,
+                routes: [
+                    {
+                        name: "landing",
+                        title: "Landing page",
+                        component: LandingPage,
+                        path: PathConstants.HOME,
+                    },
+                    {
+                        name: "cards",
+                        title: "Cards",
+                        routes: [
+                            {
+                                name: "expanded-card",
+                                title: "Expanded card",
+                                component: LandingPage,
+                                path: PathConstants.EXPANDED_CARD_WITH_ROUTER_PARM,
+                            },
+                        ],
+                    },
+                ],
+            },
         ],
-      },
-    ],
-  },
+    },
 ];
 
 export const Routes = renderRoutes(routes);

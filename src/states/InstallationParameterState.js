@@ -7,20 +7,21 @@
 import {
     LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
     STATE_ORIGIN_DEFAULT,
-} from '../util/local-storage-constants'
-import { DEFAULT_STRING_OBJECT } from '../util/constants'
-import { decryptItem } from '../util/local-storage-util'
+} from "../util/local-storage-constants";
+import { DEFAULT_STRING_OBJECT } from "../util/constants";
+import { decryptItem } from "../util/local-storage-util";
 
 const createInitialState = (skipLocalStorageUsage = false) => {
     const initialState = decryptItem(
         LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS
-    )
+    );
     const defaultState = {
         useSsh: false,
         useVnc: true,
         installationAddress: {
-            value: '',
-            computed: '',
+            value: "",
+            computed: "",
+            computedWithPasswordsRemoved: "",
             valid: true,
         },
         userName: DEFAULT_STRING_OBJECT,
@@ -29,13 +30,13 @@ const createInitialState = (skipLocalStorageUsage = false) => {
         vncPassword: DEFAULT_STRING_OBJECT,
         sshPassword: DEFAULT_STRING_OBJECT,
         origin: STATE_ORIGIN_DEFAULT,
-    }
+    };
 
     if (initialState && !skipLocalStorageUsage) {
-        return initialState
+        return initialState;
     }
 
-    return defaultState
-}
+    return defaultState;
+};
 
-export { createInitialState }
+export { createInitialState };

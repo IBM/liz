@@ -6,32 +6,60 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_network-address.scss";
 
 const NetworkAddress = ({
-  hasMultipleSteps,
-  currentHelpStep,
-  updateCurrentHelpStep,
+    hasMultipleSteps,
+    currentHelpStep,
+    updateCurrentHelpStep,
 }) => {
-  const { t } = useTranslation();
-
-  return (
-    <>
-      <div className="help-panel__network-address__header">
-        <span>{t("helpPanelHeader.networkAddress", { ns: "help" })}</span>
-      </div>
-      <div className="help-panel__network-address__content">
-        <Trans i18nKey="helpPanelContents.networkAddress" ns="help" />
-      </div>
-    </>
-  );
+    return (
+        <>
+            <div
+                className="help-panel__network-address__content"
+                id="helpPanelContents_networkAddress_para1"
+            >
+                <Trans
+                    i18nKey="helpPanelContents.networkAddress.para1"
+                    ns="help_networkAddress"
+                />
+            </div>
+            <div
+                className="help-panel__network-address__content"
+                id="helpPanelContents_networkAddress_para2"
+            >
+                <Trans
+                    i18nKey="helpPanelContents.networkAddress.para2"
+                    ns="help_networkAddress"
+                />
+            </div>
+            <div
+                className="help-panel__network-address__content"
+                id="helpPanelContents_networkAddress_para3"
+            >
+                <Trans
+                    i18nKey="helpPanelContents.networkAddress.para3"
+                    ns="help_networkAddress"
+                />
+            </div>
+            <div
+                className="help-panel__network-address__content__bottom"
+                id="helpPanelContents_networkAddress_para4"
+            >
+                <Trans
+                    i18nKey="helpPanelContents.networkAddress.para4"
+                    ns="help_networkAddress"
+                />
+            </div>
+        </>
+    );
 };
 
 NetworkAddress.propTypes = {
-  hasMultipleSteps: PropTypes.bool,
-  currentHelpStep: PropTypes.number,
-  updateCurrentHelpStep: PropTypes.func,
+    hasMultipleSteps: PropTypes.bool,
+    currentHelpStep: PropTypes.number,
+    updateCurrentHelpStep: PropTypes.func,
 };
 
 export default NetworkAddress;

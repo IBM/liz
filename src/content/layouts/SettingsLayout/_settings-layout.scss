@@ -1,0 +1,19 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2024
+ */
+
+@use "@carbon/react" with (
+    $font-path: "@ibm/plex"
+);
+
+.liz__settings-layout-content {
+    height: 100%;
+    margin-top: 0 !important;
+    padding: react.$spacing-09 0 0 0 !important;
+
+    &.liz__settings-layout-content__with-side-panel {
+        width: calc(100% - (6 * react.$spacing-11));
+    }
+}

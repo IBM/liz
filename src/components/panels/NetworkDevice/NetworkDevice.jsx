@@ -4,8 +4,8 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Layer,
     NumberInput,
@@ -18,12 +18,12 @@ import {
     RadioButton,
     ActionableNotification,
     InlineNotification,
-} from '@carbon/react'
+} from "@carbon/react";
 import {
     toChannelSegments,
     validateSegments,
     isShortFormat,
-} from '../../../util/network-device-util'
+} from "../../../util/network-device-util";
 import {
     DEVICE_TYPE_OSA,
     DEVICE_TYPE_ROCE,
@@ -37,22 +37,23 @@ import {
     UPDATE_FUNCTION__PCI_FUNCTION_ID,
     UPDATE_FUNCTION__USER_IDENTIFIER,
     SLES_DISTRIBUTION_ID,
-} from '../../../util/constants'
+    UBUNTU_DISTRIBUTION_ID,
+} from "../../../util/constants";
 import {
     LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
     STATE_ORIGIN_USER,
     STATE_ORIGIN_STORAGE,
-} from '../../../util/local-storage-constants'
+} from "../../../util/local-storage-constants";
 import {
     ApplicationContext,
     NetworkDeviceContext,
     DownloadParamFileContext,
-} from '../../../contexts'
-import { updateIsDisabled as updateIsDisabledFromUtils } from '../../../util/panel-util'
-import { resetParamFileTextAreaData } from '../../../uiUtil/panel-util'
-import DeviceSettings from './components/DeviceSettings'
-import { setItem } from '../../../util/local-storage-util'
-import './_network-device.scss'
+} from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import DeviceSettings from "./components/DeviceSettings";
+import { setItem } from "../../../util/local-storage-util";
+import "./_network-device.scss";
 
 const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
     const {
@@ -61,10 +62,10 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
         updateNextStep,
         updateIsDirty,
         updateIsDisabled,
-    } = React.useContext(ApplicationContext)
+    } = React.useContext(ApplicationContext);
     const { updateModified, updateParamFileContent } = React.useContext(
         DownloadParamFileContext
-    )
+    );
     const {
         state,
         updateSelectedDeviceType,
@@ -78,11 +79,11 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
         updatePciFunctionId,
         updateUserIdentifier,
         updateVlanId,
-    } = React.useContext(NetworkDeviceContext)
-    const { t } = useTranslation()
+    } = React.useContext(NetworkDeviceContext);
+    const { t } = useTranslation();
     const publicRef = {
         persistState: () => {
-            let mergedSteps = {}
+            let mergedSteps = {};
 
             isCompleteAndValid((error, isCompleteAndValid) => {
                 if (!error) {
@@ -94,25 +95,25 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 ...globalState.steps.networkDevice,
                                 deviceType: state.selectedDeviceType
                                     ? state.selectedDeviceType
-                                    : '',
+                                    : "",
                                 osa: {
                                     readChannel: state.readChannelId
                                         ? state.readChannelId.value
-                                        : '',
+                                        : "",
                                     writeChannel: state.writeChannelId
                                         ? state.writeChannelId.value
-                                        : '',
+                                        : "",
                                     dataChannel: state.dataChannelId
                                         ? state.dataChannelId.value
-                                        : '',
+                                        : "",
                                     layer:
-                                        typeof state.layer === 'boolean'
+                                        typeof state.layer === "boolean"
                                             ? +state.layer
                                             : 1,
                                     portNumber:
                                         typeof state.useMultiPort ===
-                                            'boolean' &&
-                                        typeof state.portNo === 'boolean'
+                                            "boolean" &&
+                                        typeof state.portNo === "boolean"
                                             ? getPortNumber({
                                                   useMultiport:
                                                       state.useMultiPort,
@@ -123,10 +124,10 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 roce: {
                                     fid: state.pciFunctionId
                                         ? state.pciFunctionId.value
-                                        : '',
+                                        : "",
                                     uid: state.userIdentifier
                                         ? state.userIdentifier.value
-                                        : '',
+                                        : "",
                                 },
                                 vlan: {
                                     id: state.vlanId ? +state.vlanId.value : 1,
@@ -137,7 +138,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 origin: STATE_ORIGIN_USER,
                             },
                         },
-                    }
+                    };
                 } else if (isCompleteAndValid.isComplete) {
                     mergedSteps = {
                         ...globalState,
@@ -147,25 +148,25 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 ...globalState.steps.networkDevice,
                                 deviceType: state.selectedDeviceType
                                     ? state.selectedDeviceType
-                                    : '',
+                                    : "",
                                 osa: {
                                     readChannel: state.readChannelId
                                         ? state.readChannelId.value
-                                        : '',
+                                        : "",
                                     writeChannel: state.writeChannelId
                                         ? state.writeChannelId.value
-                                        : '',
+                                        : "",
                                     dataChannel: state.dataChannelId
                                         ? state.dataChannelId.value
-                                        : '',
+                                        : "",
                                     layer:
-                                        typeof state.layer === 'boolean'
+                                        typeof state.layer === "boolean"
                                             ? +state.layer
                                             : 1,
                                     portNumber:
                                         typeof state.useMultiPort ===
-                                            'boolean' &&
-                                        typeof state.portNo === 'boolean'
+                                            "boolean" &&
+                                        typeof state.portNo === "boolean"
                                             ? getPortNumber({
                                                   useMultiport:
                                                       state.useMultiPort,
@@ -176,10 +177,10 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 roce: {
                                     fid: state.pciFunctionId
                                         ? state.pciFunctionId.value
-                                        : '',
+                                        : "",
                                     uid: state.userIdentifier
                                         ? state.userIdentifier.value
-                                        : '',
+                                        : "",
                                 },
                                 vlan: {
                                     id: state.vlanId ? +state.vlanId.value : 1,
@@ -190,7 +191,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 origin: STATE_ORIGIN_USER,
                             },
                         },
-                    }
+                    };
                 } else {
                     mergedSteps = {
                         ...globalState,
@@ -198,22 +199,22 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                             ...globalState.steps,
                             networkDevice: {
                                 ...globalState.steps.networkDevice,
-                                deviceType: state?.selectedDeviceType ?? '',
+                                deviceType: state?.selectedDeviceType ?? "",
                                 osa: {
                                     readChannel:
-                                        state?.readChannelId?.value ?? '',
+                                        state?.readChannelId?.value ?? "",
                                     writeChannel:
-                                        state?.writeChannelId?.value ?? '',
+                                        state?.writeChannelId?.value ?? "",
                                     dataChannel:
-                                        state?.dataChannelId?.value ?? '',
+                                        state?.dataChannelId?.value ?? "",
                                     layer:
-                                        typeof state.layer === 'boolean'
+                                        typeof state.layer === "boolean"
                                             ? +state.layer
                                             : 1,
                                     portNumber:
                                         typeof state.useMultiPort ===
-                                            'boolean' &&
-                                        typeof state.portNo === 'boolean'
+                                            "boolean" &&
+                                        typeof state.portNo === "boolean"
                                             ? getPortNumber({
                                                   useMultiport:
                                                       state.useMultiPort,
@@ -222,8 +223,8 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                             : 0,
                                 },
                                 roce: {
-                                    fid: state?.pciFunctionId?.value ?? '',
-                                    uid: state?.userIdentifier?.value ?? '',
+                                    fid: state?.pciFunctionId?.value ?? "",
+                                    uid: state?.userIdentifier?.value ?? "",
                                 },
                                 vlan: {
                                     id: state.vlanId ? +state.vlanId.value : 1,
@@ -235,13 +236,13 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                                 origin: STATE_ORIGIN_USER,
                             },
                         },
-                    }
+                    };
                 }
 
-                updateNextStep(mergedSteps.steps)
-                updateIsDirty(true)
-                updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps))
-            })
+                updateNextStep(mergedSteps.steps);
+                updateIsDirty(true);
+                updateIsDisabled(updateIsDisabledFromUtils(mergedSteps.steps));
+            });
 
             setItem(
                 LOCAL_STORAGE_KEY_APP_NETWORK_DEVICE,
@@ -249,156 +250,172 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     ...state,
                     origin: STATE_ORIGIN_STORAGE,
                 })
-            )
+            );
         },
-    }
+    };
 
-    useEffect(publicRef.persistState, [state])
-    useImperativeHandle(ref, () => publicRef)
+    useEffect(publicRef.persistState, [state]);
+    useImperativeHandle(ref, () => publicRef);
 
-    const useVlanToggled = state?.useVlan ?? false
-    const selectedDeviceType = state.selectedDeviceType
-    const vlanIdIsValid = state?.vlanId?.valid
-    const vlanId = state?.vlanId?.value
-    const readChannelIdIsValid = state?.readChannelId?.valid
-    const readChannelId = state?.readChannelId?.value
-    const writeChannelIdIsValid = state?.writeChannelId?.valid
-    const writeChannelId = state?.writeChannelId?.value
-    const dataChannelIdIsValid = state?.dataChannelId?.valid
-    const dataChannelId = state?.dataChannelId?.value
+    const useVlanToggled = state?.useVlan ?? false;
+    const selectedDeviceType = () => {
+        if (displayRoCEControls) {
+            return state?.selectedDeviceType ?? DEVICE_TYPE_OSA;
+        }
+        return DEVICE_TYPE_OSA;
+    };
+    const vlanIdIsValid = state?.vlanId?.valid;
+    const vlanId = state?.vlanId?.value;
+    const readChannelIdIsValid = state?.readChannelId?.valid;
+    const readChannelId = state?.readChannelId?.value;
+    const writeChannelIdIsValid = state?.writeChannelId?.valid;
+    const writeChannelId = state?.writeChannelId?.value;
+    const dataChannelIdIsValid = state?.dataChannelId?.valid;
+    const dataChannelId = state?.dataChannelId?.value;
     const paramFileHasBeenModifiedFromState =
-        globalState?.steps.downloadParamFile?.modified ?? false
+        globalState?.steps.downloadParamFile?.modified ?? false;
     const distributionName =
-        globalState.steps.inputFileSelection.distributionName
-    const displayRoCEControls = distributionName !== SLES_DISTRIBUTION_ID
+        globalState.steps.inputFileSelection.distributionName;
+    const displayNoneUbuntuControl =
+        distributionName !== UBUNTU_DISTRIBUTION_ID;
+    const displayRoCEControls = distributionName !== SLES_DISTRIBUTION_ID;
 
     const updateFunction = (propertyName, propertyValue, propertyIsValid) => {
         if (propertyName === UPDATE_FUNCTION__SELECT_DEVICE_TYPE) {
-            updateSelectedDeviceType(propertyValue)
+            updateSelectedDeviceType(propertyValue);
         } else if (propertyName === UPDATE_FUNCTION__READ_CHANNEL_ID) {
             updateReadChannelId({
                 value: propertyValue,
                 valid: propertyIsValid,
-            })
+            });
         } else if (propertyName === UPDATE_FUNCTION__WRITE_CHANNEL_ID) {
             updateWriteChannelId({
                 value: propertyValue,
                 valid: propertyIsValid,
-            })
+            });
         } else if (propertyName === UPDATE_FUNCTION__DATA_CHANNEL_ID) {
             updateDataChannelId({
                 value: propertyValue,
                 valid: propertyIsValid,
-            })
+            });
         } else if (propertyName === UPDATE_FUNCTION__LAYER) {
-            updateLayer(propertyValue)
+            updateLayer(propertyValue);
         } else if (propertyName === UPDATE_FUNCTION__USE_MULTIPORT) {
-            updateUseMultiPort(propertyValue)
+            updateUseMultiPort(propertyValue);
         } else if (propertyName === UPDATE_FUNCTION__PORT_NO) {
-            updatePortNo(propertyValue)
+            updatePortNo(propertyValue);
         } else if (propertyName === UPDATE_FUNCTION__PCI_FUNCTION_ID) {
             updatePciFunctionId({
                 value: propertyValue,
                 valid: propertyIsValid,
-            })
+            });
         } else if (propertyName === UPDATE_FUNCTION__USER_IDENTIFIER) {
             updateUserIdentifier({
                 value: propertyValue,
                 valid: propertyIsValid,
-            })
+            });
         }
-    }
+    };
 
     const isReadChannelIdValid = (readChannelIdValue) => {
-        const segments = toChannelSegments(readChannelIdValue)
+        const segments = toChannelSegments(readChannelIdValue);
         if (segments.length === 3) {
-            return validateSegments(segments)
+            return validateSegments(segments);
         } else if (segments.length === 0) {
-            return isShortFormat(readChannelIdValue)
+            return isShortFormat(readChannelIdValue);
         }
-        return false
-    }
+        return false;
+    };
 
     const isWriteChannelIdValid = (writeChannelIdValue) => {
-        const segments = toChannelSegments(writeChannelIdValue)
+        const segments = toChannelSegments(writeChannelIdValue);
         if (segments.length === 3) {
-            return validateSegments(segments)
+            return validateSegments(segments);
         } else if (segments.length === 0) {
-            return isShortFormat(writeChannelIdValue)
+            return isShortFormat(writeChannelIdValue);
         }
-        return false
-    }
+        return false;
+    };
 
     const isDataChannelIdValid = (dataChannelIdValue) => {
-        const segments = toChannelSegments(dataChannelIdValue)
+        const segments = toChannelSegments(dataChannelIdValue);
         if (segments.length === 3) {
-            return validateSegments(segments)
+            return validateSegments(segments);
         } else if (segments.length === 0) {
-            return isShortFormat(dataChannelIdValue)
+            return isShortFormat(dataChannelIdValue);
         }
-        return false
-    }
+        return false;
+    };
 
     const isVlanIdValid = (vlanId) => {
         // do not validate if vlan support is not toggled
         if (!state.useVlan) {
-            return true
+            return true;
         }
 
         const isInteger =
-            typeof vlanId === 'string'
+            typeof vlanId === "string"
                 ? Number.isInteger(parseInt(vlanId))
-                : Number.isInteger(vlanId)
+                : Number.isInteger(vlanId);
         if (isInteger) {
-            const decimal = Math.trunc(vlanId)
-            return decimal > 0 && decimal <= 4094
+            const decimal = Math.trunc(vlanId);
+            return decimal > 0 && decimal <= 4094;
         }
-        return false
-    }
+        return false;
+    };
 
     const isUseMultiPortValid = () => {
-        if (state.useMultiPort && typeof state.useMultiPort === 'boolean') {
-            return true
+        if (state.useMultiPort && typeof state.useMultiPort === "boolean") {
+            return true;
         }
-        return false
-    }
+        return false;
+    };
 
     const isPortNumberValid = () => {
         if (
             state.portNo &&
-            typeof +state.portNo === 'number' &&
+            typeof +state.portNo === "number" &&
             +state.portNo >= 0
         ) {
-            return true
+            return true;
         }
-        return false
-    }
+        return false;
+    };
 
     const isLayerValid = () => {
         if (
             state.layer &&
-            typeof +state.layer === 'number' &&
+            typeof +state.layer === "number" &&
             +state.layer >= 0
         ) {
-            return true
+            return true;
         }
-        return false
-    }
+        return false;
+    };
+
+    const areChannelIdsForUbuntuValid = () => {
+        if (!state.readChannelId) {
+            return false;
+        }
+        return state.readChannelId.valid;
+    };
 
     const areChannelIdsValid = () => {
-        if (
+        if (distributionName === UBUNTU_DISTRIBUTION_ID) {
+            return areChannelIdsForUbuntuValid();
+        } else if (
             !state.readChannelId ||
             !state.writeChannelId ||
             !state.dataChannelId
         ) {
-            return false
+            return false;
         }
         return (
             state.readChannelId.valid &&
             state.writeChannelId.valid &&
             state.dataChannelId.valid
-        )
-    }
+        );
+    };
 
     const areOsaDeviceSettingValid = () => {
         return (
@@ -406,80 +423,83 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             (isUseMultiPortValid() || true) &&
             (isPortNumberValid() || true) &&
             (isLayerValid() || true)
-        )
-    }
+        );
+    };
 
     const areRoCeDeviceSettingsValid = () => {
         if (!displayRoCEControls) {
-            return true
+            return true;
         } else if (!state.pciFunctionId || !state.userIdentifier) {
-            return false
+            return false;
         }
-        return state.pciFunctionId.valid && state.userIdentifier.valid
-    }
+        return state.pciFunctionId.valid && state.userIdentifier.valid;
+    };
 
     const areDeviceSettingsValid = () => {
-        if (typeof state.selectedDeviceType === 'string') {
+        if (typeof state.selectedDeviceType === "string") {
             return state.selectedDeviceType === DEVICE_TYPE_OSA
                 ? areOsaDeviceSettingValid()
-                : areRoCeDeviceSettingsValid()
+                : areRoCeDeviceSettingsValid();
         }
-        return false
-    }
+        return false;
+    };
 
     const isValid = () => {
         if (state.vlanId) {
             return (
                 areDeviceSettingsValid() && state.vlanId && state.vlanId.valid
-            )
+            );
         }
 
-        return areDeviceSettingsValid()
-    }
+        return areDeviceSettingsValid();
+    };
 
     const isReadChannelIdComplete = () => {
         return (
-            typeof state.readChannelId === 'object' &&
-            typeof state.readChannelId.value === 'string' &&
+            typeof state.readChannelId === "object" &&
+            typeof state.readChannelId.value === "string" &&
             state.readChannelId.value.length > 0
-        )
-    }
+        );
+    };
 
     const isWriteChannelIdComplete = () => {
         return (
-            typeof state.writeChannelId === 'object' &&
-            typeof state.writeChannelId.value === 'string' &&
+            typeof state.writeChannelId === "object" &&
+            typeof state.writeChannelId.value === "string" &&
             state.writeChannelId.value.length > 0
-        )
-    }
+        );
+    };
 
     const isDataChannelIdComplete = () => {
         return (
-            typeof state.dataChannelId === 'object' &&
-            typeof state.dataChannelId.value === 'string' &&
+            typeof state.dataChannelId === "object" &&
+            typeof state.dataChannelId.value === "string" &&
             state.dataChannelId.value.length > 0
-        )
-    }
+        );
+    };
 
     const areChannelIdsComplete = () => {
+        if (distributionName === UBUNTU_DISTRIBUTION_ID) {
+            return isReadChannelIdComplete();
+        }
         return (
             isReadChannelIdComplete() &&
             isWriteChannelIdComplete() &&
             isDataChannelIdComplete()
-        )
-    }
+        );
+    };
 
     const isUseMultiPortComplete = () => {
-        return isUseMultiPortValid() || true
-    }
+        return isUseMultiPortValid() || true;
+    };
 
     const isPortNumberComplete = () => {
-        return isPortNumberValid() || true
-    }
+        return isPortNumberValid() || true;
+    };
 
     const isLayerComplete = () => {
-        return isLayerValid() || true
-    }
+        return isLayerValid() || true;
+    };
 
     const areOsaDeviceSettingComplete = () => {
         return (
@@ -487,114 +507,153 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             isUseMultiPortComplete() &&
             isPortNumberComplete() &&
             isLayerComplete()
-        )
-    }
+        );
+    };
 
     const isPciFunctionIdComplete = () => {
         if (!displayRoCEControls) {
-            return true
+            return true;
         }
         return (
-            typeof state.pciFunctionId === 'object' &&
-            typeof state.pciFunctionId.value === 'string' &&
+            typeof state.pciFunctionId === "object" &&
+            typeof state.pciFunctionId.value === "string" &&
             state.pciFunctionId.value.length > 0
-        )
-    }
+        );
+    };
 
     const isUserIdentifierComplete = () => {
         if (!displayRoCEControls) {
-            return true
+            return true;
         }
         return (
-            typeof state.userIdentifier === 'object' &&
-            typeof state.userIdentifier.value === 'string' &&
+            typeof state.userIdentifier === "object" &&
+            typeof state.userIdentifier.value === "string" &&
             state.userIdentifier.value.length > 0
-        )
-    }
+        );
+    };
 
     const areRoCeDeviceSettingComplete = () => {
-        return isPciFunctionIdComplete() || isUserIdentifierComplete()
-    }
+        return isPciFunctionIdComplete() || isUserIdentifierComplete();
+    };
 
     const isVlanIdComplete = () => {
         // do not validate if vlan support is not toggled
         if (!state.useVlan) {
-            return true
+            return true;
         }
 
         if (state.vlanId) {
             // for string values other than those with
             // zero length explicitely check for the length.
             return (
-                typeof state.vlanId === 'object' &&
-                (typeof state.vlanId.value === 'number' ||
-                    typeof state.vlanId.value === 'string')
-            )
+                typeof state.vlanId === "object" &&
+                (typeof state.vlanId.value === "number" ||
+                    typeof state.vlanId.value === "string")
+            );
         }
 
-        return false
-    }
+        return false;
+    };
 
     const areDeviceSettingsComplete = () => {
-        if (typeof state.selectedDeviceType === 'string') {
+        if (typeof state.selectedDeviceType === "string") {
             return state.selectedDeviceType === DEVICE_TYPE_OSA
                 ? areOsaDeviceSettingComplete()
-                : areRoCeDeviceSettingComplete()
+                : areRoCeDeviceSettingComplete();
         }
-        return false
-    }
+        return false;
+    };
 
     const isComplete = () => {
-        return areDeviceSettingsComplete() && isVlanIdComplete()
-    }
+        return areDeviceSettingsComplete() && isVlanIdComplete();
+    };
 
     const isCompleteAndValid = (callback) => {
-        let localIsComplete = false
-        let localIsValid = false
+        let localIsComplete = false;
+        let localIsValid = false;
 
         if (isComplete()) {
-            localIsComplete = true
-            localIsValid = isValid()
+            localIsComplete = true;
+            localIsValid = isValid();
         }
 
         if (localIsComplete && localIsValid) {
             return callback(null, {
                 isComplete: localIsComplete,
                 isValid: localIsValid,
-            })
+            });
         }
 
-        return callback(new Error('Form data is incomplete or invalid'), {
+        return callback(new Error("Form data is incomplete or invalid"), {
             isComplete: localIsComplete,
             isValid: localIsValid,
-        })
-    }
+        });
+    };
 
     const getPortNumber = ({ useMultiport, portNumber }) => {
         if (useMultiport && portNumber) {
-            return 1
+            return 1;
         }
 
-        return 0
-    }
+        return 0;
+    };
 
     const gridContentsMarkupRowOne = (
         <div className="network-device_column-left">
             <RadioButtonGroup
                 readOnly={paramFileHasBeenModifiedFromState}
                 className="network-device_device-type-radiobutton-group"
-                legendText={t('panel.networkDevice.deviceTypeTextLabel', {
-                    ns: 'panels',
+                legendText={t("panel.networkDevice.deviceTypeTextLabel", {
+                    ns: "panels",
                 })}
-                helperText={t('panel.networkDevice.deviceTypeHelp', {
-                    ns: 'panels',
-                })}
+                helperText={t(
+                    displayRoCEControls
+                        ? "panel.networkDevice.deviceTypeHelp"
+                        : "panel.networkDevice.deviceTypeHelpNoRoCE",
+                    {
+                        ns: "panels",
+                    }
+                )}
                 name="network-device_device-type-group"
-                defaultSelected={selectedDeviceType ?? DEVICE_TYPE_OSA}
+                valueSelected={selectedDeviceType()}
                 onChange={(selectedItem) => {
-                    if (paramFileHasBeenModifiedFromState) return
+                    if (paramFileHasBeenModifiedFromState) return;
 
-                    updateSelectedDeviceType(selectedItem)
+                    updateSelectedDeviceType(selectedItem);
+                }}
+                onFocus={() => {
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para1")
+                        ?.classList?.add(
+                            "help-panel__network-device__content__active"
+                        );
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para2")
+                        ?.classList?.add(
+                            "help-panel__network-device__content__active"
+                        );
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para3")
+                        ?.classList?.add(
+                            "help-panel__network-device__content__active"
+                        );
+                }}
+                onBlur={() => {
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para1")
+                        ?.classList?.remove(
+                            "help-panel__network-device__content__active"
+                        );
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para2")
+                        ?.classList?.remove(
+                            "help-panel__network-device__content__active"
+                        );
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para3")
+                        ?.classList?.remove(
+                            "help-panel__network-device__content__active"
+                        );
                 }}
             >
                 <RadioButton
@@ -602,43 +661,60 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     value={DEVICE_TYPE_OSA}
                     id="network-device_osa-radio"
                 />
-                <RadioButton
-                    labelText="RoCE"
-                    value={DEVICE_TYPE_ROCE}
-                    id="network-device_roce-radio"
-                />
+                {displayRoCEControls && (
+                    <RadioButton
+                        labelText="RoCE"
+                        value={DEVICE_TYPE_ROCE}
+                        id="network-device_roce-radio"
+                    />
+                )}
             </RadioButtonGroup>
         </div>
-    )
+    );
 
-    const vlanToggleId = 'network-device_vlan-id-input'
+    const vlanToggleId = "network-device_vlan-id-input";
     const gridContentsMarkupRowTwoColumnOne = (
         <div className="network-device_column-left">
             <DeviceSettings
-                deviceSettingsId={selectedDeviceType}
+                deviceSettingsId={selectedDeviceType()}
                 updateFunction={updateFunction}
                 state={state}
                 readOnly={paramFileHasBeenModifiedFromState}
                 displayRoCEControls={displayRoCEControls}
+                distributionName={distributionName}
             />
             <Toggle
                 readOnly={paramFileHasBeenModifiedFromState}
-                labelText={t('panel.networkDevice.vlanToggleTextLabel', {
-                    ns: 'panels',
+                labelText={t("panel.networkDevice.vlanToggleTextLabel", {
+                    ns: "panels",
                 })}
-                labelA={t('btnLabel.No', { ns: 'common' })}
-                labelB={t('btnLabel.Yes', { ns: 'common' })}
+                labelA={t("btnLabel.No", { ns: "common" })}
+                labelB={t("btnLabel.Yes", { ns: "common" })}
                 id="network-device_vlan-toggle"
                 className="network-device_vlan-toggle"
                 toggled={useVlanToggled}
                 onToggle={() => {
-                    if (paramFileHasBeenModifiedFromState) return
+                    if (paramFileHasBeenModifiedFromState) return;
 
                     if (useVlanToggled) {
-                        updateUseVlan(false)
+                        updateUseVlan(false);
                     } else {
-                        updateUseVlan(true)
+                        updateUseVlan(true);
                     }
+                }}
+                onFocus={() => {
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para7")
+                        ?.classList?.add(
+                            "help-panel__network-device__content__active"
+                        );
+                }}
+                onBlur={() => {
+                    document
+                        .getElementById("helpPanelContents_networkDevice_para7")
+                        ?.classList?.remove(
+                            "help-panel__network-device__content__active"
+                        );
                 }}
             />
             {useVlanToggled && (
@@ -648,48 +724,65 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     max={4094}
                     readOnly={paramFileHasBeenModifiedFromState}
                     id={vlanToggleId}
-                    invalidText={t('invalidTextLabel', { ns: 'common' })}
+                    invalidText={t("invalidTextLabel", { ns: "common" })}
                     invalid={!vlanIdIsValid}
-                    label={t('panel.networkDevice.vlanIdTextLabel', {
-                        ns: 'panels',
+                    label={t("panel.networkDevice.vlanIdTextLabel", {
+                        ns: "panels",
                     })}
-                    helperText={t('panel.networkDevice.vlanIdHelp', {
-                        ns: 'panels',
+                    helperText={t("panel.networkDevice.vlanIdHelp", {
+                        ns: "panels",
                     })}
-                    placeholder={t('panel.networkDevice.vlanIdPlaceholder', {
-                        ns: 'panels',
+                    placeholder={t("panel.networkDevice.vlanIdPlaceholder", {
+                        ns: "panels",
                     })}
                     value={vlanId}
-                    translateWithId={(id) => t(id, { ns: 'common' })}
+                    translateWithId={(id) => t(id, { ns: "common" })}
                     onChange={(event, { value, direction }) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
-                        const vlanIdValue = value
+                        const vlanIdValue = value;
                         updateVlanId({
                             value: vlanIdValue,
                             valid: true,
-                        })
+                        });
                     }}
                     onBlur={(vlanId) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         const vlanIdValue =
                             vlanId && vlanId.target && vlanId.target.value
                                 ? vlanId.target.value
-                                : ''
-                        const vlanIdIsValid = isVlanIdValid(vlanIdValue)
+                                : "";
+                        const vlanIdIsValid = isVlanIdValid(vlanIdValue);
 
                         if (!vlanIdIsValid) {
                             updateVlanId({
                                 value: vlanIdValue,
                                 valid: vlanIdIsValid,
-                            })
+                            });
                         }
+
+                        document
+                            .getElementById(
+                                "helpPanelContents_networkDevice_para7"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__network-device__content__active"
+                            );
+                    }}
+                    onFocus={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_networkDevice_para7"
+                            )
+                            ?.classList?.add(
+                                "help-panel__network-device__content__active"
+                            );
                     }}
                 />
             )}
         </div>
-    )
+    );
 
     const gridContentsMarkupRowTwoColumnTwo = (
         <div className="network-device_column-right">
@@ -698,185 +791,260 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                 <>
                     <TextInput
                         readOnly={paramFileHasBeenModifiedFromState}
-                        helperText={t('panel.networkDevice.readChannelHelp', {
-                            ns: 'panels',
+                        helperText={t("panel.networkDevice.readChannelHelp", {
+                            ns: "panels",
                         })}
                         id="network-device_read-channel-input"
                         key="network-device_read-channel-input"
-                        invalidText={t('invalidTextLabel', { ns: 'common' })}
+                        invalidText={t("invalidTextLabel", { ns: "common" })}
                         invalid={!readChannelIdIsValid}
                         maxLength={16}
                         labelText={t(
-                            'panel.networkDevice.readChannelTextLabel',
+                            "panel.networkDevice.readChannelTextLabel",
                             {
-                                ns: 'panels',
+                                ns: "panels",
                             }
                         )}
                         placeholder={t(
-                            'panel.networkDevice.readChannelPlaceholder',
+                            "panel.networkDevice.readChannelPlaceholder",
                             {
-                                ns: 'panels',
+                                ns: "panels",
                             }
                         )}
                         value={readChannelId}
                         onChange={(readChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                            if (paramFileHasBeenModifiedFromState) return;
 
                             const readChannelIdValue =
-                                readChannelId?.target?.value ?? ''
+                                readChannelId?.target?.value ?? "";
                             const computedReadChannelIdValue =
                                 toChannelSegments(
                                     readChannelIdValue.toLowerCase()
-                                ).join('.')
+                                ).join(".");
                             updateReadChannelId({
                                 value: readChannelIdValue,
                                 computed: computedReadChannelIdValue,
                                 valid: true,
-                            })
+                            });
                         }}
                         onBlur={(readChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                            if (paramFileHasBeenModifiedFromState) return;
 
                             const readChannelIdValue =
-                                readChannelId?.target?.value ?? ''
+                                readChannelId?.target?.value ?? "";
                             const computedReadChannelIdValue =
                                 toChannelSegments(
                                     readChannelIdValue.toLowerCase()
-                                ).join('.')
+                                ).join(".");
                             const readChannelIdIsValid =
-                                isReadChannelIdValid(readChannelIdValue)
+                                isReadChannelIdValid(readChannelIdValue);
 
                             if (!readChannelIdIsValid) {
                                 updateReadChannelId({
                                     value: readChannelIdValue,
                                     computed: computedReadChannelIdValue,
                                     valid: readChannelIdIsValid,
-                                })
+                                });
                             }
+
+                            document
+                                .getElementById(
+                                    "helpPanelContents_networkDevice_para4"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__network-device__content__active"
+                                );
+                        }}
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_networkDevice_para4"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__network-device__content__active"
+                                );
                         }}
                     />
-                    <TextInput
-                        readOnly={paramFileHasBeenModifiedFromState}
-                        helperText={t('panel.networkDevice.writeChannelHelp', {
-                            ns: 'panels',
-                        })}
-                        id="network-device_write-channel-input"
-                        key="network-device_write-channel-input"
-                        invalidText={t('invalidTextLabel', { ns: 'common' })}
-                        invalid={!writeChannelIdIsValid}
-                        maxLength={16}
-                        labelText={t(
-                            'panel.networkDevice.writeChannelTextLabel',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        placeholder={t(
-                            'panel.networkDevice.writeChannelPlaceholder',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        value={writeChannelId}
-                        onChange={(writeChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                    {displayNoneUbuntuControl && (
+                        <>
+                            <TextInput
+                                readOnly={paramFileHasBeenModifiedFromState}
+                                helperText={t(
+                                    "panel.networkDevice.writeChannelHelp",
+                                    {
+                                        ns: "panels",
+                                    }
+                                )}
+                                id="network-device_write-channel-input"
+                                key="network-device_write-channel-input"
+                                invalidText={t("invalidTextLabel", {
+                                    ns: "common",
+                                })}
+                                invalid={!writeChannelIdIsValid}
+                                maxLength={16}
+                                labelText={t(
+                                    "panel.networkDevice.writeChannelTextLabel",
+                                    {
+                                        ns: "panels",
+                                    }
+                                )}
+                                placeholder={t(
+                                    "panel.networkDevice.writeChannelPlaceholder",
+                                    {
+                                        ns: "panels",
+                                    }
+                                )}
+                                value={writeChannelId}
+                                onChange={(writeChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return;
 
-                            const writeChannelIdValue =
-                                writeChannelId?.target?.value ?? ''
-                            const computedWriteChannelIdValue =
-                                toChannelSegments(
-                                    writeChannelIdValue.toLowerCase()
-                                ).join('.')
-                            updateWriteChannelId({
-                                value: writeChannelIdValue,
-                                computed: computedWriteChannelIdValue,
-                                valid: true,
-                            })
-                        }}
-                        onBlur={(writeChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                                    const writeChannelIdValue =
+                                        writeChannelId?.target?.value ?? "";
+                                    const computedWriteChannelIdValue =
+                                        toChannelSegments(
+                                            writeChannelIdValue.toLowerCase()
+                                        ).join(".");
+                                    updateWriteChannelId({
+                                        value: writeChannelIdValue,
+                                        computed: computedWriteChannelIdValue,
+                                        valid: true,
+                                    });
+                                }}
+                                onBlur={(writeChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return;
 
-                            const writeChannelIdValue =
-                                writeChannelId?.target?.value ?? ''
-                            const computedWriteChannelIdValue =
-                                toChannelSegments(
-                                    writeChannelIdValue.toLowerCase()
-                                ).join('.')
-                            const writeChannelIdIsValid =
-                                isWriteChannelIdValid(writeChannelIdValue)
+                                    const writeChannelIdValue =
+                                        writeChannelId?.target?.value ?? "";
+                                    const computedWriteChannelIdValue =
+                                        toChannelSegments(
+                                            writeChannelIdValue.toLowerCase()
+                                        ).join(".");
+                                    const writeChannelIdIsValid =
+                                        isWriteChannelIdValid(
+                                            writeChannelIdValue
+                                        );
 
-                            if (!writeChannelIdIsValid) {
-                                updateWriteChannelId({
-                                    value: writeChannelIdValue,
-                                    computed: computedWriteChannelIdValue,
-                                    valid: writeChannelIdIsValid,
-                                })
-                            }
-                        }}
-                    />
-                    <TextInput
-                        readOnly={paramFileHasBeenModifiedFromState}
-                        helperText={t('panel.networkDevice.dataChannelHelp', {
-                            ns: 'panels',
-                        })}
-                        id="network-device_data-channel-input"
-                        key="network-device_data-channel-input"
-                        invalidText={t('invalidTextLabel', { ns: 'common' })}
-                        invalid={!dataChannelIdIsValid}
-                        maxLength={16}
-                        labelText={t(
-                            'panel.networkDevice.dataChannelTextLabel',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        placeholder={t(
-                            'panel.networkDevice.dataChannelPlaceholder',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
-                        value={dataChannelId}
-                        onChange={(dataChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                                    if (!writeChannelIdIsValid) {
+                                        updateWriteChannelId({
+                                            value: writeChannelIdValue,
+                                            computed:
+                                                computedWriteChannelIdValue,
+                                            valid: writeChannelIdIsValid,
+                                        });
+                                    }
 
-                            const dataChannelIdValue =
-                                dataChannelId?.target?.value ?? ''
-                            const computedDataChannelIdValue =
-                                toChannelSegments(
-                                    dataChannelIdValue.toLowerCase()
-                                ).join('.')
-                            updateDataChannelId({
-                                value: dataChannelIdValue,
-                                computed: computedDataChannelIdValue,
-                                valid: true,
-                            })
-                        }}
-                        onBlur={(dataChannelId) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                                    document
+                                        .getElementById(
+                                            "helpPanelContents_networkDevice_para4"
+                                        )
+                                        ?.classList?.remove(
+                                            "help-panel__network-device__content__active"
+                                        );
+                                }}
+                                onFocus={() => {
+                                    document
+                                        .getElementById(
+                                            "helpPanelContents_networkDevice_para4"
+                                        )
+                                        ?.classList?.add(
+                                            "help-panel__network-device__content__active"
+                                        );
+                                }}
+                            />
+                            <TextInput
+                                readOnly={paramFileHasBeenModifiedFromState}
+                                helperText={t(
+                                    "panel.networkDevice.dataChannelHelp",
+                                    {
+                                        ns: "panels",
+                                    }
+                                )}
+                                id="network-device_data-channel-input"
+                                key="network-device_data-channel-input"
+                                invalidText={t("invalidTextLabel", {
+                                    ns: "common",
+                                })}
+                                invalid={!dataChannelIdIsValid}
+                                maxLength={16}
+                                labelText={t(
+                                    "panel.networkDevice.dataChannelTextLabel",
+                                    {
+                                        ns: "panels",
+                                    }
+                                )}
+                                placeholder={t(
+                                    "panel.networkDevice.dataChannelPlaceholder",
+                                    {
+                                        ns: "panels",
+                                    }
+                                )}
+                                value={dataChannelId}
+                                onChange={(dataChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return;
 
-                            const dataChannelIdValue =
-                                dataChannelId?.target?.value ?? ''
-                            const computedDataChannelIdValue =
-                                toChannelSegments(
-                                    dataChannelIdValue.toLowerCase()
-                                ).join('.')
-                            const dataChannelIdIsValid =
-                                isDataChannelIdValid(dataChannelIdValue)
+                                    const dataChannelIdValue =
+                                        dataChannelId?.target?.value ?? "";
+                                    const computedDataChannelIdValue =
+                                        toChannelSegments(
+                                            dataChannelIdValue.toLowerCase()
+                                        ).join(".");
+                                    updateDataChannelId({
+                                        value: dataChannelIdValue,
+                                        computed: computedDataChannelIdValue,
+                                        valid: true,
+                                    });
+                                }}
+                                onBlur={(dataChannelId) => {
+                                    if (paramFileHasBeenModifiedFromState)
+                                        return;
 
-                            if (!dataChannelIdIsValid) {
-                                updateDataChannelId({
-                                    value: dataChannelIdValue,
-                                    computed: computedDataChannelIdValue,
-                                    valid: dataChannelIdIsValid,
-                                })
-                            }
-                        }}
-                    />
+                                    const dataChannelIdValue =
+                                        dataChannelId?.target?.value ?? "";
+                                    const computedDataChannelIdValue =
+                                        toChannelSegments(
+                                            dataChannelIdValue.toLowerCase()
+                                        ).join(".");
+                                    const dataChannelIdIsValid =
+                                        isDataChannelIdValid(
+                                            dataChannelIdValue
+                                        );
+
+                                    if (!dataChannelIdIsValid) {
+                                        updateDataChannelId({
+                                            value: dataChannelIdValue,
+                                            computed:
+                                                computedDataChannelIdValue,
+                                            valid: dataChannelIdIsValid,
+                                        });
+                                    }
+
+                                    document
+                                        .getElementById(
+                                            "helpPanelContents_networkDevice_para4"
+                                        )
+                                        ?.classList?.remove(
+                                            "help-panel__network-device__content__active"
+                                        );
+                                }}
+                                onFocus={() => {
+                                    document
+                                        .getElementById(
+                                            "helpPanelContents_networkDevice_para4"
+                                        )
+                                        ?.classList?.add(
+                                            "help-panel__network-device__content__active"
+                                        );
+                                }}
+                            />
+                        </>
+                    )}
                 </>
             ) : null}
         </div>
-    )
+    );
 
     const parmfileHasBeenModifiedNotificationMarkup = (
         <ActionableNotification
@@ -884,7 +1052,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
             inline
             lowContrast
             className="network-device_parmfile-purge-banner"
-            actionButtonLabel={t('btnLabel.Reset', { ns: 'common' })}
+            actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
             aria-label="closes notification"
             kind="info"
             onActionButtonClick={() => {
@@ -893,32 +1061,32 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                     globalUpdateModified,
                     updateModified,
                     state: globalState,
-                })
+                });
             }}
             onClose={function noRefCheck() {}}
             onCloseButtonClick={function noRefCheck() {}}
             statusIconDescription="notification"
-            subtitle={t('panel.parmFileHasBeenModifiedNotificationSubtitle', {
-                ns: 'common',
+            subtitle={t("panel.parmFileHasBeenModifiedNotificationSubtitle", {
+                ns: "common",
             })}
-            title={t('modalHeading.discardParamFileModificationsPrompt')}
+            title={t("modalHeading.discardParamFileModificationsPrompt")}
         />
-    )
+    );
 
     const roceHelperMarkup = (
         <InlineNotification
             hideCloseButton
             statusIconDescription="notification"
-            subtitle={t('panel.networkDevice.roceHelperNotificationSubtitle', {
-                ns: 'panels',
+            subtitle={t("panel.networkDevice.roceHelperNotificationSubtitle", {
+                ns: "panels",
             })}
-            title={t('panel.networkDevice.roceHelperNotificationTitle', {
-                ns: 'panels',
+            title={t("panel.networkDevice.roceHelperNotificationTitle", {
+                ns: "panels",
             })}
             kind="info"
             className="network-device_roce-helper-banner"
         />
-    )
+    );
 
     return (
         <Layer className="network-device__layer">
@@ -939,7 +1107,7 @@ const NetworkDevice = forwardRef(function NetworkDevice(props, ref) {
                 </Row>
             </FlexGrid>
         </Layer>
-    )
-})
+    );
+});
 
-export default NetworkDevice
+export default NetworkDevice;

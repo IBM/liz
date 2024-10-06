@@ -4,9 +4,9 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
-import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types'
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 import {
     InlineNotification,
     Layer,
@@ -17,30 +17,36 @@ import {
     Row,
     Column,
     ActionableNotification,
-} from '@carbon/react'
-import isUrl from 'is-url-superb'
-import { toUrl, isHostnameValid } from '../../../util/network-address-util'
+} from "@carbon/react";
+import isUrl from "is-url-superb";
+import { toUrl, isHostnameValid } from "../../../util/network-address-util";
 import {
     LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
     STATE_ORIGIN_USER,
     STATE_ORIGIN_STORAGE,
-} from '../../../util/local-storage-constants'
+} from "../../../util/local-storage-constants";
 import {
     ADDRESS_TYPE_IPV4,
     SLES_DISTRIBUTION_ID,
+    RHEL_DISTRIBUTION_ID,
+    UBUNTU_DISTRIBUTION_ID,
     DEFAULT_DISTRIBUTION_ID,
-} from '../../../util/constants'
+} from "../../../util/constants";
 import {
     ApplicationContext,
     InstallationParameterContext,
     DownloadParamFileContext,
-} from '../../../contexts'
-import { updateIsDisabled as updateIsDisabledFromUtils } from '../../../util/panel-util'
-import { resetParamFileTextAreaData } from '../../../uiUtil/panel-util'
-import { encryptItem } from '../../../util/local-storage-util'
-import './_installation-parameters.scss'
+} from "../../../contexts";
+import { updateIsDisabled as updateIsDisabledFromUtils } from "../../../util/panel-util";
+import { resetParamFileTextAreaData } from "../../../uiUtil/panel-util";
+import { encryptItem } from "../../../util/local-storage-util";
+import {
+    hexEncodePassword,
+    toAsteriskRepresentation,
+} from "../../../util/password-util";
+import "./_installation-parameters.scss";
 
-const SUPPORTED_PROTOCOLS = ['http', 'https', 'ftp']
+const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
 
 const InstallationParameters = forwardRef(
     function InstallationParameters(props, ref) {
@@ -50,11 +56,11 @@ const InstallationParameters = forwardRef(
             updateNextStep,
             updateIsDirty,
             updateIsDisabled,
-        } = React.useContext(ApplicationContext)
+        } = React.useContext(ApplicationContext);
         const { updateModified, updateParamFileContent } = React.useContext(
             DownloadParamFileContext
-        )
-        const { t } = useTranslation()
+        );
+        const { t } = useTranslation();
         const {
             state,
             updateUseSsh,
@@ -64,11 +70,11 @@ const InstallationParameters = forwardRef(
             updatePassword,
             updateVncPassword,
             updateSshPassword,
-        } = React.useContext(InstallationParameterContext)
-        const { ipAddressVersion } = props
+        } = React.useContext(InstallationParameterContext);
+        const { ipAddressVersion } = props;
         const publicRef = {
             persistState: () => {
-                let mergedSteps = {}
+                let mergedSteps = {};
 
                 isCompleteAndValid((error, isCompleteAndValid) => {
                     if (!error) {
@@ -80,6 +86,9 @@ const InstallationParameters = forwardRef(
                                     ...globalState.steps.installationParameters,
                                     networkInstallationUrl:
                                         state.installationAddress.computed,
+                                    networkInstallationUrlWithPasswordsRemoved:
+                                        state.installationAddress
+                                            .computedWithPasswordsRemoved,
                                     vnc: {
                                         password: state.vncPassword,
                                         enabled: state?.useVnc ?? true,
@@ -93,7 +102,7 @@ const InstallationParameters = forwardRef(
                                     origin: STATE_ORIGIN_USER,
                                 },
                             },
-                        }
+                        };
                     } else if (isCompleteAndValid.isComplete) {
                         mergedSteps = {
                             ...globalState,
@@ -103,6 +112,9 @@ const InstallationParameters = forwardRef(
                                     ...globalState.steps.installationParameters,
                                     networkInstallationUrl:
                                         state.installationAddress.computed,
+                                    networkInstallationUrlWithPasswordsRemoved:
+                                        state.installationAddress
+                                            .computedWithPasswordsRemoved,
                                     vnc: {
                                         password: state.vncPassword,
                                         enabled: state?.useVnc ?? true,
@@ -116,7 +128,7 @@ const InstallationParameters = forwardRef(
                                     origin: STATE_ORIGIN_USER,
                                 },
                             },
-                        }
+                        };
                     } else {
                         mergedSteps = {
                             ...globalState,
@@ -126,14 +138,18 @@ const InstallationParameters = forwardRef(
                                     ...globalState.steps.installationParameters,
                                     networkInstallationUrl:
                                         state.installationAddress?.computed ??
-                                        '',
+                                        "",
+                                    networkInstallationUrlWithPasswordsRemoved:
+                                        state?.installationAddress
+                                            ?.computedWithPasswordsRemoved ??
+                                        "",
                                     vnc: {
-                                        password: state?.vncPassword ?? '',
+                                        password: state?.vncPassword ?? "",
                                         enabled: state?.useVnc ?? true,
                                     },
                                     ssh: {
                                         password: state.sshPassword,
-                                        enabled: state?.useSsh ?? '',
+                                        enabled: state?.useSsh ?? "",
                                     },
                                     disabled: false,
                                     complete: isCompleteAndValid.isComplete,
@@ -141,15 +157,15 @@ const InstallationParameters = forwardRef(
                                     origin: STATE_ORIGIN_USER,
                                 },
                             },
-                        }
+                        };
                     }
 
-                    updateNextStep(mergedSteps.steps)
-                    updateIsDirty(true)
+                    updateNextStep(mergedSteps.steps);
+                    updateIsDirty(true);
                     updateIsDisabled(
                         updateIsDisabledFromUtils(mergedSteps.steps)
-                    )
-                })
+                    );
+                });
 
                 encryptItem(
                     LOCAL_STORAGE_KEY_APP_INSTALLATION_PARAMETERS,
@@ -157,75 +173,86 @@ const InstallationParameters = forwardRef(
                         ...state,
                         origin: STATE_ORIGIN_STORAGE,
                     })
-                )
+                );
             },
-        }
+        };
 
-        useEffect(publicRef.persistState, [state])
-        useImperativeHandle(ref, () => publicRef)
+        useEffect(publicRef.persistState, [state]);
+        useImperativeHandle(ref, () => publicRef);
 
         const isUserNameInputValid = (userName) => {
             // The username is optional, if it is a zero length string
             // mark it as a valid value.
-            if (typeof userName === 'string' && userName.length >= 0) {
-                return true
+            if (typeof userName === "string" && userName.length >= 0) {
+                return true;
             }
-            return false
-        }
+            return false;
+        };
 
         const isPasswordInputValid = (password) => {
             // The password is optional, if it is a zero length string
             // mark it as a valid value.
-            if (typeof password === 'string' && password.length === 0) {
-                return true
+            if (
+                distributionName !== UBUNTU_DISTRIBUTION_ID &&
+                typeof password === "string" &&
+                password.length === 0
+            ) {
+                return true;
+            } else if (
+                distributionName === UBUNTU_DISTRIBUTION_ID &&
+                typeof password === "string" &&
+                password.length === 0
+            ) {
+                return false;
             }
-            return password.indexOf(' ') === -1
-        }
+
+            return password.indexOf(" ") === -1;
+        };
 
         const urlUsesSupportedProtocols = (url) => {
-            if (url && typeof url === 'string') {
-                const urlParts = url.split('://')
+            if (url && typeof url === "string") {
+                const urlParts = url.split("://");
                 if (SUPPORTED_PROTOCOLS.indexOf(urlParts[0]) >= 0) {
-                    return true
+                    return true;
                 }
             }
-            return false
-        }
+            return false;
+        };
 
         const getHostNameFromUrl = (url) => {
             if (url && url.length > 0) {
                 const hostUrlWithoutProtocol = url.substring(
-                    url.indexOf('://') + 3,
+                    url.indexOf("://") + 3,
                     url.length
-                )
+                );
                 const hostName =
-                    hostUrlWithoutProtocol.indexOf('/') >= 0
+                    hostUrlWithoutProtocol.indexOf("/") >= 0
                         ? hostUrlWithoutProtocol.substring(
                               0,
-                              hostUrlWithoutProtocol.indexOf('/')
+                              hostUrlWithoutProtocol.indexOf("/")
                           )
-                        : hostUrlWithoutProtocol
-                return hostName
+                        : hostUrlWithoutProtocol;
+                return hostName;
             }
-            return undefined
-        }
+            return undefined;
+        };
 
         const isInstallationAddressInputValid = (url) => {
-            const hostNameFromUrl = url ? getHostNameFromUrl(url) : ''
-            const urlObject = toUrl(url)
-            const hostname = urlObject ? urlObject.hostname : ''
-            const href = urlObject ? urlObject.href : ''
+            const hostNameFromUrl = url ? getHostNameFromUrl(url) : "";
+            const urlObject = toUrl(url);
+            const hostname = urlObject ? urlObject.hostname : "";
+            const href = urlObject ? urlObject.href : "";
 
             if (
                 urlObject &&
                 urlObject.isIP &&
                 urlObject.ipVersion === ADDRESS_TYPE_IPV4 &&
-                typeof hostNameFromUrl === 'string' &&
-                hostNameFromUrl.split('.').length !== 4
+                typeof hostNameFromUrl === "string" &&
+                hostNameFromUrl.split(".").length !== 4
             ) {
-                return false
+                return false;
             } else if (urlObject && urlObject.isIP && hostname && href) {
-                return urlUsesSupportedProtocols(url)
+                return urlUsesSupportedProtocols(url);
             } else if (
                 urlObject &&
                 hostname &&
@@ -233,50 +260,77 @@ const InstallationParameters = forwardRef(
                 isHostnameValid(urlObject.host) &&
                 isUrl(urlObject.href)
             ) {
-                return urlUsesSupportedProtocols(url)
+                return urlUsesSupportedProtocols(url);
             }
 
-            return false
-        }
+            return false;
+        };
 
-        const hexEncodePassword = (password) => {
-            if (
-                password &&
-                typeof password === 'string' &&
-                password.length > 0
-            ) {
-                return (
-                    '%' +
-                    password
-                        .split('')
-                        .map((c) =>
-                            c.charCodeAt(0).toString(16).padStart(2, '0')
-                        )
-                        .join('%')
-                )
-            }
-            return ''
-        }
-
-        const computeInstallationAddress = ({
-            url = '',
-            uid = '',
-            pwd = '',
+        const computeInstallationAddresWithPasswordsRemoved = ({
+            url = "",
+            uid = "",
+            pwd = "",
             clearUid = false,
             clearPwd = false,
         }) => {
-            const address = url || (state?.installationAddress?.value ?? '')
+            const address = url || (state?.installationAddress?.value ?? "");
             const userName = clearUid
-                ? ''
-                : uid || (state?.userName?.value ?? '')
+                ? ""
+                : uid || (state?.userName?.value ?? "");
             const password = clearPwd
-                ? ''
-                : pwd || (state?.password?.value ?? '')
+                ? ""
+                : pwd || (state?.password?.value ?? "");
 
             if (address && address.length > 0) {
-                const installationAddressUrl = toUrl(address)
+                const installationAddressUrl = toUrl(address);
                 if (installationAddressUrl && userName && userName.length > 0) {
-                    installationAddressUrl.username = userName
+                    installationAddressUrl.username = userName;
+                }
+                if (
+                    installationAddressUrl &&
+                    installationAddressUrl.password &&
+                    installationAddressUrl.password.length > 0
+                ) {
+                    installationAddressUrl.password = toAsteriskRepresentation(
+                        hexEncodePassword(installationAddressUrl.password)
+                    );
+                }
+                if (
+                    installationAddressUrl &&
+                    !installationAddressUrl.password &&
+                    password &&
+                    password.length > 0
+                ) {
+                    installationAddressUrl.password = toAsteriskRepresentation(
+                        hexEncodePassword(password)
+                    );
+                }
+                return installationAddressUrl
+                    ? installationAddressUrl.toString()
+                    : "";
+            }
+            return "";
+        };
+
+        const computeInstallationAddress = ({
+            url = "",
+            uid = "",
+            pwd = "",
+            clearUid = false,
+            clearPwd = false,
+        }) => {
+            const address = url || (state?.installationAddress?.value ?? "");
+            const userName = clearUid
+                ? ""
+                : uid || (state?.userName?.value ?? "");
+            const password = clearPwd
+                ? ""
+                : pwd || (state?.password?.value ?? "");
+
+            if (address && address.length > 0) {
+                const installationAddressUrl = toUrl(address);
+                if (installationAddressUrl && userName && userName.length > 0) {
+                    installationAddressUrl.username = userName;
                 }
                 if (
                     installationAddressUrl &&
@@ -285,7 +339,7 @@ const InstallationParameters = forwardRef(
                 ) {
                     installationAddressUrl.password = hexEncodePassword(
                         installationAddressUrl.password
-                    )
+                    );
                 }
                 if (
                     installationAddressUrl &&
@@ -294,56 +348,71 @@ const InstallationParameters = forwardRef(
                     password.length > 0
                 ) {
                     installationAddressUrl.password =
-                        hexEncodePassword(password)
+                        hexEncodePassword(password);
                 }
                 return installationAddressUrl
                     ? installationAddressUrl.toString()
-                    : ''
+                    : "";
             }
-            return ''
-        }
+            return "";
+        };
 
-        const useSshToggled = state?.useSsh ?? false
-        const useVncToggled = state?.useVnc ?? true
+        const isSshPasswordComplete = () => {
+            const password = state?.sshPassword?.value ?? "";
+
+            if (distributionName !== UBUNTU_DISTRIBUTION_ID) {
+                return true;
+            }
+            return typeof password === "string" && password.length > 0;
+        };
+
+        const useSshToggled = state?.useSsh ?? false;
+        const useVncToggled = state?.useVnc ?? true;
+        const showPasswords = globalState?.showPasswords ?? false;
         const paramFileHasBeenModifiedFromState =
-            globalState?.steps.downloadParamFile?.modified ?? false
+            globalState?.steps.downloadParamFile?.modified ?? false;
         const distributionName =
             globalState?.steps?.inputFileSelection?.distributionName ??
-            DEFAULT_DISTRIBUTION_ID
+            DEFAULT_DISTRIBUTION_ID;
         const requiresSshPassword =
-            distributionName && distributionName === SLES_DISTRIBUTION_ID
+            (distributionName && distributionName === SLES_DISTRIBUTION_ID) ||
+            (distributionName && distributionName === UBUNTU_DISTRIBUTION_ID);
+        const requiresVncSupport =
+            (distributionName && distributionName === SLES_DISTRIBUTION_ID) ||
+            (distributionName && distributionName === RHEL_DISTRIBUTION_ID);
 
         const isCompleteAndValid = (callback) => {
-            let isComplete = false
-            let isValid = false
+            let isComplete = false;
+            let isValid = false;
 
             if (
-                typeof state.installationAddress === 'object' &&
-                typeof state.installationAddress.value === 'string' &&
-                state.installationAddress.value.length > 0
+                typeof state.installationAddress === "object" &&
+                typeof state.installationAddress.value === "string" &&
+                state.installationAddress.value.length > 0 &&
+                isSshPasswordComplete()
             ) {
-                isComplete = true
+                isComplete = true;
                 isValid =
                     isInstallationAddressInputValid(
                         state.installationAddress.value
                     ) &&
                     state.password.valid &&
                     state.vncPassword.valid &&
-                    state.sshPassword.valid
+                    state.sshPassword.valid;
             }
 
             if (isComplete && isValid) {
-                return callback(null, { isComplete, isValid })
+                return callback(null, { isComplete, isValid });
             }
 
-            return callback(new Error('Form data is incomplete or invalid'), {
+            return callback(new Error("Form data is incomplete or invalid"), {
                 isComplete,
                 isValid,
-            })
-        }
+            });
+        };
 
         const ipAddressVersionMissmatchExists = () => {
-            const urlObject = toUrl(state.installationAddress?.value ?? '')
+            const urlObject = toUrl(state.installationAddress?.value ?? "");
 
             if (
                 urlObject &&
@@ -351,32 +420,32 @@ const InstallationParameters = forwardRef(
                 urlObject.ipVersion &&
                 urlObject.ipVersion !== ipAddressVersion
             ) {
-                return true
+                return true;
             }
 
-            return false
-        }
+            return false;
+        };
 
         const ipVersionMissmatchNotification = (
             <InlineNotification
                 hideCloseButton
                 statusIconDescription="notification"
                 subtitle={t(
-                    'panel.installationParameter.missingRemoteAccessNotificationSubtitle',
+                    "panel.installationParameter.missingRemoteAccessNotificationSubtitle",
                     {
-                        ns: 'panels',
+                        ns: "panels",
                     }
                 )}
                 title={t(
-                    'panel.installationParameter.missingRemoteAccessNotificationTitle',
+                    "panel.installationParameter.missingRemoteAccessNotificationTitle",
                     {
-                        ns: 'panels',
+                        ns: "panels",
                     }
                 )}
                 kind="info"
                 className="installation-address_ip-version-missmatch-banner"
             />
-        )
+        );
 
         const gridContentsMarkupRowOne = (
             <>
@@ -390,322 +459,475 @@ const InstallationParameters = forwardRef(
                             ? !state.installationAddress.valid
                             : false
                     }
-                    invalidText={t('invalidTextLabel', { ns: 'common' })}
+                    invalidText={t("invalidTextLabel", { ns: "common" })}
                     maxLength={256}
                     labelText={t(
-                        'panel.installationParameter.installationAddressTextLabel',
+                        "panel.installationParameter.installationAddressTextLabel",
                         {
-                            ns: 'panels',
+                            ns: "panels",
                         }
                     )}
                     helperText={t(
-                        'panel.installationParameter.installationAddressHelp',
+                        "panel.installationParameter.installationAddressHelp",
                         {
-                            ns: 'panels',
+                            ns: "panels",
                         }
                     )}
                     placeholder={t(
-                        'panel.installationParameter.installationAddressPlaceholder',
-                        { ns: 'panels' }
+                        "panel.installationParameter.installationAddressPlaceholder",
+                        { ns: "panels" }
                     )}
                     className="installation-parameters_installation-address-input"
                     value={
                         state.installationAddress
                             ? state.installationAddress.value
-                            : ''
+                            : ""
                     }
                     onChange={(url) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         const urlValue =
-                            url && url.target ? url.target.value : ''
+                            url && url.target ? url.target.value : "";
                         const computedUrlValue = computeInstallationAddress({
                             url: urlValue,
-                        })
+                        });
+                        const computedWithPasswordsRemovedUrlValue =
+                            computeInstallationAddresWithPasswordsRemoved({
+                                url: urlValue,
+                            });
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
                         updateInstallationAddress({
                             address: urlValue,
                             computedAddress: computedUrlValue,
+                            computedWithPasswordsRemovedAddress:
+                                computedWithPasswordsRemovedUrlValue,
                             valid: true,
-                        })
+                        });
                     }}
                     onBlur={(url) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         const urlValue =
-                            url && url.target ? url.target.value : ''
+                            url && url.target ? url.target.value : "";
                         const computedUrlValue = computeInstallationAddress({
                             url: urlValue,
-                        })
+                        });
+                        const computedWithPasswordsRemovedUrlValue =
+                            computeInstallationAddresWithPasswordsRemoved({
+                                url: urlValue,
+                            });
                         const urlValueIsValid =
-                            isInstallationAddressInputValid(urlValue)
+                            isInstallationAddressInputValid(urlValue);
 
                         if (!urlValueIsValid) {
                             updateInstallationAddress({
                                 address: urlValue,
                                 computedAddress: computedUrlValue,
+                                computedWithPasswordsRemovedAddress:
+                                    computedWithPasswordsRemovedUrlValue,
                                 valid: urlValueIsValid,
-                            })
+                            });
                         }
+
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para1"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para2"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                    }}
+                    onFocus={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para1"
+                            )
+                            ?.classList?.add(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para2"
+                            )
+                            ?.classList?.add(
+                                "help-panel__installation-parameters__content__active"
+                            );
                     }}
                 />
                 {ipAddressVersionMissmatchExists() &&
                     ipVersionMissmatchNotification}
             </>
-        )
-
-        const gridContentsMarkupComputedRow = (
-            <>
-                <TextInput
-                    readOnly
-                    helperText={t(
-                        'panel.installationParameter.computedInstallationAddressHelp',
-                        {
-                            ns: 'panels',
-                        }
-                    )}
-                    id="computed-installation-address-input"
-                    key="computed-installation-address-input"
-                    labelText={t(
-                        'panel.installationParameter.computedInstallationAddressTextLabel',
-                        { ns: 'panels' }
-                    )}
-                    placeholder={t(
-                        'panel.installationParameter.computedInstallationAddressPlaceholder',
-                        { ns: 'panels' }
-                    )}
-                    className="installation-parameters_installation-address-input"
-                    value={
-                        state.installationAddress
-                            ? state.installationAddress.computed
-                            : ''
-                    }
-                />
-            </>
-        )
+        );
 
         const gridContentsMarkupRowTwoColumnOne = (
             <div className="installation-parameters_column-left">
                 <TextInput
                     readOnly={paramFileHasBeenModifiedFromState}
                     disabled={state?.userAndPwdAreDisabled ?? true}
-                    helperText={t('panel.installationParameter.usernameHelp', {
-                        ns: 'panels',
+                    helperText={t("panel.installationParameter.usernameHelp", {
+                        ns: "panels",
                     })}
                     id="username-input"
                     key="username-input"
                     invalid={
                         state && state.userName ? !state.userName.valid : false
                     }
-                    invalidText={t('invalidTextLabel', { ns: 'common' })}
+                    invalidText={t("invalidTextLabel", { ns: "common" })}
                     maxLength={64}
                     labelText={t(
-                        'panel.installationParameter.usernameTextLabel',
+                        "panel.installationParameter.usernameTextLabel",
                         {
-                            ns: 'panels',
+                            ns: "panels",
                         }
                     )}
                     placeholder={t(
-                        'panel.installationParameter.usernamePlaceholder',
+                        "panel.installationParameter.usernamePlaceholder",
                         {
-                            ns: 'panels',
+                            ns: "panels",
                         }
                     )}
                     className="installation-parameters_username-input"
-                    value={state.userName ? state.userName.value : ''}
+                    value={state.userName ? state.userName.value : ""}
                     onChange={(userName) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         const userNameValue =
                             userName && userName.target
                                 ? userName.target.value
-                                : ''
+                                : "";
                         const computedUrlValue = state.installationAddress
                             ? computeInstallationAddress({
                                   url: state.installationAddress.value,
                                   uid: userNameValue,
                                   clearUid: userNameValue.length === 0,
                               })
-                            : ''
+                            : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: userNameValue,
+                                          clearUid: userNameValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
                         updateUserName({
                             userName: userNameValue,
                             valid: true,
-                        })
+                        });
                         updateInstallationAddress({
-                            address: state?.installationAddress?.value ?? '',
+                            address: state?.installationAddress?.value ?? "",
                             computedAddress: computedUrlValue,
+                            computedWithPasswordsRemovedAddress:
+                                computedWithPasswordsRemovedUrlValue,
                             valid: true,
-                        })
+                        });
                     }}
                     onBlur={(userName) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         const userNameValue =
                             userName && userName.target
                                 ? userName.target.value
-                                : ''
+                                : "";
                         const computedUrlValue = state.installationAddress
                             ? computeInstallationAddress({
                                   url: state.installationAddress.value,
                                   uid: userNameValue,
                                   clearUid: userNameValue.length === 0,
                               })
-                            : ''
+                            : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: userNameValue,
+                                          clearUid: userNameValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         const userNameValueIsValid =
-                            isUserNameInputValid(userNameValue)
+                            isUserNameInputValid(userNameValue);
 
                         if (!userNameValueIsValid) {
                             updateUserName({
                                 userName: userNameValue,
                                 valid: userNameValueIsValid,
-                            })
+                            });
                             updateInstallationAddress({
                                 address:
-                                    state?.installationAddress?.value ?? '',
+                                    state?.installationAddress?.value ?? "",
                                 computedAddress: computedUrlValue,
+                                computedWithPasswordsRemovedAddress:
+                                    computedWithPasswordsRemovedUrlValue,
                                 valid: true,
-                            })
+                            });
                         }
+
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para1"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para2"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                    }}
+                    onFocus={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para1"
+                            )
+                            ?.classList?.add(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para2"
+                            )
+                            ?.classList?.add(
+                                "help-panel__installation-parameters__content__active"
+                            );
                     }}
                 />
             </div>
-        )
+        );
 
         const gridContentsMarkupRowTwoColumnTwo = (
             <div className="installation-parameters_column-right">
                 <PasswordInput
                     readOnly={paramFileHasBeenModifiedFromState}
                     disabled={state?.userAndPwdAreDisabled ?? true}
+                    type={showPasswords ? "text" : "password"}
                     autoComplete="on"
-                    helperText={t('panel.installationParameter.passwordHelp', {
-                        ns: 'panels',
+                    helperText={t("panel.installationParameter.passwordHelp", {
+                        ns: "panels",
                     })}
                     id="password-input"
                     key="password-input"
                     invalid={
                         state && state.password ? !state.password.valid : false
                     }
-                    invalidText={t('invalidTextLabel', { ns: 'common' })}
+                    invalidText={t("invalidTextLabel", { ns: "common" })}
                     maxLength={64}
                     labelText={t(
-                        'panel.installationParameter.passwordTextLabel',
+                        "panel.installationParameter.passwordTextLabel",
                         {
-                            ns: 'panels',
+                            ns: "panels",
                         }
                     )}
                     placeholder={t(
-                        'panel.installationParameter.passwordPlaceholder',
+                        "panel.installationParameter.passwordPlaceholder",
                         {
-                            ns: 'panels',
+                            ns: "panels",
                         }
                     )}
                     className="installation-parameters_password-input"
-                    value={state.password ? state.password.value : ''}
+                    value={state.password ? state.password.value : ""}
                     onChange={(password) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         const passwordValue =
                             password && password.target
                                 ? password.target.value
-                                : ''
+                                : "";
                         const computedUrlValue = state.installationAddress
                             ? computeInstallationAddress({
                                   url: state.installationAddress.value,
-                                  uid: state?.userName?.value ?? '',
+                                  uid: state?.userName?.value ?? "",
                                   clearUid:
                                       typeof state.userName.value !==
-                                          'string' ||
+                                          "string" ||
                                       state.userName.value.length === 0,
                                   pwd: passwordValue,
                                   clearPwd: passwordValue.length === 0,
                               })
-                            : ''
+                            : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: state?.userName?.value ?? "",
+                                          clearUid:
+                                              typeof state.userName.value !==
+                                                  "string" ||
+                                              state.userName.value.length === 0,
+                                          pwd: passwordValue,
+                                          clearPwd: passwordValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         // while editing we don't update the validity but set it to true
                         // cause we don't want to have the form validation logic kick in.
                         updatePassword({
                             password: passwordValue,
                             valid: true,
-                        })
+                        });
                         updateInstallationAddress({
-                            address: state?.installationAddress?.value ?? '',
+                            address: state?.installationAddress?.value ?? "",
                             computedAddress: computedUrlValue,
+                            computedWithPasswordsRemovedAddress:
+                                computedWithPasswordsRemovedUrlValue,
                             valid: true,
-                        })
+                        });
                     }}
                     onBlur={(password) => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         const passwordValue =
                             password && password.target
                                 ? password.target.value
-                                : ''
+                                : "";
                         const computedUrlValue = state.installationAddress
                             ? computeInstallationAddress({
                                   url: state.installationAddress.value,
-                                  uid: state?.userName?.value ?? '',
+                                  uid: state?.userName?.value ?? "",
                                   clearUid:
                                       typeof state.userName.value !==
-                                          'string' ||
+                                          "string" ||
                                       state.userName.value.length === 0,
                                   pwd: passwordValue,
                                   clearPwd: passwordValue.length === 0,
                               })
-                            : ''
+                            : "";
+                        const computedWithPasswordsRemovedUrlValue =
+                            state.installationAddress
+                                ? computeInstallationAddresWithPasswordsRemoved(
+                                      {
+                                          url: state.installationAddress.value,
+                                          uid: state?.userName?.value ?? "",
+                                          clearUid:
+                                              typeof state.userName.value !==
+                                                  "string" ||
+                                              state.userName.value.length === 0,
+                                          pwd: passwordValue,
+                                          clearPwd: passwordValue.length === 0,
+                                      }
+                                  )
+                                : "";
                         const passwordValueIsValid =
-                            isPasswordInputValid(passwordValue)
+                            isPasswordInputValid(passwordValue);
 
                         if (!passwordValueIsValid) {
                             updatePassword({
                                 password: passwordValue,
                                 valid: passwordValueIsValid,
-                            })
+                            });
                             updateInstallationAddress({
                                 address:
-                                    state?.installationAddress?.value ?? '',
+                                    state?.installationAddress?.value ?? "",
                                 computedAddress: computedUrlValue,
+                                computedWithPasswordsRemovedAddress:
+                                    computedWithPasswordsRemovedUrlValue,
                                 valid: true,
-                            })
+                            });
                         }
+
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para3"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                    }}
+                    onFocus={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para3"
+                            )
+                            ?.classList?.add(
+                                "help-panel__installation-parameters__content__active"
+                            );
                     }}
                 />
             </div>
-        )
+        );
 
         const gridContentsMarkupRowThreeColumnOne = (
             <div className="installation-parameters_column-left">
                 <Toggle
                     readOnly={paramFileHasBeenModifiedFromState}
                     labelText={t(
-                        'panel.installationParameter.vncToggleTextLabel',
+                        "panel.installationParameter.vncToggleTextLabel",
                         {
-                            ns: 'panels',
+                            ns: "panels",
                         }
                     )}
-                    labelA={t('btnLabel.No', { ns: 'common' })}
-                    labelB={t('btnLabel.Yes', { ns: 'common' })}
+                    labelA={t("btnLabel.No", { ns: "common" })}
+                    labelB={t("btnLabel.Yes", { ns: "common" })}
                     id="vnc-toggle"
                     toggled={useVncToggled}
                     onToggle={() => {
-                        if (paramFileHasBeenModifiedFromState) return
+                        if (paramFileHasBeenModifiedFromState) return;
 
                         if (useVncToggled) {
-                            updateUseVnc(false)
+                            updateUseVnc(false);
                         } else {
-                            updateUseVnc(true)
+                            updateUseVnc(true);
                         }
+                    }}
+                    onFocus={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para4"
+                            )
+                            ?.classList?.add(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para5"
+                            )
+                            ?.classList?.add(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                    }}
+                    onBlur={() => {
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para4"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__installation-parameters__content__active"
+                            );
+                        document
+                            .getElementById(
+                                "helpPanelContents_installationParameters_para5"
+                            )
+                            ?.classList?.remove(
+                                "help-panel__installation-parameters__content__active"
+                            );
                     }}
                 />
                 {useVncToggled && (
                     <PasswordInput
                         readOnly={paramFileHasBeenModifiedFromState}
+                        type={showPasswords ? "text" : "password"}
                         autoComplete="on"
                         helperText={t(
-                            'panel.installationParameter.vncPasswordHelp',
+                            "panel.installationParameter.vncPasswordHelp",
                             {
-                                ns: 'panels',
+                                ns: "panels",
                             }
                         )}
                         id="vnc-password-input"
@@ -714,84 +936,150 @@ const InstallationParameters = forwardRef(
                                 ? !state.vncPassword.valid
                                 : false
                         }
-                        invalidText={t('invalidTextLabel', { ns: 'common' })}
+                        invalidText={t("invalidTextLabel", { ns: "common" })}
                         maxLength={64}
                         labelText={t(
-                            'panel.installationParameter.vncPasswordTextLabel',
+                            "panel.installationParameter.vncPasswordTextLabel",
                             {
-                                ns: 'panels',
+                                ns: "panels",
                             }
                         )}
                         placeholder={t(
-                            'panel.installationParameter.vncPasswordPlaceholder',
+                            "panel.installationParameter.vncPasswordPlaceholder",
                             {
-                                ns: 'panels',
+                                ns: "panels",
                             }
                         )}
-                        value={state.vncPassword ? state.vncPassword.value : ''}
+                        value={state.vncPassword ? state.vncPassword.value : ""}
                         onChange={(password) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                            if (paramFileHasBeenModifiedFromState) return;
 
                             const passwordValue =
                                 password && password.target
                                     ? password.target.value
-                                    : ''
+                                    : "";
 
                             updateVncPassword({
                                 password: passwordValue,
                                 valid: true,
-                            })
+                            });
                         }}
                         onBlur={(password) => {
                             const passwordValue =
                                 password && password.target
                                     ? password.target.value
-                                    : ''
+                                    : "";
                             const passwordValueIsValid =
-                                isPasswordInputValid(passwordValue)
+                                isPasswordInputValid(passwordValue);
 
                             updateVncPassword({
                                 password: passwordValue,
                                 valid: passwordValueIsValid,
-                            })
+                            });
+
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para3"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para4"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para5"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                        }}
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para3"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para4"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para5"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
                         }}
                     />
                 )}
             </div>
-        )
+        );
 
         const gridContentsMarkupRowThreeColumnTwo = (
             <div className="installation-parameters_column-right">
-                <Toggle
-                    readOnly={paramFileHasBeenModifiedFromState}
-                    labelText={t(
-                        'panel.installationParameter.sshToggleTextLabel',
-                        {
-                            ns: 'panels',
-                        }
-                    )}
-                    labelA={t('btnLabel.No', { ns: 'common' })}
-                    labelB={t('btnLabel.Yes', { ns: 'common' })}
-                    id="ssh-toggle"
-                    toggled={useSshToggled}
-                    onToggle={() => {
-                        if (paramFileHasBeenModifiedFromState) return
+                {distributionName !== UBUNTU_DISTRIBUTION_ID && (
+                    <Toggle
+                        readOnly={paramFileHasBeenModifiedFromState}
+                        labelText={t(
+                            "panel.installationParameter.sshToggleTextLabel",
+                            {
+                                ns: "panels",
+                            }
+                        )}
+                        labelA={t("btnLabel.No", { ns: "common" })}
+                        labelB={t("btnLabel.Yes", { ns: "common" })}
+                        id="ssh-toggle"
+                        toggled={useSshToggled}
+                        onToggle={() => {
+                            if (paramFileHasBeenModifiedFromState) return;
 
-                        if (useSshToggled) {
-                            updateUseSsh(false)
-                        } else {
-                            updateUseSsh(true)
-                        }
-                    }}
-                />
+                            if (useSshToggled) {
+                                updateUseSsh(false);
+                            } else {
+                                updateUseSsh(true);
+                            }
+                        }}
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                        }}
+                        onBlur={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                        }}
+                    />
+                )}
                 {useSshToggled && requiresSshPassword && (
                     <PasswordInput
                         readOnly={paramFileHasBeenModifiedFromState}
+                        type={showPasswords ? "text" : "password"}
                         autoComplete="on"
                         helperText={t(
-                            'panel.installationParameter.sshPasswordHelp',
+                            "panel.installationParameter.sshPasswordHelp",
                             {
-                                ns: 'panels',
+                                ns: "panels",
                             }
                         )}
                         id="ssh-password-input"
@@ -800,51 +1088,91 @@ const InstallationParameters = forwardRef(
                                 ? !state.sshPassword.valid
                                 : false
                         }
-                        invalidText={t('invalidTextLabel', { ns: 'common' })}
+                        invalidText={t("invalidTextLabel", { ns: "common" })}
                         maxLength={64}
-                        labelText={t(
-                            'panel.installationParameter.sshPasswordTextLabel',
-                            {
-                                ns: 'panels',
-                            }
-                        )}
+                        labelText={
+                            distributionName === UBUNTU_DISTRIBUTION_ID
+                                ? t(
+                                      "panel.installationParameter.sshPasswordTextLabelNoOptional",
+                                      {
+                                          ns: "panels",
+                                      }
+                                  )
+                                : t(
+                                      "panel.installationParameter.sshPasswordTextLabel",
+                                      {
+                                          ns: "panels",
+                                      }
+                                  )
+                        }
                         placeholder={t(
-                            'panel.installationParameter.sshPasswordPlaceholder',
+                            "panel.installationParameter.sshPasswordPlaceholder",
                             {
-                                ns: 'panels',
+                                ns: "panels",
                             }
                         )}
-                        value={state.sshPassword ? state.sshPassword.value : ''}
+                        value={state.sshPassword ? state.sshPassword.value : ""}
                         onChange={(password) => {
-                            if (paramFileHasBeenModifiedFromState) return
+                            if (paramFileHasBeenModifiedFromState) return;
 
                             const passwordValue =
                                 password && password.target
                                     ? password.target.value
-                                    : ''
+                                    : "";
 
                             updateSshPassword({
                                 password: passwordValue,
                                 valid: true,
-                            })
+                            });
                         }}
                         onBlur={(password) => {
                             const passwordValue =
                                 password && password.target
                                     ? password.target.value
-                                    : ''
+                                    : "";
                             const passwordValueIsValid =
-                                isPasswordInputValid(passwordValue)
+                                isPasswordInputValid(passwordValue);
 
                             updateSshPassword({
                                 password: passwordValue,
                                 valid: passwordValueIsValid,
-                            })
+                            });
+
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para3"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
+                                )
+                                ?.classList?.remove(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                        }}
+                        onFocus={() => {
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para3"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
+                            document
+                                .getElementById(
+                                    "helpPanelContents_installationParameters_para6"
+                                )
+                                ?.classList?.add(
+                                    "help-panel__installation-parameters__content__active"
+                                );
                         }}
                     />
                 )}
             </div>
-        )
+        );
 
         const parmfileHasBeenModifiedNotificationMarkup = (
             <ActionableNotification
@@ -852,7 +1180,7 @@ const InstallationParameters = forwardRef(
                 inline
                 lowContrast
                 className="intro_parmfile-purge-banner"
-                actionButtonLabel={t('btnLabel.Reset', { ns: 'common' })}
+                actionButtonLabel={t("btnLabel.Reset", { ns: "common" })}
                 aria-label="closes notification"
                 kind="info"
                 onActionButtonClick={() => {
@@ -861,20 +1189,20 @@ const InstallationParameters = forwardRef(
                         globalUpdateModified,
                         updateModified,
                         state: globalState,
-                    })
+                    });
                 }}
                 onClose={function noRefCheck() {}}
                 onCloseButtonClick={function noRefCheck() {}}
                 statusIconDescription="notification"
                 subtitle={t(
-                    'panel.parmFileHasBeenModifiedNotificationSubtitle',
+                    "panel.parmFileHasBeenModifiedNotificationSubtitle",
                     {
-                        ns: 'common',
+                        ns: "common",
                     }
                 )}
-                title={t('modalHeading.discardParamFileModificationsPrompt')}
+                title={t("modalHeading.discardParamFileModificationsPrompt")}
             />
-        )
+        );
 
         return (
             <Layer className="installation-parameters__layer">
@@ -893,20 +1221,24 @@ const InstallationParameters = forwardRef(
                         <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
                     </Row>
                     <Row>
-                        <Column>{gridContentsMarkupComputedRow}</Column>
-                    </Row>
-                    <Row>
-                        <Column>{gridContentsMarkupRowThreeColumnOne}</Column>
-                        <Column>{gridContentsMarkupRowThreeColumnTwo}</Column>
+                        <Column>
+                            {requiresVncSupport
+                                ? gridContentsMarkupRowThreeColumnOne
+                                : gridContentsMarkupRowThreeColumnTwo}
+                        </Column>
+                        <Column>
+                            {requiresVncSupport &&
+                                gridContentsMarkupRowThreeColumnTwo}
+                        </Column>
                     </Row>
                 </FlexGrid>
             </Layer>
-        )
+        );
     }
-)
+);
 
 InstallationParameters.propTypes = {
     ipAddressVersion: PropTypes.string.isRequired,
-}
+};
 
-export default InstallationParameters
+export default InstallationParameters;

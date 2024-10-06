@@ -1,0 +1,8 @@
+{
+    "helpPanelContents.settingsPage.para1": "Use the application settings to find information about the application and tailor its behaviour.",
+    "helpPanelContents.settingsPage.para2": "On the About tab, find the build number and commit hash. Include these when you need to report an issue. Before reporting an issue, check the known issues page to avoid duplicate issues.",
+    "helpPanelContents.settingsPage.para3": "On the Appearance tab you can set dark or light mode, as well as set the mode according to what the operating system uses. If you turn on the operating system setting, the other mode settings are ignored.",
+    "helpPanelContents.settingsPage.para4": "On the Security tab you can set the default behavior for passwords. You can choose to show or mask passwords. For security reasons, passwords are normally masked. However, the application can be configured to display passwords in plain text instead of masking them.",
+    "helpPanelContents.settingsPage.para5": "<strong>Security Note: Showing passwords increases the risk of password exposure to anyone nearby, as the passwords will be visible on the screen.</strong>",
+    "helpPanelHeader.settingsPage": "Application settings"
+}

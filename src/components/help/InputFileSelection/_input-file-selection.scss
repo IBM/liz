@@ -5,17 +5,36 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+    $font-path: "@ibm/plex"
 );
 
 .help-panel__input-file-selection__header {
-  @include react.type-style("heading-01");
-  @include react.font-weight("semibold");
+    @include react.type-style("heading-01");
+    @include react.font-weight("semibold");
 }
 
 .help-panel__input-file-selection__content {
-  @include react.type-style("body-compact-01");
+    @include react.type-style("body-compact-01");
 
-  padding: react.$spacing-03 0 react.$spacing-07 0;
-  white-space: pre-line;
+    padding: react.$spacing-03 react.$spacing-04 react.$spacing-05 0;
+    white-space: pre-line;
+    box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0 react.$border-subtle;
+
+    &.help-panel__input-file-selection__content__active {
+        box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0
+            react.$border-interactive;
+    }
+}
+
+.help-panel__input-file-selection__content__bottom {
+    @include react.type-style("body-compact-01");
+
+    padding: react.$spacing-03 react.$spacing-04 react.$spacing-04 0;
+    white-space: pre-line;
+    box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0 react.$border-subtle;
+
+    &.help-panel__input-file-selection__content__active {
+        box-shadow: inset calc(-1 * react.$spacing-02) 0 0 0
+            react.$border-interactive;
+    }
 }
