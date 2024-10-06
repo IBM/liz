@@ -6,7 +6,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_input-file-selection.scss";
 
 const InputFileSelection = ({
@@ -14,17 +14,8 @@ const InputFileSelection = ({
     currentHelpStep,
     updateCurrentHelpStep,
 }) => {
-    const { t } = useTranslation();
-
     return (
         <>
-            <div className="help-panel__input-file-selection__header">
-                <span>
-                    {t("helpPanelHeader.inputFileSelection", {
-                        ns: "help_inputFileSelection",
-                    })}
-                </span>
-            </div>
             <div
                 className="help-panel__input-file-selection__content"
                 id="helpPanelContents_inputFileSelection_para1"

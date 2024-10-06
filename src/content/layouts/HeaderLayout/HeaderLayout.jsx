@@ -19,9 +19,9 @@ import {
     ModalBody,
     ModalFooter,
 } from "@carbon/react";
-import { Help, LinuxAlt } from "@carbon/icons-react";
-import { SidePanel } from "@carbon/ibm-products";
+import { Close, Help, LinuxAlt } from "@carbon/icons-react";
 import About from "../../../components/About";
+import SidePanel from "../../../components/SidePanel";
 import HelpContent from "../../../components/InstallerHeader";
 import {
     ApplicationContext,
@@ -268,9 +268,11 @@ const HeaderLayout = () => {
         </>
     );
 
-    const aboutMenuMarkup = (
+    const getAboutMenuMarkup = ({ href, expanded }) => (
         <About
             ref={aboutMenuRef}
+            href={href}
+            expanded={expanded}
             closeNotification={closeNotification}
             pruneSettings={localPruneSettings}
         />
@@ -294,24 +296,33 @@ const HeaderLayout = () => {
         updateExpanded(false);
     };
 
-    const sidePanelMarkup = (
+    const getSidePanelMarkup = ({ href, expanded }) => (
         <SidePanel
-            animateTitle
-            slideIn
-            preventCloseOnClickOutside
-            closeIconDescription={t("btnLabel.Close", { ns: "common" })}
-            className="liz__installer-header_help-sidepanel-component"
-            id="liz__installer-header_help-sidepanel-component"
-            key="liz__installer-header_help-sidepanel-component"
-            open={isHelpPanelExpanded}
-            onRequestClose={hideSidePanel}
-            title={t("rightNavigation.header")}
-            subtitle=""
-            selectorPageContent="#liz__page-content"
+            ref={aboutMenuRef}
+            href={href}
+            expanded={expanded}
+            closeNotification={closeNotification}
+            pruneSettings={localPruneSettings}
             {...getSidePanelProps()}
         >
             <HelpContent helpPanelConfig={helpPanelConfig} />
         </SidePanel>
+    );
+
+    const profileActionId = "liz__installer-header_global-action__profile";
+    const profileActionHref = useHref(`/#${profileActionId}`);
+    const profileActionIcon = showNotification ? (
+        <Close size="24" />
+    ) : (
+        <LinuxAlt size="24" />
+    );
+
+    const helpActionId = "liz__installer-header_global-action__help";
+    const helpActionHref = useHref(`/#${helpActionId}`);
+    const helpActionIcon = isHelpPanelExpanded ? (
+        <Close size="24" />
+    ) : (
+        <Help size="24" />
     );
 
     const headerContainerMarkup = (
@@ -335,30 +346,43 @@ const HeaderLayout = () => {
                             aria-haspopup="true"
                             aria-expanded={isHelpPanelExpanded}
                             key="liz__installer-header_global-action__help"
-                            id="liz__installer-header_global-action__help"
+                            isActive={isHelpPanelExpanded}
+                            id={helpActionId}
                             onClick={() => {
                                 showHideSidePanel();
+                                onClickSideNavExpand();
                                 state.showNotification && onShowNotification();
                             }}
                         >
-                            <Help size="24" />
+                            {helpActionIcon}
                         </HeaderGlobalAction>
                         <HeaderGlobalAction
                             aria-label={t("header.button.profileSettings")}
                             aria-haspopup="true"
                             aria-expanded={showNotification}
                             key="liz__installer-header_global-action__profile"
-                            id="liz__installer-header_global-action__profile"
+                            isActive={showNotification}
+                            id={profileActionId}
                             onClick={() => {
                                 isHelpPanelExpanded && showHideSidePanel();
+                                isSideNavExpanded && onClickSideNavExpand();
                                 onShowNotification();
                             }}
                             {...aboutMenuButtonProps}
                         >
-                            <LinuxAlt size="24" />
+                            {profileActionIcon}
                         </HeaderGlobalAction>
-                        {showNotification && aboutMenuMarkup}
                     </HeaderGlobalBar>
+                    {showNotification &&
+                        getAboutMenuMarkup({
+                            href: profileActionHref,
+                            expanded: showNotification,
+                        })}
+                    {isHelpPanelExpanded &&
+                        getSidePanelMarkup({
+                            href: helpActionHref,
+                            expanded: isHelpPanelExpanded,
+                        })}
                 </Header>
             )}
         />
@@ -367,7 +391,6 @@ const HeaderLayout = () => {
     return (
         <>
             {headerContainerMarkup}
-            {sidePanelMarkup}
             {modalMarkup}
         </>
     );

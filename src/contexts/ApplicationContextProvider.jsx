@@ -274,6 +274,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.inputFileSelection", {
+                            ns: "help_inputFileSelection",
+                        }),
                     },
                 };
                 break;
@@ -284,6 +287,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.information", {
+                            ns: "help_information",
+                        }),
                     },
                 };
                 break;
@@ -294,6 +300,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.networkDevice", {
+                            ns: "help_networkDevice",
+                        }),
                     },
                 };
                 break;
@@ -304,6 +313,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.networkAddress", {
+                            ns: "help_networkAddress",
+                        }),
                     },
                 };
                 break;
@@ -314,6 +326,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.installationParameters", {
+                            ns: "help_installationParameters",
+                        }),
                     },
                 };
                 break;
@@ -324,6 +339,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.downloadParamFile", {
+                            ns: "help_downloadParamFile",
+                        }),
                     },
                 };
                 break;
@@ -334,6 +352,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.summary", {
+                            ns: "help_summary",
+                        }),
                     },
                 };
                 break;
@@ -344,6 +365,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.landingPage", {
+                            ns: "help_landingPage",
+                        }),
                     },
                 };
                 break;
@@ -354,6 +378,7 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.intro", { ns: "help_intro" }),
                     },
                 };
                 break;
@@ -364,6 +389,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.errorPage", {
+                            ns: "help_errorPage",
+                        }),
                     },
                 };
                 break;
@@ -374,6 +402,9 @@ const ApplicationContextProvider = ({ value, children }) => {
                         hasMultipleSteps: false,
                         currentHelpStep: state.helpStep,
                         updateCurrentHelpStep,
+                        title: t("helpPanelHeader.settingsPage", {
+                            ns: "help_settingsPage",
+                        }),
                     },
                 };
                 break;

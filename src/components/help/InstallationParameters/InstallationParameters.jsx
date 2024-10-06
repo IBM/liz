@@ -6,7 +6,7 @@
 
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import { ApplicationContext } from "../../../contexts";
 import { UBUNTU_DISTRIBUTION_ID } from "../../../util/constants";
 import "./_installation-parameters.scss";
@@ -16,7 +16,6 @@ const InstallationParameters = ({
     currentHelpStep,
     updateCurrentHelpStep,
 }) => {
-    const { t } = useTranslation();
     const { state: globalState } = useContext(ApplicationContext);
 
     const distributionName =
@@ -24,13 +23,6 @@ const InstallationParameters = ({
 
     return (
         <>
-            <div className="help-panel__installation-parameters__header">
-                <span>
-                    {t("helpPanelHeader.installationParameters", {
-                        ns: "help_installationParameters",
-                    })}
-                </span>
-            </div>
             <div
                 className="help-panel__installation-parameters__content"
                 id="helpPanelContents_installationParameters_para1"

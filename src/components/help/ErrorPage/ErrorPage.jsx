@@ -22,13 +22,6 @@ const ErrorPage = ({
         <>
             {currentHelpStep === 0 && (
                 <>
-                    <div className="help-panel__error-page__header">
-                        <span>
-                            {t("helpPanelHeader.errorPage", {
-                                ns: "help_errorPage",
-                            })}
-                        </span>
-                    </div>
                     <div
                         className="help-panel__error-page__content"
                         id="helpPanelContents_errorPage_para1"

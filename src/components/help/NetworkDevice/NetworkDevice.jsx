@@ -6,7 +6,7 @@
 
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import { ApplicationContext } from "../../../contexts";
 import {
     SLES_DISTRIBUTION_ID,
@@ -19,7 +19,6 @@ const NetworkDevice = ({
     currentHelpStep,
     updateCurrentHelpStep,
 }) => {
-    const { t } = useTranslation();
     const { state: globalState } = useContext(ApplicationContext);
 
     const distributionName =
@@ -27,13 +26,6 @@ const NetworkDevice = ({
 
     return (
         <>
-            <div className="help-panel__network-device__header">
-                <span>
-                    {t("helpPanelHeader.networkDevice", {
-                        ns: "help_networkDevice",
-                    })}
-                </span>
-            </div>
             <div
                 className="help-panel__network-device__content"
                 id="helpPanelContents_networkDevice_para1"

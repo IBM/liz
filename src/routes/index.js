@@ -50,7 +50,7 @@ const ErrorPage = loadable(() => import("../content/pages"), {
 
 export const routes = [
     {
-        layout: ErrorLayout,
+        layout: MainLayout,
         errorElement: {
             layout: ErrorLayout,
             page: ErrorPage,

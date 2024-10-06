@@ -5,12 +5,15 @@
  */
 
 @use "@carbon/react" with (
-  $font-path: "@ibm/plex"
+    $font-path: "@ibm/plex"
 );
 
 .liz__main-layout-content {
-  width: 100%;
-  height: 100%;
-  margin-top: 0 !important;
-  padding: react.$spacing-09 0 0 0 !important;
+    height: 100%;
+    margin-top: 0 !important;
+    padding: react.$spacing-09 0 0 0 !important;
+
+    &.liz__main-layout-content__with-side-panel {
+        width: calc(100% - (6 * react.$spacing-11));
+    }
 }

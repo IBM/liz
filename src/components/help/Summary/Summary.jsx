@@ -6,7 +6,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_summary.scss";
 
 const Summary = ({
@@ -14,15 +14,8 @@ const Summary = ({
     currentHelpStep,
     updateCurrentHelpStep,
 }) => {
-    const { t } = useTranslation();
-
     return (
         <>
-            <div className="help-panel__summary__header">
-                <span>
-                    {t("helpPanelHeader.summary", { ns: "help_summary" })}
-                </span>
-            </div>
             <div
                 className="help-panel__summary__content__bottom"
                 id="helpPanelContents_summary_para1"

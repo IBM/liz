@@ -6,7 +6,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_download-param-file.scss";
 
 const DownloadParamFile = ({
@@ -14,17 +14,8 @@ const DownloadParamFile = ({
     currentHelpStep,
     updateCurrentHelpStep,
 }) => {
-    const { t } = useTranslation();
-
     return (
         <>
-            <div className="help-panel__download-param-file__header">
-                <span>
-                    {t("helpPanelHeader.downloadParamFile", {
-                        ns: "help_downloadParamFile",
-                    })}
-                </span>
-            </div>
             <div
                 className="help-panel__download-param-file__content"
                 id="helpPanelContents_downloadParamFile_para1"

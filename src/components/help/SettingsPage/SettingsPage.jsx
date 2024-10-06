@@ -22,13 +22,6 @@ const SettingsPage = ({
         <>
             {currentHelpStep === 0 && (
                 <>
-                    <div className="help-panel__settings-page__header">
-                        <span>
-                            {t("helpPanelHeader.settingsPage", {
-                                ns: "help_settingsPage",
-                            })}
-                        </span>
-                    </div>
                     <div
                         className="help-panel__settings-page__content"
                         id="helpPanelContents_settingsPage_para1"

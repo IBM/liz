@@ -15,8 +15,8 @@ import { useHref } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Button, Toggle, Tooltip } from "@carbon/react";
-import { Checkmark, Close, Copy, LinuxAlt, Launch } from "@carbon/icons-react";
+import { Button, Toggle, Tooltip, HeaderPanel } from "@carbon/react";
+import { Checkmark, Copy, LinuxAlt, Launch } from "@carbon/icons-react";
 import { ApplicationContext } from "../../contexts";
 import { LIGHT_THEME, DARK_THEME } from "../../util/constants";
 import {
@@ -34,7 +34,7 @@ import "./_about.scss";
 
 const About = forwardRef(function About(props, ref) {
     const { t } = useTranslation();
-    const { closeNotification, pruneSettings } = props;
+    const { closeNotification, pruneSettings, href, expanded } = props;
     const settingsPageHref = useHref(PathConstants.SETTINGS);
     const {
         config,
@@ -53,6 +53,10 @@ const About = forwardRef(function About(props, ref) {
 
     const COPY_TYPE_BUILD_DATE = 0;
     const COPY_TYPE_COMMIT_HASH = 1;
+
+    const closeAboutPanel = () => {
+        closeNotification();
+    };
 
     const updateCopied = (type) => {
         switch (type) {
@@ -136,7 +140,7 @@ const About = forwardRef(function About(props, ref) {
         useEffect(() => {
             const handleClickOutside = (event) => {
                 if (ref.current && !ref.current.contains(event.target)) {
-                    closeNotification();
+                    closeAboutPanel();
                 }
             };
 
@@ -153,17 +157,17 @@ const About = forwardRef(function About(props, ref) {
         const relatedTargetId = event?.relatedTarget?.id ?? "";
 
         if (targetId === "about-dialog__about-menu" && !relatedTargetId) {
-            return closeNotification();
+            return closeAboutPanel();
         } else if (
             targetId === "about-dialog__about-menu" &&
             relatedTargetId === "liz__installer-header_global-action__profile"
         ) {
-            return closeNotification();
+            return closeAboutPanel();
         } else if (
             targetId === "about-dialog__about-report-button" &&
             relatedTargetId === "liz__skip-to-content"
         ) {
-            return closeNotification();
+            return closeAboutPanel();
         }
     };
 
@@ -171,7 +175,7 @@ const About = forwardRef(function About(props, ref) {
         switch (event.code) {
             case ESCAPE_KEY_EVENT:
                 event.preventDefault();
-                closeNotification();
+                closeAboutPanel();
                 break;
         }
     };
@@ -236,7 +240,7 @@ const About = forwardRef(function About(props, ref) {
                     break;
                 case ESCAPE_KEY_EVENT:
                     event.preventDefault();
-                    closeNotification();
+                    closeAboutPanel();
                     break;
             }
         }
@@ -280,7 +284,7 @@ const About = forwardRef(function About(props, ref) {
             data-title="report"
             id="about-dialog__about-settings-button"
             href={settingsPageHref}
-            onClick={closeNotification}
+            onClick={closeAboutPanel}
             className="about-dialog__about-menu-item__button"
             role="menuitem"
             onBlur={handleTabElementOnBlur}
@@ -313,17 +317,20 @@ const About = forwardRef(function About(props, ref) {
     );
 
     return (
-        <div
+        <HeaderPanel
+            expanded={expanded}
             tabIndex="0"
             id="about-dialog__about-menu"
             className="about-dialog__about-menu"
             ref={wrapperRef}
+            href={href}
             role="menu"
             aria-orientation="vertical"
             aria-label={t("header.button.profileSettings")}
+            addFocusListeners={false}
             onBlur={handleOnBlur}
             onKeyDown={handleOnKeyDown}
-            data-a11y-first="about-dialog__close-button"
+            data-a11y-first="about-dialog__copy-button__build-date"
             data-a11y-last={
                 !globalState.isEditing
                     ? "about-dialog__about-prune-button"
@@ -378,25 +385,6 @@ const About = forwardRef(function About(props, ref) {
                                 ns: "common",
                             })}
                         </div>
-                        <div className="about-dialog__about__info-section__icon">
-                            <Button
-                                ref={ref}
-                                hasIconOnly
-                                size="sm"
-                                kind="ghost"
-                                id="about-dialog__close-button"
-                                iconDescription={t("btnLabel.Close", {
-                                    ns: "common",
-                                })}
-                                onClick={closeNotification}
-                                onBlur={handleTabElementOnBlur}
-                                onKeyDown={handleTabElementOnKeyDown}
-                                renderIcon={Close}
-                                tooltipPosition="left"
-                                data-a11y-previous="about-dialog__about-report-button"
-                                data-a11y-next="about-dialog__copy-button__build-date"
-                            />
-                        </div>
                     </div>
                 </li>
             </ul>
@@ -433,7 +421,7 @@ const About = forwardRef(function About(props, ref) {
                                     tooltipPosition="left"
                                     renderIcon={buildDateCopyIcon}
                                     role="menuitemcheckbox"
-                                    data-a11y-previous="about-dialog__close-button"
+                                    data-a11y-previous="about-dialog__about-report-button"
                                     data-a11y-next="about-dialog__copy-button__commit-hash"
                                     {...buildDateCopyAriaProps}
                                 />
@@ -651,7 +639,7 @@ const About = forwardRef(function About(props, ref) {
                         onBlur={handleTabElementOnBlur}
                         onKeyDown={handleTabElementOnKeyDown}
                         data-a11y-previous="about-dialog__about-kissues-button"
-                        data-a11y-next="about-dialog__close-button"
+                        data-a11y-next="about-dialog__copy-button__build-date"
                         renderIcon={Launch}
                         iconDescription={t("dialog.about.reportIssueLabel")}
                         {...externalLinkReportIssueAriaProps}
@@ -666,13 +654,15 @@ const About = forwardRef(function About(props, ref) {
                     </Button>
                 </li>
             </ul>
-        </div>
+        </HeaderPanel>
     );
 });
 
 About.propTypes = {
     closeNotification: PropTypes.func.isRequired,
     pruneSettings: PropTypes.func.isRequired,
+    href: PropTypes.string.isRequired,
+    expanded: PropTypes.bool.isRequired,
 };
 
 export default About;

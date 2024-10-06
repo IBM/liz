@@ -1,0 +1,58 @@
+/*
+ * liz - Installation assistant for Linux on IBM Z
+ *
+ * (C) Copyright IBM Corp. 2024
+ */
+@use "@carbon/react" with (
+    $font-path: "@ibm/plex"
+);
+
+.help-dialog__help-menu {
+    // the carbon <header /> component
+    // has a z-index of 8000 where the
+    // Carbon for IBM Products <SidePanel />
+    // component has z z-index of 9000.
+    z-index: 9500;
+    position: absolute;
+    top: react.$spacing-09;
+    border: 0;
+    opacity: 1;
+    transition: all 0.75s ease;
+    visibility: visible;
+    overflow: visible;
+    height: 100%;
+    right: 0;
+    min-width: calc(6 * react.$spacing-11);
+    background: react.$background;
+    border-left: 1px solid react.$border-subtle-02;
+    border-bottom: 1px solid react.$border-subtle-02;
+    box-shadow: 0 react.$spacing-02 react.$spacing-02 react.$overlay;
+
+    ul,
+    li,
+    a {
+        width: 100%;
+    }
+
+    .help-dialog__help-menu__content {
+        color: react.$text-primary;
+        height: 100;
+
+        .help-dialog__help-menu__content__title-container {
+            padding: react.$spacing-05 0 0 react.$spacing-05;
+
+            .help-dialog__help-menu__content__title {
+                border-bottom: react.$spacing-05 solid transparent;
+
+                .help-dialog__help-menu__content__title-text {
+                    @include react.type-style("heading-03");
+                    @include react.font-weight("regular");
+                }
+            }
+        }
+
+        .help-dialog__help-menu__inner-content {
+            padding: react.$spacing-05;
+        }
+    }
+}

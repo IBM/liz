@@ -6,7 +6,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import "./_network-address.scss";
 
 const NetworkAddress = ({
@@ -14,17 +14,8 @@ const NetworkAddress = ({
     currentHelpStep,
     updateCurrentHelpStep,
 }) => {
-    const { t } = useTranslation();
-
     return (
         <>
-            <div className="help-panel__network-address__header">
-                <span>
-                    {t("helpPanelHeader.networkAddress", {
-                        ns: "help_networkAddress",
-                    })}
-                </span>
-            </div>
             <div
                 className="help-panel__network-address__content"
                 id="helpPanelContents_networkAddress_para1"

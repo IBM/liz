@@ -22,13 +22,6 @@ const LandingPage = ({
         <>
             {currentHelpStep === 0 && (
                 <>
-                    <div className="help-panel__landing-page__header">
-                        <span>
-                            {t("helpPanelHeader.landingPage", {
-                                ns: "help_landingPage",
-                            })}
-                        </span>
-                    </div>
                     <div
                         className="help-panel__landing-page__content"
                         id="helpPanelContents_landingPage_para1"
