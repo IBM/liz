@@ -311,6 +311,9 @@ const HeaderLayout = () => {
 
     const profileActionId = "liz__installer-header_global-action__profile";
     const profileActionHref = useHref(`/#${profileActionId}`);
+    const profileActionAriaLabel = showNotification
+        ? t("btnLabel.Close", { ns: "common" })
+        : t("header.button.profileSettings");
     const profileActionIcon = showNotification ? (
         <Close size="24" />
     ) : (
@@ -319,6 +322,11 @@ const HeaderLayout = () => {
 
     const helpActionId = "liz__installer-header_global-action__help";
     const helpActionHref = useHref(`/#${helpActionId}`);
+    const helpActionAriaLabel = isHelpPanelExpanded
+        ? t("btnLabel.Close", { ns: "common" })
+        : t("header.button.help", {
+              ns: "common",
+          });
     const helpActionIcon = isHelpPanelExpanded ? (
         <Close size="24" />
     ) : (
@@ -340,9 +348,7 @@ const HeaderLayout = () => {
                     </HeaderName>
                     <HeaderGlobalBar>
                         <HeaderGlobalAction
-                            aria-label={t("header.button.help", {
-                                ns: "common",
-                            })}
+                            aria-label={helpActionAriaLabel}
                             aria-haspopup="true"
                             aria-expanded={isHelpPanelExpanded}
                             key="liz__installer-header_global-action__help"
@@ -357,7 +363,7 @@ const HeaderLayout = () => {
                             {helpActionIcon}
                         </HeaderGlobalAction>
                         <HeaderGlobalAction
-                            aria-label={t("header.button.profileSettings")}
+                            aria-label={profileActionAriaLabel}
                             aria-haspopup="true"
                             aria-expanded={showNotification}
                             key="liz__installer-header_global-action__profile"
