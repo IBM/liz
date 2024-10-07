@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: 'Build and deploy to GitHub Pages'
+name: "Build and deploy to GitHub Pages"
 
 on:
     release:
@@ -17,7 +17,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-    group: 'pages'
+    group: "pages"
     cancel-in-progress: false
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: 'Build environment variable creation'
+            - name: "Build environment variable creation"
               id: build_environment
               run: |
                   echo "build_date=`date "+%Y-%m-%d"`" >> $GITHUB_OUTPUT
@@ -74,12 +74,12 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: patched_config
-                  path: 'public/config/'
+                  path: "public/config/"
             - name: Upload patched package.json
               uses: actions/upload-artifact@v4
               with:
                   name: patched_package_json
-                  path: 'package.json'
+                  path: "package.json"
     build:
         needs: prepare
         runs-on: ubuntu-latest
@@ -91,22 +91,22 @@ jobs:
               with:
                   name: patched_package_json
             - name: Setup Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
-                  node-version: '20.x'
-                  registry-url: 'https://registry.npmjs.org'
+                  node-version: "20.x"
+                  registry-url: "https://registry.npmjs.org"
             - run: npm ci
             - run: npm run build --if-present
             - name: Download patched app config
               uses: actions/download-artifact@v4
               with:
                   name: patched_config
-                  path: 'dist/config/'
+                  path: "dist/config/"
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
                   # Upload entire dist directory
-                  path: 'dist/'
+                  path: "dist/"
     deploy:
         needs: build
         environment:
