@@ -4,12 +4,21 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { useContext } from "react";
-import loadable from "@loadable/component";
+import React, { lazy, useContext } from "react";
 import PropTypes from "prop-types";
 import { ApplicationContext } from "../../../contexts";
-import { NetworkDevice as CommonView } from "./common/NetworkDevice";
 import "./_network-device.scss";
+
+const CommonView = lazy(() => import("./common/NetworkDevice"));
+const RhelView = lazy(() => import("./distribution/rhel/NetworkDevice"));
+const SlesView = lazy(() => import("./distribution/sles/NetworkDevice"));
+const UbuntuView = lazy(() => import("./distribution/ubuntu/NetworkDevice"));
+
+const views = {
+    rhel: RhelView,
+    sles: SlesView,
+    ubuntu: UbuntuView,
+};
 
 const NetworkDevice = ({
     hasMultipleSteps,
@@ -20,12 +29,7 @@ const NetworkDevice = ({
 
     const distributionName =
         globalState.steps.inputFileSelection.distributionName;
-    const DistributionView = loadable(
-        () => import(`./distribution/${distributionName}/NetworkDevice`),
-        {
-            resolveComponent: (components) => components.default,
-        }
-    );
+    const DistributionView = views[distributionName];
 
     return (
         <>

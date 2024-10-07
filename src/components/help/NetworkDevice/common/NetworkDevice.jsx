@@ -66,4 +66,4 @@ NetworkDevice.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-export { NetworkDevice };
+export default NetworkDevice;
