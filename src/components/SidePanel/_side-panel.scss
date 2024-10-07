@@ -51,6 +51,15 @@
             }
         }
 
+        .help-dialog__panel-divider {
+            display: block;
+            border: none;
+            margin: react.$spacing-03 react.$spacing-05 react.$spacing-03
+                react.$spacing-05;
+            background: react.$border-subtle;
+            block-size: 1px;
+        }
+
         .help-dialog__help-menu__inner-content {
             padding: react.$spacing-05;
         }

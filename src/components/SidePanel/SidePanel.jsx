@@ -69,6 +69,7 @@ const SidePanel = forwardRef(function SidePanel(props, ref) {
                         </h2>
                     </div>
                 </div>
+                <hr className="help-dialog__panel-divider" />
                 <div className="help-dialog__help-menu__inner-content">
                     {children}
                 </div>
