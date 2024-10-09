@@ -4,18 +4,13 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, lazy, useEffect, useImperativeHandle } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
     InlineNotification,
-    Layer,
-    Toggle,
     TextInput,
     PasswordInput,
-    FlexGrid,
-    Row,
-    Column,
     ActionableNotification,
 } from "@carbon/react";
 import isUrl from "is-url-superb";
@@ -27,8 +22,6 @@ import {
 } from "../../../util/local-storage-constants";
 import {
     ADDRESS_TYPE_IPV4,
-    SLES_DISTRIBUTION_ID,
-    RHEL_DISTRIBUTION_ID,
     UBUNTU_DISTRIBUTION_ID,
     DEFAULT_DISTRIBUTION_ID,
 } from "../../../util/constants";
@@ -45,6 +38,44 @@ import {
     toAsteriskRepresentation,
 } from "../../../util/password-util";
 import "./_installation-parameters.scss";
+
+const CommonView = lazy(() => import("./common/InstallationParameters"));
+
+const RhelSshView = lazy(() => import("./distribution/rhel/SshView"));
+const RhelVncView = lazy(() => import("./distribution/rhel/VncView"));
+const RhelRemoteAccessWrapperView = lazy(
+    () => import("./distribution/rhel/RemoteAccessWrapper")
+);
+
+const SlesSshView = lazy(() => import("./distribution/sles/SshView"));
+const SlesVncView = lazy(() => import("./distribution/sles/VncView"));
+const SlesRemoteAccessWrapperView = lazy(
+    () => import("./distribution/sles/RemoteAccessWrapper")
+);
+
+const UbuntuSshView = lazy(() => import("./distribution/ubuntu/SshView"));
+const UbuntuVncView = lazy(() => import("./distribution/ubuntu/VncView"));
+const UbuntuRemoteAccessWrapperView = lazy(
+    () => import("./distribution/ubuntu/RemoteAccessWrapper")
+);
+
+const views = {
+    rhel: {
+        SshView: RhelSshView,
+        VncView: RhelVncView,
+        RemoteWrapperView: RhelRemoteAccessWrapperView,
+    },
+    sles: {
+        SshView: SlesSshView,
+        VncView: SlesVncView,
+        RemoteWrapperView: SlesRemoteAccessWrapperView,
+    },
+    ubuntu: {
+        SshView: UbuntuSshView,
+        VncView: UbuntuVncView,
+        RemoteWrapperView: UbuntuRemoteAccessWrapperView,
+    },
+};
 
 const SUPPORTED_PROTOCOLS = ["http", "https", "ftp"];
 
@@ -63,13 +94,9 @@ const InstallationParameters = forwardRef(
         const { t } = useTranslation();
         const {
             state,
-            updateUseSsh,
-            updateUseVnc,
             updateInstallationAddress,
             updateUserName,
             updatePassword,
-            updateVncPassword,
-            updateSshPassword,
         } = React.useContext(InstallationParameterContext);
         const { ipAddressVersion } = props;
         const publicRef = {
@@ -374,12 +401,9 @@ const InstallationParameters = forwardRef(
         const distributionName =
             globalState?.steps?.inputFileSelection?.distributionName ??
             DEFAULT_DISTRIBUTION_ID;
-        const requiresSshPassword =
-            (distributionName && distributionName === SLES_DISTRIBUTION_ID) ||
-            (distributionName && distributionName === UBUNTU_DISTRIBUTION_ID);
-        const requiresVncSupport =
-            (distributionName && distributionName === SLES_DISTRIBUTION_ID) ||
-            (distributionName && distributionName === RHEL_DISTRIBUTION_ID);
+        const SshView = views[distributionName].SshView;
+        const VncView = views[distributionName].VncView;
+        const RemoteWrapperView = views[distributionName].RemoteWrapperView;
 
         const isCompleteAndValid = (callback) => {
             let isComplete = false;
@@ -447,7 +471,7 @@ const InstallationParameters = forwardRef(
             />
         );
 
-        const gridContentsMarkupRowOne = (
+        const GridContentsMarkupRowOne = () => (
             <>
                 <TextInput
                     readOnly={paramFileHasBeenModifiedFromState}
@@ -567,7 +591,7 @@ const InstallationParameters = forwardRef(
             </>
         );
 
-        const gridContentsMarkupRowTwoColumnOne = (
+        const GridContentsMarkupRowTwoColumnOne = () => (
             <div className="installation-parameters_column-left">
                 <TextInput
                     readOnly={paramFileHasBeenModifiedFromState}
@@ -711,7 +735,7 @@ const InstallationParameters = forwardRef(
             </div>
         );
 
-        const gridContentsMarkupRowTwoColumnTwo = (
+        const GridContentsMarkupRowTwoColumnTwo = () => (
             <div className="installation-parameters_column-right">
                 <PasswordInput
                     readOnly={paramFileHasBeenModifiedFromState}
@@ -863,318 +887,7 @@ const InstallationParameters = forwardRef(
             </div>
         );
 
-        const gridContentsMarkupRowThreeColumnOne = (
-            <div className="installation-parameters_column-left">
-                <Toggle
-                    readOnly={paramFileHasBeenModifiedFromState}
-                    labelText={t(
-                        "panel.installationParameter.vncToggleTextLabel",
-                        {
-                            ns: "panels",
-                        }
-                    )}
-                    labelA={t("btnLabel.No", { ns: "common" })}
-                    labelB={t("btnLabel.Yes", { ns: "common" })}
-                    id="vnc-toggle"
-                    toggled={useVncToggled}
-                    onToggle={() => {
-                        if (paramFileHasBeenModifiedFromState) return;
-
-                        if (useVncToggled) {
-                            updateUseVnc(false);
-                        } else {
-                            updateUseVnc(true);
-                        }
-                    }}
-                    onFocus={() => {
-                        document
-                            .getElementById(
-                                "helpPanelContents_installationParameters_para4"
-                            )
-                            ?.classList?.add(
-                                "help-panel__installation-parameters__content__active"
-                            );
-                        document
-                            .getElementById(
-                                "helpPanelContents_installationParameters_para5"
-                            )
-                            ?.classList?.add(
-                                "help-panel__installation-parameters__content__active"
-                            );
-                    }}
-                    onBlur={() => {
-                        document
-                            .getElementById(
-                                "helpPanelContents_installationParameters_para4"
-                            )
-                            ?.classList?.remove(
-                                "help-panel__installation-parameters__content__active"
-                            );
-                        document
-                            .getElementById(
-                                "helpPanelContents_installationParameters_para5"
-                            )
-                            ?.classList?.remove(
-                                "help-panel__installation-parameters__content__active"
-                            );
-                    }}
-                />
-                {useVncToggled && (
-                    <PasswordInput
-                        readOnly={paramFileHasBeenModifiedFromState}
-                        type={showPasswords ? "text" : "password"}
-                        autoComplete="on"
-                        helperText={t(
-                            "panel.installationParameter.vncPasswordHelp",
-                            {
-                                ns: "panels",
-                            }
-                        )}
-                        id="vnc-password-input"
-                        invalid={
-                            state && state.vncPassword
-                                ? !state.vncPassword.valid
-                                : false
-                        }
-                        invalidText={t("invalidTextLabel", { ns: "common" })}
-                        maxLength={64}
-                        labelText={t(
-                            "panel.installationParameter.vncPasswordTextLabel",
-                            {
-                                ns: "panels",
-                            }
-                        )}
-                        placeholder={t(
-                            "panel.installationParameter.vncPasswordPlaceholder",
-                            {
-                                ns: "panels",
-                            }
-                        )}
-                        value={state.vncPassword ? state.vncPassword.value : ""}
-                        onChange={(password) => {
-                            if (paramFileHasBeenModifiedFromState) return;
-
-                            const passwordValue =
-                                password && password.target
-                                    ? password.target.value
-                                    : "";
-
-                            updateVncPassword({
-                                password: passwordValue,
-                                valid: true,
-                            });
-                        }}
-                        onBlur={(password) => {
-                            const passwordValue =
-                                password && password.target
-                                    ? password.target.value
-                                    : "";
-                            const passwordValueIsValid =
-                                isPasswordInputValid(passwordValue);
-
-                            updateVncPassword({
-                                password: passwordValue,
-                                valid: passwordValueIsValid,
-                            });
-
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para3"
-                                )
-                                ?.classList?.remove(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para4"
-                                )
-                                ?.classList?.remove(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para5"
-                                )
-                                ?.classList?.remove(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                        }}
-                        onFocus={() => {
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para3"
-                                )
-                                ?.classList?.add(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para4"
-                                )
-                                ?.classList?.add(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para5"
-                                )
-                                ?.classList?.add(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                        }}
-                    />
-                )}
-            </div>
-        );
-
-        const gridContentsMarkupRowThreeColumnTwo = (
-            <div className="installation-parameters_column-right">
-                {distributionName !== UBUNTU_DISTRIBUTION_ID && (
-                    <Toggle
-                        readOnly={paramFileHasBeenModifiedFromState}
-                        labelText={t(
-                            "panel.installationParameter.sshToggleTextLabel",
-                            {
-                                ns: "panels",
-                            }
-                        )}
-                        labelA={t("btnLabel.No", { ns: "common" })}
-                        labelB={t("btnLabel.Yes", { ns: "common" })}
-                        id="ssh-toggle"
-                        toggled={useSshToggled}
-                        onToggle={() => {
-                            if (paramFileHasBeenModifiedFromState) return;
-
-                            if (useSshToggled) {
-                                updateUseSsh(false);
-                            } else {
-                                updateUseSsh(true);
-                            }
-                        }}
-                        onFocus={() => {
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para6"
-                                )
-                                ?.classList?.add(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                        }}
-                        onBlur={() => {
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para6"
-                                )
-                                ?.classList?.remove(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                        }}
-                    />
-                )}
-                {useSshToggled && requiresSshPassword && (
-                    <PasswordInput
-                        readOnly={paramFileHasBeenModifiedFromState}
-                        type={showPasswords ? "text" : "password"}
-                        autoComplete="on"
-                        helperText={t(
-                            "panel.installationParameter.sshPasswordHelp",
-                            {
-                                ns: "panels",
-                            }
-                        )}
-                        id="ssh-password-input"
-                        invalid={
-                            state && state.sshPassword
-                                ? !state.sshPassword.valid
-                                : false
-                        }
-                        invalidText={t("invalidTextLabel", { ns: "common" })}
-                        maxLength={64}
-                        labelText={
-                            distributionName === UBUNTU_DISTRIBUTION_ID
-                                ? t(
-                                      "panel.installationParameter.sshPasswordTextLabelNoOptional",
-                                      {
-                                          ns: "panels",
-                                      }
-                                  )
-                                : t(
-                                      "panel.installationParameter.sshPasswordTextLabel",
-                                      {
-                                          ns: "panels",
-                                      }
-                                  )
-                        }
-                        placeholder={t(
-                            "panel.installationParameter.sshPasswordPlaceholder",
-                            {
-                                ns: "panels",
-                            }
-                        )}
-                        value={state.sshPassword ? state.sshPassword.value : ""}
-                        onChange={(password) => {
-                            if (paramFileHasBeenModifiedFromState) return;
-
-                            const passwordValue =
-                                password && password.target
-                                    ? password.target.value
-                                    : "";
-
-                            updateSshPassword({
-                                password: passwordValue,
-                                valid: true,
-                            });
-                        }}
-                        onBlur={(password) => {
-                            const passwordValue =
-                                password && password.target
-                                    ? password.target.value
-                                    : "";
-                            const passwordValueIsValid =
-                                isPasswordInputValid(passwordValue);
-
-                            updateSshPassword({
-                                password: passwordValue,
-                                valid: passwordValueIsValid,
-                            });
-
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para3"
-                                )
-                                ?.classList?.remove(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para6"
-                                )
-                                ?.classList?.remove(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                        }}
-                        onFocus={() => {
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para3"
-                                )
-                                ?.classList?.add(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                            document
-                                .getElementById(
-                                    "helpPanelContents_installationParameters_para6"
-                                )
-                                ?.classList?.add(
-                                    "help-panel__installation-parameters__content__active"
-                                );
-                        }}
-                    />
-                )}
-            </div>
-        );
-
-        const parmfileHasBeenModifiedNotificationMarkup = (
+        const ParmfileHasBeenModifiedNotificationMarkup = () => (
             <ActionableNotification
                 hideCloseButton
                 inline
@@ -1205,34 +918,53 @@ const InstallationParameters = forwardRef(
         );
 
         return (
-            <Layer className="installation-parameters__layer">
-                <FlexGrid className="installation-parameters__grid">
-                    <Row>
-                        <Column>
-                            {paramFileHasBeenModifiedFromState &&
-                                parmfileHasBeenModifiedNotificationMarkup}
-                        </Column>
-                    </Row>
-                    <Row>
-                        <Column>{gridContentsMarkupRowOne}</Column>
-                    </Row>
-                    <Row>
-                        <Column>{gridContentsMarkupRowTwoColumnOne}</Column>
-                        <Column>{gridContentsMarkupRowTwoColumnTwo}</Column>
-                    </Row>
-                    <Row>
-                        <Column>
-                            {requiresVncSupport
-                                ? gridContentsMarkupRowThreeColumnOne
-                                : gridContentsMarkupRowThreeColumnTwo}
-                        </Column>
-                        <Column>
-                            {requiresVncSupport &&
-                                gridContentsMarkupRowThreeColumnTwo}
-                        </Column>
-                    </Row>
-                </FlexGrid>
-            </Layer>
+            <CommonView>
+                {{
+                    parmfileHasBeenModifiedNotificationMarkup:
+                        paramFileHasBeenModifiedFromState && (
+                            <ParmfileHasBeenModifiedNotificationMarkup />
+                        ),
+                    gridContentsMarkupRowOne: <GridContentsMarkupRowOne />,
+                    gridContentsMarkupRowTwoColumnOne: (
+                        <GridContentsMarkupRowTwoColumnOne />
+                    ),
+                    gridContentsMarkupRowTwoColumnTwo: (
+                        <GridContentsMarkupRowTwoColumnTwo />
+                    ),
+                    remoteWrapperView: (
+                        <RemoteWrapperView>
+                            {{
+                                sshView: (
+                                    <SshView
+                                        paramFileHasBeenModifiedFromState={
+                                            paramFileHasBeenModifiedFromState
+                                        }
+                                        useSshToggled={useSshToggled}
+                                        showPasswords={showPasswords}
+                                        isPasswordInputValid={
+                                            isPasswordInputValid
+                                        }
+                                        sshPassword={state.sshPassword}
+                                    />
+                                ),
+                                vncView: (
+                                    <VncView
+                                        paramFileHasBeenModifiedFromState={
+                                            paramFileHasBeenModifiedFromState
+                                        }
+                                        useVncToggled={useVncToggled}
+                                        showPasswords={showPasswords}
+                                        isPasswordInputValid={
+                                            isPasswordInputValid
+                                        }
+                                        vncPassword={state.vncPassword}
+                                    />
+                                ),
+                            }}
+                        </RemoteWrapperView>
+                    ),
+                }}
+            </CommonView>
         );
     }
 );
