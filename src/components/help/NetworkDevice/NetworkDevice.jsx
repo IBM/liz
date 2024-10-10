@@ -9,10 +9,16 @@ import PropTypes from "prop-types";
 import { ApplicationContext } from "../../../contexts";
 import "./_network-device.scss";
 
-const CommonView = lazy(() => import("./common/NetworkDevice"));
-const RhelView = lazy(() => import("./distribution/rhel/NetworkDevice"));
-const SlesView = lazy(() => import("./distribution/sles/NetworkDevice"));
-const UbuntuView = lazy(() => import("./distribution/ubuntu/NetworkDevice"));
+const CommonView = lazy(() => import("./components/common/NetworkDevice"));
+const RhelView = lazy(
+    () => import("./components/distribution/rhel/NetworkDevice")
+);
+const SlesView = lazy(
+    () => import("./components/distribution/sles/NetworkDevice")
+);
+const UbuntuView = lazy(
+    () => import("./components/distribution/ubuntu/NetworkDevice")
+);
 
 const views = {
     rhel: RhelView,

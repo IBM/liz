@@ -39,24 +39,38 @@ import {
 } from "../../../util/password-util";
 import "./_installation-parameters.scss";
 
-const CommonView = lazy(() => import("./common/InstallationParameters"));
+const CommonView = lazy(
+    () => import("./components/common/InstallationParameters")
+);
 
-const RhelSshView = lazy(() => import("./distribution/rhel/SshView"));
-const RhelVncView = lazy(() => import("./distribution/rhel/VncView"));
+const RhelSshView = lazy(
+    () => import("./components/distribution/rhel/SshView")
+);
+const RhelVncView = lazy(
+    () => import("./components/distribution/rhel/VncView")
+);
 const RhelRemoteAccessWrapperView = lazy(
-    () => import("./distribution/rhel/RemoteAccessWrapper")
+    () => import("./components/distribution/rhel/RemoteAccessWrapper")
 );
 
-const SlesSshView = lazy(() => import("./distribution/sles/SshView"));
-const SlesVncView = lazy(() => import("./distribution/sles/VncView"));
+const SlesSshView = lazy(
+    () => import("./components/distribution/sles/SshView")
+);
+const SlesVncView = lazy(
+    () => import("./components/distribution/sles/VncView")
+);
 const SlesRemoteAccessWrapperView = lazy(
-    () => import("./distribution/sles/RemoteAccessWrapper")
+    () => import("./components/distribution/sles/RemoteAccessWrapper")
 );
 
-const UbuntuSshView = lazy(() => import("./distribution/ubuntu/SshView"));
-const UbuntuVncView = lazy(() => import("./distribution/ubuntu/VncView"));
+const UbuntuSshView = lazy(
+    () => import("./components/distribution/ubuntu/SshView")
+);
+const UbuntuVncView = lazy(
+    () => import("./components/distribution/ubuntu/VncView")
+);
 const UbuntuRemoteAccessWrapperView = lazy(
-    () => import("./distribution/ubuntu/RemoteAccessWrapper")
+    () => import("./components/distribution/ubuntu/RemoteAccessWrapper")
 );
 
 const views = {

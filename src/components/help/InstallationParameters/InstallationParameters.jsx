@@ -9,15 +9,17 @@ import PropTypes from "prop-types";
 import { ApplicationContext } from "../../../contexts";
 import "./_installation-parameters.scss";
 
-const CommonView = lazy(() => import("./common/InstallationParameters"));
+const CommonView = lazy(
+    () => import("./components/common/InstallationParameters")
+);
 const RhelView = lazy(
-    () => import("./distribution/rhel/InstallationParameters")
+    () => import("./components/distribution/rhel/InstallationParameters")
 );
 const SlesView = lazy(
-    () => import("./distribution/sles/InstallationParameters")
+    () => import("./components/distribution/sles/InstallationParameters")
 );
 const UbuntuView = lazy(
-    () => import("./distribution/ubuntu/InstallationParameters")
+    () => import("./components/distribution/ubuntu/InstallationParameters")
 );
 
 const views = {
