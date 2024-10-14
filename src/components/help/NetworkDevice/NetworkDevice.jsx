@@ -4,8 +4,9 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { lazy, useContext } from "react";
+import React, { lazy, Suspense, useContext } from "react";
 import PropTypes from "prop-types";
+import { Loading } from "@carbon/react";
 import { ApplicationContext } from "../../../contexts";
 import "./_network-device.scss";
 
@@ -39,9 +40,13 @@ const NetworkDevice = ({
 
     return (
         <>
-            <CommonView>
-                <DistributionView />
-            </CommonView>
+            <Suspense fallback={<Loading />}>
+                <CommonView>
+                    <Suspense fallback={<Loading />}>
+                        <DistributionView />
+                    </Suspense>
+                </CommonView>
+            </Suspense>
         </>
     );
 };

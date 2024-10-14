@@ -4,11 +4,18 @@
  * (C) Copyright IBM Corp. 2023
  */
 
-import React, { forwardRef, lazy, useEffect, useImperativeHandle } from "react";
+import React, {
+    forwardRef,
+    lazy,
+    Suspense,
+    useEffect,
+    useImperativeHandle,
+} from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import {
     InlineNotification,
+    Loading,
     TextInput,
     PasswordInput,
     ActionableNotification,
@@ -932,53 +939,73 @@ const InstallationParameters = forwardRef(
         );
 
         return (
-            <CommonView>
-                {{
-                    parmfileHasBeenModifiedNotificationMarkup:
-                        paramFileHasBeenModifiedFromState && (
-                            <ParmfileHasBeenModifiedNotificationMarkup />
+            <Suspense fallback={<Loading />}>
+                <CommonView>
+                    {{
+                        parmfileHasBeenModifiedNotificationMarkup:
+                            paramFileHasBeenModifiedFromState && (
+                                <ParmfileHasBeenModifiedNotificationMarkup />
+                            ),
+                        gridContentsMarkupRowOne: <GridContentsMarkupRowOne />,
+                        gridContentsMarkupRowTwoColumnOne: (
+                            <GridContentsMarkupRowTwoColumnOne />
                         ),
-                    gridContentsMarkupRowOne: <GridContentsMarkupRowOne />,
-                    gridContentsMarkupRowTwoColumnOne: (
-                        <GridContentsMarkupRowTwoColumnOne />
-                    ),
-                    gridContentsMarkupRowTwoColumnTwo: (
-                        <GridContentsMarkupRowTwoColumnTwo />
-                    ),
-                    remoteWrapperView: (
-                        <RemoteWrapperView>
-                            {{
-                                sshView: (
-                                    <SshView
-                                        paramFileHasBeenModifiedFromState={
-                                            paramFileHasBeenModifiedFromState
-                                        }
-                                        useSshToggled={useSshToggled}
-                                        showPasswords={showPasswords}
-                                        isPasswordInputValid={
-                                            isPasswordInputValid
-                                        }
-                                        sshPassword={state.sshPassword}
-                                    />
-                                ),
-                                vncView: (
-                                    <VncView
-                                        paramFileHasBeenModifiedFromState={
-                                            paramFileHasBeenModifiedFromState
-                                        }
-                                        useVncToggled={useVncToggled}
-                                        showPasswords={showPasswords}
-                                        isPasswordInputValid={
-                                            isPasswordInputValid
-                                        }
-                                        vncPassword={state.vncPassword}
-                                    />
-                                ),
-                            }}
-                        </RemoteWrapperView>
-                    ),
-                }}
-            </CommonView>
+                        gridContentsMarkupRowTwoColumnTwo: (
+                            <GridContentsMarkupRowTwoColumnTwo />
+                        ),
+                        remoteWrapperView: (
+                            <Suspense fallback={<Loading />}>
+                                <RemoteWrapperView>
+                                    {{
+                                        sshView: (
+                                            <Suspense fallback={<Loading />}>
+                                                <SshView
+                                                    paramFileHasBeenModifiedFromState={
+                                                        paramFileHasBeenModifiedFromState
+                                                    }
+                                                    useSshToggled={
+                                                        useSshToggled
+                                                    }
+                                                    showPasswords={
+                                                        showPasswords
+                                                    }
+                                                    isPasswordInputValid={
+                                                        isPasswordInputValid
+                                                    }
+                                                    sshPassword={
+                                                        state.sshPassword
+                                                    }
+                                                />
+                                            </Suspense>
+                                        ),
+                                        vncView: (
+                                            <Suspense fallback={<Loading />}>
+                                                <VncView
+                                                    paramFileHasBeenModifiedFromState={
+                                                        paramFileHasBeenModifiedFromState
+                                                    }
+                                                    useVncToggled={
+                                                        useVncToggled
+                                                    }
+                                                    showPasswords={
+                                                        showPasswords
+                                                    }
+                                                    isPasswordInputValid={
+                                                        isPasswordInputValid
+                                                    }
+                                                    vncPassword={
+                                                        state.vncPassword
+                                                    }
+                                                />
+                                            </Suspense>
+                                        ),
+                                    }}
+                                </RemoteWrapperView>
+                            </Suspense>
+                        ),
+                    }}
+                </CommonView>
+            </Suspense>
         );
     }
 );
