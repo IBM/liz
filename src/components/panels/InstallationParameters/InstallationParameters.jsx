@@ -419,9 +419,13 @@ const InstallationParameters = forwardRef(
         const showPasswords = globalState?.showPasswords ?? false;
         const paramFileHasBeenModifiedFromState =
             globalState?.steps.downloadParamFile?.modified ?? false;
-        const distributionName =
-            globalState?.steps?.inputFileSelection?.distributionName ??
-            DEFAULT_DISTRIBUTION_ID;
+        const hasDistributionName =
+            typeof globalState.steps.inputFileSelection.distributionName ===
+                "string" &&
+            globalState.steps.inputFileSelection.distributionName.length > 0;
+        const distributionName = hasDistributionName
+            ? globalState.steps.inputFileSelection.distributionName
+            : DEFAULT_DISTRIBUTION_ID;
         const SshView = views[distributionName].SshView;
         const VncView = views[distributionName].VncView;
         const RemoteWrapperView = views[distributionName].RemoteWrapperView;

@@ -8,6 +8,7 @@ import React, { lazy, Suspense, useContext } from "react";
 import PropTypes from "prop-types";
 import { Loading } from "@carbon/react";
 import { ApplicationContext } from "../../../contexts";
+import { DEFAULT_DISTRIBUTION_ID } from "../../../util/constants";
 import "./_installation-parameters.scss";
 
 const CommonView = lazy(
@@ -35,8 +36,13 @@ const InstallationParameters = ({
     updateCurrentHelpStep,
 }) => {
     const { state: globalState } = useContext(ApplicationContext);
-    const distributionName =
-        globalState.steps.inputFileSelection.distributionName;
+    const hasDistributionName =
+        typeof globalState.steps.inputFileSelection.distributionName ===
+            "string" &&
+        globalState.steps.inputFileSelection.distributionName.length > 0;
+    const distributionName = hasDistributionName
+        ? globalState.steps.inputFileSelection.distributionName
+        : DEFAULT_DISTRIBUTION_ID;
     const DistributionView = views[distributionName];
 
     return (
