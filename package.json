@@ -31,7 +31,7 @@
         "prepare": "husky install"
     },
     "dependencies": {
-        "@carbon/colors": "11.27.1",
+        "@carbon/colors": "11.28.0",
         "@carbon/ibm-products": "2.52.0",
         "@carbon/layout": "11.27.1",
         "@carbon/react": "1.68.0",
