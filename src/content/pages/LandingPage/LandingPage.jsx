@@ -108,12 +108,12 @@ const LandingPage = forwardRef(function LandingPage(props, ref) {
 
         const secondaryButton = document
             .getElementById("liz__landing-page__expressive-card__parmfile")
-            .getElementsByClassName(
+            ?.getElementsByClassName(
                 "cds--btn cds--btn--md cds--layout--size-md cds--btn--secondary"
             );
         const primaryButton = document
             .getElementById("liz__landing-page__expressive-card__parmfile")
-            .getElementsByClassName(
+            ?.getElementsByClassName(
                 "cds--btn cds--btn--md cds--layout--size-md cds--btn--primary"
             );
 

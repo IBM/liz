@@ -19,7 +19,7 @@ const RemoteAccessWrapper = ({ children }) => {
 };
 
 RemoteAccessWrapper.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.object.isRequired,
 };
 
 export default RemoteAccessWrapper;
