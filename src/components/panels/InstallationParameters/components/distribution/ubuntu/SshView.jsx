@@ -157,8 +157,6 @@ SshView.propTypes = {
     paramFileHasBeenModifiedFromState: PropTypes.bool.isRequired,
     useSshToggled: PropTypes.bool.isRequired,
     showPasswords: PropTypes.bool.isRequired,
-    updateUseSsh: PropTypes.func.isRequired,
-    updateSshPassword: PropTypes.func.isRequired,
     isPasswordInputValid: PropTypes.func.isRequired,
     sshPassword: PropTypes.object,
 };
